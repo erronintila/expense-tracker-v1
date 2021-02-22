@@ -7,8 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\JobResource;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\JobStoreRequest;
-use App\Http\Requests\JobUpdateRequest;
+use App\Http\Requests\Job\JobStoreRequest;
+use App\Http\Requests\Job\JobUpdateRequest;
 
 class JobController extends Controller
 {
@@ -77,7 +77,7 @@ class JobController extends Controller
      */
     public function store(JobStoreRequest $request)
     {
-        $validated = $request->validated(); // checks validation
+        $validated = request()->validated(); // checks validation
         $message = "Job designation created successfully"; // return message
         $job = new Job();
         $job->code = generate_code(Job::class, "JOB", 10);
@@ -115,7 +115,7 @@ class JobController extends Controller
      */
     public function update(JobUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // checks validation
+        $validated = request()->validated(); // checks validation
         $message = "Job designation updated successfully"; // return message
 
         $job = Job::withTrashed()->findOrFail($id);

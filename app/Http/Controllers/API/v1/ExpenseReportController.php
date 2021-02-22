@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\ExpenseReportResource;
-use App\Http\Requests\ExpenseReportStoreRequest;
 use App\Notifications\ExpenseReportNotification;
-use App\Http\Requests\ExpenseReportUpdateRequest;
+use App\Http\Requests\ExpenseReport\ExpenseReportStoreRequest;
+use App\Http\Requests\ExpenseReport\ExpenseReportUpdateRequest;
 use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
 
@@ -196,7 +196,7 @@ class ExpenseReportController extends Controller
      */
     public function store(ExpenseReportStoreRequest $request)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Expense Report created successfully";
 
         $expense_report = new ExpenseReport();
@@ -266,7 +266,7 @@ class ExpenseReportController extends Controller
      */
     public function update(ExpenseReportUpdateRequest $request, $id)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Expense Report updated successfully";
 
         $expense_report = ExpenseReport::withTrashed()->findOrFail($id);

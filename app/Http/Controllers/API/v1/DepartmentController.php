@@ -7,8 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
-use App\Http\Requests\DepartmentStoreRequest;
-use App\Http\Requests\DepartmentUpdateRequest;
+use App\Http\Requests\Department\DepartmentStoreRequest;
+use App\Http\Requests\Department\DepartmentUpdateRequest;
 
 class DepartmentController extends Controller
 {
@@ -68,7 +68,7 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "Department created successfully"; // return message
 
         $department = new Department();
@@ -107,7 +107,7 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "Department updated successfully"; // return message
 
         $department = Department::withTrashed()->findOrFail($id);

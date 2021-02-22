@@ -329,150 +329,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -492,12 +348,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
       preset: "",
       presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-      headers: [// { text: "User", value: "user" },
-      // { text: "Description", value: "description" },
-      // { text: "Amount", value: "total" },
-      // { text: "Created", value: "created" },
-      // { text: "", value: "data-table-expand" },
-      {
+      headers: [{
         text: "Period",
         value: "period",
         sortable: false
@@ -560,7 +411,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         id: null
       }
     }), _defineProperty(_ref, "errors", {
-      user: [],
+      user_id: [],
       code: [],
       reference_no: [],
       voucher_no: [],
@@ -573,7 +424,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       payee_address: [],
       payee_phone: [],
       remarks: [],
-      notes: []
+      notes: [],
+      expense_reports: []
     }), _ref;
   },
   methods: {
@@ -593,6 +445,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateUser: function updateUser() {
       var _this3 = this;
 
+      this.errors.user_id = [];
       this.getDataFromApi().then(function (data) {
         _this3.items = data.items;
         _this3.totalItems = data.total;
@@ -691,6 +544,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       _this.$refs.form.validate();
 
+      if (this.form.user.id == null || !this.form.user) {
+        this.mixin_errorDialog("Error", "No Employee selected.");
+        return;
+      }
+
       if (this.selected == 0) {
         this.mixin_errorDialog("Error", "No Expense Report selected.");
         return;
@@ -729,6 +587,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             name: "admin.payments.index"
           });
         })["catch"](function (error) {
+          _this.loader = false;
           console.log(error);
           console.log(error.response);
 
@@ -933,9 +792,6 @@ var render = function() {
                                               _vm._b(
                                                 {
                                                   attrs: {
-                                                    rules:
-                                                      _vm.mixin_validation
-                                                        .required,
                                                     "error-messages":
                                                       _vm.errors.date,
                                                     label: "Date",
@@ -1000,9 +856,9 @@ var render = function() {
                               _vm._v(" "),
                               _c("v-autocomplete", {
                                 attrs: {
-                                  rules: _vm.mixin_validation.required,
                                   items: _vm.users,
-                                  "error-messages": _vm.errors.user,
+                                  rules: _vm.mixin_validation.required,
+                                  "error-messages": _vm.errors.user_id,
                                   "item-value": "id",
                                   "item-text": "full_name",
                                   label: "Employee",
@@ -1068,6 +924,15 @@ var render = function() {
                                   )
                                 ]
                               ),
+                              _vm._v(" "),
+                              _vm.errors.expense_reports &&
+                              _vm.errors.expense_reports.length > 0
+                                ? _c("small", { staticClass: "red--text" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errors.expense_reports[0])
+                                    )
+                                  ])
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "v-data-table",

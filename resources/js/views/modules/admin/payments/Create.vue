@@ -42,7 +42,6 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="form.date"
-                                        :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date"
@@ -62,9 +61,9 @@
                             </v-menu>
                             <v-autocomplete
                                 v-model="form.user"
-                                :rules="mixin_validation.required"
                                 :items="users"
-                                :error-messages="errors.user"
+                                :rules="mixin_validation.required"
+                                :error-messages="errors.user_id"
                                 @input="errors.user = []"
                                 @change="updateUser"
                                 item-value="id"
@@ -97,150 +96,7 @@
                                 Expense Reports
                             </div>
 
-                            <!-- <v-data-table
-                                elevation="0"
-                                v-model="selected"
-                                :headers="headers"
-                                :items="items"
-                                :items-per-page="5"
-                                :search="search"
-                                item-key="id"
-                                show-select
-                                single-expand
-                                show-expand
-                                class="elevation-0"
-                            >
-                                <template
-                                    slot="body.append"
-                                    v-if="items.length > 0"
-                                >
-                                    <tr class="green--text">
-                                        <td class="title">Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <strong>{{ total }}</strong>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </template>
-                                <template v-slot:top>
-                                    <DateRangePicker
-                                        :preset="preset"
-                                        :presets="presets"
-                                        :value="date_range"
-                                        :solo="false"
-                                        :buttonType="false"
-                                        :buttonColor="'white'"
-                                        :buttonDark="false"
-                                        @updateDates="updateDates"
-                                    ></DateRangePicker>
-
-                                    <v-text-field
-                                        v-model="search"
-                                        append-icon="mdi-magnify"
-                                        label="Search"
-                                        single-line
-                                        hide-details
-                                    ></v-text-field>
-                                </template>
-                                <template v-slot:[`item.user`]="{ item }">
-                                    {{
-                                        item.user.last_name +
-                                            " " +
-                                            item.user.first_name +
-                                            " " +
-                                            item.user.suffix
-                                    }}
-                                </template>
-                                <template v-slot:[`item.created`]="{ item }">
-                                    {{
-                                        mixin_formatDate(
-                                            item.created.created_at,
-                                            "YYYY-MM-DD HH:mm:ss"
-                                        )
-                                    }}
-                                </template>
-                                <template v-slot:[`item.period`]="{ item }">
-                                    {{ item.from }} ~ {{ item.to }}
-                                </template>
-                                <template v-slot:[`item.actions`]="{ item }">
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/admin/expense_reports/${item.id}`
-                                            )
-                                        "
-                                    >
-                                        mdi-eye
-                                    </v-icon>
-                                </template>
-                                <template
-                                    v-slot:expanded-item="{ headers, item }"
-                                >
-                                    <td :colspan="headers.length">
-                                        <v-container>
-                                            <div v-if="item"></div>
-                                            <div>
-                                                Expenses
-                                            </div>
-                                            <v-simple-table dense>
-                                                <template v-slot:default>
-                                                    <thead>
-                                                        <tr>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Date
-                                                            </th>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Expense
-                                                            </th>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Amount
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr
-                                                            v-for="item in item.expenses"
-                                                            :key="item.id"
-                                                        >
-                                                            <td>
-                                                                {{ item.date }}
-                                                            </td>
-                                                            <td>
-                                                                {{
-                                                                    item
-                                                                        .expense_type
-                                                                        .name
-                                                                }}
-                                                            </td>
-                                                            <td>
-                                                                {{
-                                                                    mixin_formatNumber(
-                                                                        item.amount
-                                                                    )
-                                                                }}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </template>
-                                            </v-simple-table>
-                                        </v-container>
-                                    </td>
-                                </template>
-                            </v-data-table> -->
+                            <small v-if="errors.expense_reports  && errors.expense_reports.length > 0" class="red--text">{{errors.expense_reports[0]}}</small>
 
                             <v-data-table
                                 :headers="headers"
@@ -487,12 +343,6 @@ export default {
                 "This Year"
             ],
             headers: [
-                // { text: "User", value: "user" },
-                // { text: "Description", value: "description" },
-                // { text: "Amount", value: "total" },
-                // { text: "Created", value: "created" },
-                // { text: "", value: "data-table-expand" },
-
                 { text: "Period", value: "period", sortable: false },
                 { text: "Code", value: "code", sortable: false },
                 { text: "Description", value: "description", sortable: false },
@@ -533,7 +383,7 @@ export default {
                 user: { id: null }
             },
             errors: {
-                user: [],
+                user_id: [],
                 code: [],
                 reference_no: [],
                 voucher_no: [],
@@ -546,7 +396,8 @@ export default {
                 payee_address: [],
                 payee_phone: [],
                 remarks: [],
-                notes: []
+                notes: [],
+                expense_reports: []
             }
         };
     },
@@ -563,6 +414,7 @@ export default {
             });
         },
         updateUser() {
+            this.errors.user_id = [];
             this.getDataFromApi().then(data => {
                 this.items = data.items;
                 this.totalItems = data.total;
@@ -670,6 +522,11 @@ export default {
 
             _this.$refs.form.validate();
 
+            if (this.form.user.id == null || !this.form.user) {
+                this.mixin_errorDialog("Error", "No Employee selected.");
+                return;
+            }
+
             if (this.selected == 0) {
                 this.mixin_errorDialog("Error", "No Expense Report selected.");
                 return;
@@ -714,6 +571,7 @@ export default {
                         _this.$router.push({ name: "admin.payments.index" });
                     })
                     .catch(function(error) {
+                        _this.loader = false;
                         console.log(error);
                         console.log(error.response);
 

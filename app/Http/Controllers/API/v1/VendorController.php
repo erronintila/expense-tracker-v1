@@ -7,8 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
-use App\Http\Requests\VendorStoreRequest;
-use App\Http\Requests\VendorUpdateRequest;
+use App\Http\Requests\Vendor\VendorStoreRequest;
+use App\Http\Requests\Vendor\VendorUpdateRequest;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\Vendor\VendorIndexResource;
 
@@ -72,7 +72,7 @@ class VendorController extends Controller
      */
     public function store(VendorStoreRequest $request)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Vendor created successfully"; 
 
         $vendor = new Vendor();
@@ -108,7 +108,7 @@ class VendorController extends Controller
      */
     public function update(VendorUpdateRequest $request, $id)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "Vendor updated successfully";
 
         $vendor = Vendor::withTrashed()->findOrFail($id);

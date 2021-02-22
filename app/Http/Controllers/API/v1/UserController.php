@@ -12,17 +12,17 @@ use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserProfileUpdateRequest;
-use App\Http\Requests\UserPermissionUpdateRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\User\UserShowResource;
-use App\Http\Requests\UserUpdatePasswordRequest;
+use App\Http\Requests\User\UserProfileUpdateRequest;
+use App\Http\Requests\User\UserUpdatePasswordRequest;
+use App\Http\Requests\User\UserPermissionUpdateRequest;
 
 class UserController extends Controller
 {
@@ -141,7 +141,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "User created successfully"; // return message
 
         $expense_types = ExpenseType::where("expense_type_id", null)->get();
@@ -216,7 +216,7 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
+        $validated = request()->validated(); // check validation
         $message = "User updated successfully"; // return message
 
         if (!app("auth")->user()->hasPermissionTo('edit users')) {
@@ -414,7 +414,7 @@ class UserController extends Controller
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
     {
-        $validated = $request->validated();
+        $validated = request()->validated();
         $message = "User password updated successfully";
 
         $user = User::withTrashed()->findOrFail(auth()->user()->id);
