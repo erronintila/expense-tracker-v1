@@ -443,6 +443,33 @@ class UserController extends Controller
 
         // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make(request("")password)]);
     }
+
+        
+    /**
+     * update_profile
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function update_permissions(Request $request, $id)
+    {
+        if (!app("auth")->user()->hasPermissionTo('update permissions')) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+
+        if (request()->has("permissions")) {
+            $user->syncPermissions([]);
+            $user->syncRoles([]);
+            foreach (request("permissions") as $permission) {
+                $user->givePermissionTo($permission["name"]);
+            }
+        }
+
+        return $this->successResponse(null, "User permissions updated successfully.", 200);
+    }
     
     /**
      * Export User data to Excel
