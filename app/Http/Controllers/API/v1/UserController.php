@@ -215,7 +215,6 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         $validated = request()->validated(); // check validation
-
         $message = "User updated successfully"; // return message
 
         if (!request()->has("profile_update")) {
@@ -442,17 +441,6 @@ class UserController extends Controller
         return $this->successResponse(null, $message, 200);
 
         // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make(request("")password)]);
-    }
-    
-    /**
-     * update_profile
-     *
-     * @param  mixed $request
-     * @param  mixed $id
-     * @return void
-     */
-    public function update_profile(Request $request, $id) {
-        
     }
     
     /**
