@@ -12,6 +12,7 @@ use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserPermissionUpdateRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -437,7 +438,7 @@ class UserController extends Controller
      * @param  mixed $id
      * @return void
      */
-    public function update_permissions(Request $request, $id)
+    public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
         // if (!app("auth")->user()->hasPermissionTo('update permissions')) {
         //     abort(403);
