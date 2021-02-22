@@ -278,42 +278,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -322,7 +286,6 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       menu: false,
       jobs: [],
-      permissions: [],
       selected: [],
       headers: [{
         text: "Permission",
@@ -348,13 +311,8 @@ __webpack_require__.r(__webpack_exports__);
         password_confirmation: "password",
         is_admin: false,
         is_superadmin: false,
-        can_login: true,
         type: "employee",
-        job: null,
-        old_permissions: [],
-        permissions: [],
-        old_role: "",
-        role: "Standard User"
+        job: null
       },
       errors: {
         code: [],
@@ -371,7 +329,6 @@ __webpack_require__.r(__webpack_exports__);
         address: [],
         username: [],
         role: [],
-        can_login: [],
         has_fund: [],
         fund: []
       }
@@ -399,11 +356,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.email = data.email;
         _this.form.is_admin = data.is_admin;
         _this.form.is_superadmin = data.is_superadmin;
-        _this.form.can_login = data.can_login;
-        _this.form.permissions = data.permissions;
-        _this.form.old_permissions = data.permissions;
-        _this.form.role = data.role[0];
-        _this.form.old_role = data.role[0];
         _this.form.type = data.type;
         _this.form.job = data.job.id;
         _this.loader = false;
@@ -1182,97 +1134,6 @@ var render = function() {
                                             _vm.$set(_vm.form, "username", $$v)
                                           },
                                           expression: "form.username"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c("v-checkbox", {
-                                        attrs: {
-                                          label: "Allow Login",
-                                          "error-messages": _vm.errors.can_login
-                                        },
-                                        model: {
-                                          value: _vm.form.can_login,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "can_login", $$v)
-                                          },
-                                          expression: "form.can_login"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "4" } },
-                                    [
-                                      _c(
-                                        "v-radio-group",
-                                        {
-                                          attrs: { row: "", label: "Role" },
-                                          model: {
-                                            value: _vm.form.role,
-                                            callback: function($$v) {
-                                              _vm.$set(_vm.form, "role", $$v)
-                                            },
-                                            expression: "form.role"
-                                          }
-                                        },
-                                        [
-                                          _c("v-radio", {
-                                            attrs: {
-                                              label: "Standard User",
-                                              value: "Standard User"
-                                            }
-                                          }),
-                                          _vm._v(" "),
-                                          _c("v-radio", {
-                                            attrs: {
-                                              label: "Administrator",
-                                              value: "Administrator"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    [
-                                      _c("v-data-table", {
-                                        attrs: {
-                                          "show-select": "",
-                                          "items-per-page": -1,
-                                          headers: _vm.headers,
-                                          items: _vm.permissions,
-                                          "group-by": "category"
-                                        },
-                                        model: {
-                                          value: _vm.form.permissions,
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.form,
-                                              "permissions",
-                                              $$v
-                                            )
-                                          },
-                                          expression: "form.permissions"
                                         }
                                       })
                                     ],
