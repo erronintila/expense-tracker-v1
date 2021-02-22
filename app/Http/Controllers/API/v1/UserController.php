@@ -12,8 +12,6 @@ use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserProfileUpdateRequest;
-use App\Http\Requests\UserPermissionUpdateRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,7 +20,9 @@ use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\User\UserShowResource;
+use App\Http\Requests\User\UserProfileUpdateRequest;
 use App\Http\Requests\User\UserUpdatePasswordRequest;
+use App\Http\Requests\User\UserPermissionUpdateRequest;
 
 class UserController extends Controller
 {

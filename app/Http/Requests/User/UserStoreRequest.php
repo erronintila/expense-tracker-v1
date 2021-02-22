@@ -46,4 +46,16 @@ class UserStoreRequest extends FormRequest
             'job_id' => ['required_if:is_superadmin,0'],
         ];
     }
+
+    /**
+     * Custom message for validation
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'job_id.required' => 'The job designation field is required.'
+        ];
+    }
 }
