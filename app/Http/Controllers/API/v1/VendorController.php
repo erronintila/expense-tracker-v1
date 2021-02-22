@@ -72,7 +72,7 @@ class VendorController extends Controller
      */
     public function store(VendorStoreRequest $request)
     {
-        $validated = request()->validated();
+        $validated = $request->validated();
         $message = "Vendor created successfully"; 
 
         $vendor = new Vendor();
@@ -108,7 +108,7 @@ class VendorController extends Controller
      */
     public function update(VendorUpdateRequest $request, $id)
     {
-        $validated = request()->validated();
+        $validated = $request->validated();
         $message = "Vendor updated successfully";
 
         $vendor = Vendor::withTrashed()->findOrFail($id);

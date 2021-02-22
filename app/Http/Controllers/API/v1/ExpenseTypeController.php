@@ -68,7 +68,7 @@ class ExpenseTypeController extends Controller
      */
     public function store(ExpenseTypeStoreRequest $request)
     {
-        $validated = request()->validated(); // checks validation
+        $validated = $request->validated(); // checks validation
         $message = "Expense type created successfully"; // return message
 
         $expense_type = new ExpenseType();
@@ -118,7 +118,7 @@ class ExpenseTypeController extends Controller
      */
     public function update(ExpenseTypeUpdateRequest $request, $id)
     {
-        $validated = request()->validated(); // checks validation
+        $validated = $request->validated(); // checks validation
 
         $message = "Expense type updated successfully"; // return message
         $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
