@@ -348,6 +348,25 @@ const adminRoutes = [
                 }
             },
             {
+                path: "/admin/users/:id/edit/permissions",
+                name: "admin.users.edit.permissions",
+                component: () =>
+                    import("../../views/modules/admin/users/EditPermission.vue"),
+                // beforeEnter: (to, from, next) => {
+                //     let permissions = store.getters.user.permissions;
+                //     permissions = permissions.map(item => item.name);
+
+                //     if (permissions.includes("edit permissions")) {
+                //         next();
+                //     } else {
+                //         next({ name: "error_403" });
+                //     }
+                // },
+                meta: {
+                    keepAlive: false
+                }
+            },
+            {
                 path: "/admin/users/:id",
                 name: "admin.users.show",
                 component: () =>
