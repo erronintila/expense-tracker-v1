@@ -109,7 +109,7 @@
         </v-card-subtitle>
 
         <v-row class="ml-4">
-            <Users ref="users_component" @selectUser="selectUser"></Users>
+            <Users @selectUser="selectUser"></Users>
             <v-chip
                 color="green"
                 dark
@@ -226,7 +226,7 @@ export default {
             collections: {
                 activityLogs: [],
                 selectedActivityLogs: [],
-                // users: [],
+                users: [],
                 export_data: [],
                 headers: [
                     { text: "User", value: "user", sortable: false },
@@ -296,16 +296,6 @@ export default {
         },
         changeUser() {},
         selectUser(e) {
-            if (e == null || e == undefined) {
-                this.filters.selectedUser = {
-                    id: 0,
-                    username: "",
-                    name: "All Users",
-                    email: ""
-                };
-                return;
-            }
-
             this.filters.selectedUser = e;
         },
         getDataFromApi() {
@@ -383,8 +373,6 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
             // this.getUsers();
             this.collections.selectedActivityLogs = [];
-
-            this.$refs.users_component.onReset;
         },
         hasLink(item) {
             // .properties.custom.link
@@ -407,6 +395,7 @@ export default {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
+                    console.log("fuck", data);
                     this.collections.activityLogs = data.data;
                     this.meta = data.meta;
                 });

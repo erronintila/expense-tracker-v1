@@ -225,7 +225,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       dialog: false,
       loading: false,
-      totalItems: 0,
       search: "",
       selected: [],
       items: [],
@@ -234,6 +233,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortDesc: [false],
         page: 1,
         itemsPerPage: 10
+      },
+      meta: {
+        current_page: 0,
+        from: 0,
+        last_page: 0,
+        path: "",
+        per_page: "10",
+        to: 0,
+        total: 0
       }
     };
   },
@@ -259,17 +267,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortBy: sortBy[0],
             sortType: sortDesc[0] ? "desc" : "asc",
             page: page,
-            itemsPerPage: itemsPerPage,
-            is_superadmin: false
+            itemsPerPage: itemsPerPage
           }
         };
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
-          var items = response.data.data;
-          var total = response.data.meta.total;
-          resolve({
-            items: items,
-            total: total
-          });
+          resolve(response.data);
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
@@ -288,11 +290,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         page: 1,
         itemsPerPage: 10
       };
+      return this.$emit("selectUser", this.selected);
     },
     selectUser: function selectUser() {
       this.dialog = false;
       this.selectedUser = this.selected;
       return this.$emit("selectUser", this.selected);
+    },
+    getJobName: function getJobName(user) {
+      if (user.job) {
+        return user.job.name;
+      }
+
+      return "";
+    },
+    getDepartmentName: function getDepartmentName(user) {
+      if (user.job) {
+        if (user.job.department) {
+          return user.job.department.name;
+        }
+      }
+
+      return "";
     }
   },
   watch: {
@@ -301,8 +320,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var _this3 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
+          _this3.items = data.data;
+          _this3.meta = data.meta;
         });
       },
       deep: true
@@ -334,8 +353,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this4 = this;
 
     this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
+      _this4.items = data.data;
+      _this4.meta = data.meta;
     });
   }
 });
@@ -590,7 +609,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       collections: {
         activityLogs: [],
         selectedActivityLogs: [],
-        users: [],
+        // users: [],
         export_data: [],
         headers: [{
           text: "User",
@@ -646,6 +665,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.filters.date_range = e;
     },
     changeUser: function changeUser() {},
+    selectUser: function selectUser(e) {
+      if (e == null || e == undefined) {
+        this.filters.selectedUser = {
+          id: 0,
+          username: "",
+          name: "All Users",
+          email: ""
+        };
+        return;
+      }
+
+      this.filters.selectedUser = e;
+    },
     getDataFromApi: function getDataFromApi() {
       var _this = this;
 
@@ -695,29 +727,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    getUsers: function getUsers() {
-      var _this2 = this;
-
-      _services_UserDataService__WEBPACK_IMPORTED_MODULE_4__["default"].getAll().then(function (response) {
-        _this2.collections.users = response.data.data;
-
-        _this2.collections.users.unshift({
-          id: 0,
-          username: "",
-          name: "All Users",
-          email: ""
-        });
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this2.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-      });
-    },
+    // getUsers() {
+    //     UserDataService.getAll()
+    //         .then(response => {
+    //             this.collections.users = response.data.data;
+    //             this.collections.users.unshift({
+    //                 id: 0,
+    //                 username: "",
+    //                 name: "All Users",
+    //                 email: ""
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //             console.log(error.response);
+    //             this.mixin_errorDialog(
+    //                 `Error ${error.response.status}`,
+    //                 error.response.statusText
+    //             );
+    //         });
+    // },
     onReset: function onReset() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-      this.getUsers();
+      Object.assign(this.$data, this.$options.data.apply(this)); // this.getUsers();
+
       this.collections.selectedActivityLogs = [];
+      this.$refs.users_component.onReset;
     },
     hasLink: function hasLink(item) {
       // .properties.custom.link
@@ -739,12 +773,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this2 = this;
 
         this.getDataFromApi().then(function (data) {
           console.log("fuck", data);
-          _this3.collections.activityLogs = data.data;
-          _this3.meta = data.meta;
+          _this2.collections.activityLogs = data.data;
+          _this2.meta = data.meta;
         });
       },
       deep: true
@@ -774,17 +808,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    this.getUsers();
+    // this.getUsers();
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
-    var _this4 = this;
+    var _this3 = this;
 
-    this.getUsers();
+    // this.getUsers();
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this4.collections.activityLogs = data.data;
-      _this4.meta = data.meta;
+      _this3.collections.activityLogs = data.data;
+      _this3.meta = data.meta;
     });
   }
 });
@@ -979,14 +1013,16 @@ var render = function() {
                                     _c("v-list-item-subtitle", {
                                       staticClass: "text--primary",
                                       domProps: {
-                                        textContent: _vm._s(item.job.name)
+                                        textContent: _vm._s(
+                                          _vm.getJobName(item)
+                                        )
                                       }
                                     }),
                                     _vm._v(" "),
                                     _c("v-list-item-subtitle", {
                                       domProps: {
                                         textContent: _vm._s(
-                                          item.job.department.name
+                                          _vm.getDepartmentName(item)
                                         )
                                       }
                                     })
@@ -1014,7 +1050,7 @@ var render = function() {
                 "div",
                 [
                   _c("v-pagination", {
-                    attrs: { length: _vm.totalItems, "total-visible": 7 },
+                    attrs: { length: _vm.meta.last_page, "total-visible": 7 },
                     model: {
                       value: _vm.options.page,
                       callback: function($$v) {
@@ -1111,165 +1147,7 @@ var render = function() {
             _vm._v("Activity Logs")
           ]),
           _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c(
-            "v-menu",
-            {
-              attrs: {
-                transition: "scale-transition",
-                "close-on-content-click": false,
-                "nudge-width": 200,
-                "offset-y": "",
-                left: "",
-                bottom: ""
-              },
-              scopedSlots: _vm._u([
-                {
-                  key: "activator",
-                  fn: function(ref) {
-                    var menu = ref.on
-                    var attrs = ref.attrs
-                    return [
-                      _c(
-                        "v-tooltip",
-                        {
-                          attrs: { bottom: "" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "activator",
-                                fn: function(ref) {
-                                  var tooltip = ref.on
-                                  return [
-                                    _c(
-                                      "v-btn",
-                                      _vm._g(
-                                        _vm._b(
-                                          {
-                                            staticClass: "elevation-3 mr-2",
-                                            attrs: {
-                                              color: "green",
-                                              dark: "",
-                                              fab: "",
-                                              "x-small": ""
-                                            }
-                                          },
-                                          "v-btn",
-                                          attrs,
-                                          false
-                                        ),
-                                        Object.assign({}, tooltip, menu)
-                                      ),
-                                      [
-                                        _c("v-icon", { attrs: { dark: "" } }, [
-                                          _vm._v("mdi-filter")
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            true
-                          )
-                        },
-                        [_vm._v(" "), _c("span", [_vm._v("Filter Data")])]
-                      )
-                    ]
-                  }
-                }
-              ])
-            },
-            [
-              _vm._v(" "),
-              _c(
-                "v-card",
-                [
-                  _c(
-                    "v-list",
-                    [
-                      _c("v-list-item"),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              items: _vm.collections.users,
-                              label: "User",
-                              "item-value": "id",
-                              "item-text": "name",
-                              "return-object": ""
-                            },
-                            on: { change: _vm.changeUser },
-                            scopedSlots: _vm._u([
-                              {
-                                key: "item",
-                                fn: function(data) {
-                                  return [
-                                    _c(
-                                      "v-list",
-                                      { attrs: { "max-width": "250" } },
-                                      [
-                                        _c(
-                                          "v-list-item-content",
-                                          [
-                                            _c("v-list-item-title", {
-                                              domProps: {
-                                                innerHTML: _vm._s(
-                                                  data.item.name
-                                                )
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("v-list-item-subtitle", {
-                                              domProps: {
-                                                innerHTML: _vm._s(
-                                                  "" + data.item.username
-                                                )
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("v-list-item-subtitle", {
-                                              domProps: {
-                                                innerHTML: _vm._s(
-                                                  data.item.email
-                                                )
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ]
-                                }
-                              }
-                            ]),
-                            model: {
-                              value: _vm.filters.selectedUser,
-                              callback: function($$v) {
-                                _vm.$set(_vm.filters, "selectedUser", $$v)
-                              },
-                              expression: "filters.selectedUser"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+          _c("v-spacer")
         ],
         1
       ),
@@ -1297,7 +1175,10 @@ var render = function() {
         "v-row",
         { staticClass: "ml-4" },
         [
-          _c("Users"),
+          _c("Users", {
+            ref: "users_component",
+            on: { selectUser: _vm.selectUser }
+          }),
           _vm._v(" "),
           _vm.collections.selectedActivityLogs.length > 0
             ? _c(

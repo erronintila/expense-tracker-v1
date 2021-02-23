@@ -34,11 +34,11 @@
 
                                         <v-list-item-subtitle
                                             class="text--primary"
-                                            v-text="item.job.name"
+                                            v-text="getJobName(item)"
                                         ></v-list-item-subtitle>
 
                                         <v-list-item-subtitle
-                                            v-text="item.job.department.name"
+                                            v-text="getDepartmentName(item)"
                                         ></v-list-item-subtitle>
                                     </v-list-item-content>
                                 </template>
@@ -54,7 +54,7 @@
                 <div>
                     <v-pagination
                         v-model="options.page"
-                        :length="totalItems"
+                        :length="meta.last_page"
                         :total-visible="7"
                     ></v-pagination>
                 </div>
@@ -64,10 +64,6 @@
                         Reset
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog = false">
-                        Close
-                    </v-btn>
-
                     <v-btn color="green darken-1" text @click="selectUser">
                         OK
                     </v-btn>
@@ -94,7 +90,6 @@ export default {
         return {
             dialog: false,
             loading: false,
-            totalItems: 0,
             search: "",
             selected: [],
             items: [],
@@ -103,6 +98,15 @@ export default {
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
+            },
+            meta: {
+                current_page: 0,
+                from: 0,
+                last_page: 0,
+                path: "",
+                per_page: "10",
+                to: 0,
+                total: 0
             }
         };
     },
@@ -122,16 +126,13 @@ export default {
                         sortBy: sortBy[0],
                         sortType: sortDesc[0] ? "desc" : "asc",
                         page: page,
-                        itemsPerPage: itemsPerPage,
-                        is_superadmin: false
+                        itemsPerPage: itemsPerPage
                     }
                 };
 
                 UserDataService.getAll(data)
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
-                        resolve({ items, total });
+                        resolve(response.data);
                     })
                     .catch(error => {
                         console.log(error);
@@ -153,19 +154,37 @@ export default {
                 page: 1,
                 itemsPerPage: 10
             };
+
+            return this.$emit("selectUser", this.selected);
         },
         selectUser() {
-            this.dialog = false;
+            // this.dialog = false;
             this.selectedUser = this.selected;
             return this.$emit("selectUser", this.selected);
+        },
+        getJobName(user) {
+            if(user.job) {
+                return user.job.name;
+            }
+
+            return "";
+        },
+        getDepartmentName(user) {
+            if(user.job) {
+                if(user.job.department) {
+                    return user.job.department.name;
+                }
+            }
+
+            return "";
         }
     },
     watch: {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
+                    this.items = data.data;
+                    this.meta = data.meta;
                 });
             },
             deep: true
@@ -180,7 +199,6 @@ export default {
         },
         selectedUser: {
             get() {
-                console.log("getter", this.selected);
                 if (this.selected) {
                     return this.selected.length > 0
                         ? this.selected
@@ -190,15 +208,15 @@ export default {
                 return "All Employees";
             },
             set(value) {
-                console.log("setter", value);
                 return value;
             }
-        }
+        },
+        
     },
     created() {
         this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
+            this.items = data.data;
+            this.meta = data.meta;
         });
     }
 };
