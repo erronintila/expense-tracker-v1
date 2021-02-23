@@ -5,7 +5,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         class="elevation-3 mr-2"
@@ -13,7 +13,7 @@
                         dark
                         fab
                         x-small
-                        @click="onRefresh"
+                        @click="onReset"
                         v-bind="attrs"
                         v-on="on"
                     >
@@ -21,7 +21,7 @@
                     </v-btn>
                 </template>
                 <span>Refresh</span>
-            </v-tooltip>
+            </v-tooltip> -->
 
             <v-menu
                 transition="scale-transition"
@@ -53,17 +53,17 @@
                 <v-card>
                     <v-list>
                         <v-list-item>
-                            <DateRangePicker
-                                :preset="preset"
-                                :presets="presets"
-                                :value="date_range"
+                            <!-- <DateRangePicker
+                                :preset="filters.preset"
+                                :presets="filters.presets"
+                                :value="filters.date_range"
                                 @updateDates="updateDates"
-                            ></DateRangePicker>
+                            ></DateRangePicker> -->
                         </v-list-item>
                         <v-list-item>
                             <v-select
-                                v-model="user"
-                                :items="users"
+                                v-model="filters.selectedUser"
+                                :items="collections.users"
                                 label="User"
                                 item-value="id"
                                 item-text="name"
@@ -92,29 +92,44 @@
             </v-menu>
         </v-card-title>
 
-        <v-card-subtitle>{{ formattedDateRange }}</v-card-subtitle>
+        <v-card-subtitle>
+            <!-- {{ formattedDateRange }} -->
+            <DateRangePicker
+                :buttonType="true"
+                :buttonText="true"
+                :buttonColor="'grey'"
+                :buttonClass="'ml-0 pl-0'"
+                :preset="filters.preset"
+                :presets="filters.presets"
+                :value="filters.date_range"
+                @updateDates="updateDates"
+            >
+            </DateRangePicker>
+            <!-- <v-icon>mdi-calendar-range</v-icon> -->
+        </v-card-subtitle>
 
         <v-row class="ml-4">
+            <Users></Users>
             <v-chip
                 color="green"
                 dark
-                v-if="selected.length > 0"
+                v-if="collections.selectedActivityLogs.length > 0"
                 close
                 class="mr-2"
                 small
-                @click:close="selected = []"
+                @click:close="collections.selectedActivityLogs = []"
                 close-icon="mdi-close"
             >
-                {{ selected.length }} Selected
+                {{ collections.selectedActivityLogs.length }} Selected
             </v-chip>
-            <v-chip v-if="user != null" class="mr-2" small>
-                {{ user.name }}
-            </v-chip>
+            <!-- <v-chip v-if="filters.selectedUser != null" class="mr-2" small>
+                {{ filters.selectedUser.name }}
+            </v-chip> -->
             <v-chip
                 close
                 class="mr-2"
                 small
-                @click:close="onRefresh"
+                @click:close="onReset"
                 close-icon="mdi-refresh"
             >
                 Refresh
@@ -123,17 +138,17 @@
 
         <v-card-text>
             <v-data-table
-                v-model="selected"
+                v-model="collections.selectedActivityLogs"
                 show-select
                 item-key="id"
                 class="elevation-0"
                 single-expand
                 show-expand
-                :headers="headers"
-                :items="items"
+                :headers="collections.headers"
+                :items="collections.activityLogs"
                 :loading="loading"
                 :options.sync="options"
-                :server-items-length="totalItems"
+                :server-items-length="meta.total"
                 :footer-props="{
                     itemsPerPageOptions: [10, 20, 50, 100],
                     showFirstLastPage: true,
@@ -188,8 +203,6 @@
                 </template>
             </v-data-table>
         </v-card-text>
-
-        <Users></Users>
     </v-card>
 </template>
 
@@ -197,65 +210,89 @@
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import Users from "../../../../components/selector/dialog/Users";
+import ActivityLogDataService from "../../../../services/ActivityLogDataService";
+import UserDataService from "../../../../services/UserDataService";
+import DataTable from "../../../../components/datatable/DataTable";
 
 export default {
     components: {
         DateRangePicker,
+        DataTable,
         Users
     },
     data() {
         return {
-            yawa: false,
             loading: true,
-            date_range: [
-                moment()
-                    .startOf("month")
-                    .format("YYYY-MM-DD"),
-                moment()
-                    .endOf("month")
-                    .format("YYYY-MM-DD")
-            ],
-            preset: "",
-            presets: [
-                "Today",
-                "Yesterday",
-                "Last 7 Days",
-                "Last 30 Days",
-                "This Week",
-                "This Month",
-                "This Quarter",
-                "This Year",
-                "Last Week",
-                "Last Month",
-                "Last Quarter",
-                "Last Year",
-                "Last 5 Years"
-            ],
-            headers: [
-                { text: "User", value: "user", sortable: false },
-                { text: "Description", value: "description", sortable: false },
-                { text: "Created", value: "created_at" },
-                { text: "Actions", value: "actions", sortable: false },
-                { text: "", value: "data-table-expand" }
-            ],
-            items: [],
-            user: { id: 0, username: "", name: "All Users", email: "" },
-            users: [],
-            selected: [],
-            search: "",
-            totalItems: 0,
+            collections: {
+                activityLogs: [],
+                selectedActivityLogs: [],
+                users: [],
+                export_data: [],
+                headers: [
+                    { text: "User", value: "user", sortable: false },
+                    {
+                        text: "Description",
+                        value: "description",
+                        sortable: false
+                    },
+                    { text: "Created", value: "created_at" },
+                    { text: "Actions", value: "actions", sortable: false },
+                    { text: "", value: "data-table-expand" }
+                ]
+            },
+            filters: {
+                search: "",
+                preset: "",
+                selectedUser: {
+                    id: 0,
+                    username: "",
+                    name: "All Users",
+                    email: ""
+                },
+                date_range: [
+                    moment()
+                        .startOf("month")
+                        .format("YYYY-MM-DD"),
+                    moment()
+                        .endOf("month")
+                        .format("YYYY-MM-DD")
+                ],
+                presets: [
+                    "Today",
+                    "Yesterday",
+                    "Last 7 Days",
+                    "Last 30 Days",
+                    "This Week",
+                    "This Month",
+                    "This Quarter",
+                    "This Year",
+                    "Last Week",
+                    "Last Month",
+                    "Last Quarter",
+                    "Last Year",
+                    "Last 5 Years"
+                ]
+            },
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
             },
-            export_data: []
+            meta: {
+                current_page: 0,
+                from: 0,
+                last_page: 0,
+                path: "",
+                per_page: "10",
+                to: 0,
+                total: 0
+            }
         };
     },
     methods: {
         updateDates(e) {
-            this.date_range = e;
+            this.filters.date_range = e;
         },
         changeUser() {},
         getDataFromApi() {
@@ -264,62 +301,55 @@ export default {
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = this.search.trim().toLowerCase();
-                let user_id = this.user.id;
-                let range = this.date_range;
+                let search = this.filters.search.trim().toLowerCase();
+                let user_id = this.filters.selectedUser.id;
+                let range = this.filters.date_range;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        user_id: user_id,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0]
+                    }
+                };
 
-                axios
-                    .get("/api/activity_logs", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            user_id: user_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0]
-                        }
-                    })
+                ActivityLogDataService.getAll(data)
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
+                        // console.log(response);
+                        // let items = response.data.data;
+                        // let meta =  response.data.meta;
 
-                        this.loading = false;
+                        // let export_data = items.map(item => ({
+                        //     user:
+                        //         item.user == null ? "Default" : item.user.name,
+                        //     description: item.description,
+                        //     details: item.properties.details,
+                        //     "created at": item.created_at
+                        // }));
 
-                        let export_data = items.map(item => ({
-                            user:
-                                item.user == null ? "Default" : item.user.name,
-                            description: item.description,
-                            details: item.properties.details,
-                            "created at": item.created_at
-                        }));
+                        // this.collections.export_data = export_data;
 
-                        this.export_data = export_data;
-
-                        resolve({ items, total });
+                        resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        reject();
+                        this.mixin_showErrors(error);
+                    })
+                    .finally(() => {
                         this.loading = false;
                     });
             });
         },
-        loadUsers() {
-            axios
-                // .get("/api/data/users?only=true")
-                .get("/api/users")
+        getUsers() {
+            UserDataService.getAll()
                 .then(response => {
-                    this.users = response.data.data;
+                    this.collections.users = response.data.data;
 
-                    this.users.unshift({
+                    this.collections.users.unshift({
                         id: 0,
                         username: "",
                         name: "All Users",
@@ -336,12 +366,10 @@ export default {
                     );
                 });
         },
-        onRefresh() {
+        onReset() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
-            this.loadUsers();
-
-            this.selected = [];
+            this.getUsers();
+            this.collections.selectedActivityLogs = [];
         },
         hasLink(item) {
             // .properties.custom.link
@@ -364,8 +392,9 @@ export default {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
+                    console.log("fuck", data);
+                    this.collections.activityLogs = data.data;
+                    this.meta = data.meta;
                 });
             },
             deep: true
@@ -375,14 +404,18 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
-                query: this.user,
-                query: this.date_range
+                query: this.filters.search,
+                query: this.filters.selectedUser,
+                query: this.filters.date_range
             };
         },
         formattedDateRange() {
-            let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
-            let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
+            let start_date = moment(this.filters.date_range[0]).format(
+                "MMM DD, YYYY"
+            );
+            let end_date = moment(this.filters.date_range[1]).format(
+                "MMM DD, YYYY"
+            );
 
             if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
                 return start_date;
@@ -396,15 +429,15 @@ export default {
         }
     },
     created() {
-        this.loadUsers();
+        this.getUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
     },
     activated() {
-        this.loadUsers();
+        this.getUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
+            this.collections.activityLogs = data.data;
+            this.meta = data.meta;
         });
     }
 };

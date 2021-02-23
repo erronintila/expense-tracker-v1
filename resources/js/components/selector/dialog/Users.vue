@@ -2,14 +2,8 @@
     <div>
         <v-dialog v-model="dialog" width="500">
             <template v-slot:activator="{ on, attrs }">
-                <!-- <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
-                    {{
-                        selected.length > 0 ? selected[0].name : "All Employees"
-                    }}
-                </v-btn> -->
-
                 <v-chip class="mr-2" small v-bind="attrs" v-on="on">
-                    {{selectedUser}}
+                    {{ selectedUser }}
                 </v-chip>
             </template>
             <v-card>
@@ -40,11 +34,11 @@
 
                                         <v-list-item-subtitle
                                             class="text--primary"
-                                            v-text="item.username"
+                                            v-text="item.job.name"
                                         ></v-list-item-subtitle>
 
                                         <v-list-item-subtitle
-                                            v-text="item.email"
+                                            v-text="item.job.department.name"
                                         ></v-list-item-subtitle>
                                     </v-list-item-content>
                                 </template>
@@ -57,29 +51,6 @@
                         </template>
                     </v-list-item-group>
                 </v-list>
-
-                <!-- <v-data-table
-                    v-model="selected"
-                    dense
-                    :headers="headers"
-                    :items="items"
-                    :loading="loading"
-                    :options.sync="options"
-                    :server-items-length="totalItems"
-                    :footer-props="{
-                        itemsPerPageOptions: [10],
-                        showFirstLastPage: true,
-                        firstIcon: 'mdi-page-first',
-                        lastIcon: 'mdi-page-last',
-                        prevIcon: 'mdi-chevron-left',
-                        nextIcon: 'mdi-chevron-right'
-                    }"
-                    single-select
-                    show-select
-                    item-key="id"
-                    class="elevation-0"
-                >
-                </v-data-table> -->
                 <div>
                     <v-pagination
                         v-model="options.page"
@@ -106,26 +77,25 @@
     </div>
 </template>
 <script>
+import UserDataService from "../../../services/UserDataService";
+
 export default {
+    props: {
+        selectedUsers: {
+            type: Array,
+            default: () => []
+        },
+        multipleSelection: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             dialog: false,
             loading: false,
             totalItems: 0,
             search: "",
-            multipleSelection: false,
-            headers: [
-                { value: "full_name", sortable: false }
-                // { text: "Job Designation", value: "job.name", sortable: false },
-                // {
-                //     text: "Department",
-                //     value: "department",
-                //     sortable: false
-                // },
-                // { text: "Revolving Fund", value: "revolving_fund" },
-                // { text: "Actions", value: "actions", sortable: false },
-                // { text: "", value: "data-table-expand" }
-            ],
             selected: [],
             items: [],
             options: {
@@ -146,18 +116,18 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.search.trim().toLowerCase();
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        is_superadmin: false
+                    }
+                };
 
-                axios
-                    .get("/api/users", {    
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            is_superadmin: false
-                        }
-                    })
+                UserDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -177,16 +147,16 @@ export default {
         onReset() {
             this.dialog = false;
             this.selected = [];
-            this.options= {
+            this.options = {
                 sortBy: ["last_name"],
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
-            }
+            };
         },
         selectUser() {
             this.dialog = false;
-            console.log(this.selected);
+            this.selectedUser = this.selected;
             return this.$emit("selectUser", this.selected);
         }
     },
@@ -208,12 +178,21 @@ export default {
                 query: this.search
             };
         },
-        selectedUser() {
-            if(this.selected) {
-                return this.selected.length > 0 ? this.selected[0].name : 'All Employees';
+        selectedUser: {
+            get() {
+                console.log("getter", this.selected);
+                if (this.selected) {
+                    return this.selected.length > 0
+                        ? this.selected
+                        : "All Employees";
+                }
+
+                return "All Employees";
+            },
+            set(value) {
+                console.log("setter", value);
+                return value;
             }
-            
-            return 'All Employees';
         }
     },
     created() {
