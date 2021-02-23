@@ -209,7 +209,7 @@
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import Users from "../../../../components/selector/dialog/Users";
+import UserSelector from "../../../../components/selector/dialog/UserSelector";
 import ActivityLogDataService from "../../../../services/ActivityLogDataService";
 import UserDataService from "../../../../services/UserDataService";
 import DataTable from "../../../../components/datatable/DataTable";

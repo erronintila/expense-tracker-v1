@@ -2,98 +2,10 @@
     <v-card class="elevation-0 pt-0">
         <v-card-title class="pt-0">
             <h4 class="title green--text">Activity Logs</h4>
-
             <v-spacer></v-spacer>
-
-            <!-- <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        class="elevation-3 mr-2"
-                        color="green"
-                        dark
-                        fab
-                        x-small
-                        @click="onReset"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon dark>mdi-reload</v-icon>
-                    </v-btn>
-                </template>
-                <span>Refresh</span>
-            </v-tooltip> -->
-
-            <!-- <v-menu
-                transition="scale-transition"
-                :close-on-content-click="false"
-                :nudge-width="200"
-                offset-y
-                left
-                bottom
-            >
-                <template v-slot:activator="{ on: menu, attrs }">
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on: tooltip }">
-                            <v-btn
-                                class="elevation-3 mr-2"
-                                color="green"
-                                dark
-                                fab
-                                x-small
-                                v-bind="attrs"
-                                v-on="{ ...tooltip, ...menu }"
-                            >
-                                <v-icon dark>mdi-filter</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Filter Data</span>
-                    </v-tooltip>
-                </template>
-
-                <v-card>
-                    <v-list>
-                        <v-list-item>
-                            <DateRangePicker
-                                :preset="filters.preset"
-                                :presets="filters.presets"
-                                :value="filters.date_range"
-                                @updateDates="updateDates"
-                            ></DateRangePicker>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-select
-                                v-model="filters.selectedUser"
-                                :items="collections.users"
-                                label="User"
-                                item-value="id"
-                                item-text="name"
-                                return-object
-                                @change="changeUser"
-                            >
-                                <template slot="item" slot-scope="data">
-                                    <v-list max-width="250">
-                                        <v-list-item-content>
-                                            <v-list-item-title
-                                                v-html="data.item.name"
-                                            ></v-list-item-title>
-                                            <v-list-item-subtitle
-                                                v-html="`${data.item.username}`"
-                                            ></v-list-item-subtitle>
-                                            <v-list-item-subtitle
-                                                v-html="data.item.email"
-                                            ></v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list>
-                                </template>
-                            </v-select>
-                        </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-menu> -->
         </v-card-title>
 
         <v-card-subtitle>
-            <!-- {{ formattedDateRange }} -->
             <DateRangePicker
                 :buttonType="true"
                 :buttonText="true"
@@ -105,11 +17,13 @@
                 @updateDates="updateDates"
             >
             </DateRangePicker>
-            <!-- <v-icon>mdi-calendar-range</v-icon> -->
         </v-card-subtitle>
 
         <v-row class="ml-4">
-            <Users ref="users_component" @selectUser="selectUser"></Users>
+            <UserSelector
+                ref="userSelector"
+                @selectUser="selectUser"
+            ></UserSelector>
             <v-chip
                 color="green"
                 dark
@@ -122,9 +36,6 @@
             >
                 {{ collections.selectedActivityLogs.length }} Selected
             </v-chip>
-            <!-- <v-chip v-if="filters.selectedUser != null" class="mr-2" small>
-                {{ filters.selectedUser.name }}
-            </v-chip> -->
             <v-chip
                 close
                 class="mr-2"
@@ -209,7 +120,7 @@
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import Users from "../../../../components/selector/dialog/Users";
+import UserSelector from "../../../../components/selector/dialog/UserSelector";
 import ActivityLogDataService from "../../../../services/ActivityLogDataService";
 import UserDataService from "../../../../services/UserDataService";
 import DataTable from "../../../../components/datatable/DataTable";
@@ -218,7 +129,7 @@ export default {
     components: {
         DateRangePicker,
         DataTable,
-        Users
+        UserSelector
     },
     data() {
         return {
@@ -226,7 +137,6 @@ export default {
             collections: {
                 activityLogs: [],
                 selectedActivityLogs: [],
-                // users: [],
                 export_data: [],
                 headers: [
                     { text: "User", value: "user", sortable: false },
@@ -284,7 +194,7 @@ export default {
                 from: 0,
                 last_page: 0,
                 path: "",
-                per_page: "10",
+                per_page: 10,
                 to: 0,
                 total: 0
             }
@@ -294,8 +204,8 @@ export default {
         updateDates(e) {
             this.filters.date_range = e;
         },
-        changeUser() {},
         selectUser(e) {
+            this.collections.selectedActivityLogs = [];
             if (e == null || e == undefined) {
                 this.filters.selectedUser = {
                     id: 0,
@@ -332,20 +242,6 @@ export default {
 
                 ActivityLogDataService.getAll(data)
                     .then(response => {
-                        // console.log(response);
-                        // let items = response.data.data;
-                        // let meta =  response.data.meta;
-
-                        // let export_data = items.map(item => ({
-                        //     user:
-                        //         item.user == null ? "Default" : item.user.name,
-                        //     description: item.description,
-                        //     details: item.properties.details,
-                        //     "created at": item.created_at
-                        // }));
-
-                        // this.collections.export_data = export_data;
-
                         resolve(response.data);
                     })
                     .catch(error => {
@@ -357,37 +253,13 @@ export default {
                     });
             });
         },
-        // getUsers() {
-        //     UserDataService.getAll()
-        //         .then(response => {
-        //             this.collections.users = response.data.data;
-
-        //             this.collections.users.unshift({
-        //                 id: 0,
-        //                 username: "",
-        //                 name: "All Users",
-        //                 email: ""
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         onReset() {
             Object.assign(this.$data, this.$options.data.apply(this));
-            // this.getUsers();
             this.collections.selectedActivityLogs = [];
 
-            this.$refs.users_component.onReset;
+            this.$refs.userSelector.onReset;
         },
         hasLink(item) {
-            // .properties.custom.link
             if (item.properties) {
                 if (item.properties.custom) {
                     if (item.properties.custom.link) {
@@ -443,11 +315,9 @@ export default {
         }
     },
     created() {
-        // this.getUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
     },
     activated() {
-        // this.getUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
             this.collections.activityLogs = data.data;

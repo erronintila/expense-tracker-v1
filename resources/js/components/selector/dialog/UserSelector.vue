@@ -11,20 +11,21 @@
                     Employees
                     <v-spacer></v-spacer>
                     <v-text-field
-                        v-model="search"
+                        v-model="filters.search"
                         append-icon="mdi-magnify"
                         label="Search"
                         single-line
                         hide-details
                     ></v-text-field>
                 </v-card-title>
-                <v-list class="overflow-y-auto" max-height="400" two-line dense>
+                <v-list class="overflow-y-auto" max-height="400" two-line>
                     <v-list-item-group
-                        v-model="selected"
+                        v-model="collections.selected"
                         active-class="green--text"
                         :multiple="multipleSelection"
+                        @change="selectUser"
                     >
-                        <template v-for="(item, index) in items">
+                        <template v-for="(item, index) in collections.items">
                             <v-list-item :key="item.id" :value="item">
                                 <template>
                                     <v-list-item-content>
@@ -45,7 +46,7 @@
                             </v-list-item>
 
                             <v-divider
-                                v-if="index < items.length - 1"
+                                v-if="index < collections.items.length - 1"
                                 :key="index"
                             ></v-divider>
                         </template>
@@ -64,7 +65,7 @@
                         Reset
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="selectUser">
+                    <v-btn color="green darken-1" text @click="dialog = false">
                         OK
                     </v-btn>
                 </v-card-actions>
@@ -90,9 +91,13 @@ export default {
         return {
             dialog: false,
             loading: false,
-            search: "",
-            selected: [],
-            items: [],
+            collections: {
+                selected: null,
+                items: []
+            },
+            filters: {
+                search: ""
+            },
             options: {
                 sortBy: ["last_name"],
                 sortDesc: [false],
@@ -119,7 +124,7 @@ export default {
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
+                let search = _this.filters.search.trim().toLowerCase();
                 let data = {
                     params: {
                         search: search,
@@ -147,7 +152,8 @@ export default {
         },
         onReset() {
             this.dialog = false;
-            this.selected = [];
+            this.filters.search = "";
+            this.collections.selected = null;
             this.options = {
                 sortBy: ["last_name"],
                 sortDesc: [false],
@@ -155,23 +161,22 @@ export default {
                 itemsPerPage: 10
             };
 
-            return this.$emit("selectUser", this.selected);
+            return this.$emit("selectUser", this.collections.selected);
         },
         selectUser() {
-            // this.dialog = false;
-            this.selectedUser = this.selected;
-            return this.$emit("selectUser", this.selected);
+            this.selectedUser = this.collections.selected;
+            return this.$emit("selectUser", this.collections.selected);
         },
         getJobName(user) {
-            if(user.job) {
+            if (user.job) {
                 return user.job.name;
             }
 
             return "";
         },
         getDepartmentName(user) {
-            if(user.job) {
-                if(user.job.department) {
+            if (user.job) {
+                if (user.job.department) {
                     return user.job.department.name;
                 }
             }
@@ -183,7 +188,7 @@ export default {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.data;
+                    this.collections.items = data.data;
                     this.meta = data.meta;
                 });
             },
@@ -194,15 +199,13 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search
+                query: this.filters.search
             };
         },
         selectedUser: {
             get() {
-                if (this.selected) {
-                    return this.selected.length > 0
-                        ? this.selected
-                        : "All Employees";
+                if (this.collections.selected) {
+                    return this.collections.selected.name;
                 }
 
                 return "All Employees";
@@ -210,12 +213,11 @@ export default {
             set(value) {
                 return value;
             }
-        },
-        
+        }
     },
     created() {
         this.getDataFromApi().then(data => {
-            this.items = data.data;
+            this.collections.items = data.data;
             this.meta = data.meta;
         });
     }
