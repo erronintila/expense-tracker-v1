@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import JobDataService from "../../../../services/JobDataService";
+
 export default {
     data() {
         return {
@@ -104,11 +106,12 @@ export default {
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .post("/api/jobs", {
-                        name: _this.form.name,
-                        department_id: _this.form.department
-                    })
+                let data = {
+                    name: _this.form.name,
+                    department_id: _this.form.department
+                };
+
+                JobDataService.store(data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,

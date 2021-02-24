@@ -9,6 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../services/VendorDataService */ "./resources/js/services/VendorDataService.js");
 //
 //
 //
@@ -154,6 +155,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -193,7 +195,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      axios.get("/api/vendors/" + _this.$route.params.id).then(function (response) {
+      _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(_this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.name = data.name;
@@ -230,7 +232,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.$refs.form.validate();
 
       if (_this.$refs.form.validate()) {
-        axios.put("/api/vendors/" + _this.$route.params.id, {
+        var data = {
           code: _this.form.code,
           name: _this.form.name,
           email: _this.form.email,
@@ -243,7 +245,8 @@ __webpack_require__.r(__webpack_exports__);
           is_vat_inclusive: _this.form.is_vat_inclusive,
           address: _this.form.address,
           expense_types: _this.selected_expense_types
-        }).then(function (response) {
+        };
+        _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].update(_this.$route.params.id, data).then(function (response) {
           _this.mixin_successDialog(response.data.status, response.data.message);
 
           _this.$router.push({
@@ -657,6 +660,75 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/services/VendorDataService.js":
+/*!****************************************************!*\
+  !*** ./resources/js/services/VendorDataService.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var VendorDataService = /*#__PURE__*/function () {
+  function VendorDataService() {
+    _classCallCheck(this, VendorDataService);
+  }
+
+  _createClass(VendorDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/vendors", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/vendors", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/vendors/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/restore/".concat(id), data);
+    }
+  }]);
+
+  return VendorDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new VendorDataService());
 
 /***/ }),
 

@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import DepartmentDataService from "../../../../services/DepartmentDataService";
+
 export default {
     data() {
         return {
@@ -60,8 +62,7 @@ export default {
         getData() {
             let _this = this;
 
-            axios
-                .get("/api/departments/" + _this.$route.params.id)
+            DepartmentDataService.show(_this.$route.params.id)
                 .then(response => {
                     _this.form.name = response.data.data.name;
                 })
@@ -79,11 +80,12 @@ export default {
             let _this = this;
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .put(`/api/departments/${_this.$route.params.id}`, {
-                        action: "update",
-                        name: _this.form.name
-                    })
+                let data = {
+                    action: "update",
+                    name: _this.form.name
+                };
+
+                DepartmentDataService.update(_this.$route.params.id, data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,
@@ -115,6 +117,6 @@ export default {
     },
     activated() {
         this.getData();
-    },
+    }
 };
 </script>

@@ -144,6 +144,8 @@
 </template>
 
 <script>
+import VendorDataService from "../../../../services/VendorDataService";
+
 export default {
     data() {
         return {
@@ -183,8 +185,7 @@ export default {
         getData() {
             let _this = this;
 
-            axios
-                .get("/api/vendors/" + _this.$route.params.id)
+            VendorDataService.show(_this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
 
@@ -229,21 +230,21 @@ export default {
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .put("/api/vendors/" + _this.$route.params.id, {
-                        code: _this.form.code,
-                        name: _this.form.name,
-                        email: _this.form.email,
-                        tin: _this.form.tin == "N/A" ? null : _this.form.tin,
-                        contact_person: _this.form.contact_person,
-                        mobile_number: _this.form.mobile_number,
-                        telephone_number: _this.form.telephone_number,
-                        remarks: _this.form.remarks,
-                        website: _this.form.website,
-                        is_vat_inclusive: _this.form.is_vat_inclusive,
-                        address: _this.form.address,
-                        expense_types: _this.selected_expense_types
-                    })
+                let data = {
+                    code: _this.form.code,
+                    name: _this.form.name,
+                    email: _this.form.email,
+                    tin: _this.form.tin == "N/A" ? null : _this.form.tin,
+                    contact_person: _this.form.contact_person,
+                    mobile_number: _this.form.mobile_number,
+                    telephone_number: _this.form.telephone_number,
+                    remarks: _this.form.remarks,
+                    website: _this.form.website,
+                    is_vat_inclusive: _this.form.is_vat_inclusive,
+                    address: _this.form.address,
+                    expense_types: _this.selected_expense_types
+                };
+                VendorDataService.update(_this.$route.params.id, data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,

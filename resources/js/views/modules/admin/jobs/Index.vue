@@ -211,6 +211,8 @@
 </template>
 
 <script>
+import JobDataService from "../../../../services/JobDataService";
+
 export default {
     props: {},
     data() {
@@ -253,19 +255,19 @@ export default {
                 let search = _this.search.trim().toLowerCase();
                 let department_id = _this.department.id;
                 let status = _this.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        department_id: department_id
+                    }
+                };
 
-                axios
-                    .get("/api/jobs", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            department_id: department_id
-                        }
-                    })
+                JobDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -341,14 +343,15 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/jobs/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    let data = {
+                        params: {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    };
+
+                    JobDataService.delete(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
@@ -386,12 +389,13 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/jobs/restore/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            })
+                    let data = {
+                        ids: _this.selected.map(item => {
+                            return item.id;
                         })
+                    };
+
+                    JobDataService.restore(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,

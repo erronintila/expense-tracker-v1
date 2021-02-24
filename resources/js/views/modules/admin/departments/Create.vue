@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import DepartmentDataService from "../../../../services/DepartmentDataService";
 export default {
     data() {
         return {
@@ -61,10 +62,11 @@ export default {
             let _this = this;
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .post("/api/departments", {
-                        name: _this.form.name
-                    })
+                let data = {
+                    name: _this.form.name
+                };
+
+                DepartmentDataService.store(data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,

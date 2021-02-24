@@ -173,6 +173,8 @@
 </template>
 
 <script>
+import DepartmentDataService from "../../../../services/DepartmentDataService";
+
 export default {
     data() {
         return {
@@ -206,18 +208,18 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status
+                    }
+                };
 
-                axios
-                    .get("/api/departments", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status
-                        }
-                    })
+                DepartmentDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -268,14 +270,14 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/departments/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    let data = {
+                        params: {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    };
+                    DepartmentDataService.delete(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
@@ -320,15 +322,13 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(
-                            `/api/departments/restore/${_this.selected[0].id}`,
-                            {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        )
+                    let data = {
+                        ids: _this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+
+                    DepartmentDataService.restore(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,

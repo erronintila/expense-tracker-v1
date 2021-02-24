@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import JobDataService from "../../../../services/JobDataService";
+
 export default {
     data() {
         return {
@@ -78,13 +80,10 @@ export default {
         getData() {
             let _this = this;
 
-            axios
-                .get("/api/jobs/" + _this.$route.params.id)
+            JobDataService.show(_this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
-
                     _this.form.name = data.name;
-
                     _this.form.department = data.department.id;
                 })
                 .catch(error => {
@@ -128,12 +127,13 @@ export default {
             console.log(this.form.department);
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .put("/api/jobs/" + _this.$route.params.id, {
-                        action: "update",
-                        name: _this.form.name,
-                        department_id: _this.form.department
-                    })
+                let data = {
+                    action: "update",
+                    name: _this.form.name,
+                    department_id: _this.form.department
+                };
+
+                JobDataService.update(_this.$route.params.id, data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,

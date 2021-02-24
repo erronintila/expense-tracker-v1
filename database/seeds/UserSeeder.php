@@ -119,6 +119,10 @@ class UserSeeder extends Seeder
                 // Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
                 // Permission::create(['name' => 'approve payments', 'category' => $model]);
             }
+
+            if ($model == "vendors") {
+                Permission::create(['name' => 'restore vendors', 'category' => $model]);
+            }
         }
 
         /**
