@@ -15,16 +15,14 @@
                 <v-container>
                     <v-row>
                         <v-col class="d-flex" cols="12" sm="6">
-                            <v-autocomplete
-                                v-model="form.department"
-                                :items="departments"
+                            <DepartmentDropdownSelector
+                                ref="departmentDropdownSelector"
+                                :selectedDepartment="form.department"
                                 :rules="mixin_validation.required"
-                                :error-messages="errors.department_id"
-                                @input="errors.department_id = []"
-                                item-value="id"
-                                item-text="name"
-                                label="Department *"
-                            ></v-autocomplete>
+                                :errors="errors.department_id"
+                                @onChange="onChangeDepartment"
+                            >
+                            </DepartmentDropdownSelector>
                         </v-col>
 
                         <v-col cols="12" md="6">
@@ -60,8 +58,12 @@
 
 <script>
 import JobDataService from "../../../../services/JobDataService";
+import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
 
 export default {
+    components: {
+        DepartmentDropdownSelector
+    },
     data() {
         return {
             valid: false,
@@ -77,38 +79,17 @@ export default {
         };
     },
     methods: {
-        loadDepartments() {
-            let _this = this;
-
-            axios
-                .get("/api/data/departments")
-                .then(response => {
-                    let data = response.data.data.map(item => ({
-                        id: item.id,
-                        name: item.name
-                    }));
-
-                    _this.departments = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+        onChangeDepartment(value) {
+            this.form.department = value;
         },
         onSave() {
             let _this = this;
-
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
                 let data = {
                     name: _this.form.name,
-                    department_id: _this.form.department
+                    department_id: _this.form.department.id
                 };
 
                 JobDataService.store(data)
@@ -121,13 +102,7 @@ export default {
                         _this.$router.push({ name: "admin.jobs.index" });
                     })
                     .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
@@ -140,11 +115,7 @@ export default {
             }
         }
     },
-    created() {
-        this.loadDepartments();
-    },
-    activated() {
-        this.loadDepartments();
-    }
+    created() {},
+    activated() {}
 };
 </script>

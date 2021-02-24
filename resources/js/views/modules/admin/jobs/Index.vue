@@ -75,14 +75,14 @@
                 <v-chip
                     color="green"
                     dark
-                    v-if="selected.length > 0"
+                    v-if="collections.selected.length > 0"
                     close
                     class="mr-2"
                     small
-                    @click:close="selected = []"
+                    @click:close="collections.selected = []"
                     close-icon="mdi-close"
                 >
-                    {{ selected.length }} Selected
+                    {{ collections.selected.length }} Selected
                 </v-chip>
                 <v-menu
                     transition="scale-transition"
@@ -94,13 +94,13 @@
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
-                            v-if="status != null"
+                            v-if="filters.status != null"
                             class="mr-2"
                             small
                             v-bind="attrs"
                             v-on="menu"
                         >
-                            {{ status }}
+                            {{ filters.status }}
                         </v-chip>
                     </template>
 
@@ -108,8 +108,8 @@
                         <v-list>
                             <v-list-item>
                                 <v-select
-                                    v-model="status"
-                                    :items="statuses"
+                                    v-model="filters.status"
+                                    :items="filters.statuses"
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
@@ -127,27 +127,26 @@
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
-                            v-if="department != null"
+                            v-if="filters.department != null"
                             class="mr-2"
                             small
                             v-bind="attrs"
                             v-on="menu"
                         >
-                            {{ department.name }}
+                            {{ filters.department.name }}
                         </v-chip>
                     </template>
 
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <v-select
-                                    v-model="department"
-                                    :items="departments"
-                                    item-text="name"
-                                    item-value="id"
-                                    label="Department"
-                                    return-object
-                                ></v-select>
+                                <DepartmentDropdownSelector
+                                    ref="departmentDropdownSelector"
+                                    :selectedDepartment="filters.department"
+                                    :showAll="true"
+                                    @onChange="onChangeDepartment"
+                                >
+                                </DepartmentDropdownSelector>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -166,7 +165,7 @@
 
             <v-card-subtitle>
                 <v-text-field
-                    v-model="search"
+                    v-model="filters.search"
                     append-icon="mdi-magnify"
                     label="Search"
                     single-line
@@ -176,11 +175,11 @@
 
             <v-card-text>
                 <v-data-table
-                    :headers="headers"
-                    :items="items"
+                    :headers="collections.headers"
+                    :items="collections.items"
                     :loading="loading"
                     :options.sync="options"
-                    :server-items-length="totalItems"
+                    :server-items-length="meta.total"
                     :footer-props="{
                         itemsPerPageOptions: [10, 20, 50, 100],
                         showFirstLastPage: true,
@@ -189,7 +188,7 @@
                         prevIcon: 'mdi-chevron-left',
                         nextIcon: 'mdi-chevron-right'
                     }"
-                    v-model="selected"
+                    v-model="collections.selected"
                     show-select
                     item-key="id"
                     class="elevation-0"
@@ -212,49 +211,65 @@
 
 <script>
 import JobDataService from "../../../../services/JobDataService";
+import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
 
 export default {
-    props: {},
+    components: {
+        DepartmentDropdownSelector
+    },
     data() {
         return {
             loading: true,
-            headers: [
-                { text: "Name", value: "name" },
-                {
-                    text: "Department",
-                    value: "department.name",
-                    sortable: false
-                },
-                { text: "Actions", value: "actions", sortable: false }
-            ],
-            items: [],
-            department: { id: 0, name: "All Departments" },
-            departments: [],
-            status: "Active",
-            statuses: ["Active", "Archived"],
-            selected: [],
-            search: "",
-            totalItems: 0,
+            collections: {
+                selected: [],
+                items: [],
+                headers: [
+                    { text: "Name", value: "name" },
+                    {
+                        text: "Department",
+                        value: "department.name",
+                        sortable: false
+                    },
+                    { text: "Actions", value: "actions", sortable: false }
+                ]
+            },
+            filters: {
+                department: { id: null, name: "All Departments" },
+                status: "Active",
+                search: "",
+                statuses: ["Active", "Archived"]
+            },
             options: {
                 sortBy: ["name"],
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
+            },
+            meta: {
+                current_page: 0,
+                from: 0,
+                last_page: 0,
+                path: "",
+                per_page: 10,
+                to: 0,
+                total: 0
             }
         };
     },
     methods: {
+        onChangeDepartment(value) {
+            this.filters.department = value;
+        },
         getDataFromApi() {
             let _this = this;
-
             _this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let department_id = _this.department.id;
-                let status = _this.status;
+                let search = _this.filters.search.trim().toLowerCase();
+                let department_id = _this.filters.department.id;
+                let status = _this.filters.status;
                 let data = {
                     params: {
                         search: search,
@@ -269,54 +284,20 @@ export default {
 
                 JobDataService.getAll(data)
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
-
-                        _this.loading = false;
-
-                        resolve({ items, total });
+                        resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        this.mixin_showErrors(error);
+                    })
+                    .finally(() => {
                         _this.loading = false;
                     });
             });
         },
-        loadDepartments() {
-            let _this = this;
-
-            axios
-                .get("/api/data/departments?only=true")
-                .then(response => {
-                    _this.departments = response.data.data;
-                    _this.departments.unshift({
-                        id: 0,
-                        name: "All Departments"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
 
-            this.loadDepartments();
-
-            this.selected = [];
+            this.collections.selected = [];
         },
         onShow(item) {
             this.$router.push({
@@ -333,7 +314,7 @@ export default {
         onDelete() {
             let _this = this;
 
-            if (_this.selected.length == 0) {
+            if (_this.collections.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -345,24 +326,27 @@ export default {
                 if (res) {
                     let data = {
                         params: {
-                            ids: _this.selected.map(item => {
+                            ids: _this.collections.selected.map(item => {
                                 return item.id;
                             })
                         }
                     };
 
-                    JobDataService.delete(_this.selected[0].id, data)
+                    JobDataService.delete(
+                        _this.collections.selected[0].id,
+                        data
+                    )
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
                             _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                                _this.collections.items = data.data;
+                                _this.meta = data.meta;
                             });
 
-                            _this.selected = [];
+                            _this.collections.selected = [];
                         })
                         .catch(function(error) {
                             console.log(error);
@@ -379,7 +363,7 @@ export default {
         onRestore() {
             let _this = this;
 
-            if (_this.selected.length == 0) {
+            if (_this.collections.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -390,32 +374,29 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     let data = {
-                        ids: _this.selected.map(item => {
+                        ids: _this.collections.selected.map(item => {
                             return item.id;
                         })
                     };
 
-                    JobDataService.restore(_this.selected[0].id, data)
+                    JobDataService.restore(
+                        _this.collections.selected[0].id,
+                        data
+                    )
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
                             _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                                _this.collections.items = data.data;
+                                _this.meta = data.meta;
                             });
 
-                            _this.selected = [];
+                            _this.collections.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -425,8 +406,8 @@ export default {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
+                    this.collections.items = data.data;
+                    this.meta = data.meta;
                 });
             },
             deep: true
@@ -436,28 +417,20 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
-                query: this.status,
-                query: this.department
+                query: this.filters.search,
+                query: this.filters.status,
+                query: this.filters.department
             };
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
     created() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadDepartments();
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadDepartments();
         this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
+            this.collections.items = data.data;
+            this.meta = data.meta;
         });
     }
 };

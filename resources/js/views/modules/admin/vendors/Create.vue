@@ -38,6 +38,10 @@
                                         v-model="form.name"
                                         :counter="150"
                                         :error-messages="errors.name"
+                                        :rules="[
+                                            ...mixin_validation.required,
+                                            ...mixin_validation.minLength(150)
+                                        ]"
                                         label="Name"
                                         required
                                     ></v-text-field>
@@ -81,6 +85,7 @@
                                 <v-col cols="9" md="9">
                                     <v-text-field
                                         v-model="form.tin"
+                                        :rules="mixin_validation.required"
                                         :error-messages="errors.tin"
                                         :counter="100"
                                         label="Tax Identification Number (TIN)"
@@ -154,6 +159,7 @@
                             <v-textarea
                                 v-model="form.address"
                                 :error-messages="errors.address"
+                                :rules="mixin_validation.required"
                                 @input="errors.address = []"
                                 label="Address"
                                 rows="3"

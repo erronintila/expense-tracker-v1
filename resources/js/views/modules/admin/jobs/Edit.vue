@@ -15,16 +15,15 @@
                 <v-container>
                     <v-row>
                         <v-col class="d-flex" cols="12" sm="6">
-                            <v-autocomplete
+                            <DepartmentDropdownSelector
                                 v-model="form.department"
-                                :items="departments"
+                                ref="departmentDropdownSelector"
+                                :selectedDepartment="form.department"
                                 :rules="mixin_validation.required"
-                                :error-messages="errors.department_id"
-                                @input="errors.department_id = []"
-                                item-value="id"
-                                item-text="name"
-                                label="Department *"
-                            ></v-autocomplete>
+                                :errors="errors.department_id"
+                                @onChange="onChangeDepartment"
+                            >
+                            </DepartmentDropdownSelector>
                         </v-col>
 
                         <v-col cols="12" md="6">
@@ -60,8 +59,12 @@
 
 <script>
 import JobDataService from "../../../../services/JobDataService";
+import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
 
 export default {
+    components: {
+        DepartmentDropdownSelector
+    },
     data() {
         return {
             valid: false,
@@ -73,10 +76,12 @@ export default {
                 name: [],
                 department_id: []
             },
-            departments: []
         };
     },
     methods: {
+        onChangeDepartment(value) {
+            this.form.department = value;
+        },
         getData() {
             let _this = this;
 
@@ -84,53 +89,27 @@ export default {
                 .then(response => {
                     let data = response.data.data;
                     _this.form.name = data.name;
-                    _this.form.department = data.department.id;
+                    _this.form.department = data.department;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
-        loadDepartments() {
-            let _this = this;
-
-            axios
-                .get("/api/data/departments")
-                .then(response => {
-                    let data = response.data.data.map(item => ({
-                        id: item.id,
-                        name: item.name
-                    }));
-
-                    _this.departments = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    if (error.response) {
+                        if (error.response.data) {
+                            _this.errors = error.response.data.errors;
+                        }
+                    }
                 });
         },
         onSave() {
             let _this = this;
-
             _this.$refs.form.validate();
-
-            console.log(this.form.department);
 
             if (_this.$refs.form.validate()) {
                 let data = {
                     action: "update",
                     name: _this.form.name,
-                    department_id: _this.form.department
+                    department_id: _this.form.department.id
                 };
 
                 JobDataService.update(_this.$route.params.id, data)
@@ -143,13 +122,7 @@ export default {
                         _this.$router.push({ name: "admin.jobs.index" });
                     })
                     .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
@@ -157,19 +130,14 @@ export default {
                             }
                         }
                     });
-
                 return;
             }
         }
     },
     created() {
-        this.loadDepartments();
-
         this.getData();
     },
     activated() {
-        this.loadDepartments();
-
         this.getData();
     }
 };

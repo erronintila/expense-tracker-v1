@@ -185,6 +185,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -371,6 +377,9 @@ var render = function() {
                                     attrs: {
                                       counter: 150,
                                       "error-messages": _vm.errors.name,
+                                      rules: _vm.mixin_validation.required.concat(
+                                        _vm.mixin_validation.minLength(150)
+                                      ),
                                       label: "Name",
                                       required: ""
                                     },
@@ -442,6 +451,7 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
+                                      rules: _vm.mixin_validation.required,
                                       "error-messages": _vm.errors.tin,
                                       counter: 100,
                                       label: "Tax Identification Number (TIN)",
@@ -597,6 +607,7 @@ var render = function() {
                           _c("v-textarea", {
                             attrs: {
                               "error-messages": _vm.errors.address,
+                              rules: _vm.mixin_validation.required,
                               label: "Address",
                               rows: "3"
                             },

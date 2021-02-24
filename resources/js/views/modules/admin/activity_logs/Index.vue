@@ -20,8 +20,8 @@
         </v-card-subtitle>
 
         <v-row class="ml-4">
-            <UserSelector
-                ref="userSelector"
+            <UserDialogSelector
+                ref="userDialogSelector"
                 @selectUser="selectUser"
                 @onReset="resetUser"
                 :selectedUser="filters.selectedUser"
@@ -37,7 +37,7 @@
                         }}
                     </v-chip>
                 </template>
-            </UserSelector>
+            </UserDialogSelector>
             <v-chip
                 color="green"
                 dark
@@ -134,16 +134,13 @@
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import UserSelector from "../../../../components/selector/dialog/UserSelector";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 import ActivityLogDataService from "../../../../services/ActivityLogDataService";
-import UserDataService from "../../../../services/UserDataService";
-import DataTable from "../../../../components/datatable/DataTable";
 
 export default {
     components: {
         DateRangePicker,
-        DataTable,
-        UserSelector
+        UserDialogSelector
     },
     data() {
         return {
