@@ -7,7 +7,10 @@
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add vendors')">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add vendors')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -23,64 +26,6 @@
                     </template>
                     <span>Add New</span>
                 </v-tooltip>
-
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
-
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
 
                 <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
@@ -127,13 +72,58 @@
             </v-card-title>
 
             <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
                 </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip
+                            v-if="status != null"
+                            class="mr-2"
+                            small
+                            v-bind="attrs"
+                            v-on="menu"
+                        >
+                            {{ status }}
+                        </v-chip>
+                    </template>
+
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
                 </v-chip>
             </v-row>
@@ -213,7 +203,12 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit vendors')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit vendors')"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -335,8 +330,10 @@ export default {
                             }
                         })
                         .then(function(response) {
-
-                            self.mixin_successDialog(response.data.status, response.data.message);
+                            self.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
 
                             // self.$dialog.message.success(
                             //     "Item(s) moved to archive.",
@@ -380,10 +377,13 @@ export default {
                         .put(`/api/vendors/restore/${self.selected[0].id}`, {
                             ids: self.selected.map(item => {
                                 return item.id;
-                            }),
+                            })
                         })
                         .then(function(response) {
-                            self.mixin_successDialog(response.data.status, response.data.message);
+                            self.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
 
                             self.getDataFromApi().then(data => {
                                 self.items = data.items;
