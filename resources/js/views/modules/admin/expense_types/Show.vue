@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
     data() {
         return {};
@@ -23,10 +25,8 @@ export default {
         loadItem() {
             let _this = this;
 
-            axios
-                .get(`/api/users/${_this.$route.params.id}`)
-                .then(function(response) {
-                })
+            ExpenseTypeDataService.show(_this.$route.params.id)
+                .then(function(response) {})
                 .catch(function(error) {
                     console.log(error);
                     console.log(error.response);

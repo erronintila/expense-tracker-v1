@@ -17,29 +17,6 @@
             </v-card-title>
 
             <v-expansion-panels v-model="panel" multiple>
-                <!-- <v-expansion-panel>
-                    <v-expansion-panel-header>
-                        <div class="green--text">
-                            General Settings
-                        </div>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-row>
-                            <v-col cols="12" md="4">
-                                <v-text-field
-                                    label="Company Name"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="4">
-                                <v-select
-                                    label="Currency"
-                                    :items="['Philippine Peso']"
-                                ></v-select>
-                            </v-col>
-                        </v-row>
-                    </v-expansion-panel-content>
-                </v-expansion-panel> -->
-
                 <v-expansion-panel>
                     <v-expansion-panel-header>
                         <div class="green--text">
@@ -319,16 +296,6 @@
                                     </v-col>
                                 </v-row>
 
-                                <!-- <v-row>
-                                    <v-col>
-                                        <v-textarea
-                                            v-model="base64Image"
-                                            readonly
-                                            label="Background Image"
-                                        ></v-textarea>
-                                    </v-col>
-                                </v-row> -->
-
                                 <v-divider></v-divider>
 
                                 <v-row>
@@ -396,73 +363,6 @@
                                         </v-text-field>
                                     </v-col>
                                 </v-row>
-
-                                <!-- <v-row>
-                                    <v-col cols="12" md="3">
-                                        <v-select
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .alignment
-                                            "
-                                            :items="['left', 'right', 'center']"
-                                            label="Logo Alignment"
-                                        >
-                                        </v-select>
-                                    </v-col>
-                                   
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.left
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Left)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.top
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Top)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.right
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Right)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.bottom
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Bottom)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                </v-row> -->
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>
@@ -507,6 +407,7 @@
 
 <script>
 import moment from "moment";
+import SettingDataService from "../../../../services/SettingDataService";
 
 export default {
     data() {
@@ -572,8 +473,7 @@ export default {
     methods: {
         onLoad: function() {
             let _this = this;
-            axios
-                .get("/api/settings")
+            SettingDataService.getAll()
                 .then(response => {
                     _this.file_input = null;
                     _this.settings = response.data;
@@ -591,12 +491,6 @@ export default {
         onSave: function() {
             let _this = this;
 
-            // let settings = Object.assign(
-            //     this.general_settings,
-            //     this.expense_settings,
-            //     this.expense_report_settings
-            // );
-
             _this.$refs.formExpenses.validate();
             _this.$refs.formExpenseReports.validate();
             _this.$refs.formTaxes.validate();
@@ -606,10 +500,11 @@ export default {
                 _this.$refs.formExpenseReports.validate() &&
                 _this.$refs.formTaxes.validate()
             ) {
-                axios
-                    .post("/api/settings", {
-                        settings: _this.settings
-                    })
+                let data = {
+                    settings: _this.settings
+                };
+
+                SettingDataService.store(data)
                     .then(response => {
                         _this.mixin_successDialog(
                             "Success",
@@ -702,28 +597,6 @@ export default {
 
             return this.$store.getters.settings.expense_report.print_format
                 .background.image;
-        },
-        base64Image() {
-            // let _this = this;
-            // if (this.file_input) {
-            //     let reader = new FileReader();
-            //     reader.readAsDataURL(this.file_input);
-            //     reader.onload = () => {
-            //         _this.settings.expense_report.print_format.background.image =
-            //             reader.result;
-            //         return reader.result;
-            //     };
-            //     reader.onerror = function(error) {
-            //         console.log("Error: ", error);
-            //         // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
-            //         return;
-            //     };
-            // }
-
-            // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
-
-            // return this.$store.getters.settings.expense_report.print_format.background.image;
-            return;
         },
         report_no: {
             get() {

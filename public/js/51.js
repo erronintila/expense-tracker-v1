@@ -11,6 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/SettingDataService */ "./resources/js/services/SettingDataService.js");
 //
 //
 //
@@ -418,106 +419,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -581,7 +483,7 @@ __webpack_require__.r(__webpack_exports__);
     onLoad: function onLoad() {
       var _this = this;
 
-      axios.get("/api/settings").then(function (response) {
+      _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].getAll().then(function (response) {
         _this.file_input = null;
         _this.settings = response.data;
       })["catch"](function (error) {
@@ -592,12 +494,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onSave: function onSave() {
-      var _this = this; // let settings = Object.assign(
-      //     this.general_settings,
-      //     this.expense_settings,
-      //     this.expense_report_settings
-      // );
-
+      var _this = this;
 
       _this.$refs.formExpenses.validate();
 
@@ -606,9 +503,10 @@ __webpack_require__.r(__webpack_exports__);
       _this.$refs.formTaxes.validate();
 
       if (_this.$refs.formExpenses.validate() && _this.$refs.formExpenseReports.validate() && _this.$refs.formTaxes.validate()) {
-        axios.post("/api/settings", {
+        var data = {
           settings: _this.settings
-        }).then(function (response) {
+        };
+        _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(data).then(function (response) {
           _this.mixin_successDialog("Success", "Saved settings successfully");
 
           _this.$store.dispatch("AUTH_USER");
@@ -655,26 +553,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return this.$store.getters.settings.expense_report.print_format.background.image;
-    },
-    base64Image: function base64Image() {
-      // let _this = this;
-      // if (this.file_input) {
-      //     let reader = new FileReader();
-      //     reader.readAsDataURL(this.file_input);
-      //     reader.onload = () => {
-      //         _this.settings.expense_report.print_format.background.image =
-      //             reader.result;
-      //         return reader.result;
-      //     };
-      //     reader.onerror = function(error) {
-      //         console.log("Error: ", error);
-      //         // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
-      //         return;
-      //     };
-      // }
-      // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
-      // return this.$store.getters.settings.expense_report.print_format.background.image;
-      return;
     },
     report_no: {
       get: function get() {
@@ -1643,6 +1521,50 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/services/SettingDataService.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/services/SettingDataService.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var SettingDataService = /*#__PURE__*/function () {
+  function SettingDataService() {
+    _classCallCheck(this, SettingDataService);
+  }
+
+  _createClass(SettingDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/settings", data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/settings", data);
+    }
+  }]);
+
+  return SettingDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new SettingDataService());
 
 /***/ }),
 

@@ -158,6 +158,8 @@
 </template>
 
 <script>
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
     data() {
         return {
@@ -191,8 +193,7 @@ export default {
         getData() {
             let _this = this;
 
-            axios
-                .get(`/api/expense_types/${_this.$route.params.id}`)
+            ExpenseTypeDataService.show(_this.$route.params.id)
                 .then(response => {
                     _this.form.name = response.data.data.name;
                     _this.form.limit = response.data.data.limit;
@@ -214,12 +215,13 @@ export default {
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .put("/api/expense_types/" + _this.$route.params.id, {
-                        name: _this.form.name,
-                        limit: _this.form.limit,
-                        sub_types: _this.items
-                    })
+                let data = {
+                    name: _this.form.name,
+                    limit: _this.form.limit,
+                    sub_types: _this.items
+                };
+
+                ExpenseTypeDataService.update(_this.$route.params.id, data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,
@@ -270,26 +272,6 @@ export default {
                     _this.items.splice(index, 1);
                 }
             });
-
-            // this.$confirm("Do you want to delete sub type?").then(res => {
-            //     if (res) {
-            //         axios
-            //             .delete(`/api/expense_types/${item.id}`)
-            //             .then(response => {
-            //                 const index = _this.items.indexOf(item);
-            //                 _this.items.splice(index, 1);
-            //             })
-            //             .catch(error => {
-            //                 console.log(error);
-            //                 console.log(error.response);
-
-            //                 _this.mixin_errorDialog(
-            //                     `Error ${error.response.status}`,
-            //                     error.response.data.message
-            //                 );
-            //             });
-            //     }
-            // });
         }
     },
     created() {

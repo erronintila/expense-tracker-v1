@@ -179,6 +179,8 @@
 </template>
 
 <script>
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
     props: {},
     data() {
@@ -215,18 +217,18 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status
+                    }
+                };
 
-                axios
-                    .get("/api/expense_types", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status
-                        }
-                    })
+                ExpenseTypeDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -278,14 +280,14 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/expense_types/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    let data = {
+                        params: {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    };
+                    ExpenseTypeDataService.delete(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
@@ -330,15 +332,12 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(
-                            `/api/expense_types/restore/${_this.selected[0].id}`,
-                            {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        )
+                    let data = {
+                        ids: _this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+                    ExpenseTypeDataService.restore(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
