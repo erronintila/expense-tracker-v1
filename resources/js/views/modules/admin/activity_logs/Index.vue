@@ -23,7 +23,21 @@
             <UserSelector
                 ref="userSelector"
                 @selectUser="selectUser"
-            ></UserSelector>
+                @onReset="resetUser"
+                :selectedUser="filters.selectedUser"
+            >
+                <template
+                    v-slot:openDialog="{ bind, on, computedSelectedUser }"
+                >
+                    <v-chip class="mr-2" small v-bind="bind" v-on="on">
+                        {{
+                            computedSelectedUser
+                                ? computedSelectedUser.name
+                                : "All Employees"
+                        }}
+                    </v-chip>
+                </template>
+            </UserSelector>
             <v-chip
                 color="green"
                 dark
@@ -153,12 +167,7 @@ export default {
             filters: {
                 search: "",
                 preset: "",
-                selectedUser: {
-                    id: 0,
-                    username: "",
-                    name: "All Users",
-                    email: ""
-                },
+                selectedUser: null,
                 date_range: [
                     moment()
                         .startOf("month")
@@ -207,16 +216,21 @@ export default {
         selectUser(e) {
             this.collections.selectedActivityLogs = [];
             if (e == null || e == undefined) {
-                this.filters.selectedUser = {
-                    id: 0,
-                    username: "",
-                    name: "All Users",
-                    email: ""
-                };
+                // this.filters.selectedUser = {
+                //     id: 0,
+                //     username: "",
+                //     name: "All Users",
+                //     email: ""
+                // };
+                this.filters.selectedUser = null;
                 return;
             }
 
             this.filters.selectedUser = e;
+        },
+        resetUser() {
+            this.collections.selectedActivityLogs = [];
+            this.filters.selectedUser = null;
         },
         getDataFromApi() {
             this.loading = true;
@@ -225,7 +239,9 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = this.filters.search.trim().toLowerCase();
-                let user_id = this.filters.selectedUser.id;
+                let user_id = this.filters.selectedUser
+                    ? this.filters.selectedUser.id
+                    : null;
                 let range = this.filters.date_range;
                 let data = {
                     params: {
@@ -256,8 +272,7 @@ export default {
         onReset() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.collections.selectedActivityLogs = [];
-
-            this.$refs.userSelector.onReset;
+            this.filters.selectedUser = null;
         },
         hasLink(item) {
             if (item.properties) {

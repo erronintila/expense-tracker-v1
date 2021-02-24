@@ -204,6 +204,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -216,6 +218,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     multipleSelection: {
       type: Boolean,
       "default": false
+    },
+    selectedUser: {
+      type: Object,
+      "default": null
     }
   },
   data: function data() {
@@ -285,18 +291,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onReset: function onReset() {
       this.dialog = false;
       this.filters.search = "";
-      this.collections.selected = null;
+      this.computedSelectedUser = null;
       this.options = {
         sortBy: ["last_name"],
         sortDesc: [false],
         page: 1,
         itemsPerPage: 10
       };
-      return this.$emit("selectUser", this.collections.selected);
+      return this.$emit("onReset", this.computedSelectedUser);
     },
-    selectUser: function selectUser() {
-      this.selectedUser = this.collections.selected;
-      return this.$emit("selectUser", this.collections.selected);
+    selectUser: function selectUser(e) {
+      this.computedSelectedUser = e;
+      this.$emit("selectUser", e);
     },
     getJobName: function getJobName(user) {
       if (user.job) {
@@ -334,13 +340,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         query: this.filters.search
       });
     },
-    selectedUser: {
+    computedSelectedUser: {
       get: function get() {
-        if (this.collections.selected) {
-          return this.collections.selected.name;
+        if (this.selectedUser) {
+          return this.selectedUser;
         }
 
-        return "All Employees";
+        return null;
       },
       set: function set(value) {
         return value;
@@ -381,6 +387,20 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -542,12 +562,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       filters: {
         search: "",
         preset: "",
-        selectedUser: {
-          id: 0,
-          username: "",
-          name: "All Users",
-          email: ""
-        },
+        selectedUser: null,
         date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
         presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"]
       },
@@ -576,16 +591,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.collections.selectedActivityLogs = [];
 
       if (e == null || e == undefined) {
-        this.filters.selectedUser = {
-          id: 0,
-          username: "",
-          name: "All Users",
-          email: ""
-        };
+        // this.filters.selectedUser = {
+        //     id: 0,
+        //     username: "",
+        //     name: "All Users",
+        //     email: ""
+        // };
+        this.filters.selectedUser = null;
         return;
       }
 
       this.filters.selectedUser = e;
+    },
+    resetUser: function resetUser() {
+      this.collections.selectedActivityLogs = [];
+      this.filters.selectedUser = null;
     },
     getDataFromApi: function getDataFromApi() {
       var _this = this;
@@ -600,7 +620,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var search = _this.filters.search.trim().toLowerCase();
 
-        var user_id = _this.filters.selectedUser.id;
+        var user_id = _this.filters.selectedUser ? _this.filters.selectedUser.id : null;
         var range = _this.filters.date_range;
         var data = {
           params: {
@@ -628,7 +648,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onReset: function onReset() {
       Object.assign(this.$data, this.$options.data.apply(this));
       this.collections.selectedActivityLogs = [];
-      this.$refs.userSelector.onReset;
+      this.filters.selectedUser = null;
     },
     hasLink: function hasLink(item) {
       if (item.properties) {
@@ -776,36 +796,26 @@ var render = function() {
         "v-dialog",
         {
           attrs: { width: "500" },
-          scopedSlots: _vm._u([
-            {
-              key: "activator",
-              fn: function(ref) {
-                var on = ref.on
-                var attrs = ref.attrs
-                return [
-                  _c(
-                    "v-chip",
-                    _vm._g(
-                      _vm._b(
-                        { staticClass: "mr-2", attrs: { small: "" } },
-                        "v-chip",
-                        attrs,
-                        false
-                      ),
-                      on
-                    ),
-                    [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(_vm.selectedUser) +
-                          "\n            "
-                      )
-                    ]
-                  )
-                ]
+          scopedSlots: _vm._u(
+            [
+              {
+                key: "activator",
+                fn: function(ref) {
+                  var on = ref.on
+                  var attrs = ref.attrs
+                  return [
+                    _vm._t("openDialog", null, null, {
+                      attrs: attrs,
+                      on: on,
+                      computedSelectedUser: _vm.computedSelectedUser
+                    })
+                  ]
+                }
               }
-            }
-          ]),
+            ],
+            null,
+            true
+          ),
           model: {
             value: _vm.dialog,
             callback: function($$v) {
@@ -860,11 +870,11 @@ var render = function() {
                       },
                       on: { change: _vm.selectUser },
                       model: {
-                        value: _vm.collections.selected,
+                        value: _vm.computedSelectedUser,
                         callback: function($$v) {
-                          _vm.$set(_vm.collections, "selected", $$v)
+                          _vm.computedSelectedUser = $$v
                         },
-                        expression: "collections.selected"
+                        expression: "computedSelectedUser"
                       }
                     },
                     [
@@ -1042,7 +1052,43 @@ var render = function() {
         [
           _c("UserSelector", {
             ref: "userSelector",
-            on: { selectUser: _vm.selectUser }
+            attrs: { selectedUser: _vm.filters.selectedUser },
+            on: { selectUser: _vm.selectUser, onReset: _vm.resetUser },
+            scopedSlots: _vm._u([
+              {
+                key: "openDialog",
+                fn: function(ref) {
+                  var bind = ref.bind
+                  var on = ref.on
+                  var computedSelectedUser = ref.computedSelectedUser
+                  return [
+                    _c(
+                      "v-chip",
+                      _vm._g(
+                        _vm._b(
+                          { staticClass: "mr-2", attrs: { small: "" } },
+                          "v-chip",
+                          bind,
+                          false
+                        ),
+                        on
+                      ),
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(
+                              computedSelectedUser
+                                ? computedSelectedUser.name
+                                : "All Employees"
+                            ) +
+                            "\n                "
+                        )
+                      ]
+                    )
+                  ]
+                }
+              }
+            ])
           }),
           _vm._v(" "),
           _vm.collections.selectedActivityLogs.length > 0

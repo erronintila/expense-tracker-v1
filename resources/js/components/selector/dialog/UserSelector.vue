@@ -2,10 +2,12 @@
     <div>
         <v-dialog v-model="dialog" width="500">
             <template v-slot:activator="{ on, attrs }">
-                <v-chip class="mr-2" small v-bind="attrs" v-on="on">
-                    {{ selectedUser }}
-                </v-chip>
+                <slot
+                    name="openDialog"
+                    v-bind="{ attrs, on, computedSelectedUser }"
+                ></slot>
             </template>
+
             <v-card>
                 <v-card-title>
                     Employees
@@ -20,7 +22,7 @@
                 </v-card-title>
                 <v-list class="overflow-y-auto" max-height="400" two-line>
                     <v-list-item-group
-                        v-model="collections.selected"
+                        v-model="computedSelectedUser"
                         active-class="green--text"
                         :multiple="multipleSelection"
                         @change="selectUser"
@@ -85,6 +87,10 @@ export default {
         multipleSelection: {
             type: Boolean,
             default: false
+        },
+        selectedUser: {
+            type: Object,
+            default: null
         }
     },
     data() {
@@ -153,7 +159,7 @@ export default {
         onReset() {
             this.dialog = false;
             this.filters.search = "";
-            this.collections.selected = null;
+            this.computedSelectedUser = null;
             this.options = {
                 sortBy: ["last_name"],
                 sortDesc: [false],
@@ -161,11 +167,11 @@ export default {
                 itemsPerPage: 10
             };
 
-            return this.$emit("selectUser", this.collections.selected);
+            return this.$emit("onReset", this.computedSelectedUser);
         },
-        selectUser() {
-            this.selectedUser = this.collections.selected;
-            return this.$emit("selectUser", this.collections.selected);
+        selectUser(e) {
+            this.computedSelectedUser = e;
+            this.$emit("selectUser", e);
         },
         getJobName(user) {
             if (user.job) {
@@ -202,13 +208,12 @@ export default {
                 query: this.filters.search
             };
         },
-        selectedUser: {
+        computedSelectedUser: {
             get() {
-                if (this.collections.selected) {
-                    return this.collections.selected.name;
+                if (this.selectedUser) {
+                    return this.selectedUser;
                 }
-
-                return "All Employees";
+                return null;
             },
             set(value) {
                 return value;
