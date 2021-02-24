@@ -73,6 +73,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 // Please visit :
 // https://stackoverflow.com/questions/59404459/custom-date-picker-in-vuetify
 
@@ -81,6 +83,18 @@ __webpack_require__.r(__webpack_exports__);
     buttonType: {
       type: Boolean,
       "default": false
+    },
+    buttonText: {
+      type: Boolean,
+      "default": false
+    },
+    customText: {
+      type: String,
+      "default": null
+    },
+    buttonClass: {
+      type: String,
+      "default": ""
     },
     buttonColor: {
       type: String,
@@ -263,10 +277,12 @@ var render = function() {
                     _vm._g(
                       _vm._b(
                         {
+                          class: _vm.buttonClass,
                           attrs: {
                             color: _vm.buttonColor,
                             dark: _vm.buttonDark,
-                            "offset-y": ""
+                            "offset-y": "",
+                            text: _vm.buttonText
                           }
                         },
                         "v-btn",
@@ -278,7 +294,11 @@ var render = function() {
                     [
                       _vm._v(
                         "\n            " +
-                          _vm._s(_vm.dateRangeText) +
+                          _vm._s(
+                            _vm.customText == null
+                              ? _vm.dateRangeText
+                              : _vm.customText
+                          ) +
                           "\n        "
                       )
                     ]

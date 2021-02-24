@@ -18,8 +18,10 @@
                 v-bind="attrs"
                 v-on="on"
                 offset-y
+                :text="buttonText"
+                :class="buttonClass"
             >
-                {{ dateRangeText }}
+                {{ customText == null ? dateRangeText : customText }}
             </v-btn>
 
             <v-text-field
@@ -71,6 +73,18 @@ export default {
         buttonType: {
             type: Boolean,
             default: false
+        },
+        buttonText: {
+            type: Boolean,
+            default: false
+        },
+        customText: {
+            type: String,
+            default: null
+        },
+        buttonClass: {
+            type: String,
+            default: ""
         },
         buttonColor: {
             type: String,

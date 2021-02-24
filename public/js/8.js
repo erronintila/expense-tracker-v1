@@ -827,14 +827,14 @@ var UserDataService = /*#__PURE__*/function () {
   }
 
   _createClass(UserDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
-    }
-  }, {
     key: "get",
     value: function get(data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/users", data);
+    }
+  }, {
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
     }
   }, {
     key: "show",

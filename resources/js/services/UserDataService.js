@@ -2,12 +2,12 @@
 import axios from "axios";
 
 class UserDataService {
-    getAll(data) {
-        return axios.get("/api/users", data);
-    }
-
     get(data) {
         return axios.get("/api/data/users", data);
+    }
+
+    getAll(data) {
+        return axios.get("/api/users", data);
     }
 
     show(id, data) {

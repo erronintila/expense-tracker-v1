@@ -27,64 +27,6 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
-
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-
                 <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
@@ -130,12 +72,52 @@
             </v-card-title>
 
             <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
                 </v-chip>
-                <v-chip v-if="status != null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
+
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip
+                            v-if="status != null"
+                            class="mr-2"
+                            small
+                            v-bind="attrs"
+                            v-on="menu"
+                        >
+                            {{ status }}
+                        </v-chip>
+                    </template>
+
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
                 <v-chip
                     close
                     class="mr-2"
@@ -197,6 +179,8 @@
 </template>
 
 <script>
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
     props: {},
     data() {
@@ -233,18 +217,18 @@ export default {
 
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status
+                    }
+                };
 
-                axios
-                    .get("/api/expense_types", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status
-                        }
-                    })
+                ExpenseTypeDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -296,14 +280,14 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/expense_types/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    let data = {
+                        params: {
+                            ids: _this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    };
+                    ExpenseTypeDataService.delete(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,
@@ -348,15 +332,12 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(
-                            `/api/expense_types/restore/${_this.selected[0].id}`,
-                            {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        )
+                    let data = {
+                        ids: _this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+                    ExpenseTypeDataService.restore(_this.selected[0].id, data)
                         .then(function(response) {
                             _this.mixin_successDialog(
                                 response.data.status,

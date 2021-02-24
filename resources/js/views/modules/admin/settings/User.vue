@@ -91,6 +91,8 @@
 </template>
 
 <script>
+import UserDataService from "../../../../services/UserDataService";
+
 export default {
     data() {
         return {
@@ -166,12 +168,13 @@ export default {
             if (_this.$refs.form.validate()) {
                 _this.loader = true;
 
-                axios
-                    .put("/api/users/update_settings/" + _this.user.id, {
-                        expense_types: _this.allowed_expense_types.map(
-                            item => item.id
-                        )
-                    })
+                let data = {
+                    expense_types: _this.allowed_expense_types.map(
+                        item => item.id
+                    )
+                };
+
+                UserDataService.updateSettings(_this.user.id, data)
                     .then(function(response) {
                         _this.$dialog.message.success(
                             "User settings updated successfully.",

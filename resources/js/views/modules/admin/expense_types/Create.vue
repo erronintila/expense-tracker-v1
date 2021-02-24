@@ -156,6 +156,8 @@
 </template>
 
 <script>
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
     data() {
         return {
@@ -192,18 +194,19 @@ export default {
             _this.$refs.form.validate();
 
             if (_this.$refs.form.validate()) {
-                axios
-                    .post("/api/expense_types", {
-                        name: _this.form.name,
-                        limit: _this.form.limit,
-                        sub_types: _this.items
-                    })
+                let data = {
+                    name: _this.form.name,
+                    limit: _this.form.limit,
+                    sub_types: _this.items
+                };
+
+                ExpenseTypeDataService.store(data)
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,
                             response.data.message
                         );
-                        
+
                         _this.$router.push({
                             name: "admin.expense_types.index"
                         });
