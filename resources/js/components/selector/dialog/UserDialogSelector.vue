@@ -159,7 +159,6 @@ export default {
 
                 UserDataService.getAll(data)
                     .then(response => {
-                        console.log(response);
                         resolve(response.data);
                     })
                     .catch(error => {

@@ -140,7 +140,6 @@ export default {
     },
     methods: {
         onChangeUser(e) {
-            console.log(e);
             this.user = e;
         },
         onResetUser() {

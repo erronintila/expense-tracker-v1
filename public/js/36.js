@@ -156,7 +156,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onChangeUser: function onChangeUser(e) {
-      console.log(e);
       this.user = e;
     },
     onResetUser: function onResetUser() {
