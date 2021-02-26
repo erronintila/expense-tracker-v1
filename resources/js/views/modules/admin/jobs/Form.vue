@@ -11,7 +11,6 @@
                 >
                 </DepartmentDropdownSelector>
             </v-col>
-
             <v-col cols="12" md="6">
                 <v-text-field
                     v-model="jobForm.name"
@@ -22,12 +21,11 @@
                     :counter="100"
                     :error-messages="errors.name"
                     @input="errors.name = []"
-                    label="Name *"
+                    label="Name"
                     required
                 ></v-text-field>
             </v-col>
         </v-row>
-
         <v-row>
             <v-col class="text-right">
                 <v-btn color="green" dark @click="onSave">Save</v-btn>
@@ -45,7 +43,7 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    name: "",
+                    name: null,
                     department: null
                 };
             }

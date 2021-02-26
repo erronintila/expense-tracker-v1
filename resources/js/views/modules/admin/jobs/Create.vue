@@ -8,7 +8,6 @@
                 <v-spacer></v-spacer>
                 <h4 class="title green--text">New Job Designation</h4>
             </v-card-title>
-
             <v-container>
                 <Form :errors="errors" @onSave="onSave"></Form>
             </v-container>
@@ -18,20 +17,14 @@
 
 <script>
 import JobDataService from "../../../../services/JobDataService";
-import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
 import Form from "./Form";
 
 export default {
     components: {
-        DepartmentDropdownSelector,
         Form
     },
     data() {
         return {
-            form: {
-                name: "",
-                department: null
-            },
             errors: {
                 name: [],
                 department_id: []
@@ -39,19 +32,21 @@ export default {
         };
     },
     methods: {
-        onSave() {
+        onSave(value) {
+            let data = {
+                name: value.name,
+                department_id: value.department.id
+            };
             JobDataService.store(data)
                 .then(response => {
                     this.mixin_successDialog(
                         response.data.status,
                         response.data.message
                     );
-
                     this.$router.push({ name: "admin.jobs.index" });
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-
                     if (error.response) {
                         if (error.response.data) {
                             this.errors = error.response.data.errors;
