@@ -86,7 +86,8 @@ export default {
             this.mixin_successDialog(successTitle, successMesssage);
         },
         mixin_showErrors: function(error) {
-            let errorTitle = "Error " + error.response.status;
+            let error_status = error.response ? error.response.status : "";
+            let errorTitle = "Error " + error_status;
             let errorMesssage = error.response.data
                 ? error.response.data.message == ""
                     ? error.response.statusText
