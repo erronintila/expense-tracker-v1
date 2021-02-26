@@ -112,13 +112,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -130,8 +123,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       panel: [0],
       valid: false,
-      users_parameters: {
-        with_expense_types: true
+      usersParameters: {
+        params: {
+          with_expense_types: true
+        }
       },
       user: null,
       headerExpenseTypes: [{
@@ -177,7 +172,6 @@ __webpack_require__.r(__webpack_exports__);
           itemsPerPage: 100
         }
       }).then(function (response) {
-        console.log(response);
         _this.all_expense_types = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -333,7 +327,10 @@ var render = function() {
                         [
                           _c("UserDialogSelector", {
                             ref: "userDialogSelector",
-                            attrs: { selectedUser: _vm.user },
+                            attrs: {
+                              selectedUser: _vm.user,
+                              usersParameters: _vm.usersParameters
+                            },
                             on: {
                               selectUser: _vm.onChangeUser,
                               onReset: _vm.onResetUser

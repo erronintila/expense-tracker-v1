@@ -21,6 +21,7 @@
                                 @selectUser="onChangeUser"
                                 @onReset="onResetUser"
                                 :selectedUser="user"
+                                :usersParameters="usersParameters"
                             >
                                 <template
                                     v-slot:openDialog="{
@@ -82,14 +83,6 @@
                                     </v-select>
                                 </v-col>
                             </v-row>
-                            <!-- <v-row>
-                                <v-col>
-                                    <v-data-table
-                                        :headers="headerExpenseTypes"
-                                        :items="pivot_expense_types"
-                                    ></v-data-table>
-                                </v-col>
-                            </v-row> -->
                             <v-row>
                                 <v-col cols="12" md="4">
                                     <v-btn @click="onSave" color="green" dark>
@@ -118,8 +111,10 @@ export default {
         return {
             panel: [0],
             valid: false,
-            users_parameters: {
-                with_expense_types: true
+            usersParameters: {
+                params: {
+                    with_expense_types: true
+                }
             },
             user: null,
 
@@ -159,7 +154,6 @@ export default {
 
             ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
                 .then(response => {
-                    console.log(response);
                     _this.all_expense_types = response.data.data;
                 })
                 .catch(error => {
