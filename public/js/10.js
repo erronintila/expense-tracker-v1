@@ -1214,7 +1214,7 @@ var render = function() {
                 ? _c(
                     "v-chip",
                     {
-                      staticClass: "mr-2",
+                      staticClass: "mr-2 mb-2",
                       attrs: {
                         color: "green",
                         dark: "",
@@ -1263,7 +1263,7 @@ var render = function() {
                                 _vm._g(
                                   _vm._b(
                                     {
-                                      staticClass: "mr-2",
+                                      staticClass: "mr-2 mb-2",
                                       attrs: { small: "" }
                                     },
                                     "v-chip",
@@ -1345,7 +1345,7 @@ var render = function() {
                                 _vm._g(
                                   _vm._b(
                                     {
-                                      staticClass: "mr-2",
+                                      staticClass: "mr-2 mb-2",
                                       attrs: { small: "" }
                                     },
                                     "v-chip",
@@ -1422,7 +1422,7 @@ var render = function() {
                                 _vm._g(
                                   _vm._b(
                                     {
-                                      staticClass: "mr-2",
+                                      staticClass: "mr-2 mb-2",
                                       attrs: { small: "" }
                                     },
                                     "v-chip",
@@ -1480,7 +1480,7 @@ var render = function() {
               _c(
                 "v-chip",
                 {
-                  staticClass: "mr-2",
+                  staticClass: "mr-2 mb-2",
                   attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
                   on: { "click:close": _vm.onRefresh }
                 },

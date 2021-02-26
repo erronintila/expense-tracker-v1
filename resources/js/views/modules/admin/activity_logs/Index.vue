@@ -29,7 +29,7 @@
                 <template
                     v-slot:openDialog="{ bind, on, computedSelectedUser }"
                 >
-                    <v-chip class="mr-2" small v-bind="bind" v-on="on">
+                    <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
                         {{
                             computedSelectedUser
                                 ? computedSelectedUser.name
@@ -43,7 +43,7 @@
                 dark
                 v-if="collections.selectedActivityLogs.length > 0"
                 close
-                class="mr-2"
+                class="mr-2 mb-2"
                 small
                 @click:close="collections.selectedActivityLogs = []"
                 close-icon="mdi-close"
@@ -52,7 +52,7 @@
             </v-chip>
             <v-chip
                 close
-                class="mr-2"
+                class="mr-2 mb-2"
                 small
                 @click:close="onReset"
                 close-icon="mdi-refresh"

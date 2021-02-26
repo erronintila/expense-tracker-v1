@@ -74,7 +74,7 @@
                 dark
                 v-if="selected.length > 0"
                 close
-                class="mr-2"
+                class="mr-2 mb-2"
                 small
                 @click:close="selected = []"
                 close-icon="mdi-close"
@@ -92,7 +92,7 @@
                 <template v-slot:activator="{ on: menu, attrs }">
                     <v-chip
                         v-if="status != null"
-                        class="mr-2"
+                        class="mr-2 mb-2"
                         small
                         v-bind="attrs"
                         v-on="menu"
@@ -115,7 +115,7 @@
 
             <v-chip
                 close
-                class="mr-2"
+                class="mr-2 mb-2"
                 small
                 @click:close="onRefresh"
                 close-icon="mdi-refresh"

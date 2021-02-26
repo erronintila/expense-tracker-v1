@@ -77,7 +77,7 @@
                     dark
                     v-if="collections.selected.length > 0"
                     close
-                    class="mr-2"
+                    class="mr-2 mb-2"
                     small
                     @click:close="collections.selected = []"
                     close-icon="mdi-close"
@@ -95,7 +95,7 @@
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
                             v-if="filters.status != null"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             small
                             v-bind="attrs"
                             v-on="menu"
@@ -128,7 +128,7 @@
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
                             v-if="filters.department != null"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             small
                             v-bind="attrs"
                             v-on="menu"
@@ -154,7 +154,7 @@
 
                 <v-chip
                     close
-                    class="mr-2"
+                    class="mr-2 mb-2"
                     small
                     @click:close="onRefresh"
                     close-icon="mdi-refresh"
