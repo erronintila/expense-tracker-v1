@@ -15,14 +15,29 @@
                 <v-card-text>
                     <v-row>
                         <v-col cols="12" md="6">
-                            <v-autocomplete
+                            <UserDialogSelector
                                 v-model="user"
-                                label="User"
-                                return-object
-                                :items="users"
-                                item-text="full_name"
-                                item-value="id"
-                            ></v-autocomplete>
+                                ref="userDialogSelector"
+                                @selectUser="onChangeUser"
+                                @onReset="onResetUser"
+                                :selectedUser="user"
+                            >
+                                <template
+                                    v-slot:openDialog="{
+                                        bind,
+                                        on,
+                                        computedSelectedUser
+                                    }"
+                                >
+                                    <v-btn v-bind="bind" v-on="on">
+                                        {{
+                                            computedSelectedUser
+                                                ? computedSelectedUser.name
+                                                : "Select User"
+                                        }}
+                                    </v-btn>
+                                </template>
+                            </UserDialogSelector>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -92,14 +107,21 @@
 
 <script>
 import UserDataService from "../../../../services/UserDataService";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
 
 export default {
+    components: {
+        UserDialogSelector
+    },
     data() {
         return {
             panel: [0],
             valid: false,
-            users: [],
-            user: { id: null, expense_types: null, sub_types: null },
+            users_parameters: {
+                with_expense_types: true
+            },
+            user: null,
 
             headerExpenseTypes: [
                 { text: "Name", value: "name" },
@@ -115,34 +137,29 @@ export default {
             // expense_type_limit: null
 
             pivot_expense_types: [],
-            pivot_sub_types: null
+            pivot_sub_types: null,
+
+            collections: {},
+            filters: {},
         };
     },
     methods: {
-        loadUsers() {
-            let _this = this;
-            axios
-                .get("/api/data/users?update_settings=true")
-                .then(response => {
-                    let data = response.data.data;
-
-                    _this.users = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+        onChangeUser(e) {
+            console.log(e);
+            this.user = e;
+        },
+        onResetUser() {
+            this.user = null;
         },
         loadExpenseTypes() {
             let _this = this;
-            axios
-                .get("/api/data/expense_types?only=true")
+
+            // axios
+            // .get("/api/data/expense_types?only=true")
+
+            ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
                 .then(response => {
+                    console.log(response);
                     _this.all_expense_types = response.data.data;
                 })
                 .catch(error => {
@@ -158,7 +175,7 @@ export default {
         onSave() {
             let _this = this;
 
-            if (_this.user.id == null) {
+            if (_this.user == null) {
                 _this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
@@ -186,7 +203,6 @@ export default {
 
                         _this.$store.dispatch("AUTH_USER");
 
-                        // _this.$router.push({ name: "admin.users.index" });
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -211,9 +227,8 @@ export default {
     watch: {
         user(item) {
             // this.expense_types = item.expense_types;
-            this.allowed_expense_types = item.expense_types;
-
-            this.pivot_expense_types = item.pivot_expense_types;
+            this.allowed_expense_types = item ? item.expense_types : null;
+            this.pivot_expense_types = item ? item.pivot_expense_types : null;
         },
         allowed_expense_types(items) {
             this.expense_types = items;
@@ -248,11 +263,9 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadExpenseTypes();
-        this.loadUsers();
     },
     activated() {
         this.loadExpenseTypes();
-        this.loadUsers();
     }
 };
 </script>
