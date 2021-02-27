@@ -55,7 +55,7 @@ class UserStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'job_id.required' => 'The job designation field is required.'
+            'job_id.required_if' => 'The job designation field is required.'
         ];
     }
 }

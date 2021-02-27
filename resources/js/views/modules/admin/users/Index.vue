@@ -134,7 +134,6 @@
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
-                            v-if="status != null"
                             class="mr-2 mb-2"
                             small
                             v-bind="attrs"
@@ -167,7 +166,6 @@
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
-                            v-if="department != null"
                             class="mr-2 mb-2"
                             v-bind="attrs"
                             v-on="menu"
@@ -200,13 +198,12 @@
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
-                            v-if="job != null"
                             class="mr-2 mb-2"
                             v-bind="attrs"
                             v-on="menu"
                             small
                         >
-                            {{ job.name }}
+                            {{ job ? job.name : "All Job Designations" }}
                         </v-chip>
                     </template>
                     <v-card>
@@ -216,6 +213,7 @@
                                     ref="jobData"
                                     :showAll="true"
                                     :department_id="department.id"
+                                    :selectedJob="job"
                                     @changeData="changeJob"
                                 ></JobData>
                             </v-list-item>
@@ -486,7 +484,8 @@ export default {
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
+            
+            this.job = null;
             this.$refs.departmentData.resetData();
             this.$refs.jobData.resetData();
         },
