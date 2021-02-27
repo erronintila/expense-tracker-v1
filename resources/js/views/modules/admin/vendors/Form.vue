@@ -51,11 +51,6 @@
                 <v-checkbox
                     v-model="no_tin"
                     label="N/A"
-                    @click="
-                        () => {
-                            vendorForm.tin = no_tin ? 'N/A' : '';
-                        }
-                    "
                     :readonly="vendorForm.is_vat_inclusive"
                 ></v-checkbox>
             </v-col>
@@ -172,6 +167,7 @@ export default {
     },
     data() {
         return {
+            no_tin: false,
             valid: false,
             row: null
         };
@@ -182,27 +178,31 @@ export default {
                 return;
             }
             this.$emit("onSave", this.vendorForm);
-        }
+        },
     },
     computed: {
-        no_tin: {
-            get() {
-                if (this.vendorForm.tin == "N/A" || this.vendorForm.tin == null) {
-                    return true;
-                }
-                return false;
-            },
-            set(value) {
-                console.log(value);
-                return value;
-            }
-        },
         vendorForm: {
             get() {
                 return this.form;
             },
             set(value) {
                 return value;
+            }
+        }
+    },
+    watch: {
+        "vendorForm.is_vat_inclusive": function() {
+            if (this.vendorForm.is_vat_inclusive) {
+                this.no_tin = false;
+                return;
+            }
+        },
+        no_tin() {
+            this.vendorForm.tin = this.no_tin ? "N/A" : "";
+        },
+        "vendorForm.tin" : function() {
+            if(this.vendorForm.tin == "N/A" || this.vendorForm.tin == null) {
+                this.no_tin = true;
             }
         }
     }

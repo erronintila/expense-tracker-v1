@@ -126,11 +126,6 @@ var _this = undefined;
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     form: {
@@ -182,6 +177,7 @@ var _this = undefined;
   },
   data: function data() {
     return {
+      no_tin: false,
       valid: false,
       row: null
     };
@@ -196,25 +192,28 @@ var _this = undefined;
     }
   },
   computed: {
-    no_tin: {
-      get: function get() {
-        if (this.vendorForm.tin == "N/A" || this.vendorForm.tin == null) {
-          return true;
-        }
-
-        return false;
-      },
-      set: function set(value) {
-        console.log(value);
-        return value;
-      }
-    },
     vendorForm: {
       get: function get() {
         return this.form;
       },
       set: function set(value) {
         return value;
+      }
+    }
+  },
+  watch: {
+    "vendorForm.is_vat_inclusive": function vendorFormIs_vat_inclusive() {
+      if (this.vendorForm.is_vat_inclusive) {
+        this.no_tin = false;
+        return;
+      }
+    },
+    no_tin: function no_tin() {
+      this.vendorForm.tin = this.no_tin ? "N/A" : "";
+    },
+    "vendorForm.tin": function vendorFormTin() {
+      if (this.vendorForm.tin == "N/A" || this.vendorForm.tin == null) {
+        this.no_tin = true;
       }
     }
   }
@@ -364,11 +363,6 @@ var render = function() {
                 attrs: {
                   label: "N/A",
                   readonly: _vm.vendorForm.is_vat_inclusive
-                },
-                on: {
-                  click: function() {
-                    _vm.vendorForm.tin = _vm.no_tin ? "N/A" : ""
-                  }
                 },
                 model: {
                   value: _vm.no_tin,
