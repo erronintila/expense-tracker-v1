@@ -225,10 +225,10 @@ var render = function() {
   return _c("v-autocomplete", {
     attrs: {
       label: "Department",
-      items: _vm.collections.departments,
       "item-value": "id",
       "item-text": "name",
       "return-object": "",
+      items: _vm.collections.departments,
       rules: _vm.rules,
       "error-messages": _vm.errors
     },

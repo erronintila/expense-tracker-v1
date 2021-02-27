@@ -1534,6 +1534,11 @@ var UserDataService = /*#__PURE__*/function () {
     value: function updateSettings(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
     }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
+    }
   }]);
 
   return UserDataService;

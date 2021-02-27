@@ -2,10 +2,10 @@
     <v-autocomplete
         v-model="computedSelectedDepartment"
         label="Department"
-        :items="collections.departments"
         item-value="id"
         item-text="name"
         return-object
+        :items="collections.departments"
         :rules="rules"
         :error-messages="errors"
         @change="onChange"

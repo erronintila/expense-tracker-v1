@@ -49,6 +49,10 @@ class UserDataService {
     updateSettings(id, data) {
         return axios.put(`/api/users/update_settings/${id}`, data);
     }
+
+    export() {
+        return axios.get("/api/users/export");
+    }
 }
 
 export default new UserDataService();

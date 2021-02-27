@@ -15,6 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(randomcolor__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
 //
 //
 //
@@ -351,10 +352,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
 
 
 
@@ -417,37 +415,32 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getData: function getData() {
-      var _this = this;
+      var _this2 = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {
+      _services_UserDataService__WEBPACK_IMPORTED_MODULE_3__["default"].show(this.$route.params.id).then(function (response) {
         var data = response.data.data;
-        _this.id = data.id;
-        _this.full_name = data.full_name;
-        _this.first_name = data.first_name;
-        _this.middle_name = data.middle_name;
-        _this.last_name = data.last_name;
-        _this.suffix = data.suffix;
-        _this.gender = data.gender;
-        _this.birthdate = data.birthdate;
-        _this.mobile_number = data.mobile_number;
-        _this.telephone_number = data.telephone_number;
-        _this.email = data.email;
-        _this.address = data.address;
-        _this.fund = data.fund;
-        _this.remaining_fund = data.remaining_fund;
-        _this.job = data.job.name;
-        _this.department = data.job.department.name;
-        _this.permissions = data.permissions;
-        _this.user = data;
-        _this.loader = false;
+        _this2.id = data.id;
+        _this2.full_name = data.full_name;
+        _this2.first_name = data.first_name;
+        _this2.middle_name = data.middle_name;
+        _this2.last_name = data.last_name;
+        _this2.suffix = data.suffix;
+        _this2.gender = data.gender;
+        _this2.birthdate = data.birthdate;
+        _this2.mobile_number = data.mobile_number;
+        _this2.telephone_number = data.telephone_number;
+        _this2.email = data.email;
+        _this2.address = data.address;
+        _this2.fund = data.fund;
+        _this2.remaining_fund = data.remaining_fund;
+        _this2.job = data.job.name;
+        _this2.department = data.job.department.name;
+        _this2.permissions = data.permissions;
+        _this2.user = data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response); // _this.mixin_errorDialog(
-        //     `Error ${error.response.status}`,
-        //     error.response.statusText
-        // );
-
-        _this.loader = false;
+        _this2.mixin_showErrors(error);
+      })["finally"](function () {
+        _this2.loader = false;
       });
     },
     editUser: function editUser() {
@@ -459,22 +452,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getExpenseStats: function getExpenseStats() {
-      var _this = this;
+      var _this3 = this;
 
       var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
       var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
       var user_id = this.$route.params.id;
       axios.get("/api/data/expense_stats?start_date=".concat(start_date, "&end_date=").concat(end_date, "&user_id=").concat(user_id)).then(function (response) {
-        _this.total_expenses = response.data.summary.total;
-        _this.total_replenishments = response.data.summary.replenishments;
-        _this.total_reimbursements = response.data.summary.reimbursements;
-        _this.total_pending_reports = response.data.summary.pending;
+        _this3.total_expenses = response.data.summary.total;
+        _this3.total_replenishments = response.data.summary.replenishments;
+        _this3.total_reimbursements = response.data.summary.reimbursements;
+        _this3.total_pending_reports = response.data.summary.pending;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response); // _this.mixin_errorDialog(
-        //     `Error ${error.response.status}`,
-        //     error.response.statusText
-        // );
+        _this3.mixin_showErrors(error);
       });
     }
   },
@@ -1101,6 +1090,105 @@ render._withStripped = true
 /***/ (function(module, exports) {
 
 module.exports = "/images/user.png?5405d77c51fb46a0cbf26cb96fe4da4d";
+
+/***/ }),
+
+/***/ "./resources/js/services/UserDataService.js":
+/*!**************************************************!*\
+  !*** ./resources/js/services/UserDataService.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var UserDataService = /*#__PURE__*/function () {
+  function UserDataService() {
+    _classCallCheck(this, UserDataService);
+  }
+
+  _createClass(UserDataService, [{
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/users", data);
+    }
+  }, {
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/users", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/restore/".concat(id), data);
+    }
+  }, {
+    key: "updatePassword",
+    value: function updatePassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_password/".concat(id), data);
+    }
+  }, {
+    key: "resetPassword",
+    value: function resetPassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/reset_password/".concat(id), data);
+    }
+  }, {
+    key: "verifyEmail",
+    value: function verifyEmail(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/verify_email/".concat(id), data);
+    }
+  }, {
+    key: "updateFund",
+    value: function updateFund(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_fund/".concat(id), data);
+    }
+  }, {
+    key: "updateSettings",
+    value: function updateSettings(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
+    }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
+    }
+  }]);
+
+  return UserDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new UserDataService());
 
 /***/ }),
 
