@@ -3,84 +3,7 @@
         <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Notifications</h4>
-
                 <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
-
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                            <!-- <v-list-item>
-                                <v-select
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    label="User"
-                                ></v-select>
-                            </v-list-item> -->
-                        </v-list>
-                    </v-card>
-                </v-menu>
-
                 <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
@@ -143,17 +66,77 @@
             </v-card-title>
 
             <v-card-subtitle>
-                {{ formattedDateRange }}
+                <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker>
             </v-card-subtitle>
 
+            <!-- <v-card-subtitle>
+                {{ formattedDateRange }}
+            </v-card-subtitle> -->
+
             <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
                 </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
+                <!-- <v-chip v-if="status!=null" class="mr-2" small>
                     {{ status }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                </v-chip> -->
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip
+                            v-if="status != null"
+                            class="mr-2 mb-2"
+                            small
+                            v-bind="attrs"
+                            v-on="menu"
+                        >
+                            {{ status }}
+                        </v-chip>
+                    </template>
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+                <v-chip
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
                 </v-chip>
             </v-row>
@@ -341,6 +324,7 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import NotificationDataService from "../../../../services/NotificationDataService";
 
 export default {
     components: { DateRangePicker },
@@ -357,8 +341,6 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            // user: 0,
-            // users: [],
             status: "All Unread",
             statuses: ["All Unread", "All Read", "All Notifications"],
             selected: [],
@@ -400,28 +382,6 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
-        // loadUsers() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/users?only=true")
-        //         .then(response => {
-        //             _this.users = response.data.data;
-        //             _this.users.unshift({
-        //                 id: 0,
-        //                 full_name: "All Users"
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         getDataFromApi() {
             let _this = this;
 
@@ -433,22 +393,20 @@ export default {
                 let search = _this.search.trim().toLowerCase();
                 let status = _this.status;
                 let range = _this.date_range;
-                // let user_id = _this.user;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0]
+                    }
+                };
 
-                axios
-                    .get("/api/notifications", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0]
-                            // user_id: user_id
-                        }
-                    })
+                NotificationDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -474,7 +432,6 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.selected = [];
-            // this.loadUsers();
         },
         onShow(item) {
             this.$router.push({
@@ -522,8 +479,10 @@ export default {
                     break;
             }
 
-            axios
-                .patch(`/api/notifications/${item_id}`, parameters)
+            // axios
+            // .patch(`/api/notifications/${item_id}`, parameters)
+
+            NotificationDataService.update(item_id, parameters)
                 .then(response => {
                     _this.getDataFromApi().then(data => {
                         _this.items = data.items;
@@ -549,7 +508,6 @@ export default {
                 query: this.search,
                 query: this.status,
                 query: this.date_range
-                // query: this.user
             };
         },
         formattedDateRange() {
@@ -584,7 +542,6 @@ export default {
         }
     },
     created() {
-        // this.loadUsers();
         this.$store.dispatch("AUTH_NOTIFICATIONS");
     },
     activated() {

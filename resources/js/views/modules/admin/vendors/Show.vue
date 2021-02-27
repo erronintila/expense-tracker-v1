@@ -204,10 +204,11 @@
 </template>
 
 <script>
+import VendorDataService from "../../../../services/VendorDataService";
 export default {
     data() {
         return {
-            panel: [],
+            panel: 0,
             code: "",
             name: "",
             email: "",
@@ -225,8 +226,7 @@ export default {
         getData() {
             let _this = this;
 
-            axios
-                .get(`/api/vendors/${_this.$route.params.id}`)
+            VendorDataService.show(_this.$route.params.id)
                 .then(function(response) {
                     let data = response.data.data;
 

@@ -9,6 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../services/VendorDataService */ "./resources/js/services/VendorDataService.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -235,6 +236,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   data: function data() {
@@ -290,7 +292,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage = _this$options.itemsPerPage;
         var search = self.search.trim().toLowerCase();
         var status = self.status;
-        axios.get("/api/vendors", {
+        var data = {
           params: {
             search: search,
             sortBy: sortBy[0],
@@ -299,7 +301,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             status: status
           }
-        }).then(function (response) {
+        };
+        _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
           self.loading = false;
@@ -348,13 +351,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/vendors/".concat(self.selected[0].id), {
+          var data = {
             params: {
               ids: self.selected.map(function (item) {
                 return item.id;
               })
             }
-          }).then(function (response) {
+          };
+          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](self.selected[0].id, data).then(function (response) {
             self.mixin_successDialog(response.data.status, response.data.message); // self.$dialog.message.success(
             //     "Item(s) moved to archive.",
             //     {
@@ -386,11 +390,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          axios.put("/api/vendors/restore/".concat(self.selected[0].id), {
+          var data = {
             ids: self.selected.map(function (item) {
               return item.id;
             })
-          }).then(function (response) {
+          };
+          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(self.selected[0].id, data).then(function (response) {
             self.mixin_successDialog(response.data.status, response.data.message);
             self.getDataFromApi().then(function (data) {
               self.items = data.items;
@@ -659,7 +664,7 @@ var render = function() {
                 ? _c(
                     "v-chip",
                     {
-                      staticClass: "mr-2",
+                      staticClass: "mr-2 mb-2",
                       attrs: {
                         color: "green",
                         dark: "",
@@ -707,7 +712,7 @@ var render = function() {
                                 _vm._g(
                                   _vm._b(
                                     {
-                                      staticClass: "mr-2",
+                                      staticClass: "mr-2 mb-2",
                                       attrs: { small: "" }
                                     },
                                     "v-chip",
@@ -767,7 +772,7 @@ var render = function() {
               _c(
                 "v-chip",
                 {
-                  staticClass: "mr-2",
+                  staticClass: "mr-2 mb-2",
                   attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
                   on: { "click:close": _vm.onRefresh }
                 },
@@ -996,6 +1001,75 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/services/VendorDataService.js":
+/*!****************************************************!*\
+  !*** ./resources/js/services/VendorDataService.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var VendorDataService = /*#__PURE__*/function () {
+  function VendorDataService() {
+    _classCallCheck(this, VendorDataService);
+  }
+
+  _createClass(VendorDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/vendors", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/vendors", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/vendors/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/restore/".concat(id), data);
+    }
+  }]);
+
+  return VendorDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new VendorDataService());
 
 /***/ }),
 

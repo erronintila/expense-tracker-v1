@@ -20,8 +20,8 @@
         </v-card-subtitle>
 
         <v-row class="ml-4">
-            <UserSelector
-                ref="userSelector"
+            <UserDialogSelector
+                ref="userDialogSelector"
                 @selectUser="selectUser"
                 @onReset="resetUser"
                 :selectedUser="filters.selectedUser"
@@ -29,7 +29,7 @@
                 <template
                     v-slot:openDialog="{ bind, on, computedSelectedUser }"
                 >
-                    <v-chip class="mr-2" small v-bind="bind" v-on="on">
+                    <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
                         {{
                             computedSelectedUser
                                 ? computedSelectedUser.name
@@ -37,13 +37,13 @@
                         }}
                     </v-chip>
                 </template>
-            </UserSelector>
+            </UserDialogSelector>
             <v-chip
                 color="green"
                 dark
                 v-if="collections.selectedActivityLogs.length > 0"
                 close
-                class="mr-2"
+                class="mr-2 mb-2"
                 small
                 @click:close="collections.selectedActivityLogs = []"
                 close-icon="mdi-close"
@@ -52,7 +52,7 @@
             </v-chip>
             <v-chip
                 close
-                class="mr-2"
+                class="mr-2 mb-2"
                 small
                 @click:close="onReset"
                 close-icon="mdi-refresh"
@@ -134,16 +134,13 @@
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
-import UserSelector from "../../../../components/selector/dialog/UserSelector";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 import ActivityLogDataService from "../../../../services/ActivityLogDataService";
-import UserDataService from "../../../../services/UserDataService";
-import DataTable from "../../../../components/datatable/DataTable";
 
 export default {
     components: {
         DateRangePicker,
-        DataTable,
-        UserSelector
+        UserDialogSelector
     },
     data() {
         return {

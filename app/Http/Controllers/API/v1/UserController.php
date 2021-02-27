@@ -57,6 +57,12 @@ class UserController extends Controller
             }]);
         }]);
 
+        if(request()->has("with_expense_types")) {
+            $users = $users->with(['expense_types' => function($query) {
+                $query->withTrashed();
+            }]);
+        }
+
         switch ($sortBy) {
             case 'fullname':
                 $users = $users->orderBy("last_name", $sortType);

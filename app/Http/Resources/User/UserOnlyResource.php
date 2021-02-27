@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Resources\Job\JobIndexResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -60,6 +61,8 @@ class UserOnlyResource extends JsonResource
             "job" => new JobIndexResource($this->whenLoaded("job")),
             "role" => $this->is_admin ? ["Administrator"] : $this->getRoleNames(),
             "permissions" => $this->getAllPermissions(),
+            "expense_types" => ExpenseTypeResource::collection($this->whenLoaded('expense_types')),
+            "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
         ];
     }
 }

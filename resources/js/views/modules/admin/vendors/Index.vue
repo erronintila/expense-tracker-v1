@@ -77,7 +77,7 @@
                     dark
                     v-if="selected.length > 0"
                     close
-                    class="mr-2"
+                    class="mr-2 mb-2"
                     small
                     @click:close="selected = []"
                     close-icon="mdi-close"
@@ -95,7 +95,7 @@
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-chip
                             v-if="status != null"
-                            class="mr-2"
+                            class="mr-2 mb-2"
                             small
                             v-bind="attrs"
                             v-on="menu"
@@ -119,7 +119,7 @@
 
                 <v-chip
                     close
-                    class="mr-2"
+                    class="mr-2 mb-2"
                     small
                     @click:close="onRefresh"
                     close-icon="mdi-refresh"
@@ -219,6 +219,8 @@
 </template>
 
 <script>
+import VendorDataService from "../../../../services/VendorDataService";
+
 export default {
     props: {},
     data() {
@@ -259,18 +261,18 @@ export default {
 
                 let search = self.search.trim().toLowerCase();
                 let status = self.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status
+                    }
+                };
 
-                axios
-                    .get("/api/vendors", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status
-                        }
-                    })
+                VendorDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -321,14 +323,15 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/vendors/${self.selected[0].id}`, {
-                            params: {
-                                ids: self.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    let data = {
+                        params: {
+                            ids: self.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    };
+
+                    VendorDataService.delete(self.selected[0].id, data)
                         .then(function(response) {
                             self.mixin_successDialog(
                                 response.data.status,
@@ -373,12 +376,13 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/vendors/restore/${self.selected[0].id}`, {
-                            ids: self.selected.map(item => {
-                                return item.id;
-                            })
+                    let data = {
+                        ids: self.selected.map(item => {
+                            return item.id;
                         })
+                    };
+
+                    VendorDataService.restore(self.selected[0].id, data)
                         .then(function(response) {
                             self.mixin_successDialog(
                                 response.data.status,

@@ -91,6 +91,10 @@ export default {
         selectedUser: {
             type: Object,
             default: null
+        },
+        usersParameters: {
+            type: Object,
+            default: null
         }
     },
     data() {
@@ -131,15 +135,27 @@ export default {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
                 let search = _this.filters.search.trim().toLowerCase();
-                let data = {
-                    params: {
-                        search: search,
-                        sortBy: sortBy[0],
-                        sortType: sortDesc[0] ? "desc" : "asc",
-                        page: page,
-                        itemsPerPage: itemsPerPage
-                    }
+                let params = {
+                    search: search,
+                    sortBy: sortBy[0],
+                    sortType: sortDesc[0] ? "desc" : "asc",
+                    page: page,
+                    itemsPerPage: itemsPerPage
                 };
+
+                let data = {};
+
+                if(this.usersParameters) {
+                    if(this.usersParameters.params) {
+                        data = { params: { ...params, ...this.usersParameters.params }}
+                    } else {
+                        data = { params: { ...params }}
+                    }
+                } else {
+                    data = { params: { ...params }}
+                }
+
+                // data = { ...params };
 
                 UserDataService.getAll(data)
                     .then(response => {

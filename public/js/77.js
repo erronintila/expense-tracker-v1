@@ -1,1832 +1,1178 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[77],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/dompurify/dist/purify.js":
+/*!***********************************************!*\
+  !*** ./node_modules/dompurify/dist/purify.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// Please visit :
-// https://stackoverflow.com/questions/59404459/custom-date-picker-in-vuetify
+/*! @license DOMPurify | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.0.8/LICENSE */
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    buttonType: {
-      type: Boolean,
-      "default": false
-    },
-    buttonColor: {
-      type: String,
-      "default": "primary"
-    },
-    buttonDark: {
-      type: Boolean,
-      "default": true
-    },
-    solo: {
-      type: Boolean,
-      "default": false
-    },
-    value: {
-      type: Array,
-      "default": function _default() {
-        return [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-      }
-    },
-    preset: {
-      type: String,
-      "default": ""
-    },
-    presets: {
-      type: Array,
-      "default": function _default() {
-        return ["Today", "This Week", "This Month", "This Year"];
-      }
-    }
-  },
-  data: function data() {
-    return {
-      menu: false,
-      presetValue: this.preset,
-      presetsList: this.presets
+(function (global, factory) {
+   true ? module.exports = factory() :
+  undefined;
+}(this, function () { 'use strict';
+
+  function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+  var hasOwnProperty = Object.hasOwnProperty,
+      setPrototypeOf = Object.setPrototypeOf,
+      isFrozen = Object.isFrozen;
+  var freeze = Object.freeze,
+      seal = Object.seal,
+      create = Object.create; // eslint-disable-line import/no-mutable-exports
+
+  var _ref = typeof Reflect !== 'undefined' && Reflect,
+      apply = _ref.apply,
+      construct = _ref.construct;
+
+  if (!apply) {
+    apply = function apply(fun, thisValue, args) {
+      return fun.apply(thisValue, args);
     };
-  },
-  methods: {
-    // customChange() {
-    //     this.$emit("updateDates", this.value);
-    // },
-    resetDates: function resetDates() {
-      this.menu = false;
-      var value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-      this.presetValue = "";
-      this.$emit("updateDates", value);
-    },
-    updatePreset: function updatePreset() {
-      this.menu = false;
-      var value = [];
-
-      switch (this.presetValue) {
-        case "Today":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Yesterday":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last 7 Days":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(7, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last 30 Days":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(30, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Week":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Week":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").endOf("week").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Month":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Month":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").endOf("month").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Quarter":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("quarter").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Quarter":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").endOf("quarter").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Year":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Year":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last 5 Years":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(5, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        default:
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-      }
-    }
-  },
-  computed: {
-    selected: {
-      get: function get() {
-        return this.value;
-      },
-      set: function set(value) {
-        this.$emit("updateDates", value);
-      }
-    },
-    dateRangeText: function dateRangeText() {
-      this.value.sort();
-      return this.value.join(" ~ ");
-    }
   }
-});
 
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
-  data: function data() {
-    return {
-      loading: true,
-      loader: true,
-      valid: false,
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
-      preset: "",
-      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
-      headers: [{
-        text: "Date",
-        value: "date"
-      }, {
-        text: "Type",
-        value: "expense_type.name"
-      }, {
-        text: "Receipt",
-        value: "receipt_number"
-      }, {
-        text: "Vendor",
-        value: "vendor.name"
-      }, {
-        text: "Amount",
-        value: "amount"
-      }, {
-        text: "Actions",
-        value: "actions",
-        sortable: false
-      }, {
-        text: "",
-        value: "data-table-expand"
-      }],
-      items: [],
-      selected: [],
-      users: [],
-      expenses: [],
-      total: 0,
-      paid: 0,
-      totalItems: 0,
-      expense_report_id: this.$route.params.id,
-      options: {
-        sortBy: ["created_at"],
-        sortDesc: [true],
-        page: 1,
-        itemsPerPage: 10
-      },
-      form: {
-        code: "",
-        description: "",
-        remarks: "",
-        notes: "",
-        user: null
-      },
-      errors: {
-        date_range: [],
-        code: [],
-        description: [],
-        remarks: [],
-        notes: [],
-        user_id: [],
-        expenses: []
-      }
+  if (!freeze) {
+    freeze = function freeze(x) {
+      return x;
     };
-  },
-  methods: {
-    updateDates: function updateDates(e) {
-      var _this2 = this;
+  }
 
-      this.date_range = e;
-      this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
-        _this2.getDataFromApi().then(function (data) {
-          _this2.items = data.items;
-          _this2.totalItems = data.total;
-        });
-      });
-    },
-    updateUser: function updateUser() {
-      var _this3 = this;
+  if (!seal) {
+    seal = function seal(x) {
+      return x;
+    };
+  }
 
-      this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
-        _this3.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
-        });
-      });
-    },
-    getData: function getData() {
-      var _this = this;
+  if (!construct) {
+    construct = function construct(Func, args) {
+      return new (Function.prototype.bind.apply(Func, [null].concat(_toConsumableArray(args))))();
+    };
+  }
 
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
-          var data = response.data.data;
-          _this.form.code = data.code;
-          _this.form.description = data.description;
-          _this.form.remarks = data.remarks;
-          _this.form.notes = data.notes;
-          _this.form.user = data.user;
-          _this.form.status = data.status;
-          _this.total = data.total;
-          _this.loader = false;
-          resolve();
-        })["catch"](function (error) {
-          reject();
-          console.log(error);
-          console.log(error.response);
+  var arrayForEach = unapply(Array.prototype.forEach);
+  var arrayPop = unapply(Array.prototype.pop);
+  var arrayPush = unapply(Array.prototype.push);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+  var stringToLowerCase = unapply(String.prototype.toLowerCase);
+  var stringMatch = unapply(String.prototype.match);
+  var stringReplace = unapply(String.prototype.replace);
+  var stringIndexOf = unapply(String.prototype.indexOf);
+  var stringTrim = unapply(String.prototype.trim);
 
-          _this.loader = false;
-        });
-      });
-    },
-    getDataFromApi: function getDataFromApi() {
-      var _this4 = this;
+  var regExpTest = unapply(RegExp.prototype.test);
 
-      var _this = this;
+  var typeErrorCreate = unconstruct(TypeError);
 
-      _this.loading = true;
-      return new Promise(function (resolve, reject) {
-        var _this4$options = _this4.options,
-            sortBy = _this4$options.sortBy,
-            sortDesc = _this4$options.sortDesc,
-            page = _this4$options.page,
-            itemsPerPage = _this4$options.itemsPerPage;
-        var range = _this.date_range;
-        var user_id = _this.form.user == null ? null : _this.form.user.id;
-        axios.get("/api/expenses", {
-          params: {
-            page: page,
-            itemsPerPage: itemsPerPage,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
-            user_id: user_id,
-            expense_report_id: _this.$route.params.id,
-            update_report: true
+  function unapply(func) {
+    return function (thisArg) {
+      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+
+      return apply(func, thisArg, args);
+    };
+  }
+
+  function unconstruct(func) {
+    return function () {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      return construct(func, args);
+    };
+  }
+
+  /* Add properties to a lookup table */
+  function addToSet(set, array) {
+    if (setPrototypeOf) {
+      // Make 'in' and truthy checks like Boolean(set.constructor)
+      // independent of any properties defined on Object.prototype.
+      // Prevent prototype setters from intercepting set as a this value.
+      setPrototypeOf(set, null);
+    }
+
+    var l = array.length;
+    while (l--) {
+      var element = array[l];
+      if (typeof element === 'string') {
+        var lcElement = stringToLowerCase(element);
+        if (lcElement !== element) {
+          // Config presets (e.g. tags.js, attrs.js) are immutable.
+          if (!isFrozen(array)) {
+            array[l] = lcElement;
           }
-        }).then(function (response) {
-          // _this.selected = [];
-          var items = response.data.data;
-          var total = response.data.meta.total;
-          _this.loading = false;
-          resolve({
-            items: items,
-            total: total
-          });
-        })["catch"](function (error) {
-          reject();
-          console.log(error);
-          console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          element = lcElement;
+        }
+      }
 
-          _this.loading = false;
-        });
+      set[element] = true;
+    }
+
+    return set;
+  }
+
+  /* Shallow clone an object */
+  function clone(object) {
+    var newObject = create(null);
+
+    var property = void 0;
+    for (property in object) {
+      if (apply(hasOwnProperty, object, [property])) {
+        newObject[property] = object[property];
+      }
+    }
+
+    return newObject;
+  }
+
+  var html = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'shadow', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
+
+  // SVG
+  var svg = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'audio', 'canvas', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'video', 'view', 'vkern']);
+
+  var svgFilters = freeze(['feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence']);
+
+  var mathMl = freeze(['math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mglyph', 'mi', 'mlabeledtr', 'mmultiscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow', 'ms', 'mspace', 'msqrt', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd', 'mtext', 'mtr', 'munder', 'munderover']);
+
+  var text = freeze(['#text']);
+
+  var html$1 = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'pattern', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'xmlns']);
+
+  var svg$1 = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'targetx', 'targety', 'transform', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
+
+  var mathMl$1 = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnsalign', 'columnlines', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lspace', 'lquote', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
+
+  var xml = freeze(['xlink:href', 'xml:id', 'xlink:title', 'xml:space', 'xmlns:xlink']);
+
+  // eslint-disable-next-line unicorn/better-regex
+  var MUSTACHE_EXPR = seal(/\{\{[\s\S]*|[\s\S]*\}\}/gm); // Specify template detection regex for SAFE_FOR_TEMPLATES mode
+  var ERB_EXPR = seal(/<%[\s\S]*|[\s\S]*%>/gm);
+  var DATA_ATTR = seal(/^data-[\-\w.\u00B7-\uFFFF]/); // eslint-disable-line no-useless-escape
+  var ARIA_ATTR = seal(/^aria-[\-\w]+$/); // eslint-disable-line no-useless-escape
+  var IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // eslint-disable-line no-useless-escape
+  );
+  var IS_SCRIPT_OR_DATA = seal(/^(?:\w+script|data):/i);
+  var ATTR_WHITESPACE = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g // eslint-disable-line no-control-regex
+  );
+
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+  function _toConsumableArray$1(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+  var getGlobal = function getGlobal() {
+    return typeof window === 'undefined' ? null : window;
+  };
+
+  /**
+   * Creates a no-op policy for internal use only.
+   * Don't export this function outside this module!
+   * @param {?TrustedTypePolicyFactory} trustedTypes The policy factory.
+   * @param {Document} document The document object (to determine policy name suffix)
+   * @return {?TrustedTypePolicy} The policy created (or null, if Trusted Types
+   * are not supported).
+   */
+  var _createTrustedTypesPolicy = function _createTrustedTypesPolicy(trustedTypes, document) {
+    if ((typeof trustedTypes === 'undefined' ? 'undefined' : _typeof(trustedTypes)) !== 'object' || typeof trustedTypes.createPolicy !== 'function') {
+      return null;
+    }
+
+    // Allow the callers to control the unique policy name
+    // by adding a data-tt-policy-suffix to the script element with the DOMPurify.
+    // Policy creation with duplicate names throws in Trusted Types.
+    var suffix = null;
+    var ATTR_NAME = 'data-tt-policy-suffix';
+    if (document.currentScript && document.currentScript.hasAttribute(ATTR_NAME)) {
+      suffix = document.currentScript.getAttribute(ATTR_NAME);
+    }
+
+    var policyName = 'dompurify' + (suffix ? '#' + suffix : '');
+
+    try {
+      return trustedTypes.createPolicy(policyName, {
+        createHTML: function createHTML(html$$1) {
+          return html$$1;
+        }
       });
-    },
-    loadExpenses: function loadExpenses(emp_id) {
-      var start_date = this.date_range[0];
-      var end_date = this.date_range[1];
+    } catch (_) {
+      // Policy creation failed (most likely another DOMPurify script has
+      // already run). Skip creating the policy, as this will only cause errors
+      // if TT are enforced.
+      console.warn('TrustedTypes policy ' + policyName + ' could not be created.');
+      return null;
+    }
+  };
 
-      var _this = this;
+  function createDOMPurify() {
+    var window = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : getGlobal();
 
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/data/expenses", {
-          params: {
-            update_report: true,
-            user_id: emp_id,
-            start_date: start_date,
-            end_date: end_date,
-            expense_report_id: _this.$route.params.id
-          }
-        }).then(function (response) {
-          _this.selected = response.data.data;
-          return resolve();
-        })["catch"](function (error) {
-          return reject();
-          console.log(error);
-          console.log(error.response);
+    var DOMPurify = function DOMPurify(root) {
+      return createDOMPurify(root);
+    };
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-        });
-      });
-    },
-    loadUsers: function loadUsers() {
-      var _this = this;
+    /**
+     * Version label, exposed for easier checks
+     * if DOMPurify is up to date or not
+     */
+    DOMPurify.version = '2.2.0';
 
-      return new Promise(function (resolve, reject) {
-        axios.get("/api/data/users").then(function (response) {
-          _this.users = response.data.data;
-          return resolve();
-        })["catch"](function (error) {
-          return reject();
-          console.log(error);
-          console.log(error.response);
+    /**
+     * Array of elements that DOMPurify removed during sanitation.
+     * Empty if nothing was removed.
+     */
+    DOMPurify.removed = [];
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-        });
-      });
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
-    onSave: function onSave() {
-      var _this = this;
+    if (!window || !window.document || window.document.nodeType !== 9) {
+      // Not running in a browser, provide a factory function
+      // so that you can pass your own Window
+      DOMPurify.isSupported = false;
 
-      _this.$refs.form.validate();
+      return DOMPurify;
+    }
 
-      if (_this.selected.length == 0) {
-        _this.$dialog.message.error("No Expenses selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+    var originalDocument = window.document;
 
+    var document = window.document;
+    var DocumentFragment = window.DocumentFragment,
+        HTMLTemplateElement = window.HTMLTemplateElement,
+        Node = window.Node,
+        NodeFilter = window.NodeFilter,
+        _window$NamedNodeMap = window.NamedNodeMap,
+        NamedNodeMap = _window$NamedNodeMap === undefined ? window.NamedNodeMap || window.MozNamedAttrMap : _window$NamedNodeMap,
+        Text = window.Text,
+        Comment = window.Comment,
+        DOMParser = window.DOMParser,
+        trustedTypes = window.trustedTypes;
+
+    // As per issue #47, the web-components registry is inherited by a
+    // new document created via createHTMLDocument. As per the spec
+    // (http://w3c.github.io/webcomponents/spec/custom/#creating-and-passing-registries)
+    // a new empty registry is used when creating a template contents owner
+    // document, so we use that as our parent document to ensure nothing
+    // is inherited.
+
+    if (typeof HTMLTemplateElement === 'function') {
+      var template = document.createElement('template');
+      if (template.content && template.content.ownerDocument) {
+        document = template.content.ownerDocument;
+      }
+    }
+
+    var trustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, originalDocument);
+    var emptyHTML = trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML('') : '';
+
+    var _document = document,
+        implementation = _document.implementation,
+        createNodeIterator = _document.createNodeIterator,
+        getElementsByTagName = _document.getElementsByTagName,
+        createDocumentFragment = _document.createDocumentFragment;
+    var importNode = originalDocument.importNode;
+
+
+    var documentMode = {};
+    try {
+      documentMode = clone(document).documentMode ? document.documentMode : {};
+    } catch (_) {}
+
+    var hooks = {};
+
+    /**
+     * Expose whether this browser supports running the full DOMPurify.
+     */
+    DOMPurify.isSupported = implementation && typeof implementation.createHTMLDocument !== 'undefined' && documentMode !== 9;
+
+    var MUSTACHE_EXPR$$1 = MUSTACHE_EXPR,
+        ERB_EXPR$$1 = ERB_EXPR,
+        DATA_ATTR$$1 = DATA_ATTR,
+        ARIA_ATTR$$1 = ARIA_ATTR,
+        IS_SCRIPT_OR_DATA$$1 = IS_SCRIPT_OR_DATA,
+        ATTR_WHITESPACE$$1 = ATTR_WHITESPACE;
+    var IS_ALLOWED_URI$$1 = IS_ALLOWED_URI;
+
+    /**
+     * We consider the elements and attributes below to be safe. Ideally
+     * don't add any new ones but feel free to remove unwanted ones.
+     */
+
+    /* allowed element names */
+
+    var ALLOWED_TAGS = null;
+    var DEFAULT_ALLOWED_TAGS = addToSet({}, [].concat(_toConsumableArray$1(html), _toConsumableArray$1(svg), _toConsumableArray$1(svgFilters), _toConsumableArray$1(mathMl), _toConsumableArray$1(text)));
+
+    /* Allowed attribute names */
+    var ALLOWED_ATTR = null;
+    var DEFAULT_ALLOWED_ATTR = addToSet({}, [].concat(_toConsumableArray$1(html$1), _toConsumableArray$1(svg$1), _toConsumableArray$1(mathMl$1), _toConsumableArray$1(xml)));
+
+    /* Explicitly forbidden tags (overrides ALLOWED_TAGS/ADD_TAGS) */
+    var FORBID_TAGS = null;
+
+    /* Explicitly forbidden attributes (overrides ALLOWED_ATTR/ADD_ATTR) */
+    var FORBID_ATTR = null;
+
+    /* Decide if ARIA attributes are okay */
+    var ALLOW_ARIA_ATTR = true;
+
+    /* Decide if custom data attributes are okay */
+    var ALLOW_DATA_ATTR = true;
+
+    /* Decide if unknown protocols are okay */
+    var ALLOW_UNKNOWN_PROTOCOLS = false;
+
+    /* Output should be safe for common template engines.
+     * This means, DOMPurify removes data attributes, mustaches and ERB
+     */
+    var SAFE_FOR_TEMPLATES = false;
+
+    /* Decide if document with <html>... should be returned */
+    var WHOLE_DOCUMENT = false;
+
+    /* Track whether config is already set on this instance of DOMPurify. */
+    var SET_CONFIG = false;
+
+    /* Decide if all elements (e.g. style, script) must be children of
+     * document.body. By default, browsers might move them to document.head */
+    var FORCE_BODY = false;
+
+    /* Decide if a DOM `HTMLBodyElement` should be returned, instead of a html
+     * string (or a TrustedHTML object if Trusted Types are supported).
+     * If `WHOLE_DOCUMENT` is enabled a `HTMLHtmlElement` will be returned instead
+     */
+    var RETURN_DOM = false;
+
+    /* Decide if a DOM `DocumentFragment` should be returned, instead of a html
+     * string  (or a TrustedHTML object if Trusted Types are supported) */
+    var RETURN_DOM_FRAGMENT = false;
+
+    /* If `RETURN_DOM` or `RETURN_DOM_FRAGMENT` is enabled, decide if the returned DOM
+     * `Node` is imported into the current `Document`. If this flag is not enabled the
+     * `Node` will belong (its ownerDocument) to a fresh `HTMLDocument`, created by
+     * DOMPurify.
+     *
+     * This defaults to `true` starting DOMPurify 2.2.0. Note that setting it to `false`
+     * might cause XSS from attacks hidden in closed shadowroots in case the browser
+     * supports Declarative Shadow: DOM https://web.dev/declarative-shadow-dom/
+     */
+    var RETURN_DOM_IMPORT = true;
+
+    /* Try to return a Trusted Type object instead of a string, return a string in
+     * case Trusted Types are not supported  */
+    var RETURN_TRUSTED_TYPE = false;
+
+    /* Output should be free from DOM clobbering attacks? */
+    var SANITIZE_DOM = true;
+
+    /* Keep element content when removing element? */
+    var KEEP_CONTENT = true;
+
+    /* If a `Node` is passed to sanitize(), then performs sanitization in-place instead
+     * of importing it into a new Document and returning a sanitized copy */
+    var IN_PLACE = false;
+
+    /* Allow usage of profiles like html, svg and mathMl */
+    var USE_PROFILES = {};
+
+    /* Tags to ignore content of when KEEP_CONTENT is true */
+    var FORBID_CONTENTS = addToSet({}, ['annotation-xml', 'audio', 'colgroup', 'desc', 'foreignobject', 'head', 'iframe', 'math', 'mi', 'mn', 'mo', 'ms', 'mtext', 'noembed', 'noframes', 'plaintext', 'script', 'style', 'svg', 'template', 'thead', 'title', 'video', 'xmp']);
+
+    /* Tags that are safe for data: URIs */
+    var DATA_URI_TAGS = null;
+    var DEFAULT_DATA_URI_TAGS = addToSet({}, ['audio', 'video', 'img', 'source', 'image', 'track']);
+
+    /* Attributes safe for values like "javascript:" */
+    var URI_SAFE_ATTRIBUTES = null;
+    var DEFAULT_URI_SAFE_ATTRIBUTES = addToSet({}, ['alt', 'class', 'for', 'id', 'label', 'name', 'pattern', 'placeholder', 'summary', 'title', 'value', 'style', 'xmlns']);
+
+    /* Keep a reference to config to pass to hooks */
+    var CONFIG = null;
+
+    /* Ideally, do not touch anything below this line */
+    /* ______________________________________________ */
+
+    var formElement = document.createElement('form');
+
+    /**
+     * _parseConfig
+     *
+     * @param  {Object} cfg optional config literal
+     */
+    // eslint-disable-next-line complexity
+    var _parseConfig = function _parseConfig(cfg) {
+      if (CONFIG && CONFIG === cfg) {
         return;
       }
 
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
-        axios.put("/api/expense_reports/" + _this.$route.params.id, {
-          code: _this.form.code,
-          description: _this.form.description,
-          remarks: _this.form.remarks,
-          notes: _this.form.notes,
-          user_id: _this.form.user == null ? null : _this.form.user.id,
-          expenses: _this.selected
-        }).then(function (response) {
-          _this.mixin_successDialog(response.data.status, response.data.message);
+      /* Shield configuration object from tampering */
+      if (!cfg || (typeof cfg === 'undefined' ? 'undefined' : _typeof(cfg)) !== 'object') {
+        cfg = {};
+      }
 
-          _this.$router.push({
-            name: "admin.expense_reports.index"
-          });
-        })["catch"](function (error) {
-          _this.loader = false;
-          console.log(error);
-          console.log(error.response);
-          _this.errors = error.response.data.errors;
+      /* Shield configuration object from prototype pollution */
+      cfg = clone(cfg);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+      /* Set configuration parameters */
+      ALLOWED_TAGS = 'ALLOWED_TAGS' in cfg ? addToSet({}, cfg.ALLOWED_TAGS) : DEFAULT_ALLOWED_TAGS;
+      ALLOWED_ATTR = 'ALLOWED_ATTR' in cfg ? addToSet({}, cfg.ALLOWED_ATTR) : DEFAULT_ALLOWED_ATTR;
+      URI_SAFE_ATTRIBUTES = 'ADD_URI_SAFE_ATTR' in cfg ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), cfg.ADD_URI_SAFE_ATTR) : DEFAULT_URI_SAFE_ATTRIBUTES;
+      DATA_URI_TAGS = 'ADD_DATA_URI_TAGS' in cfg ? addToSet(clone(DEFAULT_DATA_URI_TAGS), cfg.ADD_DATA_URI_TAGS) : DEFAULT_DATA_URI_TAGS;
+      FORBID_TAGS = 'FORBID_TAGS' in cfg ? addToSet({}, cfg.FORBID_TAGS) : {};
+      FORBID_ATTR = 'FORBID_ATTR' in cfg ? addToSet({}, cfg.FORBID_ATTR) : {};
+      USE_PROFILES = 'USE_PROFILES' in cfg ? cfg.USE_PROFILES : false;
+      ALLOW_ARIA_ATTR = cfg.ALLOW_ARIA_ATTR !== false; // Default true
+      ALLOW_DATA_ATTR = cfg.ALLOW_DATA_ATTR !== false; // Default true
+      ALLOW_UNKNOWN_PROTOCOLS = cfg.ALLOW_UNKNOWN_PROTOCOLS || false; // Default false
+      SAFE_FOR_TEMPLATES = cfg.SAFE_FOR_TEMPLATES || false; // Default false
+      WHOLE_DOCUMENT = cfg.WHOLE_DOCUMENT || false; // Default false
+      RETURN_DOM = cfg.RETURN_DOM || false; // Default false
+      RETURN_DOM_FRAGMENT = cfg.RETURN_DOM_FRAGMENT || false; // Default false
+      RETURN_DOM_IMPORT = cfg.RETURN_DOM_IMPORT !== false; // Default true
+      RETURN_TRUSTED_TYPE = cfg.RETURN_TRUSTED_TYPE || false; // Default false
+      FORCE_BODY = cfg.FORCE_BODY || false; // Default false
+      SANITIZE_DOM = cfg.SANITIZE_DOM !== false; // Default true
+      KEEP_CONTENT = cfg.KEEP_CONTENT !== false; // Default true
+      IN_PLACE = cfg.IN_PLACE || false; // Default false
+      IS_ALLOWED_URI$$1 = cfg.ALLOWED_URI_REGEXP || IS_ALLOWED_URI$$1;
+      if (SAFE_FOR_TEMPLATES) {
+        ALLOW_DATA_ATTR = false;
+      }
+
+      if (RETURN_DOM_FRAGMENT) {
+        RETURN_DOM = true;
+      }
+
+      /* Parse profile info */
+      if (USE_PROFILES) {
+        ALLOWED_TAGS = addToSet({}, [].concat(_toConsumableArray$1(text)));
+        ALLOWED_ATTR = [];
+        if (USE_PROFILES.html === true) {
+          addToSet(ALLOWED_TAGS, html);
+          addToSet(ALLOWED_ATTR, html$1);
+        }
+
+        if (USE_PROFILES.svg === true) {
+          addToSet(ALLOWED_TAGS, svg);
+          addToSet(ALLOWED_ATTR, svg$1);
+          addToSet(ALLOWED_ATTR, xml);
+        }
+
+        if (USE_PROFILES.svgFilters === true) {
+          addToSet(ALLOWED_TAGS, svgFilters);
+          addToSet(ALLOWED_ATTR, svg$1);
+          addToSet(ALLOWED_ATTR, xml);
+        }
+
+        if (USE_PROFILES.mathMl === true) {
+          addToSet(ALLOWED_TAGS, mathMl);
+          addToSet(ALLOWED_ATTR, mathMl$1);
+          addToSet(ALLOWED_ATTR, xml);
+        }
+      }
+
+      /* Merge configuration parameters */
+      if (cfg.ADD_TAGS) {
+        if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
+          ALLOWED_TAGS = clone(ALLOWED_TAGS);
+        }
+
+        addToSet(ALLOWED_TAGS, cfg.ADD_TAGS);
+      }
+
+      if (cfg.ADD_ATTR) {
+        if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
+          ALLOWED_ATTR = clone(ALLOWED_ATTR);
+        }
+
+        addToSet(ALLOWED_ATTR, cfg.ADD_ATTR);
+      }
+
+      if (cfg.ADD_URI_SAFE_ATTR) {
+        addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR);
+      }
+
+      /* Add #text in case KEEP_CONTENT is set to true */
+      if (KEEP_CONTENT) {
+        ALLOWED_TAGS['#text'] = true;
+      }
+
+      /* Add html, head and body to ALLOWED_TAGS in case WHOLE_DOCUMENT is true */
+      if (WHOLE_DOCUMENT) {
+        addToSet(ALLOWED_TAGS, ['html', 'head', 'body']);
+      }
+
+      /* Add tbody to ALLOWED_TAGS in case tables are permitted, see #286, #365 */
+      if (ALLOWED_TAGS.table) {
+        addToSet(ALLOWED_TAGS, ['tbody']);
+        delete FORBID_TAGS.tbody;
+      }
+
+      // Prevent further manipulation of configuration.
+      // Not available in IE8, Safari 5, etc.
+      if (freeze) {
+        freeze(cfg);
+      }
+
+      CONFIG = cfg;
+    };
+
+    /**
+     * _forceRemove
+     *
+     * @param  {Node} node a DOM node
+     */
+    var _forceRemove = function _forceRemove(node) {
+      arrayPush(DOMPurify.removed, { element: node });
+      try {
+        node.parentNode.removeChild(node);
+      } catch (_) {
+        node.outerHTML = emptyHTML;
+      }
+    };
+
+    /**
+     * _removeAttribute
+     *
+     * @param  {String} name an Attribute name
+     * @param  {Node} node a DOM node
+     */
+    var _removeAttribute = function _removeAttribute(name, node) {
+      try {
+        arrayPush(DOMPurify.removed, {
+          attribute: node.getAttributeNode(name),
+          from: node
         });
+      } catch (_) {
+        arrayPush(DOMPurify.removed, {
+          attribute: null,
+          from: node
+        });
+      }
+
+      node.removeAttribute(name);
+    };
+
+    /**
+     * _initDocument
+     *
+     * @param  {String} dirty a string of dirty markup
+     * @return {Document} a DOM, filled with the dirty markup
+     */
+    var _initDocument = function _initDocument(dirty) {
+      /* Create a HTML document */
+      var doc = void 0;
+      var leadingWhitespace = void 0;
+
+      if (FORCE_BODY) {
+        dirty = '<remove></remove>' + dirty;
+      } else {
+        /* If FORCE_BODY isn't used, leading whitespace needs to be preserved manually */
+        var matches = stringMatch(dirty, /^[\r\n\t ]+/);
+        leadingWhitespace = matches && matches[0];
+      }
+
+      var dirtyPayload = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
+      /* Use the DOMParser API by default, fallback later if needs be */
+      try {
+        doc = new DOMParser().parseFromString(dirtyPayload, 'text/html');
+      } catch (_) {}
+
+      /* Use createHTMLDocument in case DOMParser is not available */
+      if (!doc || !doc.documentElement) {
+        doc = implementation.createHTMLDocument('');
+        var _doc = doc,
+            body = _doc.body;
+
+        body.parentNode.removeChild(body.parentNode.firstElementChild);
+        body.outerHTML = dirtyPayload;
+      }
+
+      if (dirty && leadingWhitespace) {
+        doc.body.insertBefore(document.createTextNode(leadingWhitespace), doc.body.childNodes[0] || null);
+      }
+
+      /* Work on whole document or just its body */
+      return getElementsByTagName.call(doc, WHOLE_DOCUMENT ? 'html' : 'body')[0];
+    };
+
+    /**
+     * _createIterator
+     *
+     * @param  {Document} root document/fragment to create iterator for
+     * @return {Iterator} iterator instance
+     */
+    var _createIterator = function _createIterator(root) {
+      return createNodeIterator.call(root.ownerDocument || root, root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT, function () {
+        return NodeFilter.FILTER_ACCEPT;
+      }, false);
+    };
+
+    /**
+     * _isClobbered
+     *
+     * @param  {Node} elm element to check for clobbering attacks
+     * @return {Boolean} true if clobbered, false if safe
+     */
+    var _isClobbered = function _isClobbered(elm) {
+      if (elm instanceof Text || elm instanceof Comment) {
+        return false;
+      }
+
+      if (typeof elm.nodeName !== 'string' || typeof elm.textContent !== 'string' || typeof elm.removeChild !== 'function' || !(elm.attributes instanceof NamedNodeMap) || typeof elm.removeAttribute !== 'function' || typeof elm.setAttribute !== 'function' || typeof elm.namespaceURI !== 'string') {
+        return true;
+      }
+
+      return false;
+    };
+
+    /**
+     * _isNode
+     *
+     * @param  {Node} obj object to check whether it's a DOM node
+     * @return {Boolean} true is object is a DOM node
+     */
+    var _isNode = function _isNode(object) {
+      return (typeof Node === 'undefined' ? 'undefined' : _typeof(Node)) === 'object' ? object instanceof Node : object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string';
+    };
+
+    /**
+     * _executeHook
+     * Execute user configurable hooks
+     *
+     * @param  {String} entryPoint  Name of the hook's entry point
+     * @param  {Node} currentNode node to work on with the hook
+     * @param  {Object} data additional hook parameters
+     */
+    var _executeHook = function _executeHook(entryPoint, currentNode, data) {
+      if (!hooks[entryPoint]) {
         return;
       }
-    }
-  },
-  watch: {
-    params: {
-      handler: function handler() {
-        var _this5 = this;
 
-        this.getDataFromApi().then(function (data) {
-          _this5.items = data.items;
-          _this5.totalItems = data.total;
-        });
-      },
-      deep: true
-    },
-    selected: function selected() {
-      this.total = this.selected.reduce(function (total, item) {
-        return total + item.amount;
-      }, 0);
-    }
-  },
-  computed: {
-    params: function params(nv) {
-      var _objectSpread2;
-
-      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.date_range
-      }, _defineProperty(_objectSpread2, "query", this.expense_report_id), _defineProperty(_objectSpread2, "query", this.form.user == null ? null : this.form.user.id), _objectSpread2));
-    },
-    default_description: function default_description() {
-      return "Expense Report Summary (".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("LL"), " - ").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("LL"), ")");
-    },
-    balance: function balance() {
-      return this.total - this.paid;
-    }
-  },
-  created: function created() {
-    var _this6 = this;
-
-    // this.$store.dispatch("AUTH_USER");
-    var _this = this;
-
-    this.loadUsers().then(function () {
-      _this6.getData().then(function () {
-        _this6.loadExpenses(_this6.form.user == null ? null : _this6.form.user.id).then(function () {
-          _this6.getDataFromApi().then(function (data) {
-            _this.items = data.items;
-            _this.totalItems = data.total;
-          });
-        });
+      arrayForEach(hooks[entryPoint], function (hook) {
+        hook.call(DOMPurify, currentNode, data, CONFIG);
       });
-    });
-  },
-  activated: function activated() {
-    var _this7 = this;
+    };
 
-    // this.$store.dispatch("AUTH_USER");
-    var _this = this;
+    /**
+     * _sanitizeElements
+     *
+     * @protect nodeName
+     * @protect textContent
+     * @protect removeChild
+     *
+     * @param   {Node} currentNode to check for permission to exist
+     * @return  {Boolean} true if node was killed, false if left alive
+     */
+    var _sanitizeElements = function _sanitizeElements(currentNode) {
+      var content = void 0;
 
-    this.loadUsers().then(function () {
-      _this7.getData().then(function () {
-        _this7.loadExpenses(_this7.form.user.id).then(function () {
-          _this7.getDataFromApi().then(function (data) {
-            _this.items = data.items;
-            _this.totalItems = data.total;
-          });
-        });
+      /* Execute a hook if present */
+      _executeHook('beforeSanitizeElements', currentNode, null);
+
+      /* Check if element is clobbered or can clobber */
+      if (_isClobbered(currentNode)) {
+        _forceRemove(currentNode);
+        return true;
+      }
+
+      /* Check if tagname contains Unicode */
+      if (stringMatch(currentNode.nodeName, /[\u0080-\uFFFF]/)) {
+        _forceRemove(currentNode);
+        return true;
+      }
+
+      /* Now let's check the element's type and name */
+      var tagName = stringToLowerCase(currentNode.nodeName);
+
+      /* Execute a hook if present */
+      _executeHook('uponSanitizeElement', currentNode, {
+        tagName: tagName,
+        allowedTags: ALLOWED_TAGS
       });
-    });
-  }
-});
 
-/***/ }),
+      /* Take care of an mXSS pattern using p, br inside svg, math */
+      if ((tagName === 'svg' || tagName === 'math') && currentNode.querySelectorAll('p, br').length !== 0) {
+        _forceRemove(currentNode);
+        return true;
+      }
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&":
-/*!**********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0& ***!
-  \**********************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+      /* Detect mXSS attempts abusing namespace confusion */
+      if (!_isNode(currentNode.firstElementChild) && (!_isNode(currentNode.content) || !_isNode(currentNode.content.firstElementChild)) && regExpTest(/<[!/\w]/g, currentNode.innerHTML) && regExpTest(/<[!/\w]/g, currentNode.textContent)) {
+        _forceRemove(currentNode);
+        return true;
+      }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-menu",
-    {
-      ref: "menu",
-      staticClass: "pa-0",
-      attrs: {
-        "close-on-content-click": false,
-        transition: "scale-transition",
-        "offset-y": "",
-        "min-width": "290px",
-        "max-width": "290px"
-      },
-      scopedSlots: _vm._u([
-        {
-          key: "activator",
-          fn: function(ref) {
-            var on = ref.on
-            var attrs = ref.attrs
-            return [
-              _vm._v(
-                '"\n            label="Date"\n            readonly\n            v-bind="attrs"\n            v-on="on"\n            :solo="solo"\n        >'
-              )
-            ]
+      /* Remove element if anything forbids its presence */
+      if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+        /* Keep content except for bad-listed elements */
+        if (KEEP_CONTENT && !FORBID_CONTENTS[tagName] && typeof currentNode.insertAdjacentHTML === 'function') {
+          try {
+            var htmlToInsert = currentNode.innerHTML;
+            currentNode.insertAdjacentHTML('AfterEnd', trustedTypesPolicy ? trustedTypesPolicy.createHTML(htmlToInsert) : htmlToInsert);
+          } catch (_) {}
+        }
+
+        _forceRemove(currentNode);
+        return true;
+      }
+
+      /* Remove in case a noscript/noembed XSS is suspected */
+      if ((tagName === 'noscript' || tagName === 'noembed') && regExpTest(/<\/no(script|embed)/i, currentNode.innerHTML)) {
+        _forceRemove(currentNode);
+        return true;
+      }
+
+      /* Sanitize element content to be template-safe */
+      if (SAFE_FOR_TEMPLATES && currentNode.nodeType === 3) {
+        /* Get the element's text content */
+        content = currentNode.textContent;
+        content = stringReplace(content, MUSTACHE_EXPR$$1, ' ');
+        content = stringReplace(content, ERB_EXPR$$1, ' ');
+        if (currentNode.textContent !== content) {
+          arrayPush(DOMPurify.removed, { element: currentNode.cloneNode() });
+          currentNode.textContent = content;
+        }
+      }
+
+      /* Execute a hook if present */
+      _executeHook('afterSanitizeElements', currentNode, null);
+
+      return false;
+    };
+
+    /**
+     * _isValidAttribute
+     *
+     * @param  {string} lcTag Lowercase tag name of containing element.
+     * @param  {string} lcName Lowercase attribute name.
+     * @param  {string} value Attribute value.
+     * @return {Boolean} Returns true if `value` is valid, otherwise false.
+     */
+    // eslint-disable-next-line complexity
+    var _isValidAttribute = function _isValidAttribute(lcTag, lcName, value) {
+      /* Make sure attribute cannot clobber */
+      if (SANITIZE_DOM && (lcName === 'id' || lcName === 'name') && (value in document || value in formElement)) {
+        return false;
+      }
+
+      /* Allow valid data-* attributes: At least one character after "-"
+          (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
+          XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
+          We don't need to check the value; it's always URI safe. */
+      if (ALLOW_DATA_ATTR && regExpTest(DATA_ATTR$$1, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR$$1, lcName)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
+        return false;
+
+        /* Check value is safe. First, is attr inert? If so, is safe */
+      } else if (URI_SAFE_ATTRIBUTES[lcName]) ; else if (regExpTest(IS_ALLOWED_URI$$1, stringReplace(value, ATTR_WHITESPACE$$1, ''))) ; else if ((lcName === 'src' || lcName === 'xlink:href' || lcName === 'href') && lcTag !== 'script' && stringIndexOf(value, 'data:') === 0 && DATA_URI_TAGS[lcTag]) ; else if (ALLOW_UNKNOWN_PROTOCOLS && !regExpTest(IS_SCRIPT_OR_DATA$$1, stringReplace(value, ATTR_WHITESPACE$$1, ''))) ; else if (!value) ; else {
+        return false;
+      }
+
+      return true;
+    };
+
+    /**
+     * _sanitizeAttributes
+     *
+     * @protect attributes
+     * @protect nodeName
+     * @protect removeAttribute
+     * @protect setAttribute
+     *
+     * @param  {Node} currentNode to sanitize
+     */
+    var _sanitizeAttributes = function _sanitizeAttributes(currentNode) {
+      var attr = void 0;
+      var value = void 0;
+      var lcName = void 0;
+      var l = void 0;
+      /* Execute a hook if present */
+      _executeHook('beforeSanitizeAttributes', currentNode, null);
+
+      var attributes = currentNode.attributes;
+
+      /* Check if we have attributes; if not we might have a text node */
+
+      if (!attributes) {
+        return;
+      }
+
+      var hookEvent = {
+        attrName: '',
+        attrValue: '',
+        keepAttr: true,
+        allowedAttributes: ALLOWED_ATTR
+      };
+      l = attributes.length;
+
+      /* Go backwards over all attributes; safely remove bad ones */
+      while (l--) {
+        attr = attributes[l];
+        var _attr = attr,
+            name = _attr.name,
+            namespaceURI = _attr.namespaceURI;
+
+        value = stringTrim(attr.value);
+        lcName = stringToLowerCase(name);
+
+        /* Execute a hook if present */
+        hookEvent.attrName = lcName;
+        hookEvent.attrValue = value;
+        hookEvent.keepAttr = true;
+        hookEvent.forceKeepAttr = undefined; // Allows developers to see this is a property they can set
+        _executeHook('uponSanitizeAttribute', currentNode, hookEvent);
+        value = hookEvent.attrValue;
+        /* Did the hooks approve of the attribute? */
+        if (hookEvent.forceKeepAttr) {
+          continue;
+        }
+
+        /* Remove attribute */
+        _removeAttribute(name, currentNode);
+
+        /* Did the hooks approve of the attribute? */
+        if (!hookEvent.keepAttr) {
+          continue;
+        }
+
+        /* Work around a security issue in jQuery 3.0 */
+        if (regExpTest(/\/>/i, value)) {
+          _removeAttribute(name, currentNode);
+          continue;
+        }
+
+        /* Sanitize attribute content to be template-safe */
+        if (SAFE_FOR_TEMPLATES) {
+          value = stringReplace(value, MUSTACHE_EXPR$$1, ' ');
+          value = stringReplace(value, ERB_EXPR$$1, ' ');
+        }
+
+        /* Is `value` valid for this attribute? */
+        var lcTag = currentNode.nodeName.toLowerCase();
+        if (!_isValidAttribute(lcTag, lcName, value)) {
+          continue;
+        }
+
+        /* Handle invalid data-* attribute set by try-catching it */
+        try {
+          if (namespaceURI) {
+            currentNode.setAttributeNS(namespaceURI, name, value);
+          } else {
+            /* Fallback to setAttribute() for browser-unrecognized namespaces e.g. "x-schema". */
+            currentNode.setAttribute(name, value);
+          }
+
+          arrayPop(DOMPurify.removed);
+        } catch (_) {}
+      }
+
+      /* Execute a hook if present */
+      _executeHook('afterSanitizeAttributes', currentNode, null);
+    };
+
+    /**
+     * _sanitizeShadowDOM
+     *
+     * @param  {DocumentFragment} fragment to iterate over recursively
+     */
+    var _sanitizeShadowDOM = function _sanitizeShadowDOM(fragment) {
+      var shadowNode = void 0;
+      var shadowIterator = _createIterator(fragment);
+
+      /* Execute a hook if present */
+      _executeHook('beforeSanitizeShadowDOM', fragment, null);
+
+      while (shadowNode = shadowIterator.nextNode()) {
+        /* Execute a hook if present */
+        _executeHook('uponSanitizeShadowNode', shadowNode, null);
+
+        /* Sanitize tags and elements */
+        if (_sanitizeElements(shadowNode)) {
+          continue;
+        }
+
+        /* Deep shadow DOM detected */
+        if (shadowNode.content instanceof DocumentFragment) {
+          _sanitizeShadowDOM(shadowNode.content);
+        }
+
+        /* Check attributes, sanitize if necessary */
+        _sanitizeAttributes(shadowNode);
+      }
+
+      /* Execute a hook if present */
+      _executeHook('afterSanitizeShadowDOM', fragment, null);
+    };
+
+    /**
+     * Sanitize
+     * Public method providing core sanitation functionality
+     *
+     * @param {String|Node} dirty string or DOM node
+     * @param {Object} configuration object
+     */
+    // eslint-disable-next-line complexity
+    DOMPurify.sanitize = function (dirty, cfg) {
+      var body = void 0;
+      var importedNode = void 0;
+      var currentNode = void 0;
+      var oldNode = void 0;
+      var returnNode = void 0;
+      /* Make sure we have a string to sanitize.
+        DO NOT return early, as this will return the wrong type if
+        the user has requested a DOM object rather than a string */
+      if (!dirty) {
+        dirty = '<!-->';
+      }
+
+      /* Stringify, in case dirty is an object */
+      if (typeof dirty !== 'string' && !_isNode(dirty)) {
+        // eslint-disable-next-line no-negated-condition
+        if (typeof dirty.toString !== 'function') {
+          throw typeErrorCreate('toString is not a function');
+        } else {
+          dirty = dirty.toString();
+          if (typeof dirty !== 'string') {
+            throw typeErrorCreate('dirty is not a string, aborting');
           }
         }
-      ]),
-      model: {
-        value: _vm.menu,
-        callback: function($$v) {
-          _vm.menu = $$v
-        },
-        expression: "menu"
       }
-    },
-    [
-      _vm._v(" "),
-      _c(
-        "v-card",
-        [
-          _c("v-select", {
-            attrs: {
-              items: _vm.presetsList,
-              label: "Presets",
-              solo: "",
-              flat: ""
-            },
-            on: { change: _vm.updatePreset },
-            model: {
-              value: _vm.presetValue,
-              callback: function($$v) {
-                _vm.presetValue = $$v
-              },
-              expression: "presetValue"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "v-date-picker",
-            {
-              attrs: {
-                range: "",
-                "no-title": "",
-                scrollable: "",
-                color: "success"
-              },
-              model: {
-                value: _vm.selected,
-                callback: function($$v) {
-                  _vm.selected = $$v
-                },
-                expression: "selected"
-              }
-            },
-            [
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "success" },
-                  on: { click: _vm.resetDates }
-                },
-                [_vm._v("Reset")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "success" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$refs.menu.save(_vm.selected)
-                    }
-                  }
-                },
-                [_vm._v("\n                OK\n            ")]
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
 
+      /* Check we can run. Otherwise fall back or ignore */
+      if (!DOMPurify.isSupported) {
+        if (_typeof(window.toStaticHTML) === 'object' || typeof window.toStaticHTML === 'function') {
+          if (typeof dirty === 'string') {
+            return window.toStaticHTML(dirty);
+          }
 
+          if (_isNode(dirty)) {
+            return window.toStaticHTML(dirty.outerHTML);
+          }
+        }
 
-/***/ }),
+        return dirty;
+      }
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=template&id=665e6808&":
-/*!********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=template&id=665e6808& ***!
-  \********************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+      /* Assign config vars */
+      if (!SET_CONFIG) {
+        _parseConfig(cfg);
+      }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0 pt-0" },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Edit Expense Report")
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-container",
-                [
-                  _c(
-                    "v-card",
-                    { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
-                    [
-                      _c(
-                        "v-form",
-                        {
-                          ref: "form",
-                          model: {
-                            value: _vm.valid,
-                            callback: function($$v) {
-                              _vm.valid = $$v
-                            },
-                            expression: "valid"
-                          }
-                        },
-                        [
-                          _c(
-                            "v-container",
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "overline green--text" },
-                                [
-                                  _vm._v(
-                                    "\n                            BASIC DETAILS\n                        "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("DateRangePicker", {
-                                attrs: {
-                                  preset: _vm.preset,
-                                  presets: _vm.presets,
-                                  value: _vm.date_range,
-                                  solo: false,
-                                  buttonType: false,
-                                  buttonColor: "white",
-                                  buttonDark: false
-                                },
-                                on: { updateDates: _vm.updateDates }
-                              }),
-                              _vm._v(" "),
-                              _c("v-autocomplete", {
-                                attrs: {
-                                  rules: [].concat(
-                                    _vm.mixin_validation.required
-                                  ),
-                                  items: _vm.users,
-                                  "error-messages": _vm.errors.user_id,
-                                  "item-value": "id",
-                                  "item-text": "full_name",
-                                  label: "Employee",
-                                  required: "",
-                                  "return-object": ""
-                                },
-                                on: {
-                                  input: function($event) {
-                                    _vm.errors.user_id = []
-                                  },
-                                  change: _vm.updateUser
-                                },
-                                model: {
-                                  value: _vm.form.user,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "user", $$v)
-                                  },
-                                  expression: "form.user"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("v-combobox", {
-                                attrs: {
-                                  rules: _vm.mixin_validation.required.concat(
-                                    _vm.mixin_validation.minLength(100)
-                                  ),
-                                  counter: 100,
-                                  items: [_vm.default_description],
-                                  "error-messages": _vm.errors.description,
-                                  label: "Description"
-                                },
-                                on: {
-                                  input: function($event) {
-                                    _vm.errors.description = []
-                                  }
-                                },
-                                model: {
-                                  value: _vm.form.description,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "description", $$v)
-                                  },
-                                  expression: "form.description"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "overline green--text" },
-                                [_vm._v("Expenses")]
-                              ),
-                              _vm._v(" "),
-                              _c("v-data-table", {
-                                staticClass: "elevation-0",
-                                attrs: {
-                                  headers: _vm.headers,
-                                  items: _vm.items,
-                                  loading: _vm.loading,
-                                  options: _vm.options,
-                                  "server-items-length": _vm.totalItems,
-                                  "footer-props": {
-                                    itemsPerPageOptions: [10, 20, 50, 100],
-                                    showFirstLastPage: true,
-                                    firstIcon: "mdi-page-first",
-                                    lastIcon: "mdi-page-last",
-                                    prevIcon: "mdi-chevron-left",
-                                    nextIcon: "mdi-chevron-right"
-                                  },
-                                  "show-select": "",
-                                  "show-expand": "",
-                                  "single-expand": "",
-                                  "item-key": "id"
-                                },
-                                on: {
-                                  "update:options": function($event) {
-                                    _vm.options = $event
-                                  }
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "top",
-                                      fn: function() {
-                                        return [
-                                          _vm.selected.length > 0
-                                            ? _c(
-                                                "div",
-                                                [
-                                                  _c(
-                                                    "div",
-                                                    { staticClass: "d-inline" },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                                        " +
-                                                          _vm._s(
-                                                            _vm.selected.length
-                                                          ) +
-                                                          " Item(s)\n                                        Selected\n                                    "
-                                                      )
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "v-btn",
-                                                    {
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.selected = []
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                                        Clear All Selected\n                                    "
-                                                      )
-                                                    ]
-                                                  )
-                                                ],
-                                                1
-                                              )
-                                            : _vm._e()
-                                        ]
-                                      },
-                                      proxy: true
-                                    },
-                                    {
-                                      key: "expanded-item",
-                                      fn: function(ref) {
-                                        var headers = ref.headers
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "td",
-                                            {
-                                              attrs: { colspan: headers.length }
-                                            },
-                                            [
-                                              _c("v-container", [
-                                                _c("table", [
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Code")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(_vm._s(item.code))
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Description")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(
-                                                        "\n                                                    " +
-                                                          _vm._s(
-                                                            item.description
-                                                          ) +
-                                                          "\n                                                "
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Receipt")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(
-                                                        "\n                                                    " +
-                                                          _vm._s(
-                                                            item.receipt_number
-                                                          ) +
-                                                          "\n                                                "
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Vendor")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(
-                                                        "\n                                                    " +
-                                                          _vm._s(
-                                                            item.vendor == null
-                                                              ? ""
-                                                              : item.vendor.name
-                                                          ) +
-                                                          "\n                                                "
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  item.remarks
-                                                    ? _c("tr", [
-                                                        _c("td", [
-                                                          _c("strong", [
-                                                            _vm._v("Remarks")
-                                                          ])
-                                                        ]),
-                                                        _vm._v(" "),
-                                                        _c("td", [_vm._v(":")]),
-                                                        _vm._v(" "),
-                                                        _c("td", [
-                                                          _vm._v(
-                                                            _vm._s(item.remarks)
-                                                          )
-                                                        ])
-                                                      ])
-                                                    : _vm._e()
-                                                ])
-                                              ])
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.updated_at",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_getHumanDate(
-                                                  item.updated_at
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.amount",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  item.amount
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.replenishment",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  item.amount -
-                                                    item.reimbursable_amount
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.status.status",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "v-chip",
-                                            {
-                                              attrs: {
-                                                color: item.status.color,
-                                                dark: "",
-                                                small: ""
-                                              }
-                                            },
-                                            [_vm._v(_vm._s(item.status.status))]
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.actions",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "v-icon",
-                                            {
-                                              staticClass: "mr-2",
-                                              attrs: { small: "" },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.$router.push(
-                                                    "/admin/expenses/" + item.id
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    mdi-eye\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                ),
-                                model: {
-                                  value: _vm.selected,
-                                  callback: function($$v) {
-                                    _vm.selected = $$v
-                                  },
-                                  expression: "selected"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _vm.errors.expenses.length > 0
-                                ? _c("div", { staticClass: "red--text" }, [
-                                    _c("small", [
-                                      _vm._v(_vm._s(_vm.errors.expenses[0]))
-                                    ])
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c(
-                                "v-row",
-                                [
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c("v-textarea", {
-                                        attrs: {
-                                          label: "Remarks",
-                                          rules: [],
-                                          rows: 3
-                                        },
-                                        model: {
-                                          value: _vm.form.remarks,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "remarks", $$v)
-                                          },
-                                          expression: "form.remarks"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", md: "6" } },
-                                    [
-                                      _c(
-                                        "table",
-                                        {
-                                          staticClass: "mt-4",
-                                          attrs: { width: "100%" }
-                                        },
-                                        [
-                                          _c("tbody", [
-                                            _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  "\n                                                Total Expense Amount\n                                            "
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [_vm._v(":")]),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "green--text text--darken-4 text-right"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                " +
-                                                      _vm._s(
-                                                        _vm.mixin_formatNumber(
-                                                          _vm.total
-                                                        )
-                                                      ) +
-                                                      "\n                                            "
-                                                  )
-                                                ]
-                                              )
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c("td", [
-                                                _vm._v(
-                                                  "\n                                                Paid Amount\n                                            "
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [_vm._v(":")]),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "green--text text--darken-4 text-right"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                (-)\n                                                " +
-                                                      _vm._s(
-                                                        _vm.mixin_formatNumber(
-                                                          _vm.paid
-                                                        )
-                                                      ) +
-                                                      "\n                                            "
-                                                  )
-                                                ]
-                                              )
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "td",
-                                                { attrs: { colspan: "3" } },
-                                                [_c("v-divider")],
-                                                1
-                                              )
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "th",
-                                                { staticClass: "text-left" },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                Amount to be reimbursed\n                                            "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("td", [_vm._v(":")]),
-                                              _vm._v(" "),
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "green--text text--darken-4 text-right"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                " +
-                                                      _vm._s(
-                                                        _vm.mixin_formatNumber(
-                                                          _vm.balance
-                                                        )
-                                                      ) +
-                                                      "\n                                            "
-                                                  )
-                                                ]
-                                              )
-                                            ])
-                                          ])
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "green", dark: "" },
-                              on: { click: _vm.onSave }
-                            },
-                            [_vm._v("Save")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              on: {
-                                click: function($event) {
-                                  return _vm.$router.go(-1)
-                                }
-                              }
-                            },
-                            [_vm._v(" Cancel ")]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
+      /* Clean up removed elements */
+      DOMPurify.removed = [];
 
+      /* Check if dirty is correctly typed for IN_PLACE */
+      if (typeof dirty === 'string') {
+        IN_PLACE = false;
+      }
 
+      if (IN_PLACE) ; else if (dirty instanceof Node) {
+        /* If dirty is a DOM element, append to an empty document to avoid
+           elements being stripped by the parser */
+        body = _initDocument('<!---->');
+        importedNode = body.ownerDocument.importNode(dirty, true);
+        if (importedNode.nodeType === 1 && importedNode.nodeName === 'BODY') {
+          /* Node is already a body, use as is */
+          body = importedNode;
+        } else if (importedNode.nodeName === 'HTML') {
+          body = importedNode;
+        } else {
+          // eslint-disable-next-line unicorn/prefer-node-append
+          body.appendChild(importedNode);
+        }
+      } else {
+        /* Exit directly if we have nothing to do */
+        if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT &&
+        // eslint-disable-next-line unicorn/prefer-includes
+        dirty.indexOf('<') === -1) {
+          return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
+        }
 
-/***/ }),
+        /* Initialize the document to work on */
+        body = _initDocument(dirty);
 
-/***/ "./resources/js/components/daterangepicker/DateRangePicker.vue":
-/*!*********************************************************************!*\
-  !*** ./resources/js/components/daterangepicker/DateRangePicker.vue ***!
-  \*********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+        /* Check we have a DOM node from the data */
+        if (!body) {
+          return RETURN_DOM ? null : emptyHTML;
+        }
+      }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DateRangePicker.vue?vue&type=template&id=c3ea2be0& */ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&");
-/* harmony import */ var _DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DateRangePicker.vue?vue&type=script&lang=js& */ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+      /* Remove first element node (ours) if FORCE_BODY is set */
+      if (body && FORCE_BODY) {
+        _forceRemove(body.firstChild);
+      }
 
+      /* Get node iterator */
+      var nodeIterator = _createIterator(IN_PLACE ? dirty : body);
 
+      /* Now start iterating over the created document */
+      while (currentNode = nodeIterator.nextNode()) {
+        /* Fix IE's strange behavior with manipulated textNodes #89 */
+        if (currentNode.nodeType === 3 && currentNode === oldNode) {
+          continue;
+        }
 
+        /* Sanitize tags and elements */
+        if (_sanitizeElements(currentNode)) {
+          continue;
+        }
 
+        /* Shadow DOM detected, sanitize it */
+        if (currentNode.content instanceof DocumentFragment) {
+          _sanitizeShadowDOM(currentNode.content);
+        }
 
-/* normalize component */
+        /* Check attributes, sanitize if necessary */
+        _sanitizeAttributes(currentNode);
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
+        oldNode = currentNode;
+      }
 
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/daterangepicker/DateRangePicker.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+      oldNode = null;
 
-/***/ }),
+      /* If we sanitized `dirty` in-place, return it. */
+      if (IN_PLACE) {
+        return dirty;
+      }
 
-/***/ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************************!*\
-  !*** ./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+      /* Return sanitized string or DOM */
+      if (RETURN_DOM) {
+        if (RETURN_DOM_FRAGMENT) {
+          returnNode = createDocumentFragment.call(body.ownerDocument);
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DateRangePicker.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+          while (body.firstChild) {
+            // eslint-disable-next-line unicorn/prefer-node-append
+            returnNode.appendChild(body.firstChild);
+          }
+        } else {
+          returnNode = body;
+        }
 
-/***/ }),
+        if (RETURN_DOM_IMPORT) {
+          /*
+            AdoptNode() is not used because internal state is not reset
+            (e.g. the past names map of a HTMLFormElement), this is safe
+            in theory but we would rather not risk another attack vector.
+            The state that is cloned by importNode() is explicitly defined
+            by the specs.
+          */
+          returnNode = importNode.call(originalDocument, returnNode, true);
+        }
 
-/***/ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&":
-/*!****************************************************************************************************!*\
-  !*** ./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0& ***!
-  \****************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+        return returnNode;
+      }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DateRangePicker.vue?vue&type=template&id=c3ea2be0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+      var serializedHTML = WHOLE_DOCUMENT ? body.outerHTML : body.innerHTML;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+      /* Sanitize final string template-safe */
+      if (SAFE_FOR_TEMPLATES) {
+        serializedHTML = stringReplace(serializedHTML, MUSTACHE_EXPR$$1, ' ');
+        serializedHTML = stringReplace(serializedHTML, ERB_EXPR$$1, ' ');
+      }
 
+      return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
+    };
 
+    /**
+     * Public method to set the configuration once
+     * setConfig
+     *
+     * @param {Object} cfg configuration object
+     */
+    DOMPurify.setConfig = function (cfg) {
+      _parseConfig(cfg);
+      SET_CONFIG = true;
+    };
 
-/***/ }),
+    /**
+     * Public method to remove the configuration
+     * clearConfig
+     *
+     */
+    DOMPurify.clearConfig = function () {
+      CONFIG = null;
+      SET_CONFIG = false;
+    };
 
-/***/ "./resources/js/views/modules/admin/expense_reports/Edit.vue":
-/*!*******************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expense_reports/Edit.vue ***!
-  \*******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    /**
+     * Public method to check if an attribute value is valid.
+     * Uses last set config, if any. Otherwise, uses config defaults.
+     * isValidAttribute
+     *
+     * @param  {string} tag Tag name of containing element.
+     * @param  {string} attr Attribute name.
+     * @param  {string} value Attribute value.
+     * @return {Boolean} Returns true if `value` is valid. Otherwise, returns false.
+     */
+    DOMPurify.isValidAttribute = function (tag, attr, value) {
+      /* Initialize shared config vars if necessary. */
+      if (!CONFIG) {
+        _parseConfig({});
+      }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Edit_vue_vue_type_template_id_665e6808___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=665e6808& */ "./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=template&id=665e6808&");
-/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+      var lcTag = stringToLowerCase(tag);
+      var lcName = stringToLowerCase(attr);
+      return _isValidAttribute(lcTag, lcName, value);
+    };
 
+    /**
+     * AddHook
+     * Public method to add DOMPurify hooks
+     *
+     * @param {String} entryPoint entry point for the hook to add
+     * @param {Function} hookFunction function to execute
+     */
+    DOMPurify.addHook = function (entryPoint, hookFunction) {
+      if (typeof hookFunction !== 'function') {
+        return;
+      }
 
+      hooks[entryPoint] = hooks[entryPoint] || [];
+      arrayPush(hooks[entryPoint], hookFunction);
+    };
 
+    /**
+     * RemoveHook
+     * Public method to remove a DOMPurify hook at a given entryPoint
+     * (pops it from the stack of hooks if more are present)
+     *
+     * @param {String} entryPoint entry point for the hook to remove
+     */
+    DOMPurify.removeHook = function (entryPoint) {
+      if (hooks[entryPoint]) {
+        arrayPop(hooks[entryPoint]);
+      }
+    };
 
+    /**
+     * RemoveHooks
+     * Public method to remove all DOMPurify hooks at a given entryPoint
+     *
+     * @param  {String} entryPoint entry point for the hooks to remove
+     */
+    DOMPurify.removeHooks = function (entryPoint) {
+      if (hooks[entryPoint]) {
+        hooks[entryPoint] = [];
+      }
+    };
 
-/* normalize component */
+    /**
+     * RemoveAllHooks
+     * Public method to remove all DOMPurify hooks
+     *
+     */
+    DOMPurify.removeAllHooks = function () {
+      hooks = {};
+    };
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Edit_vue_vue_type_template_id_665e6808___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Edit_vue_vue_type_template_id_665e6808___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
+    return DOMPurify;
+  }
 
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/expense_reports/Edit.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+  var purify = createDOMPurify();
 
-/***/ }),
+  return purify;
 
-/***/ "./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=template&id=665e6808&":
-/*!**************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=template&id=665e6808& ***!
-  \**************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_665e6808___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=665e6808& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Edit.vue?vue&type=template&id=665e6808&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_665e6808___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_665e6808___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
+}));
+//# sourceMappingURL=purify.js.map
 
 
 /***/ })

@@ -101,19 +101,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    id: {
+    department_id: {
       type: Number,
       "default": null
     },
-    department_id: {
-      type: Number,
+    selectedJob: {
+      type: Object,
       "default": null
     },
     showAll: {
       type: Boolean,
       "default": false
+    },
+    errors: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    },
+    rules: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
     }
   },
   data: function data() {
@@ -122,7 +136,6 @@ __webpack_require__.r(__webpack_exports__);
         id: null,
         name: "All Job Designations"
       },
-      data: {},
       items: []
     };
   },
@@ -137,19 +150,32 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this.items = response.data.data;
 
-        _this.items.unshift(_this.defaultValue);
+        if (_this.showAll) {
+          _this.items.unshift(_this.defaultValue);
+        }
       })["catch"](function (error) {
         console.log(error);
         console.log(error.response);
       });
     },
-    changeData: function changeData() {
-      this.$emit("changeData", this.data);
+    changeData: function changeData(e) {
+      this.computedSelectedJob = e;
       this.getData(this.department_id);
+      this.$emit("changeData", e);
     },
     resetData: function resetData(department_id) {
-      this.data = this.showAll ? this.defaultValue : null;
+      this.computedSelectedJob = this.showAll ? this.defaultValue : null;
       this.getData(department_id);
+    }
+  },
+  computed: {
+    computedSelectedJob: {
+      get: function get() {
+        return this.selectedJob;
+      },
+      set: function set(value) {
+        return value;
+      }
     }
   },
   created: function created() {
@@ -176,6 +202,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -669,6 +703,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.job = null;
       this.$refs.departmentData.resetData();
       this.$refs.jobData.resetData();
     },
@@ -903,15 +938,17 @@ var render = function() {
       items: _vm.items,
       "item-value": "id",
       "item-text": "name",
-      "return-object": ""
+      "return-object": "",
+      "error-messages": _vm.errors,
+      rules: _vm.rules
     },
     on: { change: _vm.changeData },
     model: {
-      value: _vm.data,
+      value: _vm.computedSelectedJob,
       callback: function($$v) {
-        _vm.data = $$v
+        _vm.computedSelectedJob = $$v
       },
-      expression: "data"
+      expression: "computedSelectedJob"
     }
   })
 }
@@ -1004,187 +1041,6 @@ var render = function() {
                   )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Add New")])]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-tooltip",
-                {
-                  attrs: { bottom: "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "elevation-3 mr-2",
-                                  attrs: {
-                                    color: "green",
-                                    dark: "",
-                                    fab: "",
-                                    "x-small": ""
-                                  },
-                                  on: { click: _vm.onRefresh }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-reload")
-                              ])
-                            ],
-                            1
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                },
-                [_vm._v(" "), _c("span", [_vm._v("Refresh")])]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  attrs: {
-                    transition: "scale-transition",
-                    "close-on-content-click": false,
-                    "nudge-width": 200,
-                    "offset-y": "",
-                    left: "",
-                    bottom: "",
-                    eager: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var menu = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-tooltip",
-                            {
-                              attrs: { bottom: "" },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "activator",
-                                    fn: function(ref) {
-                                      var tooltip = ref.on
-                                      return [
-                                        _c(
-                                          "v-btn",
-                                          _vm._g(
-                                            _vm._b(
-                                              {
-                                                staticClass: "elevation-3 mr-2",
-                                                attrs: {
-                                                  color: "green",
-                                                  dark: "",
-                                                  fab: "",
-                                                  "x-small": ""
-                                                }
-                                              },
-                                              "v-btn",
-                                              attrs,
-                                              false
-                                            ),
-                                            Object.assign({}, tooltip, menu)
-                                          ),
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              { attrs: { dark: "" } },
-                                              [_vm._v("mdi-filter")]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ],
-                                null,
-                                true
-                              )
-                            },
-                            [_vm._v(" "), _c("span", [_vm._v("Filter Data")])]
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    [
-                      _c(
-                        "v-list",
-                        [
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("v-select", {
-                                attrs: { items: _vm.statuses, label: "Status" },
-                                on: { change: _vm.changeStatus },
-                                model: {
-                                  value: _vm.status,
-                                  callback: function($$v) {
-                                    _vm.status = $$v
-                                  },
-                                  expression: "status"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("DepartmentData", {
-                                ref: "departmentData",
-                                attrs: { showAll: true },
-                                on: { changeData: _vm.changeDepartment }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("JobData", {
-                                ref: "jobData",
-                                attrs: {
-                                  showAll: true,
-                                  department_id: _vm.department.id
-                                },
-                                on: { changeData: _vm.changeJob }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
               ),
               _vm._v(" "),
               _c(
@@ -1385,7 +1241,7 @@ var render = function() {
                 ? _c(
                     "v-chip",
                     {
-                      staticClass: "mr-2",
+                      staticClass: "mr-2 mb-2",
                       attrs: {
                         color: "green",
                         dark: "",
@@ -1401,7 +1257,7 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        " \n                " +
+                        "\n                " +
                           _vm._s(_vm.selected.length) +
                           " Selected\n            "
                       )
@@ -1409,40 +1265,248 @@ var render = function() {
                   )
                 : _vm._e(),
               _vm._v(" "),
-              _vm.status != null
-                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(_vm.status) +
-                        "\n            "
-                    )
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    transition: "scale-transition",
+                    "close-on-content-click": false,
+                    "nudge-width": 200,
+                    "offset-y": "",
+                    right: "",
+                    bottom: "",
+                    eager: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var menu = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-chip",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "mr-2 mb-2",
+                                  attrs: { small: "" }
+                                },
+                                "v-chip",
+                                attrs,
+                                false
+                              ),
+                              menu
+                            ),
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(_vm.status) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
                   ])
-                : _vm._e(),
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c(
+                        "v-list",
+                        [
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("v-select", {
+                                attrs: { items: _vm.statuses, label: "Status" },
+                                model: {
+                                  value: _vm.status,
+                                  callback: function($$v) {
+                                    _vm.status = $$v
+                                  },
+                                  expression: "status"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
-              _vm.department != null
-                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(_vm.department.name) +
-                        "\n            "
-                    )
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    transition: "scale-transition",
+                    "close-on-content-click": false,
+                    "nudge-width": 200,
+                    "offset-y": "",
+                    right: "",
+                    bottom: "",
+                    eager: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var menu = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-chip",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "mr-2 mb-2",
+                                  attrs: { small: "" }
+                                },
+                                "v-chip",
+                                attrs,
+                                false
+                              ),
+                              menu
+                            ),
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(_vm.department.name) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
                   ])
-                : _vm._e(),
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c(
+                        "v-list",
+                        [
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("DepartmentData", {
+                                ref: "departmentData",
+                                attrs: { showAll: true },
+                                on: { changeData: _vm.changeDepartment }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
-              _vm.job != null
-                ? _c("v-chip", { staticClass: "mr-2", attrs: { small: "" } }, [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(_vm.job.name) +
-                        "\n            "
-                    )
+              _c(
+                "v-menu",
+                {
+                  attrs: {
+                    transition: "scale-transition",
+                    "close-on-content-click": false,
+                    "nudge-width": 200,
+                    "offset-y": "",
+                    right: "",
+                    bottom: "",
+                    eager: ""
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var menu = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-chip",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass: "mr-2 mb-2",
+                                  attrs: { small: "" }
+                                },
+                                "v-chip",
+                                attrs,
+                                false
+                              ),
+                              menu
+                            ),
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    _vm.job
+                                      ? _vm.job.name
+                                      : "All Job Designations"
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
                   ])
-                : _vm._e(),
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c(
+                        "v-list",
+                        [
+                          _c(
+                            "v-list-item",
+                            [
+                              _c("JobData", {
+                                ref: "jobData",
+                                attrs: {
+                                  showAll: true,
+                                  department_id: _vm.department.id,
+                                  selectedJob: _vm.job
+                                },
+                                on: { changeData: _vm.changeJob }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
               _c(
                 "v-chip",
                 {
-                  staticClass: "mr-2",
+                  staticClass: "mr-2 mb-2",
                   attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
                   on: { "click:close": _vm.onRefresh }
                 },
