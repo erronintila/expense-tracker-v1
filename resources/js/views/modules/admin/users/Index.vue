@@ -171,17 +171,24 @@
                             v-on="menu"
                             small
                         >
-                            {{ department.name }}
+                            {{ department ? department.name : "All Departments" }}
                         </v-chip>
                     </template>
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <DepartmentData
+                                <!-- <DepartmentData
                                     ref="departmentData"
                                     :showAll="true"
                                     @changeData="changeDepartment"
-                                ></DepartmentData>
+                                ></DepartmentData> -->
+                                <DepartmentDropdownSelector
+                                    ref="departmentDropdownSelector"
+                                    :selectedDepartment="department"
+                                    :showAll="true"
+                                    @onChange="onChangeDepartment"
+                                >
+                                </DepartmentDropdownSelector>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -212,7 +219,7 @@
                                 <JobData
                                     ref="jobData"
                                     :showAll="true"
-                                    :department_id="department.id"
+                                    :department_id="department ? department.id : null"
                                     :selectedJob="job"
                                     @changeData="changeJob"
                                 ></JobData>
@@ -376,12 +383,14 @@
 </template>
 
 <script>
+import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
 import DepartmentData from "../../../../components/selector/dropdown/Departments";
 import JobData from "../../../../components/selector/dropdown/Jobs";
 
 export default {
     props: {},
     components: {
+        DepartmentDropdownSelector,
         DepartmentData,
         JobData
     },
@@ -423,11 +432,16 @@ export default {
     },
     methods: {
         changeStatus() {},
-        changeDepartment(e) {
+        onChangeDepartment(e) {
             this.department = e;
-            this.job = { id: null, name: "All Job Designations" };
+            this.job = null;
             this.$refs.jobData.resetData(this.department.id);
         },
+        // changeDepartment(e) {
+        //     this.department = e;
+        //     this.job = { id: null, name: "All Job Designations" };
+        //     this.$refs.jobData.resetData(this.department.id);
+        // },
         changeJob(e) {
             this.job = e;
         },
@@ -485,9 +499,10 @@ export default {
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             
+            this.department = null;
             this.job = null;
-            this.$refs.departmentData.resetData();
-            this.$refs.jobData.resetData();
+            // this.$refs.departmentData.resetData();
+            // this.$refs.jobData.resetData();
         },
         onEditFund() {
             if (this.selected.length == 0) {
