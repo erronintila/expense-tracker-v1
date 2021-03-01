@@ -236,6 +236,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
@@ -529,128 +553,6 @@ var render = function() {
                   )
                 },
                 [_vm._v(" "), _c("span", [_vm._v("Add New")])]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  attrs: {
-                    "offset-y": "",
-                    transition: "scale-transition",
-                    left: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var menu = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-tooltip",
-                            {
-                              attrs: { bottom: "" },
-                              scopedSlots: _vm._u(
-                                [
-                                  {
-                                    key: "activator",
-                                    fn: function(ref) {
-                                      var tooltip = ref.on
-                                      return [
-                                        _c(
-                                          "v-btn",
-                                          _vm._g(
-                                            _vm._b(
-                                              {
-                                                staticClass: "elevation-3",
-                                                attrs: {
-                                                  color: "green",
-                                                  dark: "",
-                                                  fab: "",
-                                                  "x-small": ""
-                                                }
-                                              },
-                                              "v-btn",
-                                              attrs,
-                                              false
-                                            ),
-                                            Object.assign({}, tooltip, menu)
-                                          ),
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              { attrs: { dark: "" } },
-                                              [
-                                                _vm._v(
-                                                  "mdi-view-grid-plus-outline"
-                                                )
-                                              ]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ],
-                                null,
-                                true
-                              )
-                            },
-                            [_vm._v(" "), _c("span", [_vm._v("More Options")])]
-                          )
-                        ]
-                      }
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-list",
-                    [
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onRestore } },
-                        [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("mdi-history")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "\n                            Restore\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { on: { click: _vm.onDelete } },
-                        [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("mdi-trash-can-outline")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("v-list-item-subtitle", [
-                            _vm._v(
-                              "\n                            Move to archive\n                        "
-                            )
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
               )
             ],
             1
@@ -777,6 +679,53 @@ var render = function() {
                   on: { "click:close": _vm.onRefresh }
                 },
                 [_vm._v("\n                Refresh\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value:
+                        _vm.selected.length > 0 && _vm.status == "Archived",
+                      expression: "selected.length > 0 && status == 'Archived'"
+                    }
+                  ],
+                  staticClass: "mr-2 mb-2",
+                  attrs: {
+                    close: "",
+                    small: "",
+                    "close-icon": "mdi-history",
+                    color: "green"
+                  },
+                  on: { "click:close": _vm.onRestore }
+                },
+                [_vm._v("\n                Restore\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-chip",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.selected.length > 0 && _vm.status == "Active",
+                      expression: "selected.length > 0 && status == 'Active'"
+                    }
+                  ],
+                  staticClass: "mr-2 mb-2",
+                  attrs: {
+                    close: "",
+                    small: "",
+                    "close-icon": "mdi-trash-can-outline",
+                    color: "red"
+                  },
+                  on: { "click:close": _vm.onDelete }
+                },
+                [_vm._v("\n                Archive\n            ")]
               )
             ],
             1

@@ -26,7 +26,7 @@
                 <span>Add New</span>
             </v-tooltip>
 
-            <v-menu offset-y transition="scale-transition" left>
+            <!-- <v-menu offset-y transition="scale-transition" left>
                 <template v-slot:activator="{ on: menu, attrs }">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on: tooltip }">
@@ -65,7 +65,7 @@
                         </v-list-item-subtitle>
                     </v-list-item>
                 </v-list>
-            </v-menu>
+            </v-menu> -->
         </v-card-title>
 
         <v-row class="ml-4">
@@ -122,6 +122,30 @@
             >
                 Refresh
             </v-chip>
+
+            <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                >
+                    Restore
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                >
+                    Archive
+                </v-chip>
         </v-row>
 
         <v-card-subtitle>
