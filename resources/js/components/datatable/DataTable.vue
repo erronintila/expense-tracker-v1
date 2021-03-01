@@ -1,19 +1,28 @@
 <template>
     <div>
         <v-data-table
-            v-model="selected"
+            v-model="computedSelected"
             :show-select="showSelect"
             :item-key="itemKey"
             :class="classStyle"
             :single-expand="singleExpand"
             :show-expand="showExpand"
-            :headers="headers"
-            :items="items"
+            :headers="computedHeaders"
+            :items="computedItems"
             :loading="loading"
-            :options.sync="options"
-            :server-items-length="meta.total"
+            :options.sync="computedOptions"
+            :server-items-length="serverItemsLength"
             :footer-props="footerProps"
         >
+            <template
+                v-slot:expanded-item="{ computedHeaders, computedSelected }"
+            >
+                <slot
+                    name="expanded-item"
+                    v-bind="{ computedHeaders, computedSelected }"
+                >
+                </slot>
+            </template>
         </v-data-table>
     </div>
 </template>
@@ -41,13 +50,15 @@ export default {
             type: String,
             default: "elevation-0"
         },
-        options: {
+        optionsSync: {
             type: Object,
-            default: {
-                sortBy: ["created_at"],
-                sortDesc: [true],
-                page: 1,
-                itemsPerPage: 10
+            default: () => {
+                return {
+                    sortBy: ["created_at"],
+                    sortDesc: [true],
+                    page: 1,
+                    itemsPerPage: 10
+                };
             }
         },
         loading: {
@@ -56,13 +67,15 @@ export default {
         },
         footerProps: {
             type: Object,
-            default: {
-                itemsPerPageOptions: [10, 20, 50, 100],
-                showFirstLastPage: true,
-                firstIcon: "mdi-page-first",
-                lastIcon: "mdi-page-last",
-                prevIcon: "mdi-chevron-left",
-                nextIcon: "mdi-chevron-right"
+            default: () => {
+                return {
+                    itemsPerPageOptions: [10, 20, 50, 100],
+                    showFirstLastPage: true,
+                    firstIcon: "mdi-page-first",
+                    lastIcon: "mdi-page-last",
+                    prevIcon: "mdi-chevron-left",
+                    nextIcon: "mdi-chevron-right"
+                };
             }
         },
         headers: {
@@ -73,27 +86,89 @@ export default {
             type: Array,
             default: () => []
         },
+        selected: {
+            type: Object,
+            default: () => {}
+        },
+        serverItemsLength: {
+            type: Number,
+            default: 0
+        },
         meta: {
             type: Object,
-            default: {
-                current_page: 0,
-                from: 0,
-                last_page: 0,
-                path: "",
-                per_page: "10",
-                to: 0,
-                total: 0
+            default: () => {
+                return {
+                    current_page: 0,
+                    from: 0,
+                    last_page: 0,
+                    path: "",
+                    per_page: "10",
+                    to: 0,
+                    total: 0
+                };
             }
         }
     },
     data() {
-        return {
-            selected: []
-        };
+        return {};
     },
     methods: {},
-    computed: {},
-    watch: {},
+    computed: {
+        computedserverItemsLength: {
+            get() {
+                return this.serverItemsLength;
+            },
+            set(value) {
+                return value;
+            }
+        },
+        computedMeta: {
+            get() {
+                return this.meta;
+            },
+            set(value) {
+                return value;
+            }
+        },
+        computedSelected: {
+            get() {
+                return this.selected;
+            },
+            set(value) {
+                return value;
+            }
+        },
+        computedHeaders: {
+            get() {
+                return this.headers;
+            },
+            set(value) {
+                return value;
+            }
+        },
+        computedItems: {
+            get() {
+                return this.items;
+            },
+            set(value) {
+                return value;
+            }
+        },
+        computedOptions: {
+            get() {
+                return this.optionsSync;
+            },
+            set(value) {
+                return value;
+            }
+        }
+    },
+    watch: {
+        computedSelected() {
+            console.log(this.computedSelected);
+            this.$emit("onSelect", this.computedSelected);
+        }
+    },
     created() {}
 };
 </script>

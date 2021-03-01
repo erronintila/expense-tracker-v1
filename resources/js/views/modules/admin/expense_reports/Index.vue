@@ -1847,7 +1847,7 @@ export default {
 
             switch (action) {
                 case "submit":
-                    url = `/api/expense_reports/submit/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/${_this.selected[0].id}`;
 
                     break;
                 case "approve":

@@ -1473,7 +1473,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           axios({
             method: method,
-            url: "/api/expense_reports/".concat(_this.selected[0].id),
+            url: "/api/expense_reports/submit/".concat(_this.selected[0].id),
             data: {
               ids: ids,
               action: action

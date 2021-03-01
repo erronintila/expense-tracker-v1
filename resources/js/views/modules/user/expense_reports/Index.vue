@@ -1621,7 +1621,7 @@ export default {
 
                         axios({
                             method: method,
-                            url: `/api/expense_reports/${_this.selected[0].id}`,
+                            url: `/api/expense_reports/submit/${_this.selected[0].id}`,
                             data: {
                                 ids: ids,
                                 action: action

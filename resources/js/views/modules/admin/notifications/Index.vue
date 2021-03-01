@@ -79,66 +79,110 @@
                 </DateRangePicker>
             </v-card-subtitle>
 
-            <!-- <v-card-subtitle>
-                {{ formattedDateRange }}
-            </v-card-subtitle> -->
+            <v-row class="ml-2">
+                <v-col>
+                    <v-chip
+                        color="green"
+                        dark
+                        v-if="selected.length > 0"
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="selected = []"
+                        close-icon="mdi-close"
+                    >
+                        {{ selected.length }} Selected
+                    </v-chip>
 
-            <v-row class="ml-4">
-                <v-chip
-                    color="green"
-                    dark
-                    v-if="selected.length > 0"
-                    close
-                    class="mr-2 mb-2"
-                    small
-                    @click:close="selected = []"
-                    close-icon="mdi-close"
-                >
-                    {{ selected.length }} Selected
-                </v-chip>
-                <!-- <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip> -->
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    right
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-chip
-                            v-if="status != null"
-                            class="mr-2 mb-2"
-                            small
-                            v-bind="attrs"
-                            v-on="menu"
-                        >
-                            {{ status }}
-                        </v-chip>
-                    </template>
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-                <v-chip
-                    close
-                    class="mr-2 mb-2"
-                    small
-                    @click:close="onRefresh"
-                    close-icon="mdi-refresh"
-                >
-                    Refresh
-                </v-chip>
+                    <v-menu
+                        transition="scale-transition"
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-y
+                        right
+                        bottom
+                    >
+                        <template v-slot:activator="{ on: menu, attrs }">
+                            <v-chip
+                                class="mr-2 mb-2"
+                                small
+                                v-bind="attrs"
+                                v-on="menu"
+                            >
+                                {{ status ? status.text : "" }}
+                            </v-chip>
+                        </template>
+                        <v-card>
+                            <ListItemGroup
+                                v-model="status"
+                                :items="statuses"
+                                @onChange="onChangeStatus"
+                            >
+                                <template v-slot:itemText="{ item }">
+                                    {{ item.text }}
+                                </template>
+                            </ListItemGroup>
+                        </v-card>
+                    </v-menu>
+
+                    <v-chip
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onRefresh"
+                        close-icon="mdi-refresh"
+                    >
+                        Refresh
+                    </v-chip>
+
+                    <v-chip
+                        v-if="
+                            items.filter(item => item.read_at == null).length >
+                                0 && selected.length == 0
+                        "
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onReadUpdate(null, 'read', 'all')"
+                        close-icon="mdi-check"
+                        color="green"
+                        dark
+                    >
+                        Mark all as read
+                    </v-chip>
+
+                    <v-chip
+                        v-if="
+                            selected.filter(item => item.read_at == null)
+                                .length > 0
+                        "
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onReadUpdate(null, 'read', 'multiple')"
+                        close-icon="mdi-check"
+                        color="green"
+                        dark
+                    >
+                        Mark as read
+                    </v-chip>
+
+                    <v-chip
+                        v-if="
+                            selected.filter(item => item.read_at != null)
+                                .length > 0
+                        "
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onReadUpdate(null, 'unread', 'multiple')"
+                        close-icon="mdi-check"
+                        color="red"
+                        dark
+                    >
+                        Mark as unread
+                    </v-chip>
+                </v-col>
             </v-row>
 
             <v-card-text>
@@ -147,7 +191,7 @@
                     :items="items"
                     :loading="loading"
                     :options.sync="options"
-                    :server-items-length="totalItems"
+                    :server-items-length="meta.total"
                     :footer-props="{
                         itemsPerPageOptions: [10, 20, 50, 100],
                         showFirstLastPage: true,
@@ -273,48 +317,7 @@
                             Unread
                         </v-chip>
                     </template>
-                    <!-- <template v-slot:[`item.status.status`]="{ item }">
-                        <v-chip :color="item.status.color" dark small>{{
-                            item.status.status
-                        }}</v-chip>
-                    </template>
-                    <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            `${item.user.last_name}, ${item.user.first_name} ${item.user.middle_name}`
-                        }}
-                    </template>
-                    
-                    <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at) }}
-                    </template>
-                    <template v-slot:[`item.amount`]="{ item }">
-                        {{ mixin_formatNumber(item.amount) }}
-                    </template>
-                    <template slot="body.append" v-if="items.length > 0">
-                        <tr class="green--text hidden-md-and-up">
-                            <td class="title">
-                                Total: <strong>{{ totalAmount }}</strong>
-                            </td>
-                        </tr>
-                        <tr class="green--text hidden-sm-and-down">
-                            <td class="title">Total</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <strong>{{ totalAmount }}</strong>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </template> -->
                 </v-data-table>
-
-                <v-btn v-if="selected.length > 0" @click="selected = []"
-                    >Clear All Selected</v-btn
-                >
             </v-card-text>
         </v-card>
     </div>
@@ -325,32 +328,51 @@ import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import NotificationDataService from "../../../../services/NotificationDataService";
+import ListItemGroup from "../../../../components/list_item_group/ListItemGroup";
 
 export default {
-    components: { DateRangePicker },
+    components: { DateRangePicker, ListItemGroup },
     data() {
         return {
             loading: true,
             headers: [
                 { text: "Date", value: "created_at" },
                 { text: "Employee", value: "data.data.user.full_name" },
-                { text: "Description", value: "description" },
+                { text: "Description", value: "data.data.description" },
                 { text: "Status", value: "status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             totalAmount: 0,
             items: [],
-            status: "All Unread",
-            statuses: ["All Unread", "All Read", "All Notifications"],
+            status: {
+                text: "All Unread"
+            },
+            // status: "All Unread",
+            statuses: [
+                { text: "All Unread" },
+                { text: "All Read" },
+                { text: "All Notifications" }
+                // "All Unread",
+                // "All Read",
+                // "All Notifications"
+            ],
             selected: [],
             search: "",
-            totalItems: 0,
             options: {
                 sortBy: ["updated_at"],
                 sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
+            },
+            meta: {
+                current_page: 0,
+                from: 0,
+                last_page: 0,
+                path: "",
+                per_page: 10,
+                to: 0,
+                total: 0
             },
             date_range: [
                 moment()
@@ -383,16 +405,12 @@ export default {
             this.date_range = e;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
-
+            this.loading = true;
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status?.text;
+                let range = this.date_range;
                 let data = {
                     params: {
                         search: search,
@@ -405,33 +423,22 @@ export default {
                         end_date: range[1] ? range[1] : range[0]
                     }
                 };
-
                 NotificationDataService.getAll(data)
-                    .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
-
-                        _this.loading = false;
-
-                        resolve({ items, total });
-                    })
+                    .then(response => resolve(response.data))
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                        reject();
+                    })
+                    .finally(() => (this.loading = false));
             });
+        },
+        onChangeStatus(value) {
+            this.status = value;
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
             this.selected = [];
+            this.onChangeStatus({ text: "All Unread" });
         },
         onShow(item) {
             this.$router.push({
@@ -440,10 +447,8 @@ export default {
             });
         },
         onReadUpdate(item, action, type) {
-            let _this = this;
             let parameters = {};
             let item_id = item ? item : this.selected.map(item => item.id)[0];
-
             switch (type) {
                 case "all":
                     if (this.items.length <= 0) {
@@ -479,25 +484,18 @@ export default {
                     break;
             }
 
-            // axios
-            // .patch(`/api/notifications/${item_id}`, parameters)
-
             NotificationDataService.update(item_id, parameters)
                 .then(response => {
-                    _this.getDataFromApi().then(data => {
-                        _this.items = data.items;
-                        _this.totalItems = data.total;
+                    this.getDataFromApi().then(data => {
+                        this.items = data.data;
+                        this.meta = data.meta;
                     });
-
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                    _this.selected = [];
+                    this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    this.selected = [];
                 })
                 .catch(error => {
                     console.log(error);
-                    console.log(error.response);
-
-                    _this.selected = [];
+                    this.selected = [];
                 });
         }
     },
@@ -529,8 +527,8 @@ export default {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
+                    this.items = data.data;
+                    this.meta = data.meta;
                 });
             },
             deep: true
@@ -546,10 +544,10 @@ export default {
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
+        // this.getDataFromApi().then(data => {
+        //     this.items = data.data;
+        //     this.meta = data.meta;
+        // });
     }
 };
 </script>
