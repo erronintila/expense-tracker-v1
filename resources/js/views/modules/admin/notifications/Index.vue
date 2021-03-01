@@ -4,7 +4,7 @@
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Notifications</h4>
                 <v-spacer></v-spacer>
-                <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -62,7 +62,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-card-subtitle>
@@ -84,7 +84,7 @@
                     <v-chip
                         color="green"
                         dark
-                        v-if="selected.length > 0"
+                        v-show="selected.length > 0"
                         close
                         class="mr-2 mb-2"
                         small
@@ -136,7 +136,7 @@
                     </v-chip>
 
                     <v-chip
-                        v-if="
+                        v-show="
                             items.filter(item => item.read_at == null).length >
                                 0 && selected.length == 0
                         "
@@ -152,7 +152,7 @@
                     </v-chip>
 
                     <v-chip
-                        v-if="
+                        v-show="
                             selected.filter(item => item.read_at == null)
                                 .length > 0
                         "
@@ -168,7 +168,7 @@
                     </v-chip>
 
                     <v-chip
-                        v-if="
+                        v-show="
                             selected.filter(item => item.read_at != null)
                                 .length > 0
                         "

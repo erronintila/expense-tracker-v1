@@ -11,6 +11,7 @@
                 v-for="(item, index) in computedItems"
                 :key="index"
                 :value="item"
+                active-class="border"
             >
                 <v-list-item-icon v-if="hasIcon">
                     <slot name="itemIcon" v-bind="{ item }"> </slot>
@@ -59,6 +60,10 @@ export default {
         onChange(value) {
             this.computedItem = value;
             this.$emit("onChange", value);
+        },
+        onReset() {
+            this.computedItem = null;
+            this.$emit("onReset");
         }
     },
     computed: {
@@ -81,3 +86,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+.border {
+    border: 2px dashed orange;
+}
+</style>
