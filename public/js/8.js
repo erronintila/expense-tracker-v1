@@ -89,10 +89,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -381,7 +377,7 @@ var render = function() {
                         return [
                           _c(
                             "v-list-item",
-                            { key: item.id, attrs: { value: item } },
+                            { key: index, attrs: { value: item } },
                             [
                               [
                                 _c(
@@ -415,11 +411,7 @@ var render = function() {
                               ]
                             ],
                             2
-                          ),
-                          _vm._v(" "),
-                          index < _vm.collections.items.length - 1
-                            ? _c("v-divider", { key: index })
-                            : _vm._e()
+                          )
                         ]
                       })
                     ],

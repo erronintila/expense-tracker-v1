@@ -28,7 +28,7 @@
                         @change="selectUser"
                     >
                         <template v-for="(item, index) in collections.items">
-                            <v-list-item :key="item.id" :value="item">
+                            <v-list-item :key="index" :value="item">
                                 <template>
                                     <v-list-item-content>
                                         <v-list-item-title
@@ -46,11 +46,7 @@
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
-
-                            <v-divider
-                                v-if="index < collections.items.length - 1"
-                                :key="index"
-                            ></v-divider>
+                            <!-- <v-divider v-if="index < collections.items.length - 1" :key="index"></v-divider> -->
                         </template>
                     </v-list-item-group>
                 </v-list>

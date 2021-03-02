@@ -27,25 +27,7 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
-
-                <v-menu
+                <!-- <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
@@ -75,14 +57,6 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
-                            <v-list-item>
                                 <v-select
                                     v-model="status"
                                     :items="statuses"
@@ -101,9 +75,9 @@
                             </v-list-item>
                         </v-list>
                     </v-card>
-                </v-menu>
+                </v-menu> -->
 
-                <v-menu
+                <!-- <v-menu
                     offset-y
                     transition="scale-transition"
                     :close-on-content-click="false"
@@ -165,9 +139,9 @@
                             <v-list-item-subtitle>
                                 Cancel Report(s)
                             </v-list-item-subtitle>
-                        </v-list-item>
+                        </v-list-item> -->
 
-                        <!-- <v-list-item>
+                <!-- <v-list-item>
                             <v-list-item-icon>
                                 <v-icon>mdi-plus</v-icon>
                             </v-list-item-icon>
@@ -176,7 +150,7 @@
                             </v-list-item-subtitle>
                         </v-list-item> -->
 
-                        <v-list-item @click="onDuplicate">
+                <!-- <v-list-item @click="onDuplicate">
                             <v-list-item-icon>
                                 <v-icon>mdi-content-copy</v-icon>
                             </v-list-item-icon>
@@ -185,14 +159,24 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-card-subtitle>
-                {{ formattedDateRange }}
+                <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker>
             </v-card-subtitle>
 
-            <v-row class="ml-4">
+            <v-row class="ml-4 mb-2">
                 <v-chip
                     color="green"
                     dark
@@ -205,10 +189,41 @@
                 >
                     {{ selected.length }} Selected
                 </v-chip>
-                <v-chip v-if="status != null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip v-if="user != null" class="mr-2" small>
+
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip
+                            v-if="status != null"
+                            class="mr-2"
+                            v-bind="attrs"
+                            v-on="menu"
+                            small
+                        >
+                            {{ status }}
+                        </v-chip>
+                    </template>
+
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
+                <v-chip class="mr-2" small>
                     {{ user.full_name }}
                 </v-chip>
                 <v-chip
@@ -244,6 +259,63 @@
                     v-if="totalUnapproved > 0"
                 >
                     For Approval ({{ totalUnapproved }})
+                </v-chip>
+            </v-row>
+
+            <v-row v-if="selected.length > 0" class="ml-4">
+                <v-chip
+                    v-if="isValidSubmit"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onSubmit"
+                    close-icon="mdi-send"
+                    color="blue"
+                >
+                    Submit
+                </v-chip>
+                <v-chip
+                    v-if="isValidApprove"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onApprove"
+                    close-icon="mdi-check"
+                    color="green"
+                >
+                    Approve
+                </v-chip>
+                <v-chip
+                    v-if="isValidReject"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onReject"
+                    close-icon="mdi-cancel"
+                    color="red"
+                >
+                    Reject
+                </v-chip>
+                <v-chip
+                    v-if="isValidDelete"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-close"
+                    color="red"
+                >
+                    Cancel
+                </v-chip>
+                <v-chip
+                    v-if="isValidDuplicate"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onDuplicate"
+                    close-icon="mdi-content-copy"
+                >
+                    Duplicate
                 </v-chip>
             </v-row>
 
@@ -1847,7 +1919,7 @@ export default {
 
             switch (action) {
                 case "submit":
-                    url = `/api/expense_reports/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/submit/${_this.selected[0].id}`;
 
                     break;
                 case "approve":
@@ -2246,6 +2318,104 @@ export default {
             }
 
             return base64Image;
+        },
+        isValidSubmit() {
+            let selectedCount = this.selected.length;
+
+            if (selectedCount == 0) {
+                return false;
+            }
+            if (this.selectedCount.submitted > 0 || this.selectedCount.approved > 0 || this.selectedCount.rejected > 0 || this.selectedCount.deleted > 0) {
+                return false;
+            }
+
+            return true;
+        },
+        isValidApprove() {
+            let selectedCount = this.selected.length;
+            let unapprovedCount = this.selected.filter(
+                item => item.approved_at == null
+            ).length;
+
+            if (selectedCount == 0) {
+                return false;
+            }
+
+            if (this.selectedCount.approved > 0 || this.selectedCount.rejected > 0 || this.selectedCount.deleted > 0) {
+                return false;
+            }
+
+            return true;
+        },
+        isValidReject() {
+            let selectedCount = this.selected.length;
+            let unsubmittedCount = this.selected.filter(
+                item => item.submitted_at == null
+            ).length;
+
+            if (selectedCount == 0) {
+                return false;
+            }
+
+            if (this.selectedCount.rejected > 0 || this.selectedCount.deleted > 0) {
+                return false;
+            }
+
+            return true;
+        },
+        isValidDelete() {
+            let selectedCount = this.selected.length;
+            let deletedCount = this.selected.filter(
+                item => item.deleted_at == null
+            ).length;
+
+            if (selectedCount == 0) {
+                return false;
+            }
+
+            if (this.selectedCount.deleted > 0) {
+                return false;
+            }
+
+            return true;
+        },
+        isValidDuplicate() {
+            let selectedCount = this.selected.length;
+
+            if (selectedCount !== 1) {
+                return false;
+            }
+            return true;
+        },
+        selectedCount() {
+            let submitted = this.selected.filter(
+                item =>
+                    item.submitted_at != null &&
+                    item.approved_at == null &&
+                    item.rejected_at == null &&
+                    item.deleted_at == null
+            ).length;
+
+            let approved = this.selected.filter(
+                item =>
+                    item.submitted_at != null &&
+                    item.approved_at != null &&
+                    item.rejected_at == null &&
+                    item.deleted_at == null
+            ).length;
+
+            let rejected = this.selected.filter(
+                item => item.rejected_at != null && item.deleted_at == null
+            ).length;
+            let deleted = this.selected.filter(item => item.deleted_at != null)
+                .length;
+
+            return {
+                submitted,
+                approved,
+                rejected,
+                deleted
+            };
         }
     },
     created() {
