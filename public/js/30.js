@@ -153,6 +153,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -403,6 +404,34 @@ var render = function() {
         "v-row",
         { staticClass: "ml-4" },
         [
+          _vm.collections.selectedActivityLogs.length > 0
+            ? _c(
+                "v-chip",
+                {
+                  staticClass: "mr-2 mb-2",
+                  attrs: {
+                    color: "green",
+                    dark: "",
+                    close: "",
+                    small: "",
+                    "close-icon": "mdi-close"
+                  },
+                  on: {
+                    "click:close": function($event) {
+                      _vm.collections.selectedActivityLogs = []
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm.collections.selectedActivityLogs.length) +
+                      " Selected\n        "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
           _c("UserDialogSelector", {
             ref: "userDialogSelector",
             attrs: { selectedUser: _vm.filters.selectedUser },
@@ -443,34 +472,6 @@ var render = function() {
               }
             ])
           }),
-          _vm._v(" "),
-          _vm.collections.selectedActivityLogs.length > 0
-            ? _c(
-                "v-chip",
-                {
-                  staticClass: "mr-2 mb-2",
-                  attrs: {
-                    color: "green",
-                    dark: "",
-                    close: "",
-                    small: "",
-                    "close-icon": "mdi-close"
-                  },
-                  on: {
-                    "click:close": function($event) {
-                      _vm.collections.selectedActivityLogs = []
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(_vm.collections.selectedActivityLogs.length) +
-                      " Selected\n        "
-                  )
-                ]
-              )
-            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-chip",

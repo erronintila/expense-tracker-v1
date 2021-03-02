@@ -20,6 +20,18 @@
         </v-card-subtitle>
 
         <v-row class="ml-4">
+            <v-chip
+                color="green"
+                dark
+                v-if="collections.selectedActivityLogs.length > 0"
+                close
+                class="mr-2 mb-2"
+                small
+                @click:close="collections.selectedActivityLogs = []"
+                close-icon="mdi-close"
+            >
+                {{ collections.selectedActivityLogs.length }} Selected
+            </v-chip>
             <UserDialogSelector
                 ref="userDialogSelector"
                 @selectUser="selectUser"
@@ -38,18 +50,7 @@
                     </v-chip>
                 </template>
             </UserDialogSelector>
-            <v-chip
-                color="green"
-                dark
-                v-if="collections.selectedActivityLogs.length > 0"
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="collections.selectedActivityLogs = []"
-                close-icon="mdi-close"
-            >
-                {{ collections.selectedActivityLogs.length }} Selected
-            </v-chip>
+
             <v-chip
                 close
                 class="mr-2 mb-2"

@@ -27,7 +27,7 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -50,18 +50,6 @@
                     </template>
 
                     <v-list>
-                        <!-- <v-list-item
-                            @click="onExport"
-                            href="/api/users/export"
-                        >
-                            <v-list-item-icon>
-                                <v-icon>mdi-lock-reset</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Export to Excel
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
                         <v-list-item @click="onPasswordReset">
                             <v-list-item-icon>
                                 <v-icon>mdi-lock-reset</v-icon>
@@ -107,7 +95,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-row class="ml-4">
@@ -252,6 +240,65 @@
                     Refresh
                 </v-chip>
             </v-row>
+
+            <v-row class="ml-4" v-if="selected.length > 0">
+                <v-chip
+                    v-show="selected.length == 1 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onPasswordReset"
+                    close-icon="mdi-lock"
+                >
+                    Reset Password
+                </v-chip>
+                <v-chip
+                    v-show="selected.length == 1 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onEditFund"
+                    close-icon="mdi-credit-card-refund"
+                >
+                    Edit Revolving Fund
+                </v-chip>
+                <v-chip
+                    v-show="selected.length == 1 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onEditPermissions"
+                    close-icon="mdi-account-cog-outline"
+                    color="orange"
+                    dark
+                >
+                    Edit Permissions
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-history"
+                    color="green"
+                    dark
+                >
+                    Restore
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0  && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                    dark
+                >
+                    Archive
+                </v-chip>
+            </v-row>    
 
             <v-card-subtitle>
                 <v-hover v-slot:default="{ hover }">
