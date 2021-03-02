@@ -26,62 +26,52 @@
                     </template>
                     <span>Add New Record</span>
                 </v-tooltip>
+            </v-card-title>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
+            <v-card-subtitle>
+                <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker>
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
+                </v-chip>
 
                 <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-y
-                    left
+                    right
                     bottom
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
+                        <v-chip class="mr-2" v-bind="attrs" v-on="menu" small>
+                            {{ status }}
+                        </v-chip>
                     </template>
 
                     <v-card>
                         <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
                             <v-list-item>
                                 <v-select
                                     v-model="status"
@@ -89,109 +79,55 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    label="User"
-                                    return-object
-                                ></v-select>
-                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
 
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <!-- <v-list-item @click="onUpdate('approve', 'put')">
-                            <v-list-item-title>
-                                Approve Payment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="onUpdate('release', 'put')">
-                            <v-list-item-title>
-                                Release Payment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-
-                         -->
-
-                        <v-list-item @click="onUpdate('receive', 'put')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-credit-card-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Mark as Received
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <!-- <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Advance Payment
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Payment Record(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <!-- <v-list-item  @click="onUpdate('complete', 'put')">
-                            <v-list-item-title>
-                                Complete Transaction(s)
-                            </v-list-item-title>
-                        </v-list-item> -->
-                    </v-list>
-                </v-menu>
-            </v-card-title>
-
-            <v-card-subtitle>
-                {{ formattedDateRange }}
-            </v-card-subtitle>
-
-            <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
-                </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip v-if="user!=null" class="mr-2" small>
+                <v-chip v-if="user != null" class="mr-2" small>
                     {{ user.full_name }}
                 </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        selected.length > 0 &&
+                            selected.filter(item => item.received_at == null)
+                                .length > 0
+                    "
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onUpdate('receive', 'put')"
+                    close-icon="mdi-download"
+                    color="orange"
+                    dark
+                >
+                    Mark as received
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        selected.length > 0 &&
+                            selected.filter(item => item.deleted_at == null)
+                                .length > 0
+                    "
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onUpdate('cancel', 'delete')"
+                    close-icon="mdi-close"
+                    color="red"
+                    dark
+                >
+                    Cancel Payment(s)
                 </v-chip>
             </v-row>
 
@@ -234,7 +170,14 @@
                                     <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
-                                        <td>{{ mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Code</strong></td>
@@ -300,9 +243,7 @@
                         }}</v-chip>
                     </template>
                     <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            `${item.user.full_name}`
-                        }}
+                        {{ `${item.user.full_name}` }}
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ mixin_getHumanDate(item.created_at) }}
@@ -374,7 +315,7 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            user: {id: 0, full_name: "All Users"},
+            user: { id: 0, full_name: "All Users" },
             users: [],
             status: "All Payments",
             statuses: [
@@ -558,10 +499,7 @@ export default {
             let _this = this;
 
             if (action == "receive" && !this.mixin_can("receive payments")) {
-                _this.mixin_errorDialog(
-                    `Error`,
-                    "Not allowed"
-                );
+                _this.mixin_errorDialog(`Error`, "Not allowed");
 
                 return;
             }
@@ -599,20 +537,26 @@ export default {
                     let url = "";
 
                     switch (action) {
-                        case 'release':
+                        case "release":
                             url = `/api/payments/release_payment/${_this.selected[0].id}`;
                             break;
-                        case 'receive':
+                        case "receive":
                             url = `/api/payments/receive_payment/${_this.selected[0].id}`;
                             break;
-                        case 'complete':
+                        case "complete":
                             url = `/api/payments/complete_payment/${_this.selected[0].id}`;
                             break;
-                        case 'update':
+                        case "update":
+                            url = `/api/payments/${_this.selected[0].id}`;
+                            break;
+                        case "cancel":
                             url = `/api/payments/${_this.selected[0].id}`;
                             break;
                         default:
-                            this.mixin_errorDialog("Error", "Action can't be processed.");
+                            this.mixin_errorDialog(
+                                "Error",
+                                "Action can't be processed."
+                            );
                             return;
                             break;
                     }
@@ -621,7 +565,7 @@ export default {
                         method: method,
                         url: url,
                         data: {
-                            ids: ids,
+                            ids: ids
                         }
                     })
                         .then(function(response) {
@@ -685,11 +629,11 @@ export default {
             let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
             let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
 
-            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
                 return start_date;
             }
 
-            if(JSON.stringify(end_date) == null) {
+            if (JSON.stringify(end_date) == null) {
                 return start_date;
             }
 
