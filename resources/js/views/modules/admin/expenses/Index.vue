@@ -83,9 +83,28 @@
                     </v-card>
                 </v-menu>
 
-                <v-chip v-if="user != null" class="mr-2" small>
+                <!-- <v-chip v-if="user != null" class="mr-2" small>
                     {{ user.full_name }}
-                </v-chip>
+                </v-chip> -->
+
+                <UserDialogSelector
+                    ref="userDialogSelector"
+                    @selectUser="selectUser"
+                    @onReset="resetUser"
+                    :selectedUser="user"
+                >
+                    <template
+                        v-slot:openDialog="{ bind, on, computedSelectedUser }"
+                    >
+                        <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
+                            {{
+                                computedSelectedUser
+                                    ? computedSelectedUser.name
+                                    : "All Employees"
+                            }}
+                        </v-chip>
+                    </template>
+                </UserDialogSelector>
 
                 <v-menu
                     transition="scale-transition"
@@ -467,10 +486,12 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
+        UserDialogSelector
     },
     data() {
         return {
@@ -523,8 +544,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: { id: 0, full_name: "All Employees" },
-            users: [],
+            user: null,
             expense_type: { id: 0, name: "All Expense Types" },
             expense_types: [],
             status: "All Expenses",
@@ -556,19 +576,29 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
+        selectUser(e) {
+            this.selected = [];
+            if (e == null || e == undefined) {
+                this.user = null;
+                return;
+            }
+            this.user = e;
+        },
+        resetUser() {
+            this.selected = [];
+            this.user = null;
+        },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.user.id;
-                let expense_type_id = _this.expense_type.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.user ? this.user.id : null;
+                let expense_type_id = this.expense_type.id;
+                let range = this.date_range;
 
                 axios
                     .get("/api/expenses", {
@@ -589,52 +619,33 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        _this.loading = false;
+                        this.loading = false;
 
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        _this.mixin_showErrors(error);
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
                     });
             });
         },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users?only=true")
-                .then(response => {
-                    _this.users = response.data.data;
-                    _this.users.unshift({
-                        id: 0,
-                        full_name: "All Employees"
-                    });
-                })
-                .catch(error => {
-                    _this.mixin_showErrors(error);
-                });
-        },
         loadExpenseTypes() {
-            let _this = this;
-
             axios
                 .get("/api/data/expense_types?only=true")
                 .then(response => {
-                    _this.expense_types = response.data.data;
-                    _this.expense_types.unshift({
+                    this.expense_types = response.data.data;
+                    this.expense_types.unshift({
                         id: 0,
                         name: "All Expense Types"
                     });
                 })
                 .catch(error => {
-                    _this.mixin_showErrors(error);
+                    this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "All Expenses";
-            this.loadUsers();
             this.loadExpenseTypes();
             this.selected = [];
         },
@@ -647,33 +658,24 @@ export default {
         onEdit(item) {
             if (item.expense_report) {
                 if (item.expense_report.approved_at) {
-                    this.$dialog.message.error(
-                        "Expense with an approved report can't be edited",
-                        {
-                            position: "top-right",
-                            timeout: 2000
-                        }
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Expense with an approved report can't be edited"
                     );
                     return;
                 }
 
                 if (item.expense_report.deleted_at) {
-                    this.$dialog.message.error(
-                        "Expense with a deleted report can't be edited",
-                        {
-                            position: "top-right",
-                            timeout: 2000
-                        }
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Expense with a deleted report can't be edited"
                     );
                     return;
                 }
             }
 
             if (this.status == "Cancelled") {
-                this.$dialog.message.error("Expense has been deleted.", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "Expense has been deleted.");
                 return;
             }
 
@@ -683,19 +685,15 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
             let arr = this.selected.map(item => item.expense_report === null);
 
             // this.mixin_is_empty(
-            //     _this.selected.length,
+            //     this.selected.length,
             //     "No item(s) selected bitch"
             // );
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -705,74 +703,58 @@ export default {
             // );
 
             if (arr.includes(false)) {
-                this.$dialog.message.error("Expense(s) can't be cancelled", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog(
+                    "Error",
+                    "Expense(s) can't be cancelled"
+                );
                 return;
             }
 
             this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
                     axios
-                        .delete(`/api/expenses/${_this.selected[0].id}`, {
+                        .delete(`/api/expenses/${this.selected[0].id}`, {
                             params: {
-                                ids: _this.selected.map(item => {
+                                ids: this.selected.map(item => {
                                     return item.id;
                                 })
                             }
                         })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Cancelled successfully.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            _this.mixin_showErrors(error);
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
             let arr = this.selected.map(item => item.expense_report === null);
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
             if (!this.mixin_can("restore expenses")) {
-                this.$dialog.message.error("Not allowed", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "Not allowed");
                 return;
             }
 
             if (arr.includes(false)) {
-                this.$dialog.message.error(
-                    "Expense(s) with report(s) can't be restored",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
+                this.mixin_errorDialog(
+                    "Error",
+                    "Expense(s) with report(s) can't be restored"
                 );
                 return;
             }
@@ -780,28 +762,28 @@ export default {
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
                     axios
-                        .put(`/api/expenses/restore/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
+                        .put(`/api/expenses/restore/${this.selected[0].id}`, {
+                            ids: this.selected.map(item => {
                                 return item.id;
                             })
                         })
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
+                            // this.$store.dispatch("AUTH_USER");
 
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            _this.mixin_showErrors(error);
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -907,15 +889,13 @@ export default {
             }
 
             return `${start_date} ~ ${end_date}`;
-        },
+        }
     },
     created() {
-        this.loadUsers();
         this.loadExpenseTypes();
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadUsers();
         this.loadExpenseTypes();
         this.getDataFromApi().then(data => {
             this.items = data.items;

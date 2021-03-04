@@ -26,140 +26,6 @@
                     </template>
                     <span>Add New</span>
                 </v-tooltip>
-
-                <!-- <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    label="Employee"
-                                    return-object
-                                ></v-select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu> -->
-
-                <!-- <v-menu
-                    offset-y
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    left
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>
-                                        mdi-view-grid-plus-outline
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list max-width="250">
-                        <v-list-item @click="onSubmit">
-                            <v-list-item-icon>
-                                <v-icon>mdi-file-send-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Submit Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onApprove">
-                            <v-list-item-icon>
-                                <v-icon>mdi-file-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Approve Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onReject">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Reject Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                <!-- <v-list-item>
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Payment
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                <!-- <v-list-item @click="onDuplicate">
-                            <v-list-item-icon>
-                                <v-icon>mdi-content-copy</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Duplicate Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu> -->
             </v-card-title>
 
             <v-card-subtitle>
@@ -223,9 +89,25 @@
                     </v-card>
                 </v-menu>
 
-                <v-chip class="mr-2" small>
-                    {{ user.full_name }}
-                </v-chip>
+                <UserDialogSelector
+                    ref="userDialogSelector"
+                    @selectUser="selectUser"
+                    @onReset="resetUser"
+                    :selectedUser="user"
+                >
+                    <template
+                        v-slot:openDialog="{ bind, on, computedSelectedUser }"
+                    >
+                        <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
+                            {{
+                                computedSelectedUser
+                                    ? computedSelectedUser.name
+                                    : "All Employees"
+                            }}
+                        </v-chip>
+                    </template>
+                </UserDialogSelector>
+
                 <v-chip
                     close
                     class="mr-2"
@@ -451,128 +333,6 @@
                                         <td>:</td>
                                         <td>{{ item.is_late_approved }}</td>
                                     </tr>
-                                    <!-- <tr>
-                                        <td><strong>Created</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.created.created_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Created By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.created.created_by == null
-                                                    ? ""
-                                                    : item.created.created_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Updated</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.updated.updated_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Updated By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.updated.updated_by == null
-                                                    ? ""
-                                                    : item.updated.updated_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.submitted">
-                                        <td><strong>Submitted</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.submitted.submitted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.submitted">
-                                        <td><strong>Submitted By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.submitted.submitted_by ==
-                                                null
-                                                    ? ""
-                                                    : item.submitted
-                                                          .submitted_by.name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.approved">
-                                        <td><strong>Approved</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.approved.approved_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.approved">
-                                        <td><strong>Approved By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.approved.approved_by ==
-                                                null
-                                                    ? ""
-                                                    : item.approved.approved_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                mixin_formatDate(
-                                                    item.deleted.deleted_at,
-                                                    "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                            }}
-                                        </td>
-                                    </tr>
-                                    <tr v-if="item.deleted">
-                                        <td><strong>Cancelled By</strong></td>
-                                        <td>:</td>
-                                        <td>
-                                            {{
-                                                item.deleted.deleted_by == null
-                                                    ? ""
-                                                    : item.deleted.deleted_by
-                                                          .name
-                                            }}
-                                        </td>
-                                    </tr> -->
                                 </table>
                             </v-container>
                         </td>
@@ -665,18 +425,8 @@
                             </h4>
                         </div>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="4" v-if="isValidPrint">
                         <div class="text-right">
-                            <!-- <v-btn @click="onPrint('print', 'expense')">
-                            Print By Expense
-                        </v-btn>
-                        <v-btn @click="onPrint('print', 'user')">
-                            Print By Employee
-                        </v-btn>
-                        <v-btn @click="onPrint('print', 'date')">
-                            Print By Date
-                        </v-btn> -->
-
                             <v-menu offset-y>
                                 <template v-slot:activator="{ attrs, on }">
                                     <v-btn
@@ -796,9 +546,10 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 
 export default {
-    components: { DateRangePicker },
+    components: { DateRangePicker, UserDialogSelector },
     data() {
         return {
             loading: true,
@@ -814,7 +565,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: { id: 0, full_name: "All Employees" },
+            user: null,
             users: [],
             date_range: [
                 moment()
@@ -871,7 +622,20 @@ export default {
         };
     },
     methods: {
+        selectUser(e) {
+            this.selected = [];
+            if (e == null || e == undefined) {
+                this.user = null;
+                return;
+            }
+            this.user = e;
+        },
+        resetUser() {
+            this.selected = [];
+            this.user = null;
+        },
         showAllUnsubmitted() {
+            this.user = null;
             this.status = "Unsubmitted Expense Reports";
             this.updateDates([
                 moment("0000-01-01").format("YYYY-MM-DD"),
@@ -879,6 +643,7 @@ export default {
             ]);
         },
         showAllUnapproved() {
+            this.user = null;
             this.status = "Submitted Expense Reports";
             this.updateDates([
                 moment("0000-01-01").format("YYYY-MM-DD"),
@@ -886,15 +651,13 @@ export default {
             ]);
         },
         loadTotalCountReportStatus() {
-            let _this = this;
-
             axios
                 .get("/api/data/expense_reports?total_count=true")
                 .then(response => {
                     let total = response.data ?? 0;
 
-                    _this.totalUnsubmitted = total.data.total_unsubmitted ?? 0;
-                    _this.totalUnapproved = total.data.total_unapproved ?? 0;
+                    this.totalUnsubmitted = total.data.total_unsubmitted ?? 0;
+                    this.totalUnapproved = total.data.total_unapproved ?? 0;
                 })
                 .catch(error => {
                     console.log(error);
@@ -902,12 +665,10 @@ export default {
                 });
         },
         loadExpenseTypes() {
-            let _this = this;
-
             axios
                 .get(`/api/data/expense_types?only=true`)
                 .then(response => {
-                    _this.expense_types = response.data.data;
+                    this.expense_types = response.data.data;
                 })
                 .catch(error => {
                     console.log(error);
@@ -1407,17 +1168,15 @@ export default {
             this.date_range = e;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.user.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.user ? this.user.id : null;
+                let range = this.date_range;
 
                 axios
                     .get("/api/expense_reports", {
@@ -1438,7 +1197,7 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        _this.loading = false;
+                        this.loading = false;
 
                         resolve({ items, total });
                     })
@@ -1447,41 +1206,18 @@ export default {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(
+                        this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
 
-                        _this.loading = false;
+                        this.loading = false;
                     });
             });
-        },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users")
-                .then(response => {
-                    _this.users = response.data.data;
-                    _this.users.unshift({
-                        id: 0,
-                        full_name: "All Employees"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.loadTotalCountReportStatus();
-            this.loadUsers();
             this.loadExpenseTypes();
             this.selected = [];
             this.$store.dispatch("AUTH_NOTIFICATIONS");
@@ -1527,8 +1263,6 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
-
             if (
                 this.selected
                     .map(item => item.status.status)
@@ -1559,7 +1293,7 @@ export default {
                 return;
             }
 
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -1574,34 +1308,34 @@ export default {
 
             // if (notes) {
             //     axios
-            //         .delete(`/api/expense_reports/${_this.selected[0].id}`, {
+            //         .delete(`/api/expense_reports/${this.selected[0].id}`, {
             //             params: {
-            //                 ids: _this.selected.map(item => {
+            //                 ids: this.selected.map(item => {
             //                     return item.id;
             //                 }),
             //                 notes: notes
             //             }
             //         })
             //         .then(function(response) {
-            //             _this.$dialog.message.success(
+            //             this.$dialog.message.success(
             //                 "Expense report(s) cancelled successfully",
             //                 {
             //                     position: "top-right",
             //                     timeout: 2000
             //                 }
             //             );
-            //             _this.getDataFromApi().then(data => {
-            //                 _this.items = data.items;
-            //                 _this.totalItems = data.total;
+            //             this.getDataFromApi().then(data => {
+            //                 this.items = data.items;
+            //                 this.totalItems = data.total;
             //             });
 
-            //             _this.selected = [];
+            //             this.selected = [];
             //         })
             //         .catch(function(error) {
             //             console.log(error);
             //             console.log(error.response);
 
-            //             _this.mixin_errorDialog(
+            //             this.mixin_errorDialog(
             //                 `Error ${error.response.status}`,
             //                 error.response.statusText
             //             );
@@ -1615,49 +1349,35 @@ export default {
                     if (res) {
                         axios
                             .delete(
-                                `/api/expense_reports/${_this.selected[0].id}`,
+                                `/api/expense_reports/${this.selected[0].id}`,
                                 {
                                     params: {
-                                        ids: _this.selected.map(item => {
+                                        ids: this.selected.map(item => {
                                             return item.id;
                                         })
                                     }
                                 }
                             )
-                            .then(function(response) {
-                                _this.$dialog.message.success(
-                                    "Expense report(s) cancelled successfully",
-                                    {
-                                        position: "top-right",
-                                        timeout: 2000
-                                    }
+                            .then(response => {
+                                this.mixin_successDialog(
+                                    response.data.status,
+                                    response.data.message
                                 );
-                                _this.getDataFromApi().then(data => {
-                                    _this.items = data.items;
-                                    _this.totalItems = data.total;
+                                this.getDataFromApi().then(data => {
+                                    this.items = data.items;
+                                    this.totalItems = data.total;
                                 });
-
-                                // _this.$store.dispatch("AUTH_USER");
-
-                                _this.selected = [];
+                                this.selected = [];
                             })
-                            .catch(function(error) {
-                                console.log(error);
-                                console.log(error.response);
-
-                                _this.mixin_errorDialog(
-                                    `Error ${error.response.status}`,
-                                    error.response.statusText
-                                );
+                            .catch(error => {
+                                this.mixin_showErrors(error);
                             });
                     }
                 }
             );
         },
         // onUpdate(action, method) {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
+        //     if (this.selected.length == 0) {
         //         this.$dialog.message.error("No item(s) selected", {
         //             position: "top-right",
         //             timeout: 2000
@@ -1870,38 +1590,38 @@ export default {
         //     this.$confirm(`Do you want to ${action} expense report(s)?`).then(
         //         res => {
         //             if (res) {
-        //                 let ids = _this.selected.map(item => {
+        //                 let ids = this.selected.map(item => {
         //                     return item.id;
         //                 });
 
         //                 axios({
         //                     method: method,
-        //                     url: `/api/expense_reports/${_this.selected[0].id}`,
+        //                     url: `/api/expense_reports/${this.selected[0].id}`,
         //                     data: {
         //                         ids: ids,
         //                         action: action
         //                     }
         //                 })
         //                     .then(function(response) {
-        //                         _this.$dialog.message.success(
+        //                         this.$dialog.message.success(
         //                             response.data.message,
         //                             {
         //                                 position: "top-right",
         //                                 timeout: 2000
         //                             }
         //                         );
-        //                         _this.getDataFromApi().then(data => {
-        //                             _this.items = data.items;
-        //                             _this.totalItems = data.total;
+        //                         this.getDataFromApi().then(data => {
+        //                             this.items = data.items;
+        //                             this.totalItems = data.total;
         //                         });
 
-        //                         _this.selected = [];
+        //                         this.selected = [];
         //                     })
         //                     .catch(function(error) {
         //                         console.log(error);
         //                         console.log(error.response);
 
-        //                         _this.mixin_errorDialog(
+        //                         this.mixin_errorDialog(
         //                             `Error ${error.response.status}`,
         //                             error.response.statusText
         //                         );
@@ -1914,29 +1634,28 @@ export default {
         //
         // ------------------------------------------------------------------------------------------------------------------
         onUpdate(action, method) {
-            let _this = this;
             let url = "";
 
             switch (action) {
                 case "submit":
-                    url = `/api/expense_reports/submit/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/submit/${this.selected[0].id}`;
 
                     break;
                 case "approve":
-                    url = `/api/expense_reports/approve/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/approve/${this.selected[0].id}`;
 
                     break;
                 case "reject":
-                    url = `/api/expense_reports/reject/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/reject/${this.selected[0].id}`;
 
                     break;
                 case "duplicate":
-                    url = `/api/expense_reports/duplicate/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/duplicate/${this.selected[0].id}`;
 
                     break;
 
                 default:
-                    url = `/api/expense_reports/${_this.selected[0].id}`;
+                    url = `/api/expense_reports/${this.selected[0].id}`;
 
                     break;
             }
@@ -1944,7 +1663,7 @@ export default {
             this.$confirm(`Do you want to ${action} expense report(s)?`).then(
                 res => {
                     if (res) {
-                        let ids = _this.selected.map(item => {
+                        let ids = this.selected.map(item => {
                             return item.id;
                         });
 
@@ -1956,31 +1675,21 @@ export default {
                                 action: action
                             }
                         })
-                            .then(function(response) {
-                                _this.mixin_successDialog(
+                            .then(response => {
+                                this.mixin_successDialog(
                                     response.data.status,
                                     response.data.message
                                 );
-
-                                _this.getDataFromApi().then(data => {
-                                    _this.items = data.items;
-                                    _this.totalItems = data.total;
+                                this.getDataFromApi().then(data => {
+                                    this.items = data.items;
+                                    this.totalItems = data.total;
                                 });
-
-                                _this.selected = [];
-
-                                _this.loadTotalCountReportStatus();
-
-                                _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                                this.selected = [];
+                                this.loadTotalCountReportStatus();
+                                this.$store.dispatch("AUTH_NOTIFICATIONS");
                             })
-                            .catch(function(error) {
-                                console.log(error);
-                                console.log(error.response);
-
-                                _this.mixin_errorDialog(
-                                    error.response.status,
-                                    error.response.data.message
-                                );
+                            .catch(error => {
+                                this.mixin_showErrors(error);
                             });
                     }
                 }
@@ -2060,51 +1769,40 @@ export default {
         },
         async onReject() {
             // this.onUpdate("reject", "put");
-            let _this = this;
-
             let notes = await this.$dialog.prompt({
                 text: "Please specify an appropriate reason for rejection",
                 title: "Do you want to reject expense report(s)?"
             });
 
             if (notes) {
-                let ids = _this.selected.map(item => {
+                let ids = this.selected.map(item => {
                     return item.id;
                 });
 
                 axios({
                     method: "put",
-                    url: `/api/expense_reports/reject/${_this.selected[0].id}`,
+                    url: `/api/expense_reports/reject/${this.selected[0].id}`,
                     data: {
                         ids: ids,
                         action: "reject",
                         notes: notes
                     }
                 })
-                    .then(function(response) {
-                        _this.mixin_successDialog(
+                    .then(response => {
+                        this.mixin_successDialog(
                             "Success",
                             response.data.message
                         );
 
-                        _this.getDataFromApi().then(data => {
-                            _this.items = data.items;
-                            _this.totalItems = data.total;
+                        this.getDataFromApi().then(data => {
+                            this.items = data.items;
+                            this.totalItems = data.total;
                         });
-
-                        // _this.$store.dispatch("AUTH_USER");
-                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                        _this.selected = [];
+                        this.$store.dispatch("AUTH_NOTIFICATIONS");
+                        this.selected = [];
                     })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            error.response.status,
-                            error.response.data.message
-                        );
+                    .catch(error => {
+                        this.mixin_showErrors(error);
                     });
             }
         },
@@ -2325,7 +2023,12 @@ export default {
             if (selectedCount == 0) {
                 return false;
             }
-            if (this.selectedCount.submitted > 0 || this.selectedCount.approved > 0 || this.selectedCount.rejected > 0 || this.selectedCount.deleted > 0) {
+            if (
+                this.selectedCount.submitted > 0 ||
+                this.selectedCount.approved > 0 ||
+                this.selectedCount.rejected > 0 ||
+                this.selectedCount.deleted > 0
+            ) {
                 return false;
             }
 
@@ -2341,7 +2044,11 @@ export default {
                 return false;
             }
 
-            if (this.selectedCount.approved > 0 || this.selectedCount.rejected > 0 || this.selectedCount.deleted > 0) {
+            if (
+                this.selectedCount.approved > 0 ||
+                this.selectedCount.rejected > 0 ||
+                this.selectedCount.deleted > 0
+            ) {
                 return false;
             }
 
@@ -2357,7 +2064,10 @@ export default {
                 return false;
             }
 
-            if (this.selectedCount.rejected > 0 || this.selectedCount.deleted > 0) {
+            if (
+                this.selectedCount.rejected > 0 ||
+                this.selectedCount.deleted > 0
+            ) {
                 return false;
             }
 
@@ -2385,6 +2095,21 @@ export default {
             if (selectedCount !== 1) {
                 return false;
             }
+            return true;
+        },
+        isValidPrint() {
+            let selectedItems = this.selected.filter(
+                item => item.submitted_at == null || item.deleted_at != null
+            ).length;
+
+            if (this.selected.length == 0) {
+                return false;
+            }
+
+            if (selectedItems > 0) {
+                return false;
+            }
+
             return true;
         },
         selectedCount() {
@@ -2423,14 +2148,12 @@ export default {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.$store.dispatch("AUTH_SETTINGS");
         this.loadTotalCountReportStatus();
-        this.loadUsers();
         this.loadExpenseTypes();
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.$store.dispatch("AUTH_SETTINGS");
         this.loadTotalCountReportStatus();
-        this.loadUsers();
         this.loadExpenseTypes();
         this.getDataFromApi().then(data => {
             this.items = data.items;

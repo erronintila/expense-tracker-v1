@@ -5,7 +5,7 @@
         </div>
         <p class="text--disabled">
             Note: Due of encoding of expenses :
-            <!-- {{ $store.getters.settings.submission_period }} -->
+            {{ $store.getters.settings.submission_period }}
         </p>
 
         <v-row>
@@ -570,9 +570,8 @@ export default {
                     },
                     remarks: "",
                     notes: "",
-                    encoding_period: 3,
-                    // encoding_period: this.$store.getters.settings
-                    //     .expense_encoding_period,
+                    encoding_period: this.$store.getters.settings
+                        .expense_encoding_period,
                     expense_type: {
                         id: null,
                         name: "",
@@ -700,13 +699,6 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
-            console.log( {
-                ...this.expenseForm,
-                ...{itemize : this.itemize},
-                ...{items : this.items},
-                ...{amount_to_reimburse : this.amount_to_reimburse}
-            });
-            return;
             let expense_type_limit = this.expenseForm.expense_type.limit;
             let sub_type_limit = this.expenseForm.sub_type.limit;
             let expense_limit = sub_type_limit
@@ -864,8 +856,7 @@ export default {
                 return null;
             }
 
-            // let settings = this.$store.getters.settings;
-            let settings = null;
+            let settings = this.$store.getters.settings;
             let submissionMinDate = moment().endOf("day");
             let encodingMinDate = moment()
                 .subtract(settings.expense_encoding_period - 1, "days")
@@ -1093,8 +1084,7 @@ export default {
             }
         },
         "expenseForm.vendor": function() {
-            // this.expenseForm.tax_rate = this.$store.getters.settings.tax_rate;
-            this.expenseForm.tax_rate = 12;
+            this.expenseForm.tax_rate = this.$store.getters.settings.tax_rate;
             this.expenseForm.tax_amount = 0;
             this.expenseForm.is_tax_inclusive = true;
         },

@@ -290,6 +290,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_dialogs_AddVendor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/dialogs/AddVendor */ "./resources/js/components/dialogs/AddVendor.vue");
 /* harmony import */ var _components_selector_dialog_VendorDialogSelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../.../../../../../components/selector/dialog/VendorDialogSelector */ "./resources/js/components/selector/dialog/VendorDialogSelector.vue");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../.../../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+var _this = undefined;
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -866,9 +868,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           },
           remarks: "",
           notes: "",
-          encoding_period: 3,
-          // encoding_period: this.$store.getters.settings
-          //     .expense_encoding_period,
+          encoding_period: _this.$store.getters.settings.expense_encoding_period,
           expense_type: {
             id: null,
             name: "",
@@ -1018,14 +1018,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
-      console.log(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, this.expenseForm), {
-        itemize: this.itemize
-      }), {
-        items: this.items
-      }), {
-        amount_to_reimburse: this.amount_to_reimburse
-      }));
-      return;
       var expense_type_limit = this.expenseForm.expense_type.limit;
       var sub_type_limit = this.expenseForm.sub_type.limit;
       var expense_limit = sub_type_limit ? sub_type_limit : expense_type_limit;
@@ -1148,10 +1140,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     minDate: function minDate() {
       if (this.mixin_can("add expenses beyond encoding period")) {
         return null;
-      } // let settings = this.$store.getters.settings;
+      }
 
-
-      var settings = null;
+      var settings = this.$store.getters.settings;
       var submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
       var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(settings.expense_encoding_period - 1, "days").format("YYYY-MM-DD");
 
@@ -1313,8 +1304,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     "expenseForm.vendor": function expenseFormVendor() {
-      // this.expenseForm.tax_rate = this.$store.getters.settings.tax_rate;
-      this.expenseForm.tax_rate = 12;
+      this.expenseForm.tax_rate = this.$store.getters.settings.tax_rate;
       this.expenseForm.tax_amount = 0;
       this.expenseForm.is_tax_inclusive = true;
     },
@@ -1581,7 +1571,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("p", { staticClass: "text--disabled" }, [
-        _vm._v("\n        Note: Due of encoding of expenses :\n        ")
+        _vm._v(
+          "\n        Note: Due of encoding of expenses :\n        " +
+            _vm._s(_vm.$store.getters.settings.submission_period) +
+            "\n    "
+        )
       ]),
       _vm._v(" "),
       _c(
