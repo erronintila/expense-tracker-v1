@@ -60,6 +60,9 @@ class UserController extends Controller
         if(request()->has("with_expense_types")) {
             $users = $users->with(['expense_types' => function($query) {
                 $query->withTrashed();
+                $query->with(['sub_types' => function ($query) {
+                    $query->withTrashed();
+                }]);
             }]);
         }
 
@@ -109,7 +112,6 @@ class UserController extends Controller
         if (request()->has('department_id')) {
             if (request("department_id") > 0) {
                 $jobs = Job::where('department_id', request("department_id"));
-
                 $users = $users->whereIn('job_id', $jobs->pluck('id'));
             }
         }

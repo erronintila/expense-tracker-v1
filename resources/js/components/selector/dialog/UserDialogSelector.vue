@@ -141,14 +141,27 @@ export default {
 
                 let data = {};
 
-                if(this.usersParameters) {
-                    if(this.usersParameters.params) {
-                        data = { params: { ...params, ...this.usersParameters.params }}
+                if (this.usersParameters) {
+                    if (this.usersParameters.params) {
+                        data = {
+                            params: {
+                                ...params,
+                                ...this.usersParameters.params,
+                            }
+                        };
                     } else {
-                        data = { params: { ...params }}
+                        data = {
+                            params: {
+                                ...params,
+                            }
+                        };
                     }
                 } else {
-                    data = { params: { ...params }}
+                    data = {
+                        params: {
+                            ...params,
+                        }
+                    };
                 }
 
                 // data = { ...params };
@@ -211,6 +224,12 @@ export default {
                 });
             },
             deep: true
+        },
+        dialog() {
+            this.getDataFromApi().then(data => {
+                this.collections.items = data.data;
+                this.meta = data.meta;
+            });
         }
     },
     computed: {
