@@ -314,13 +314,13 @@
         <v-data-table
             v-if="itemize"
             :headers="headers"
-            :items="items"
+            :items="expenseForm.details"
             :items-per-page="5"
             :footer-props="{
                 itemsPerPageOptions: [5, 10, 20]
             }"
         >
-            <template slot="body.append" v-if="items.length > 0">
+            <template slot="body.append" v-if="expenseForm.details.length > 0">
                 <tr class="green--text hidden-md-and-up">
                     <td class="title">
                         Total:
@@ -636,6 +636,10 @@ export default {
                     is_active: []
                 };
             }
+        },
+        itemizeExpenses: {
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -648,7 +652,6 @@ export default {
         return {
             loader: false,
             panel: [0, 1],
-            itemize: false,
             paid_through: "Revolving Fund",
             reimbursable_amount: false,
             openAddVendor: false,
@@ -665,16 +668,10 @@ export default {
             items: [],
             expense_types: [],
             sub_types: [],
-            users: [],
-            vendors: []
-            // usersParameters: {
-            //     params: { with_expense_types: true }
-            // }
         };
     },
     methods: {
         // selectUser(e) {
-        //     console.log(e);
         //     if (e == null || e == undefined) {
         //         this.expenseForm.user = null;
         //         return;
@@ -712,12 +709,9 @@ export default {
                         expense_limit !== null &&
                         expense_limit < expense_amount
                     ) {
-                        this.$dialog.message.error(
-                            "Amount can't be greater than expense limit.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        this.mixin_errorDialog(
+                            "Error",
+                            "Amount can't be greater than expense limit."
                         );
                         return;
                     }
@@ -726,12 +720,9 @@ export default {
                         expense_limit !== null &&
                         expense_limit < this.expenseForm.details_amount
                     ) {
-                        this.$dialog.message.error(
-                            "Itemized Expenses Amount can't be greater than expense limit",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        this.mixin_errorDialog(
+                            "Error",
+                            "Itemized Expenses Amount can't be greater than expense limit"
                         );
                         return;
                     }
@@ -739,18 +730,12 @@ export default {
             }
 
             if (this.expenseForm.user == null) {
-                this.$dialog.message.error("No User Selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
 
             if (this.expenseForm.expense_type.id == null) {
-                this.$dialog.message.error("No Expense Type Selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No Expense Type Selected");
                 return;
             }
 
@@ -760,12 +745,9 @@ export default {
                     ? this.expenseForm.user.remaining_fund
                     : 0)
             ) {
-                this.$dialog.message.error(
-                    "Amount to replenish is greater than remaining fund",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
+                this.mixin_errorDialog(
+                    "Error",
+                    "Amount to replenish is greater than remaining fund"
                 );
                 return;
             }
@@ -794,11 +776,18 @@ export default {
                 return;
             }
 
+            console.log("before value", {
+                ...this.expenseForm,
+                ...{ itemize: this.itemize },
+                ...{ items: this.expenseForm.details },
+                ...{ amount_to_reimburse: this.amount_to_reimburse }
+            });
+
             this.$emit("onSave", {
                 ...this.expenseForm,
-                ...this.itemize,
-                ...this.items,
-                ...{amount_to_reimburse : this.amount_to_reimburse}
+                ...{ itemize: this.itemize },
+                ...{ items: this.expenseForm.details },
+                ...{ amount_to_reimburse: this.amount_to_reimburse }
             });
         },
         addItem() {
@@ -826,7 +815,7 @@ export default {
                 }
             }
 
-            this.items.push({
+            this.expenseForm.details.push({
                 description: description,
                 quantity: quantity,
                 amount: amount,
@@ -840,9 +829,9 @@ export default {
             this.expenseForm.details.total = 0;
         },
         onRemove(item) {
-            const index = this.items.indexOf(item);
+            const index = this.expenseForm.details.indexOf(item);
             confirm("Are you sure you want to remove this item?") &&
-                this.items.splice(index, 1);
+                this.expenseForm.details.splice(index, 1);
         },
         loadSubTypes(e) {
             this.expenseForm.sub_type = { id: null, name: "", limit: null };
@@ -851,6 +840,14 @@ export default {
         }
     },
     computed: {
+        itemize: {
+            get() {
+                return this.itemizeExpenses;
+            },
+            set(value) {
+                return value;
+            }
+        },
         minDate() {
             if (this.mixin_can("add expenses beyond encoding period")) {
                 return null;
@@ -1039,47 +1036,38 @@ export default {
         }
     },
     watch: {
-        items() {
-            this.expenseForm.amount = this.items.reduce(
+        "expenseForm.details": function() {
+            this.expenseForm.amount = this.expenseForm.details.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
 
-            this.expenseForm.details_amount = this.items.reduce(
+            this.expenseForm.details_amount = this.expenseForm.details.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.amount),
                 0
             );
 
-            this.expenseForm.details_quantity = this.items.reduce(
+            this.expenseForm.details_quantity = this.expenseForm.details.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.quantity),
                 0
             );
         },
         itemize() {
-            this.expenseForm.amount = this.items.reduce(
+            console.log(this.itemize);
+            this.expenseForm.amount = this.expenseForm.details.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.total),
                 0
             );
 
-            if (this.expenseForm.user.id == null) {
+            if (this.expenseForm.user == null) {
                 this.itemize = false;
-
-                this.$dialog.message.error("No User Selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-
+                this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
 
             if (this.expenseForm.expense_type.id == null) {
                 this.itemize = false;
-
-                this.$dialog.message.error("No Expense Type Selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-
+                this.mixin_errorDialog("Error", "No expense type Selected");
                 return;
             }
         },

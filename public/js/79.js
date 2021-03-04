@@ -126,6 +126,8 @@ __webpack_require__.r(__webpack_exports__);
           with_expense_types: true
         }
       },
+      items: [],
+      itemize: false,
       form: {
         code: null,
         description: null,
@@ -215,6 +217,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.tax_name = data.tax_name;
         _this.form.tax_rate = data.tax_rate;
         _this.form.tax_amount = data.tax_amount;
+        _this.form.details = data.details;
 
         if (data.details !== null) {
           _this.itemize = true;
@@ -245,6 +248,8 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
         _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
+        console.log("data", data);
+        console.log("form", _this.form);
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
       })["finally"](this.loader = false);

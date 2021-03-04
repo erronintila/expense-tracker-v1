@@ -107,6 +107,8 @@ export default {
             usersParameters: {
                 params: { with_expense_types: true }
             },
+            items: [],
+            itemize: false,
             form: {
                 code: null,
                 description: null,
@@ -193,6 +195,7 @@ export default {
                     this.form.tax_name = data.tax_name;
                     this.form.tax_rate = data.tax_rate;
                     this.form.tax_amount = data.tax_amount;
+                    this.form.details = data.details;
 
                     if (data.details !== null) {
                         this.itemize = true;
@@ -220,6 +223,9 @@ export default {
                     this.form.reimbursable_amount = data.reimbursable_amount;
                     this.form.user.remaining_fund +=
                         data.amount - data.reimbursable_amount;
+
+                    console.log("data", data);
+                    console.log("form", this.form);
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);

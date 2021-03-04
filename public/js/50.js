@@ -940,6 +940,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           is_active: []
         };
       }
+    },
+    itemizeExpenses: {
+      type: Boolean,
+      "default": false
     }
   },
   components: {
@@ -952,7 +956,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       loader: false,
       panel: [0, 1],
-      itemize: false,
       paid_through: "Revolving Fund",
       reimbursable_amount: false,
       openAddVendor: false,
@@ -982,17 +985,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       expense_types: [],
-      sub_types: [],
-      users: [],
-      vendors: [] // usersParameters: {
-      //     params: { with_expense_types: true }
-      // }
-
+      sub_types: []
     };
   },
   methods: {
     // selectUser(e) {
-    //     console.log(e);
     //     if (e == null || e == undefined) {
     //         this.expenseForm.user = null;
     //         return;
@@ -1026,44 +1023,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (!this.mixin_can("add expenses beyond limit")) {
         if (!this.itemize) {
           if (expense_limit !== null && expense_limit < expense_amount) {
-            this.$dialog.message.error("Amount can't be greater than expense limit.", {
-              position: "top-right",
-              timeout: 2000
-            });
+            this.mixin_errorDialog("Error", "Amount can't be greater than expense limit.");
             return;
           }
         } else {
           if (expense_limit !== null && expense_limit < this.expenseForm.details_amount) {
-            this.$dialog.message.error("Itemized Expenses Amount can't be greater than expense limit", {
-              position: "top-right",
-              timeout: 2000
-            });
+            this.mixin_errorDialog("Error", "Itemized Expenses Amount can't be greater than expense limit");
             return;
           }
         }
       }
 
       if (this.expenseForm.user == null) {
-        this.$dialog.message.error("No User Selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No user selected");
         return;
       }
 
       if (this.expenseForm.expense_type.id == null) {
-        this.$dialog.message.error("No Expense Type Selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No Expense Type Selected");
         return;
       }
 
       if (this.amount_to_replenish > (this.expenseForm.user ? this.expenseForm.user.remaining_fund : 0)) {
-        this.$dialog.message.error("Amount to replenish is greater than remaining fund", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "Amount to replenish is greater than remaining fund");
         return;
       }
 
@@ -1083,7 +1065,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$emit("onSave", _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, this.expenseForm), this.itemize), this.items), {
+      console.log("before value", _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, this.expenseForm), {
+        itemize: this.itemize
+      }), {
+        items: this.expenseForm.details
+      }), {
+        amount_to_reimburse: this.amount_to_reimburse
+      }));
+      this.$emit("onSave", _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, this.expenseForm), {
+        itemize: this.itemize
+      }), {
+        items: this.expenseForm.details
+      }), {
         amount_to_reimburse: this.amount_to_reimburse
       }));
     },
@@ -1106,7 +1099,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
 
-      this.items.push({
+      this.expenseForm.details.push({
         description: description,
         quantity: quantity,
         amount: amount,
@@ -1119,8 +1112,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.expenseForm.details.total = 0;
     },
     onRemove: function onRemove(item) {
-      var index = this.items.indexOf(item);
-      confirm("Are you sure you want to remove this item?") && this.items.splice(index, 1);
+      var index = this.expenseForm.details.indexOf(item);
+      confirm("Are you sure you want to remove this item?") && this.expenseForm.details.splice(index, 1);
     },
     loadSubTypes: function loadSubTypes(e) {
       this.expenseForm.sub_type = {
@@ -1137,6 +1130,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   computed: {
+    itemize: {
+      get: function get() {
+        return this.itemizeExpenses;
+      },
+      set: function set(value) {
+        return value;
+      }
+    },
     minDate: function minDate() {
       if (this.mixin_can("add expenses beyond encoding period")) {
         return null;
@@ -1269,37 +1270,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   watch: {
-    items: function items() {
-      this.expenseForm.amount = this.items.reduce(function (total, item) {
+    "expenseForm.details": function expenseFormDetails() {
+      this.expenseForm.amount = this.expenseForm.details.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
-      this.expenseForm.details_amount = this.items.reduce(function (total, item) {
+      this.expenseForm.details_amount = this.expenseForm.details.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.amount);
       }, 0);
-      this.expenseForm.details_quantity = this.items.reduce(function (total, item) {
+      this.expenseForm.details_quantity = this.expenseForm.details.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.quantity);
       }, 0);
     },
     itemize: function itemize() {
-      this.expenseForm.amount = this.items.reduce(function (total, item) {
+      console.log(this.itemize);
+      this.expenseForm.amount = this.expenseForm.details.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.total);
       }, 0);
 
-      if (this.expenseForm.user.id == null) {
+      if (this.expenseForm.user == null) {
         this.itemize = false;
-        this.$dialog.message.error("No User Selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No user selected");
         return;
       }
 
       if (this.expenseForm.expense_type.id == null) {
         this.itemize = false;
-        this.$dialog.message.error("No Expense Type Selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No expense type Selected");
         return;
       }
     },
@@ -2120,7 +2116,7 @@ var render = function() {
             {
               attrs: {
                 headers: _vm.headers,
-                items: _vm.items,
+                items: _vm.expenseForm.details,
                 "items-per-page": 5,
                 "footer-props": {
                   itemsPerPageOptions: [5, 10, 20]
@@ -2426,7 +2422,7 @@ var render = function() {
               )
             },
             [
-              _vm.items.length > 0
+              _vm.expenseForm.details.length > 0
                 ? _c("template", { slot: "body.append" }, [
                     _c("tr", { staticClass: "green--text hidden-md-and-up" }, [
                       _c("td", { staticClass: "title" }, [

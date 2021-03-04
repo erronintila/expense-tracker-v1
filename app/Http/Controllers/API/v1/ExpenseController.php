@@ -10,13 +10,11 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Expense\ExpenseStoreRequest as ExpenseExpenseStoreRequest;
-use App\Http\Requests\Expense\ExpenseUpdateRequest as ExpenseExpenseUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ExpenseResource;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\ExpenseStoreRequest;
-use App\Http\Requests\ExpenseUpdateRequest;
+use App\Http\Requests\Expense\ExpenseStoreRequest;
+use App\Http\Requests\Expense\ExpenseUpdateRequest;
 use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
 
@@ -224,7 +222,7 @@ class ExpenseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ExpenseExpenseStoreRequest $request)
+    public function store(ExpenseStoreRequest $request)
     {
         $validated = $request->validated();
         $message = "Expense created successfully";
@@ -308,7 +306,7 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ExpenseExpenseUpdateRequest $request, $id)
+    public function update(ExpenseUpdateRequest $request, $id)
     {
         $validated = $request->validated();
         $message = "Expense updated successfully";

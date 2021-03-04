@@ -59,7 +59,10 @@ class ExpenseUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'tin.required_if' => 'The tax identification number field is required if VAT inclusive.'
+            'user_id.required' => 'The employee field is required.',
+            'expense_type_id.required' => 'The expense type field is required.',
+            // 'reimbursable_amount.gte' => 'Reimbursable amount must be greater than or equal 0',
+            'reimbursable_amount.lte' => 'Reimbursable amount must be less than or equal to amount'
         ];
     }
 }

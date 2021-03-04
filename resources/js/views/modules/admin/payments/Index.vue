@@ -83,9 +83,25 @@
                     </v-card>
                 </v-menu>
 
-                <v-chip v-if="user != null" class="mr-2" small>
-                    {{ user.full_name }}
-                </v-chip>
+                <UserDialogSelector
+                    ref="userDialogSelector"
+                    @selectUser="selectUser"
+                    @onReset="resetUser"
+                    :selectedUser="user"
+                >
+                    <template
+                        v-slot:openDialog="{ bind, on, computedSelectedUser }"
+                    >
+                        <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
+                            {{
+                                computedSelectedUser
+                                    ? computedSelectedUser.name
+                                    : "All Employees"
+                            }}
+                        </v-chip>
+                    </template>
+                </UserDialogSelector>
+
                 <v-chip
                     close
                     class="mr-2"
@@ -297,9 +313,10 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 
 export default {
-    components: { DateRangePicker },
+    components: { DateRangePicker, UserDialogSelector },
     data() {
         return {
             loading: true,
@@ -315,8 +332,7 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            user: { id: 0, full_name: "All Users" },
-            users: [],
+            user: null,
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -366,40 +382,28 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users?only=true")
-                .then(response => {
-                    _this.users = response.data.data;
-                    _this.users.unshift({
-                        id: 0,
-                        full_name: "All Users"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+        selectUser(e) {
+            this.selected = [];
+            if (e == null || e == undefined) {
+                this.user = null;
+                return;
+            }
+            this.user = e;
+        },
+        resetUser() {
+            this.selected = [];
+            this.user = null;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let range = _this.date_range;
-                let user_id = _this.user.id;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let range = this.date_range;
+                let user_id = this.user ? this.user.id : null;
 
                 axios
                     .get("/api/payments", {
@@ -418,29 +422,17 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
             this.selected = [];
-            this.loadUsers();
         },
         onShow(item) {
             this.$router.push({
@@ -455,40 +447,29 @@ export default {
             });
         },
         // onDelete() {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
-        //         this.$dialog.message.error("No item(s) selected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
+        //     if (this.selected.length == 0) {
+        //         this.mixin_errorDialog("Error", "No item(s) selected");
         //         return;
         //     }
 
         //     this.$confirm("do you want to cancel payment?").then(res => {
         //         if (res) {
         //             axios
-        //                 .delete(`/api/payments/${_this.selected[0].id}`, {
+        //                 .delete(`/api/payments/${this.selected[0].id}`, {
         //                     params: {
-        //                         ids: _this.selected.map(item => {
+        //                         ids: this.selected.map(item => {
         //                             return item.id;
         //                         })
         //                     }
         //                 })
-        //                 .then(function(response) {
-        //                     _this.$dialog.message.success(
-        //                         "Item(s) moved to archive.",
-        //                         {
-        //                             position: "top-right",
-        //                             timeout: 2000
-        //                         }
-        //                     );
-        //                     _this.getDataFromApi().then(data => {
-        //                         _this.items = data.items;
-        //                         _this.totalItems = data.total;
+        //                 .then(response => {
+        //                      this.mixin_successDialog(response.data.status, response.data.message);
+        //                     this.getDataFromApi().then(data => {
+        //                         this.items = data.items;
+        //                         this.totalItems = data.total;
         //                     });
         //                 })
-        //                 .catch(function(error) {
+        //                 .catch(error => {
         //                     console.log(error);
         //                      console.log(error.response);
         //                 });
@@ -496,19 +477,14 @@ export default {
         //     });
         // },
         onUpdate(action, method) {
-            let _this = this;
-
             if (action == "receive" && !this.mixin_can("receive payments")) {
-                _this.mixin_errorDialog(`Error`, "Not allowed");
+                this.mixin_errorDialog(`Error`, "Not allowed");
 
                 return;
             }
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -518,19 +494,16 @@ export default {
                     .map(item => item.status.status)
                     .includes("Completed")
             ) {
-                this.$dialog.message.error(
-                    "Payment has already been received",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
+                this.mixin_errorDialog(
+                    "Error",
+                    "Payment has already been received"
                 );
                 return;
             }
 
             this.$confirm(`Do you want to ${action} payment(s)?`).then(res => {
                 if (res) {
-                    let ids = _this.selected.map(item => {
+                    let ids = this.selected.map(item => {
                         return item.id;
                     });
 
@@ -538,19 +511,19 @@ export default {
 
                     switch (action) {
                         case "release":
-                            url = `/api/payments/release_payment/${_this.selected[0].id}`;
+                            url = `/api/payments/release_payment/${this.selected[0].id}`;
                             break;
                         case "receive":
-                            url = `/api/payments/receive_payment/${_this.selected[0].id}`;
+                            url = `/api/payments/receive_payment/${this.selected[0].id}`;
                             break;
                         case "complete":
-                            url = `/api/payments/complete_payment/${_this.selected[0].id}`;
+                            url = `/api/payments/complete_payment/${this.selected[0].id}`;
                             break;
                         case "update":
-                            url = `/api/payments/${_this.selected[0].id}`;
+                            url = `/api/payments/${this.selected[0].id}`;
                             break;
                         case "cancel":
-                            url = `/api/payments/${_this.selected[0].id}`;
+                            url = `/api/payments/${this.selected[0].id}`;
                             break;
                         default:
                             this.mixin_errorDialog(
@@ -568,32 +541,20 @@ export default {
                             ids: ids
                         }
                     })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                response.data.message,
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-                            _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                            _this.selected = [];
+                            this.$store.dispatch("AUTH_NOTIFICATIONS");
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -649,11 +610,9 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadUsers();
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadUsers();
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;

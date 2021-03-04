@@ -54,6 +54,7 @@
                                             @onReset="resetUser"
                                             :selectedUser="form.user"
                                             :usersParameters="usersParameters"
+                                            :itemize="itemize"
                                         >
                                             <template
                                                 v-slot:openDialog="{
@@ -103,6 +104,7 @@ export default {
             usersParameters: {
                 params: { with_expense_types: true }
             },
+            itemize: false,
             form: {
                 code: null,
                 reference_no: null,
@@ -208,6 +210,8 @@ export default {
             value.user_id = value.user.id;
             value.vendor_id = value.vendor ? value.vendor.id : null;
             value.reimbursable_amount = value.amount_to_reimburse;
+
+            console.log("value", value);
 
             ExpenseDataService.store(value)
                 .then(response => {
