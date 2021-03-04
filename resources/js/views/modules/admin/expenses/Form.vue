@@ -700,6 +700,13 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
+            console.log( {
+                ...this.expenseForm,
+                ...{itemize : this.itemize},
+                ...{items : this.items},
+                ...{amount_to_reimburse : this.amount_to_reimburse}
+            });
+            return;
             let expense_type_limit = this.expenseForm.expense_type.limit;
             let sub_type_limit = this.expenseForm.sub_type.limit;
             let expense_limit = sub_type_limit
