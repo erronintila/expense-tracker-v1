@@ -224,32 +224,24 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
-
-            VendorDataService.show(_this.$route.params.id)
-                .then(function(response) {
+            VendorDataService.show(this.$route.params.id)
+                .then(response => {
                     let data = response.data.data;
 
-                    _this.code = data.code;
-                    _this.name = data.name;
-                    _this.email = data.email;
-                    _this.tin = data.tin == null ? "N/A" : data.tin;
-                    _this.contact_person = data.contact_person;
-                    _this.mobile_number = data.mobile_number;
-                    _this.telephone_number = data.telephone_number;
-                    _this.remarks = data.remarks;
-                    _this.website = data.website;
-                    _this.is_vat_inclusive = data.is_vat_inclusive;
-                    _this.address = data.address;
+                    this.code = data.code;
+                    this.name = data.name;
+                    this.email = data.email;
+                    this.tin = data.tin == null ? "N/A" : data.tin;
+                    this.contact_person = data.contact_person;
+                    this.mobile_number = data.mobile_number;
+                    this.telephone_number = data.telephone_number;
+                    this.remarks = data.remarks;
+                    this.website = data.website;
+                    this.is_vat_inclusive = data.is_vat_inclusive;
+                    this.address = data.address;
                 })
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                .catch(error => {
+                    this.mixin_showErrors(error);
                 });
         },
         editData() {

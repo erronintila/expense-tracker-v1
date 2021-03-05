@@ -21,20 +21,12 @@ export default {
     },
     methods: {
         loadItem() {
-            let _this = this;
-
             axios
-                .get(`/api/users/${_this.$route.params.id}`)
-                .then(function(response) {
+                .get(`/api/users/${this.$route.params.id}`)
+                .then(response => {
                 })
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                .catch(error => {
+                    this.mixin_showErrors(error);
                 });
         }
     },

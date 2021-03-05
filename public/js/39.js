@@ -162,9 +162,7 @@ __webpack_require__.r(__webpack_exports__);
       this.user = null;
     },
     loadExpenseTypes: function loadExpenseTypes() {
-      var _this = this; // axios
-      // .get("/api/data/expense_types?only=true")
-
+      var _this = this;
 
       _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll({
         params: {
@@ -173,46 +171,39 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this.all_expense_types = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this2 = this;
 
-      if (_this.user == null) {
-        _this.mixin_errorDialog("Error", "No user selected");
-
+      if (this.user == null) {
+        this.mixin_errorDialog("Error", "No user selected");
         return;
       }
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
+      if (this.$refs.form.validate()) {
+        this.loader = true;
         var data = {
-          expense_types: _this.allowed_expense_types.map(function (item) {
+          expense_types: this.allowed_expense_types.map(function (item) {
             return item.id;
           })
         };
-        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateSettings(_this.user.id, data).then(function (response) {
-          _this.$dialog.message.success("User settings updated successfully.", {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateSettings(this.user.id, data).then(function (response) {
+          _this2.$dialog.message.success("User settings updated successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$store.dispatch("AUTH_USER");
+          _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {
-              _this.errors = error.response.data.errors;
+              _this2.errors = error.response.data.errors;
             }
           }
         });

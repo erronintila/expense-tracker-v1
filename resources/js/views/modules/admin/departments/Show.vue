@@ -21,18 +21,10 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
-
-            DepartmentDataService.show(_this.$route.params.id)
-                .then(function(response) {})
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+            DepartmentDataService.show(this.$route.params.id)
+                .then(response => {})
+                .catch(error => {
+                    this.mixin_showErrors(error);
                 });
         }
     },

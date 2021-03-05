@@ -211,8 +211,6 @@ export default {
             value.vendor_id = value.vendor ? value.vendor.id : null;
             value.reimbursable_amount = value.amount_to_reimburse;
 
-            console.log("value", value);
-
             ExpenseDataService.store(value)
                 .then(response => {
                     this.mixin_successDialog(

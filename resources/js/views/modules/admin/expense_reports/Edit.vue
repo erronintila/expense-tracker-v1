@@ -206,8 +206,11 @@
                                 </template>
                             </v-data-table>
 
-                            <div class="red--text" v-if="errors.expenses.length > 0">
-                                <small>{{errors.expenses[0]}}</small>
+                            <div
+                                class="red--text"
+                                v-if="errors.expenses.length > 0"
+                            >
+                                <small>{{ errors.expenses[0] }}</small>
                             </div>
 
                             <v-row>
@@ -372,7 +375,9 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(() => {
+            this.loadExpenses(
+                this.form.user == null ? null : this.form.user.id
+            ).then(() => {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
@@ -380,7 +385,9 @@ export default {
             });
         },
         updateUser() {
-            this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(() => {
+            this.loadExpenses(
+                this.form.user == null ? null : this.form.user.id
+            ).then(() => {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
@@ -388,51 +395,37 @@ export default {
             });
         },
         getData() {
-            let _this = this;
             return new Promise((resolve, reject) => {
                 axios
-                    .get(`/api/expense_reports/${_this.$route.params.id}`)
+                    .get(`/api/expense_reports/${this.$route.params.id}`)
                     .then(response => {
                         let data = response.data.data;
 
-                        _this.form.code = data.code;
-                        _this.form.description = data.description;
-                        _this.form.remarks = data.remarks;
-                        _this.form.notes = data.notes;
-                        _this.form.user = data.user;
-                        _this.form.status = data.status;
-                        
-                        _this.total = data.total;
-
-                        _this.loader = false;
-
+                        this.form.code = data.code;
+                        this.form.description = data.description;
+                        this.form.remarks = data.remarks;
+                        this.form.notes = data.notes;
+                        this.form.user = data.user;
+                        this.form.status = data.status;
+                        this.total = data.total;
                         resolve();
                     })
                     .catch(error => {
                         reject();
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loader = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loader = false));
             });
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let range = _this.date_range;
-                let user_id = _this.form.user == null ? null : _this.form.user.id;
+                let range = this.date_range;
+                let user_id =
+                    this.form.user == null ? null : this.form.user.id;
 
                 axios
                     .get("/api/expenses", {
@@ -442,41 +435,27 @@ export default {
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
                             user_id: user_id,
-                            expense_report_id: _this.$route.params.id,
+                            expense_report_id: this.$route.params.id,
                             update_report: true
                         }
                     })
                     .then(response => {
-                        // _this.selected = [];
-
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
                         reject();
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         loadExpenses(emp_id) {
             let start_date = this.date_range[0];
             let end_date = this.date_range[1];
-            let _this = this;
 
-            return new Promise(function(resolve, reject) {
+            return new Promise((resolve, reject) => {
                 axios
                     .get("/api/data/expenses", {
                         params: {
@@ -484,47 +463,30 @@ export default {
                             user_id: emp_id,
                             start_date: start_date,
                             end_date: end_date,
-                            expense_report_id: _this.$route.params.id
+                            expense_report_id: this.$route.params.id
                         }
                     })
                     .then(response => {
-                        _this.selected = response.data.data;
-
-                        return resolve();
+                        this.selected = response.data.data;
+                        resolve();
                     })
                     .catch(error => {
-                        return reject();
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
+                        reject();
                     });
             });
         },
         loadUsers() {
-            let _this = this;
-
             return new Promise((resolve, reject) => {
                 axios
                     .get("/api/data/users")
                     .then(response => {
-                        _this.users = response.data.data;
-
-                        return resolve();
+                        this.users = response.data.data;
+                        resolve();
                     })
                     .catch(error => {
-                        return reject();
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
+                        reject();
                     });
             });
         },
@@ -532,12 +494,10 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
-            let _this = this;
+            this.$refs.form.validate();
 
-            _this.$refs.form.validate();
-
-            if (_this.selected.length == 0) {
-                _this.$dialog.message.error("No Expenses selected", {
+            if (this.selected.length == 0) {
+                this.$dialog.message.error("No Expenses selected", {
                     position: "top-right",
                     timeout: 2000
                 });
@@ -545,38 +505,34 @@ export default {
                 return;
             }
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.loader = true;
 
                 axios
-                    .put("/api/expense_reports/" + _this.$route.params.id, {
-                        code: _this.form.code,
-                        description: _this.form.description,
-                        remarks: _this.form.remarks,
-                        notes: _this.form.notes,
-                        user_id: _this.form.user == null ? null : _this.form.user.id,
-                        expenses: _this.selected
+                    .put("/api/expense_reports/" + this.$route.params.id, {
+                        code: this.form.code,
+                        description: this.form.description,
+                        remarks: this.form.remarks,
+                        notes: this.form.notes,
+                        user_id:
+                            this.form.user == null ? null : this.form.user.id,
+                        expenses: this.selected
                     })
-                    .then(function(response) {
-                        _this.mixin_successDialog(response.data.status, response.data.message);
+                    .then(response => {
+                        this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
+                        );
 
-                        _this.$router.push({
+                        this.$router.push({
                             name: "admin.expense_reports.index"
                         });
                     })
-                    .catch(function(error) {
-                        _this.loader = false;
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.errors = error.response.data.errors;
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
-                    });
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
+                    })
+                    .finally((this.loader = false));
 
                 return;
             }
@@ -618,30 +574,26 @@ export default {
         }
     },
     created() {
-        // this.$store.dispatch("AUTH_USER");
-        let _this = this;
-
         this.loadUsers().then(() => {
             this.getData().then(() => {
-                this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(() => {
+                this.loadExpenses(
+                    this.form.user == null ? null : this.form.user.id
+                ).then(() => {
                     this.getDataFromApi().then(data => {
-                        _this.items = data.items;
-                        _this.totalItems = data.total;
+                        this.items = data.items;
+                        this.totalItems = data.total;
                     });
                 });
             });
         });
     },
     activated() {
-        // this.$store.dispatch("AUTH_USER");
-        let _this = this;
-
         this.loadUsers().then(() => {
             this.getData().then(() => {
                 this.loadExpenses(this.form.user.id).then(() => {
                     this.getDataFromApi().then(data => {
-                        _this.items = data.items;
-                        _this.totalItems = data.total;
+                        this.items = data.items;
+                        this.totalItems = data.total;
                     });
                 });
             });

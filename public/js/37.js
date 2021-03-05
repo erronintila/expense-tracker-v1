@@ -461,7 +461,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    var _this2 = this;
+    var _this = this;
 
     return {
       showOldPassword: false,
@@ -523,7 +523,7 @@ __webpack_require__.r(__webpack_exports__);
         password_confirmation: [function (v) {
           return !!v || "Retype password is required";
         }, function (v) {
-          return _this2.password === _this2.password_confirmation || "Passwords do not match";
+          return _this.password === _this.password_confirmation || "Passwords do not match";
         }]
       },
       password_errors: {
@@ -568,77 +568,74 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onSave: function onSave() {
-      var _this = this; // _this.$refs.form.validate();
+      var _this2 = this;
 
-
-      if (_this.$refs.form.validate()) {
-        axios.put("/api/users/update_profile/" + _this.form.id, {
-          code: _this.form.code,
-          first_name: _this.form.first_name,
-          middle_name: _this.form.middle_name,
-          last_name: _this.form.last_name,
-          suffix: _this.form.suffix,
-          gender: _this.form.gender,
-          birthdate: _this.form.birthdate,
-          mobile_number: _this.form.mobile_number,
-          telephone_number: _this.form.telephone_number,
-          address: _this.form.address,
-          fund: _this.form.fund,
-          remaining_fund: _this.form.remaining_fund,
-          username: _this.form.username,
-          email: _this.form.email,
+      // this.$refs.form.validate();
+      if (this.$refs.form.validate()) {
+        axios.put("/api/users/update_profile/" + this.form.id, {
+          code: this.form.code,
+          first_name: this.form.first_name,
+          middle_name: this.form.middle_name,
+          last_name: this.form.last_name,
+          suffix: this.form.suffix,
+          gender: this.form.gender,
+          birthdate: this.form.birthdate,
+          mobile_number: this.form.mobile_number,
+          telephone_number: this.form.telephone_number,
+          address: this.form.address,
+          fund: this.form.fund,
+          remaining_fund: this.form.remaining_fund,
+          username: this.form.username,
+          email: this.form.email,
           password: "password",
           password_confirmation: "password",
-          is_admin: _this.form.is_admin,
-          is_superadmin: _this.form.is_superadmin,
-          can_login: _this.form.can_login,
-          type: _this.form.type,
-          job_id: _this.form.job == null ? null : _this.form.job.id
+          is_admin: this.form.is_admin,
+          is_superadmin: this.form.is_superadmin,
+          can_login: this.form.can_login,
+          type: this.form.type,
+          job_id: this.form.job == null ? null : this.form.job.id
         }).then(function (response) {
-          _this.$dialog.message.success("User account updated successfully.", {
+          _this2.$dialog.message.success("User account updated successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$store.dispatch("AUTH_USER");
+          _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
+          _this2.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.errors = error.response.data.errors;
+          _this2.errors = error.response.data.errors;
         });
       }
     },
     onUpdatePassword: function onUpdatePassword() {
-      var _this = this;
+      var _this3 = this;
 
-      if (_this.$refs.form_password.validate()) {
-        axios.put("/api/users/update_password/" + _this.form.id, {
-          old_password: _this.old_password,
-          password: _this.password,
-          password_confirmation: _this.password_confirmation
+      if (this.$refs.form_password.validate()) {
+        axios.put("/api/users/update_password/" + this.form.id, {
+          old_password: this.old_password,
+          password: this.password,
+          password_confirmation: this.password_confirmation
         }).then(function (response) {
-          _this.$dialog.message.success("User account password has been updated.", {
+          _this3.$dialog.message.success("User account password has been updated.", {
             position: "top-right",
             timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
+          }); // this.$store.dispatch("AUTH_USER");
 
 
-          _this.dialogPassword = false;
-          _this.old_password = "";
-          _this.password = "";
-          _this.password_confirmation = "";
+          _this3.dialogPassword = false;
+          _this3.old_password = "";
+          _this3.password = "";
+          _this3.password_confirmation = "";
         })["catch"](function (error) {
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
           if (error.response) {
             if (error.response.data) {
-              _this.password_errors = error.response.data.errors;
+              _this3.password_errors = error.response.data.errors;
             }
           }
         });
@@ -658,21 +655,21 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
+    var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.form = response;
+      _this4.form = response;
 
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this4.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   },
   activated: function activated() {
-    var _this = this;
+    var _this5 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.form = response;
+      _this5.form = response;
 
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this5.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   }
 });

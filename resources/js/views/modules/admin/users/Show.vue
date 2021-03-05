@@ -387,8 +387,7 @@ export default {
                     this.getData();
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         getData() {

@@ -329,6 +329,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -433,42 +440,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     updateDates: function updateDates(e) {
-      var _this2 = this;
+      var _this = this;
 
       this.date_range = e; // this.loadExpenseReports();
 
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.items;
+        _this.totalItems = data.total;
+      });
+    },
+    updateUser: function updateUser() {
+      var _this2 = this;
+
+      this.errors.user_id = [];
       this.getDataFromApi().then(function (data) {
         _this2.items = data.items;
         _this2.totalItems = data.total;
       });
     },
-    updateUser: function updateUser() {
+    loadUsers: function loadUsers() {
       var _this3 = this;
 
-      this.errors.user_id = [];
-      this.getDataFromApi().then(function (data) {
-        _this3.items = data.items;
-        _this3.totalItems = data.total;
-      });
-    },
-    loadUsers: function loadUsers() {
-      var _this = this;
-
       axios.get("/api/data/users").then(function (response) {
-        _this.users = response.data.data;
+        _this3.users = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this3.mixin_showErrors(error);
       });
     },
     getDataFromApi: function getDataFromApi() {
       var _this4 = this;
 
-      var _this = this;
-
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
         var _this4$options = _this4.options,
             sortBy = _this4$options.sortBy,
@@ -476,11 +478,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this4$options.page,
             itemsPerPage = _this4$options.itemsPerPage;
 
-        var search = _this.search.trim().toLowerCase();
+        var search = _this4.search.trim().toLowerCase();
 
-        var status = _this.status;
-        var user_id = _this.form.user.id;
-        var range = _this.date_range;
+        var status = _this4.status;
+        var user_id = _this4.form.user.id;
+        var range = _this4.date_range;
         axios.get("/api/expense_reports", {
           params: {
             search: search,
@@ -498,51 +500,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
-          console.log(items);
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.loading = false;
-        });
+          _this4.mixin_showErrors(error);
+        })["finally"](_this4.loading = false);
       });
     },
     // loadExpenseReports() {
     //     let start_date = this.date_range[0];
     //     let end_date = this.date_range[1];
-    //     let _this = this;
     //     axios
     //         .get("/api/data/expense_reports", {
     //             params: {
     //                 create_payment: true,
     //                 start_date: start_date,
     //                 end_date: end_date,
-    //                 user_id: _this.form.user.id
+    //                 user_id: this.form.user.id
     //             }
     //         })
     //         .then(response => {
-    //             _this.items = response.data.data;
+    //             this.items = response.data.data;
     //         })
     //         .catch(error => {
-    //             console.log(error);
-    //             console.log(error.response);
-    //             _this.mixin_errorDialog(
-    //                 `Error ${error.response.status}`,
-    //                 error.response.statusText
-    //             );
+    //              this.mixin_showErrors(error);
     //         });
     // },
     onSave: function onSave() {
-      var _this = this;
+      var _this5 = this;
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
       if (this.form.user.id == null || !this.form.user) {
         this.mixin_errorDialog("Error", "No Employee selected.");
@@ -554,47 +543,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
+      if (this.$refs.form.validate()) {
+        this.loader = true;
         axios.post("/api/payments", {
-          code: _this.form.code,
-          reference_no: _this.form.reference_no,
-          voucher_no: _this.form.voucher_no,
-          description: _this.form.description,
-          date: _this.form.date,
-          cheque_no: _this.form.cheque_no,
-          cheque_date: _this.form.cheque_date,
-          amount: _this.total,
-          payee: _this.form.payee,
-          payee_address: _this.form.payee_address,
-          payee_phone: _this.form.payee_phone,
-          remarks: _this.form.remarks,
-          notes: _this.form.notes,
-          expense_reports: _this.selected,
-          user_id: _this.form.user.id
+          code: this.form.code,
+          reference_no: this.form.reference_no,
+          voucher_no: this.form.voucher_no,
+          description: this.form.description,
+          date: this.form.date,
+          cheque_no: this.form.cheque_no,
+          cheque_date: this.form.cheque_date,
+          amount: this.total,
+          payee: this.form.payee,
+          payee_address: this.form.payee_address,
+          payee_phone: this.form.payee_phone,
+          remarks: this.form.remarks,
+          notes: this.form.notes,
+          expense_reports: this.selected,
+          user_id: this.form.user.id
         }).then(function (response) {
-          _this.onRefresh();
+          _this5.onRefresh();
 
-          _this.$dialog.message.success("Payment created successfully.", {
+          _this5.$dialog.message.success("Payment created successfully.", {
             position: "top-right",
             timeout: 2000
           });
 
-          _this.$store.dispatch("AUTH_NOTIFICATIONS"); // _this.$store.dispatch("AUTH_USER");
+          _this5.$store.dispatch("AUTH_NOTIFICATIONS");
 
-
-          _this.$router.push({
+          _this5.$router.push({
             name: "admin.payments.index"
           });
         })["catch"](function (error) {
-          _this.loader = false;
-          console.log(error);
-          console.log(error.response);
+          _this5.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.errors = error.response.data.errors;
-        });
+          _this5.errors = error.response.data.errors;
+        })["finally"](this.loader = false);
         return;
       }
     }
@@ -614,11 +598,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this5 = this;
+        var _this6 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this5.items = data.items;
-          _this5.totalItems = data.total;
+          _this6.items = data.items;
+          _this6.totalItems = data.total;
         });
       },
       deep: true

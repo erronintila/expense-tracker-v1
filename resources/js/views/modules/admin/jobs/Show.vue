@@ -23,18 +23,10 @@ export default {
     },
     methods: {
         loadItem() {
-            let _this = this;
-
-            JobDataService.show(_this.$route.params.id)
+            JobDataService.show(this.$route.params.id)
                 .then(function(response) {})
                 .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         }
     },

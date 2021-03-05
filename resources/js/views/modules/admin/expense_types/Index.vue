@@ -232,15 +232,13 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
                 let data = {
                     params: {
                         search: search,
@@ -256,22 +254,12 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         onRefresh() {
@@ -292,9 +280,7 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -306,47 +292,33 @@ export default {
                 if (res) {
                     let data = {
                         params: {
-                            ids: _this.selected.map(item => {
+                            ids: this.selected.map(item => {
                                 return item.id;
                             })
                         }
                     };
-                    ExpenseTypeDataService.delete(_this.selected[0].id, data)
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    ExpenseTypeDataService.delete(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            let statusText = error.response.data
-                                ? error.response.data.message
-                                    ? error.response.data.message
-                                    : ""
-                                : error.response.statusText;
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -357,32 +329,26 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     let data = {
-                        ids: _this.selected.map(item => {
+                        ids: this.selected.map(item => {
                             return item.id;
                         })
                     };
-                    ExpenseTypeDataService.restore(_this.selected[0].id, data)
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    ExpenseTypeDataService.restore(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });

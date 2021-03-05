@@ -33,11 +33,8 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(_this.$route.params.id).then(function (response) {})["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {})["catch"](function (error) {
+        _this.mixin_showErrors(error);
       });
     }
   },

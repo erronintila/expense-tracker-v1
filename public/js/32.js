@@ -242,17 +242,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
-
       var _this = this;
 
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
+        var _this$options = _this.options,
+            sortBy = _this$options.sortBy,
+            sortDesc = _this$options.sortDesc,
+            page = _this$options.page,
+            itemsPerPage = _this$options.itemsPerPage;
 
         var search = _this.search.trim().toLowerCase();
 
@@ -276,10 +274,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_showErrors(error);
 
           _this.loading = false;
         });
@@ -306,9 +301,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this = this;
+      var _this2 = this;
 
-      if (_this.selected.length == 0) {
+      if (this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
@@ -320,34 +315,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (res) {
           var data = {
             params: {
-              ids: _this.selected.map(function (item) {
+              ids: _this2.selected.map(function (item) {
                 return item.id;
               })
             }
           };
-          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this.selected[0].id, data).then(function (response) {
-            _this.mixin_successDialog(response.data.status, response.data.message);
+          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this2.selected[0].id, data).then(function (response) {
+            _this2.mixin_successDialog(response.data.status, response.data.message);
 
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
+            _this2.getDataFromApi().then(function (data) {
+              _this2.items = data.items;
+              _this2.totalItems = data.total;
             });
 
-            _this.selected = [];
+            _this2.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-            var statusText = error.response.data ? error.response.data.message ? error.response.data.message : "" : error.response.statusText;
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), statusText);
+            _this2.mixin_showErrors(error);
           });
         }
       });
     },
     onRestore: function onRestore() {
-      var _this = this;
+      var _this3 = this;
 
-      if (_this.selected.length == 0) {
+      if (this.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
@@ -358,24 +349,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
           var data = {
-            ids: _this.selected.map(function (item) {
+            ids: _this3.selected.map(function (item) {
               return item.id;
             })
           };
-          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this.selected[0].id, data).then(function (response) {
-            _this.mixin_successDialog(response.data.status, response.data.message);
+          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this3.selected[0].id, data).then(function (response) {
+            _this3.mixin_successDialog(response.data.status, response.data.message);
 
-            _this.getDataFromApi().then(function (data) {
-              _this.items = data.items;
-              _this.totalItems = data.total;
+            _this3.getDataFromApi().then(function (data) {
+              _this3.items = data.items;
+              _this3.totalItems = data.total;
             });
 
-            _this.selected = [];
+            _this3.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this3.mixin_showErrors(error);
           });
         }
       });
@@ -384,11 +372,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this4 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
         });
       },
       deep: true
@@ -405,12 +393,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
-    var _this4 = this;
+    var _this5 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
+      _this5.items = data.items;
+      _this5.totalItems = data.total;
     });
   }
 });

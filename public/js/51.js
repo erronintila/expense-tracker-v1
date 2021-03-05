@@ -248,8 +248,6 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.form.reimbursable_amount = data.reimbursable_amount;
         _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
-        console.log("data", data);
-        console.log("form", _this.form);
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
       })["finally"](this.loader = false);

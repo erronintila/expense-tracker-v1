@@ -286,11 +286,7 @@ export default {
             totalAmount: 0,
             items: [],
             status: "All Unread",
-            statuses: [
-                "All Unread",
-                "All Read",
-                "All Notifications"
-            ],
+            statuses: ["All Unread", "All Read", "All Notifications"],
             selected: [],
             search: "",
             options: {
@@ -421,12 +417,11 @@ export default {
                         this.meta = data.meta;
                     });
                     this.$store.dispatch("AUTH_NOTIFICATIONS");
-                    this.selected = [];
                 })
                 .catch(error => {
-                    console.log(error);
-                    this.selected = [];
-                });
+                    this.mixin_showErrors(error);
+                })
+                .finally((this.selected = []));
         }
     },
     computed: {

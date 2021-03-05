@@ -1065,13 +1065,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      console.log("before value", _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, this.expenseForm), {
-        itemize: this.itemize
-      }), {
-        items: this.expenseForm.details
-      }), {
-        amount_to_reimburse: this.amount_to_reimburse
-      }));
       this.$emit("onSave", _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, this.expenseForm), {
         itemize: this.itemize
       }), {
@@ -1282,7 +1275,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, 0);
     },
     itemize: function itemize() {
-      console.log(this.itemize);
       this.expenseForm.amount = this.expenseForm.details.reduce(function (total, item) {
         return parseFloat(total) + parseFloat(item.total);
       }, 0);

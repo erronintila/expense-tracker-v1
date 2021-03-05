@@ -464,8 +464,6 @@ export default {
     }),
     methods: {
         redirectPage(item) {
-            let _this = this;
-
             axios
                 .put(
                     `/api/notifications/${
@@ -473,19 +471,18 @@ export default {
                     }?action=${"read"}&type=${"single"}`
                 )
                 .then(response => {
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                     window.location.replace(
                         `/admin/${item.data.data.model}/${item.data.data.id}`
                     );
 
-                    // _this.$router.replace(
+                    // this.$router.replace(
                     //     `/admin/${item.data.data.model}/${item.data.data.id}`
                     // );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         toProfile() {
@@ -501,17 +498,15 @@ export default {
         }
     },
     created() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.user = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.user = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };

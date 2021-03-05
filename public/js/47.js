@@ -1013,15 +1013,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             items: items
           });
         })["catch"](function (error) {
-          reject();
-          console.log(error);
-          console.log(error.response);
+          _this4.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          reject();
         });
       });
     },
     getData: function getData() {
+      var _this5 = this;
+
       var _this = this;
 
       axios.get("/api/expense_reports/".concat(_this.router_params_id)).then(function (response) {
@@ -1067,29 +1067,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.form.expenses = data.items;
           _this.totalItems = data.total;
         });
-
-        _this.loader = false;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = false;
-      });
+        _this5.mixin_showErrors(error);
+      })["finally"](this.loader = false);
     },
     getDataFromApi: function getDataFromApi() {
-      var _this5 = this;
+      var _this6 = this;
 
       var _this = this;
 
       _this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this5$options = _this5.options,
-            sortBy = _this5$options.sortBy,
-            sortDesc = _this5$options.sortDesc,
-            page = _this5$options.page,
-            itemsPerPage = _this5$options.itemsPerPage;
+        var _this6$options = _this6.options,
+            sortBy = _this6$options.sortBy,
+            sortDesc = _this6$options.sortDesc,
+            page = _this6$options.page,
+            itemsPerPage = _this6$options.itemsPerPage;
         var range = [_this.form.from, _this.form.to];
         var expense_report_id = _this.router_params_id;
         axios.get("/api/expenses", {
@@ -1105,30 +1098,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.loading = false;
-        });
+          _this6.mixin_showErrors(error);
+        })["finally"](_this6.loading = false);
       });
     }
   },
   watch: {
     params: {
       handler: function handler() {
-        var _this6 = this;
+        var _this7 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this6.form.expenses = data.items;
-          _this6.totalItems = data.total;
+          _this7.form.expenses = data.items;
+          _this7.totalItems = data.total;
         });
       },
       deep: true

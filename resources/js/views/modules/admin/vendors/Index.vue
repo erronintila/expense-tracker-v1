@@ -300,22 +300,12 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        self.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        self.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
-
-                        self.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         onRefresh() {
@@ -378,13 +368,7 @@ export default {
                             self.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            self.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -421,13 +405,7 @@ export default {
                             self.selected = [];
                         })
                         .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            self.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                            this.mixin_showErrors(error);
                         });
                 }
             });

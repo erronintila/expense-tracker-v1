@@ -112,7 +112,7 @@ export default {
             },
             errors: {
                 role: [],
-                can_login: [],
+                can_login: []
             }
         };
     },
@@ -125,28 +125,17 @@ export default {
                     .get("/api/users/" + _this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
-
-                        console.log(data);
                         _this.form.is_admin = data.is_admin;
                         _this.form.can_login = data.can_login;
                         _this.form.permissions = data.permissions;
                         _this.form.old_permissions = data.permissions;
                         _this.form.role = data.role[0];
                         _this.form.old_role = data.role[0];
-
-                        _this.loader = false;
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loader = false;
+                        this.mixin_showErrors(error);
                     })
+                    .finally((this.loader = false))
             );
         },
         loadPermissions() {
@@ -186,11 +175,15 @@ export default {
                 _this.loader = true;
 
                 axios
-                    .put("/api/users/update_permissions/" + _this.$route.params.id, {
-                        is_admin: is_administrator,
-                        can_login: _this.form.can_login,
-                        permissions: _this.form.permissions,
-                    })
+                    .put(
+                        "/api/users/update_permissions/" +
+                            _this.$route.params.id,
+                        {
+                            is_admin: is_administrator,
+                            can_login: _this.form.can_login,
+                            permissions: _this.form.permissions
+                        }
+                    )
                     .then(function(response) {
                         _this.mixin_successDialog(
                             response.data.status,

@@ -660,8 +660,7 @@ export default {
                     this.totalUnapproved = total.data.total_unapproved ?? 0;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         loadExpenseTypes() {
@@ -671,8 +670,7 @@ export default {
                     this.expense_types = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
 
@@ -705,9 +703,8 @@ export default {
                         resolve(item);
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-                        console.log(error);
-                        console.log(error.response);
                     });
             });
         },
@@ -1196,23 +1193,12 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        this.loading = false;
-                    });
+                    }).finally(this.loading = false);
             });
         },
         onRefresh() {
@@ -1332,13 +1318,7 @@ export default {
             //             this.selected = [];
             //         })
             //         .catch(function(error) {
-            //             console.log(error);
-            //             console.log(error.response);
-
-            //             this.mixin_errorDialog(
-            //                 `Error ${error.response.status}`,
-            //                 error.response.statusText
-            //             );
+            //             this.mixin_showErrors(error);
             //         });
             // }
 
@@ -1618,13 +1598,7 @@ export default {
         //                         this.selected = [];
         //                     })
         //                     .catch(function(error) {
-        //                         console.log(error);
-        //                         console.log(error.response);
-
-        //                         this.mixin_errorDialog(
-        //                             `Error ${error.response.status}`,
-        //                             error.response.statusText
-        //                         );
+        //                         this.mixin_showErrors(error);
         //                     });
         //             }
         //         }

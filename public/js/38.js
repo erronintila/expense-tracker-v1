@@ -487,38 +487,30 @@ __webpack_require__.r(__webpack_exports__);
         _this.file_input = null;
         _this.settings = response.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog(error.response.status, error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this2 = this;
 
-      _this.$refs.formExpenses.validate();
+      this.$refs.formExpenses.validate();
+      this.$refs.formExpenseReports.validate();
+      this.$refs.formTaxes.validate();
 
-      _this.$refs.formExpenseReports.validate();
-
-      _this.$refs.formTaxes.validate();
-
-      if (_this.$refs.formExpenses.validate() && _this.$refs.formExpenseReports.validate() && _this.$refs.formTaxes.validate()) {
+      if (this.$refs.formExpenses.validate() && this.$refs.formExpenseReports.validate() && this.$refs.formTaxes.validate()) {
         var data = {
-          settings: _this.settings
+          settings: this.settings
         };
         _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(data).then(function (response) {
-          _this.mixin_successDialog("Success", "Saved settings successfully");
+          _this2.mixin_successDialog("Success", "Saved settings successfully");
 
-          _this.$store.dispatch("AUTH_USER");
+          _this2.$store.dispatch("AUTH_USER");
 
-          _this.$store.dispatch("AUTH_SETTINGS");
+          _this2.$store.dispatch("AUTH_SETTINGS");
 
           window.location.replace("/admin/settings");
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog(error.response.status, error.response.statusText);
+          _this2.mixin_showErrors(error);
         });
       }
     }
@@ -566,18 +558,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     file_input: function file_input() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.file_input) {
         var reader = new FileReader();
         reader.readAsDataURL(this.file_input);
 
         reader.onload = function () {
-          _this2.settings.expense_report.print_format.background.image = reader.result;
+          _this3.settings.expense_report.print_format.background.image = reader.result;
         };
 
         reader.onerror = function (error) {
-          console.log("Error: ", error);
+          _this3.mixin_showErrors(error);
         };
       } else {
         this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;

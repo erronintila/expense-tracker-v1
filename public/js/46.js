@@ -312,6 +312,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -384,9 +387,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     updateDates: function updateDates(e) {
-      var _this2 = this;
+      var _this = this;
 
       this.date_range = e;
+      this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
+        _this.getDataFromApi().then(function (data) {
+          _this.items = data.items;
+          _this.totalItems = data.total;
+        });
+      });
+    },
+    updateUser: function updateUser() {
+      var _this2 = this;
+
       this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
         _this2.getDataFromApi().then(function (data) {
           _this2.items = data.items;
@@ -394,56 +407,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    updateUser: function updateUser() {
+    getData: function getData() {
       var _this3 = this;
 
-      this.loadExpenses(this.form.user == null ? null : this.form.user.id).then(function () {
-        _this3.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
-        });
-      });
-    },
-    getData: function getData() {
-      var _this = this;
-
       return new Promise(function (resolve, reject) {
-        axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
+        axios.get("/api/expense_reports/".concat(_this3.$route.params.id)).then(function (response) {
           var data = response.data.data;
-          _this.form.code = data.code;
-          _this.form.description = data.description;
-          _this.form.remarks = data.remarks;
-          _this.form.notes = data.notes;
-          _this.form.user = data.user;
-          _this.form.status = data.status;
-          _this.total = data.total;
-          _this.loader = false;
+          _this3.form.code = data.code;
+          _this3.form.description = data.description;
+          _this3.form.remarks = data.remarks;
+          _this3.form.notes = data.notes;
+          _this3.form.user = data.user;
+          _this3.form.status = data.status;
+          _this3.total = data.total;
           resolve();
         })["catch"](function (error) {
           reject();
-          console.log(error);
-          console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.loader = false;
-        });
+          _this3.mixin_showErrors(error);
+        })["finally"](_this3.loader = false);
       });
     },
     getDataFromApi: function getDataFromApi() {
       var _this4 = this;
 
-      var _this = this;
-
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
         var _this4$options = _this4.options,
             sortBy = _this4$options.sortBy,
             sortDesc = _this4$options.sortDesc,
             page = _this4$options.page,
             itemsPerPage = _this4$options.itemsPerPage;
-        var range = _this.date_range;
-        var user_id = _this.form.user == null ? null : _this.form.user.id;
+        var range = _this4.date_range;
+        var user_id = _this4.form.user == null ? null : _this4.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -451,35 +447,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
             user_id: user_id,
-            expense_report_id: _this.$route.params.id,
+            expense_report_id: _this4.$route.params.id,
             update_report: true
           }
         }).then(function (response) {
-          // _this.selected = [];
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
           reject();
-          console.log(error);
-          console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.loading = false;
-        });
+          _this4.mixin_showErrors(error);
+        })["finally"](_this4.loading = false);
       });
     },
     loadExpenses: function loadExpenses(emp_id) {
+      var _this5 = this;
+
       var start_date = this.date_range[0];
       var end_date = this.date_range[1];
-
-      var _this = this;
-
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/expenses", {
           params: {
@@ -487,33 +476,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             user_id: emp_id,
             start_date: start_date,
             end_date: end_date,
-            expense_report_id: _this.$route.params.id
+            expense_report_id: _this5.$route.params.id
           }
         }).then(function (response) {
-          _this.selected = response.data.data;
-          return resolve();
+          _this5.selected = response.data.data;
+          resolve();
         })["catch"](function (error) {
-          return reject();
-          console.log(error);
-          console.log(error.response);
+          _this5.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          reject();
         });
       });
     },
     loadUsers: function loadUsers() {
-      var _this = this;
+      var _this6 = this;
 
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/users").then(function (response) {
-          _this.users = response.data.data;
-          return resolve();
+          _this6.users = response.data.data;
+          resolve();
         })["catch"](function (error) {
-          return reject();
-          console.log(error);
-          console.log(error.response);
+          _this6.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          reject();
         });
       });
     },
@@ -521,42 +506,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this7 = this;
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
-      if (_this.selected.length == 0) {
-        _this.$dialog.message.error("No Expenses selected", {
+      if (this.selected.length == 0) {
+        this.$dialog.message.error("No Expenses selected", {
           position: "top-right",
           timeout: 2000
         });
-
         return;
       }
 
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
-        axios.put("/api/expense_reports/" + _this.$route.params.id, {
-          code: _this.form.code,
-          description: _this.form.description,
-          remarks: _this.form.remarks,
-          notes: _this.form.notes,
-          user_id: _this.form.user == null ? null : _this.form.user.id,
-          expenses: _this.selected
+      if (this.$refs.form.validate()) {
+        this.loader = true;
+        axios.put("/api/expense_reports/" + this.$route.params.id, {
+          code: this.form.code,
+          description: this.form.description,
+          remarks: this.form.remarks,
+          notes: this.form.notes,
+          user_id: this.form.user == null ? null : this.form.user.id,
+          expenses: this.selected
         }).then(function (response) {
-          _this.mixin_successDialog(response.data.status, response.data.message);
+          _this7.mixin_successDialog(response.data.status, response.data.message);
 
-          _this.$router.push({
+          _this7.$router.push({
             name: "admin.expense_reports.index"
           });
         })["catch"](function (error) {
-          _this.loader = false;
-          console.log(error);
-          console.log(error.response);
-          _this.errors = error.response.data.errors;
+          _this7.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
-        });
+          _this7.errors = error.response.data.errors;
+        })["finally"](this.loader = false);
         return;
       }
     }
@@ -564,11 +545,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this5 = this;
+        var _this8 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this5.items = data.items;
-          _this5.totalItems = data.total;
+          _this8.items = data.items;
+          _this8.totalItems = data.total;
         });
       },
       deep: true
@@ -595,34 +576,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    var _this6 = this;
-
-    // this.$store.dispatch("AUTH_USER");
-    var _this = this;
+    var _this9 = this;
 
     this.loadUsers().then(function () {
-      _this6.getData().then(function () {
-        _this6.loadExpenses(_this6.form.user == null ? null : _this6.form.user.id).then(function () {
-          _this6.getDataFromApi().then(function (data) {
-            _this.items = data.items;
-            _this.totalItems = data.total;
+      _this9.getData().then(function () {
+        _this9.loadExpenses(_this9.form.user == null ? null : _this9.form.user.id).then(function () {
+          _this9.getDataFromApi().then(function (data) {
+            _this9.items = data.items;
+            _this9.totalItems = data.total;
           });
         });
       });
     });
   },
   activated: function activated() {
-    var _this7 = this;
-
-    // this.$store.dispatch("AUTH_USER");
-    var _this = this;
+    var _this10 = this;
 
     this.loadUsers().then(function () {
-      _this7.getData().then(function () {
-        _this7.loadExpenses(_this7.form.user.id).then(function () {
-          _this7.getDataFromApi().then(function (data) {
-            _this.items = data.items;
-            _this.totalItems = data.total;
+      _this10.getData().then(function () {
+        _this10.loadExpenses(_this10.form.user.id).then(function () {
+          _this10.getDataFromApi().then(function (data) {
+            _this10.items = data.items;
+            _this10.totalItems = data.total;
           });
         });
       });

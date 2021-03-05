@@ -237,7 +237,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(_this.$route.params.id).then(function (response) {
+      _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.code = data.code;
         _this.name = data.name;
@@ -251,10 +251,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.is_vat_inclusive = data.is_vat_inclusive;
         _this.address = data.address;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     editData: function editData() {

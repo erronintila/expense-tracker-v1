@@ -226,10 +226,18 @@
                                                     </td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ item.status == null ? '' : item.status.status }}
+                                                        {{
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .status
+                                                        }}
                                                         ({{
-                                                            item.status == null ? '' : item.status.remarks
-                                                        }}) 
+                                                            item.status == null
+                                                                ? ""
+                                                                : item.status
+                                                                      .remarks
+                                                        }})
                                                     </td>
                                                 </tr>
                                                 <tr v-if="item.remarks">
@@ -499,86 +507,74 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
             axios
-                .get(`/api/payments/${_this.$route.params.id}`)
+                .get(`/api/payments/${this.$route.params.id}`)
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.code = data.code;
-                    _this.reference_no = data.reference_no;
-                    _this.voucher_no = data.voucher_no;
-                    _this.description = data.description;
-                    _this.date = data.date;
-                    _this.cheque_no = data.cheque_no;
-                    _this.cheque_date = data.cheque_date;
-                    _this.amount = data.amount;
-                    _this.payee = data.payee;
-                    _this.payee_address = data.payee_address;
-                    _this.payee_phone = data.payee_phone;
-                    _this.remarks = data.remarks;
-                    _this.notes = data.notes;
-                    _this.items = data.expense_reports;
-                    _this.user = `${data.last_name}, ${data.first_name} ${data.middle_name}`;
+                    this.code = data.code;
+                    this.reference_no = data.reference_no;
+                    this.voucher_no = data.voucher_no;
+                    this.description = data.description;
+                    this.date = data.date;
+                    this.cheque_no = data.cheque_no;
+                    this.cheque_date = data.cheque_date;
+                    this.amount = data.amount;
+                    this.payee = data.payee;
+                    this.payee_address = data.payee_address;
+                    this.payee_phone = data.payee_phone;
+                    this.remarks = data.remarks;
+                    this.notes = data.notes;
+                    this.items = data.expense_reports;
+                    this.user = `${data.last_name}, ${data.first_name} ${data.middle_name}`;
 
-                    // _this.selected.splice(0, 0, ...data.expenses);
+                    // this.selected.splice(0, 0, ...data.expenses);
 
-                    // _this.loadExpenses(data.id);
+                    // this.loadExpenses(data.id);
 
-                    _this.form.amount = data.amount;
-                    _this.form.cheque_date = data.cheque_date;
-                    _this.form.cheque_no = data.cheque_no;
-                    _this.form.code = data.code;
-                    _this.form.date = data.date;
-                    _this.form.description = data.description;
-                    _this.form.user = data.user;
-                    // _this.form.expense_reports = data.expense_reports;
-                    _this.form.notes = data.notes;
-                    _this.form.reference_no = data.reference_no;
-                    _this.form.remarks = data.remarks;
-                    _this.form.status = data.status;
-                    _this.form.voucher_no = data.voucher_no;
+                    this.form.amount = data.amount;
+                    this.form.cheque_date = data.cheque_date;
+                    this.form.cheque_no = data.cheque_no;
+                    this.form.code = data.code;
+                    this.form.date = data.date;
+                    this.form.description = data.description;
+                    this.form.user = data.user;
+                    // this.form.expense_reports = data.expense_reports;
+                    this.form.notes = data.notes;
+                    this.form.reference_no = data.reference_no;
+                    this.form.remarks = data.remarks;
+                    this.form.status = data.status;
+                    this.form.voucher_no = data.voucher_no;
 
-                    _this.form.created = data.created;
-                    _this.form.updated = data.updated;
-                    _this.form.deleted = data.deleted;
-                    _this.form.submitted = data.submitted;
-                    _this.form.reviewed = data.reviewed;
-                    _this.form.approved = data.approved;
-                    _this.form.rejected = data.rejected;
-                    _this.form.cancelled = data.cancelled;
+                    this.form.created = data.created;
+                    this.form.updated = data.updated;
+                    this.form.deleted = data.deleted;
+                    this.form.submitted = data.submitted;
+                    this.form.reviewed = data.reviewed;
+                    this.form.approved = data.approved;
+                    this.form.rejected = data.rejected;
+                    this.form.cancelled = data.cancelled;
 
-                    _this.form.logs = data.logs;
+                    this.form.logs = data.logs;
 
                     this.getDataFromApi().then(data => {
                         this.items = data.items;
                         this.totalItems = data.total;
                     });
-
-                    _this.loader = false;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
-                    _this.loader = false;
-                });
+                    this.mixin_showErrors(error);
+                })
+                .finally((this.loader = false));
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let user_id = _this.form.user.id;
-                let range = _this.date_range;
+                let user_id = this.form.user.id;
+                let range = this.date_range;
                 let payment_id = this.$route.params.id;
 
                 axios
@@ -598,40 +594,28 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         cancelPayment() {
-            let _this = this;
-
             this.$confirm(`Do you want to cancel this payment?`).then(res => {
                 if (res) {
-                    _this.loader = true;
+                    this.loader = true;
 
                     axios({
                         method: "delete",
-                        url: `/api/payments/${_this.$route.params.id}`,
+                        url: `/api/payments/${this.$route.params.id}`,
                         data: {
-                            ids: [_this.$route.params.id]
+                            ids: [this.$route.params.id]
                         }
                     })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
+                        .then(response => {
+                            this.$dialog.message.success(
                                 response.data.message,
                                 {
                                     position: "top-right",
@@ -639,18 +623,12 @@ export default {
                                 }
                             );
 
-                            _this.$router.push({
+                            this.$router.push({
                                 name: "admin.payments.index"
                             });
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -702,6 +680,6 @@ export default {
     deactivated() {
         this.form.expense_reports = [];
         Object.assign(this.$data.form, this.$options.data());
-    },
+    }
 };
 </script>

@@ -449,12 +449,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
 
         _this2.$store.dispatch("AUTH_NOTIFICATIONS");
-
-        _this2.selected = [];
       })["catch"](function (error) {
-        console.log(error);
-        _this2.selected = [];
-      });
+        _this2.mixin_showErrors(error);
+      })["finally"](this.selected = []);
     }
   },
   computed: {

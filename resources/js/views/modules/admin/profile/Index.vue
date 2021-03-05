@@ -556,71 +556,58 @@ export default {
     },
     methods: {
         onSave() {
-            let _this = this;
-
-            // _this.$refs.form.validate();
-
-            if (_this.$refs.form.validate()) {
+            // this.$refs.form.validate();
+            if (this.$refs.form.validate()) {
                 axios
-                    .put("/api/users/update_profile/" + _this.form.id, {
-                        code: _this.form.code,
-                        first_name: _this.form.first_name,
-                        middle_name: _this.form.middle_name,
-                        last_name: _this.form.last_name,
-                        suffix: _this.form.suffix,
-                        gender: _this.form.gender,
-                        birthdate: _this.form.birthdate,
-                        mobile_number: _this.form.mobile_number,
-                        telephone_number: _this.form.telephone_number,
-                        address: _this.form.address,
-                        fund: _this.form.fund,
-                        remaining_fund: _this.form.remaining_fund,
-                        username: _this.form.username,
-                        email: _this.form.email,
+                    .put("/api/users/update_profile/" + this.form.id, {
+                        code: this.form.code,
+                        first_name: this.form.first_name,
+                        middle_name: this.form.middle_name,
+                        last_name: this.form.last_name,
+                        suffix: this.form.suffix,
+                        gender: this.form.gender,
+                        birthdate: this.form.birthdate,
+                        mobile_number: this.form.mobile_number,
+                        telephone_number: this.form.telephone_number,
+                        address: this.form.address,
+                        fund: this.form.fund,
+                        remaining_fund: this.form.remaining_fund,
+                        username: this.form.username,
+                        email: this.form.email,
                         password: "password",
                         password_confirmation: "password",
-                        is_admin: _this.form.is_admin,
-                        is_superadmin: _this.form.is_superadmin,
-                        can_login: _this.form.can_login,
-                        type: _this.form.type,
-                        job_id: _this.form.job == null ? null : _this.form.job.id,
+                        is_admin: this.form.is_admin,
+                        is_superadmin: this.form.is_superadmin,
+                        can_login: this.form.can_login,
+                        type: this.form.type,
+                        job_id: this.form.job == null ? null : this.form.job.id,
                     })
                     .then(response => {
-                        _this.$dialog.message.success(
+                        this.$dialog.message.success(
                             "User account updated successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
                             }
                         );
-
-                        _this.$store.dispatch("AUTH_USER");
+                        this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.errors = error.response.data.errors;
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
             }
         },
         onUpdatePassword() {
-            let _this = this;
-
-            if (_this.$refs.form_password.validate()) {
+            if (this.$refs.form_password.validate()) {
                 axios
-                    .put("/api/users/update_password/" + _this.form.id, {
-                        old_password: _this.old_password,
-                        password: _this.password,
-                        password_confirmation: _this.password_confirmation
+                    .put("/api/users/update_password/" + this.form.id, {
+                        old_password: this.old_password,
+                        password: this.password,
+                        password_confirmation: this.password_confirmation
                     })
                     .then(response => {
-                        _this.$dialog.message.success(
+                        this.$dialog.message.success(
                             "User account password has been updated.",
                             {
                                 position: "top-right",
@@ -628,25 +615,25 @@ export default {
                             }
                         );
 
-                        // _this.$store.dispatch("AUTH_USER");
+                        // this.$store.dispatch("AUTH_USER");
 
-                        _this.dialogPassword = false;
-                        _this.old_password = "";
-                        _this.password = "";
-                        _this.password_confirmation = "";
+                        this.dialogPassword = false;
+                        this.old_password = "";
+                        this.password = "";
+                        this.password_confirmation = "";
                     })
                     .catch(error => {
                         console.log(error);
                         console.log(error.response);
 
-                        _this.mixin_errorDialog(
+                        this.mixin_errorDialog(
                             `Error ${error.response.status}`,
                             error.response.statusText
                         );
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.password_errors =
+                                this.password_errors =
                                     error.response.data.errors;
                             }
                         }
@@ -667,17 +654,15 @@ export default {
         }
     },
     created() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.form = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.form = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.form = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.form = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };

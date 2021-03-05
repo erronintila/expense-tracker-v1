@@ -46,8 +46,6 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave(value) {
       var _this = this;
 
-      // console.log(value);
-      // return;
       _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"].store(value).then(function (response) {
         _this.mixin_successDialog(response.data.status, response.data.message);
 

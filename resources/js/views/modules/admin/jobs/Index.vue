@@ -163,7 +163,10 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="collections.selected.length > 0 && filters.status == 'Archived'"
+                    v-show="
+                        collections.selected.length > 0 &&
+                            filters.status == 'Archived'
+                    "
                     close
                     class="mr-2 mb-2"
                     small
@@ -175,7 +178,10 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="collections.selected.length > 0 && filters.status == 'Active'"
+                    v-show="
+                        collections.selected.length > 0 &&
+                            filters.status == 'Active'
+                    "
                     close
                     class="mr-2 mb-2"
                     small
@@ -285,15 +291,14 @@ export default {
             this.filters.department = value;
         },
         getDataFromApi() {
-            let _this = this;
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.filters.search.trim().toLowerCase();
-                let department_id = _this.filters.department.id;
-                let status = _this.filters.status;
+                let search = this.filters.search.trim().toLowerCase();
+                let department_id = this.filters.department.id;
+                let status = this.filters.status;
                 let data = {
                     params: {
                         search: search,
@@ -314,7 +319,7 @@ export default {
                         this.mixin_showErrors(error);
                     })
                     .finally(() => {
-                        _this.loading = false;
+                        this.loading = false;
                     });
             });
         },
@@ -336,9 +341,7 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
-
-            if (_this.collections.selected.length == 0) {
+            if (this.collections.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -350,44 +353,33 @@ export default {
                 if (res) {
                     let data = {
                         params: {
-                            ids: _this.collections.selected.map(item => {
+                            ids: this.collections.selected.map(item => {
                                 return item.id;
                             })
                         }
                     };
 
-                    JobDataService.delete(
-                        _this.collections.selected[0].id,
-                        data
-                    )
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    JobDataService.delete(this.collections.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-                            _this.getDataFromApi().then(data => {
-                                _this.collections.items = data.data;
-                                _this.meta = data.meta;
+                            this.getDataFromApi().then(data => {
+                                this.collections.items = data.data;
+                                this.meta = data.meta;
                             });
 
-                            _this.collections.selected = [];
+                            this.collections.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
-
-            if (_this.collections.selected.length == 0) {
+            if (this.collections.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -398,28 +390,28 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     let data = {
-                        ids: _this.collections.selected.map(item => {
+                        ids: this.collections.selected.map(item => {
                             return item.id;
                         })
                     };
 
                     JobDataService.restore(
-                        _this.collections.selected[0].id,
+                        this.collections.selected[0].id,
                         data
                     )
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-                            _this.getDataFromApi().then(data => {
-                                _this.collections.items = data.data;
-                                _this.meta = data.meta;
+                            this.getDataFromApi().then(data => {
+                                this.collections.items = data.data;
+                                this.meta = data.meta;
                             });
 
-                            _this.collections.selected = [];
+                            this.collections.selected = [];
                         })
-                        .catch(function(error) {
+                        .catch(error => {
                             this.mixin_showErrors(error);
                         });
                 }

@@ -357,6 +357,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -413,17 +419,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.filters.department = value;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
-
       var _this = this;
 
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
+        var _this$options = _this.options,
+            sortBy = _this$options.sortBy,
+            sortDesc = _this$options.sortDesc,
+            page = _this$options.page,
+            itemsPerPage = _this$options.itemsPerPage;
 
         var search = _this.filters.search.trim().toLowerCase();
 
@@ -443,7 +447,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           resolve(response.data);
         })["catch"](function (error) {
-          _this2.mixin_showErrors(error);
+          _this.mixin_showErrors(error);
         })["finally"](function () {
           _this.loading = false;
         });
@@ -470,9 +474,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this = this;
+      var _this2 = this;
 
-      if (_this.collections.selected.length == 0) {
+      if (this.collections.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
@@ -484,33 +488,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (res) {
           var data = {
             params: {
-              ids: _this.collections.selected.map(function (item) {
+              ids: _this2.collections.selected.map(function (item) {
                 return item.id;
               })
             }
           };
-          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this.collections.selected[0].id, data).then(function (response) {
-            _this.mixin_successDialog(response.data.status, response.data.message);
+          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this2.collections.selected[0].id, data).then(function (response) {
+            _this2.mixin_successDialog(response.data.status, response.data.message);
 
-            _this.getDataFromApi().then(function (data) {
-              _this.collections.items = data.data;
-              _this.meta = data.meta;
+            _this2.getDataFromApi().then(function (data) {
+              _this2.collections.items = data.data;
+              _this2.meta = data.meta;
             });
 
-            _this.collections.selected = [];
+            _this2.collections.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this2.mixin_showErrors(error);
           });
         }
       });
     },
     onRestore: function onRestore() {
-      var _this = this;
+      var _this3 = this;
 
-      if (_this.collections.selected.length == 0) {
+      if (this.collections.selected.length == 0) {
         this.$dialog.message.error("No item(s) selected", {
           position: "top-right",
           timeout: 2000
@@ -521,21 +522,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
           var data = {
-            ids: _this.collections.selected.map(function (item) {
+            ids: _this3.collections.selected.map(function (item) {
               return item.id;
             })
           };
-          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this.collections.selected[0].id, data).then(function (response) {
-            _this.mixin_successDialog(response.data.status, response.data.message);
+          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this3.collections.selected[0].id, data).then(function (response) {
+            _this3.mixin_successDialog(response.data.status, response.data.message);
 
-            _this.getDataFromApi().then(function (data) {
-              _this.collections.items = data.data;
-              _this.meta = data.meta;
+            _this3.getDataFromApi().then(function (data) {
+              _this3.collections.items = data.data;
+              _this3.meta = data.meta;
             });
 
-            _this.collections.selected = [];
+            _this3.collections.selected = [];
           })["catch"](function (error) {
-            this.mixin_showErrors(error);
+            _this3.mixin_showErrors(error);
           });
         }
       });
@@ -544,11 +545,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this4 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.collections.items = data.data;
-          _this3.meta = data.meta;
+          _this4.collections.items = data.data;
+          _this4.meta = data.meta;
         });
       },
       deep: true
@@ -567,12 +568,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
-    var _this4 = this;
+    var _this5 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this4.collections.items = data.data;
-      _this4.meta = data.meta;
+      _this5.collections.items = data.data;
+      _this5.meta = data.meta;
     });
   }
 });
@@ -924,7 +925,7 @@ var render = function() {
                         _vm.collections.selected.length > 0 &&
                         _vm.filters.status == "Archived",
                       expression:
-                        "collections.selected.length > 0 && filters.status == 'Archived'"
+                        "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Archived'\n                "
                     }
                   ],
                   staticClass: "mr-2 mb-2",
@@ -950,7 +951,7 @@ var render = function() {
                         _vm.collections.selected.length > 0 &&
                         _vm.filters.status == "Active",
                       expression:
-                        "collections.selected.length > 0 && filters.status == 'Active'"
+                        "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Active'\n                "
                     }
                   ],
                   staticClass: "mr-2 mb-2",

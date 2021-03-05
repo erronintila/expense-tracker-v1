@@ -58,8 +58,11 @@
                     </v-card>
                 </v-menu>
             </v-card-title>
-            <v-card-subtitle> 
-                {{ formattedDateRange}} <v-chip v-if="user!=null && user.id > 0" small>{{ user.full_name }}</v-chip>
+            <v-card-subtitle>
+                {{ formattedDateRange }}
+                <v-chip v-if="user != null && user.id > 0" small>{{
+                    user.full_name
+                }}</v-chip>
             </v-card-subtitle>
 
             <v-row>
@@ -639,31 +642,21 @@ export default {
     },
     methods: {
         loadUsers() {
-            let _this = this;
-
             axios
                 .get("/api/data/users")
                 .then(response => {
-                    _this.users = response.data.data;
+                    this.users = response.data.data;
 
-                    _this.users.unshift({
+                    this.users.unshift({
                         id: 0,
                         full_name: "All Users"
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_department_expenses(start, end, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/departments_expenses_summary", {
                     params: {
@@ -674,45 +667,30 @@ export default {
                     }
                 })
                 .then(response => {
-                    _this.expenses_by_category = response.data;
-
+                    this.expenses_by_category = response.data;
                     let labels = response.data.map(item => item.text);
-
                     let data = response.data.map(item => item.value);
-
-                    let backgroundColors = _this.getBackgroundColors(
+                    let backgroundColors = this.getBackgroundColors(
                         data.length
                     );
-
                     let sum = response.data.reduce(function(a, b) {
                         return a + b.value;
                     }, 0);
-
                     let percentages = response.data.map(
                         item => (item.value / sum) * 100
                     );
-
                     this.updatePieChartValues(
                         labels,
                         percentages,
                         backgroundColors
                     );
-
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_expense_types_expenses(start, end, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/expense_types_expenses_summary", {
                     params: {
@@ -723,45 +701,30 @@ export default {
                     }
                 })
                 .then(response => {
-                    _this.expenses_by_category = response.data;
-
+                    this.expenses_by_category = response.data;
                     let labels = response.data.map(item => item.text);
-
                     let data = response.data.map(item => item.value);
-
-                    let backgroundColors = _this.getBackgroundColors(
+                    let backgroundColors = this.getBackgroundColors(
                         data.length
                     );
-
                     let sum = response.data.reduce(function(a, b) {
                         return a + b.value;
                     }, 0);
-
                     let percentages = response.data.map(
                         item => (item.value / sum) * 100
                     );
-
                     this.updatePieChartValues(
                         labels,
                         percentages,
                         backgroundColors
                     );
-
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_users_expenses(start, end, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/users_expenses_summary", {
                     params: {
@@ -772,45 +735,30 @@ export default {
                     }
                 })
                 .then(response => {
-                    _this.expenses_by_category = response.data;
-
+                    this.expenses_by_category = response.data;
                     let labels = response.data.map(item => item.text);
-
                     let data = response.data.map(item => item.value);
-
-                    let backgroundColors = _this.getBackgroundColors(
+                    let backgroundColors = this.getBackgroundColors(
                         data.length
                     );
-
                     let sum = response.data.reduce(function(a, b) {
                         return a + b.value;
                     }, 0);
-
                     let percentages = response.data.map(
                         item => (item.value / sum) * 100
                     );
-
                     this.updatePieChartValues(
                         labels,
                         percentages,
                         backgroundColors
                     );
-
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_expenses_summary(start, end, time_unit, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/expenses_summary", {
                     params: {
@@ -822,14 +770,14 @@ export default {
                     }
                 })
                 .then(response => {
-                    switch (_this.groupBy) {
+                    switch (this.groupBy) {
                         case "day":
-                            _this.lineChart_labels = response.data.map(
+                            this.lineChart_labels = response.data.map(
                                 item => item.text
                             );
                             break;
                         case "week":
-                            _this.lineChart_labels = response.data.map(
+                            this.lineChart_labels = response.data.map(
                                 item =>
                                     `${moment(item.text).format(
                                         "YYYY-MM"
@@ -839,12 +787,12 @@ export default {
                             );
                             break;
                         case "month":
-                            _this.lineChart_labels = response.data.map(item =>
+                            this.lineChart_labels = response.data.map(item =>
                                 moment(item.text).format("MMM YYYY")
                             );
                             break;
                         case "quarter":
-                            _this.lineChart_labels = response.data.map(
+                            this.lineChart_labels = response.data.map(
                                 item =>
                                     `${moment(item.text).format(
                                         "YYYY"
@@ -852,7 +800,7 @@ export default {
                             );
                             break;
                         case "year":
-                            _this.lineChart_labels = response.data.map(item =>
+                            this.lineChart_labels = response.data.map(item =>
                                 moment(item.text).format("YYYY")
                             );
                             break;
@@ -860,23 +808,15 @@ export default {
                             break;
                     }
 
-                    _this.lineChart_data = response.data.map(
-                        item => item.value
-                    );
+                    this.lineChart_data = response.data.map(item => item.value);
 
                     this.updateLineChartValues(
-                        _this.lineChart_labels,
-                        _this.lineChart_data
+                        this.lineChart_labels,
+                        this.lineChart_data
                     );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_bar_chart() {
@@ -1137,24 +1077,18 @@ export default {
             );
         },
         getExpenseStats(start, end, emp) {
-            let _this = this;
-
             axios
                 .get(
                     `/api/data/expense_stats?start_date=${start}&end_date=${end}&user_id=${emp}`
                 )
                 .then(response => {
-                    _this.total = response.data.total;
-                    _this.count = response.data.count;
-
-                    _this.loader = false;
-
+                    this.total = response.data.total;
+                    this.count = response.data.count;
                     this.load_expense_types_expenses(
                         this.date_range[0],
                         this.date_range[1],
                         this.user.id
                     );
-
                     this.load_expenses_summary(
                         this.date_range[0],
                         this.date_range[1],
@@ -1163,25 +1097,15 @@ export default {
                     );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
-                    _this.loader = true;
-                });
+                    this.mixin_showErrors(error);
+                })
+                .finally((this.loader = false));
         }
         // loadStatistics(start, end, user_id) {
-        //     let _this = this;
         //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
         //     .then(response => {
-        //         console.log(response);
         //     }).catch(error => {
-        //         console.log(error);
-        //         console.log(error.response);
+        //         this.mixin_showErrors(error);
         //     });
         // }
     },

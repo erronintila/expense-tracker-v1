@@ -302,7 +302,7 @@ import DateRangePicker from "../../../../components/daterangepicker/DateRangePic
 
 export default {
     components: {
-        DateRangePicker,
+        DateRangePicker
     },
     data() {
         return {
@@ -389,61 +389,43 @@ export default {
         loadExpenses() {
             let start_date = this.date_range[0];
             let end_date = this.date_range[1];
-            let _this = this;
 
             axios
                 .get("/api/data/expenses", {
                     params: {
                         create_report: true,
                         user_id:
-                            _this.form.user == null ? null : _this.form.user.id,
+                            this.form.user == null ? null : this.form.user.id,
                         start_date: start_date,
                         end_date: end_date
                     }
                 })
                 .then(response => {
-                    _this.items = response.data.data;
-                    // _this.total = response.data.total;
+                    this.items = response.data.data;
+                    // this.total = response.data.total;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         loadUsers() {
-            let _this = this;
-
             axios
                 .get("/api/data/users")
                 .then(response => {
-                    _this.users = response.data.data;
+                    this.users = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let range = _this.date_range;
-                let user_id =
-                    _this.form.user == null ? null : _this.form.user.id;
+                let range = this.date_range;
+                let user_id = this.form.user == null ? null : this.form.user.id;
 
                 axios
                     .get("/api/expenses", {
@@ -460,76 +442,56 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         onSave() {
-            let _this = this;
+            this.$refs.form.validate();
 
-            _this.$refs.form.validate();
-
-            if (_this.form.user == null) {
-                _this.mixin_errorDialog("Error", "No employee selected");
+            if (this.form.user == null) {
+                this.mixin_errorDialog("Error", "No employee selected");
 
                 return;
             }
 
-            if (_this.selected.length == 0) {
-                _this.mixin_errorDialog("Error", "No expense(s) selected");
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No expense(s) selected");
 
                 return;
             }
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.loader = true;
 
                 axios
                     .post("/api/expense_reports", {
-                        code: _this.form.code,
-                        description: _this.form.description,
-                        remarks: _this.form.remarks,
-                        notes: _this.form.notes,
+                        code: this.form.code,
+                        description: this.form.description,
+                        remarks: this.form.remarks,
+                        notes: this.form.notes,
                         user_id:
-                            _this.form.user == null ? null : _this.form.user.id,
-                        expenses: _this.selected
+                            this.form.user == null ? null : this.form.user.id,
+                        expenses: this.selected
                     })
-                    .then(function(response) {
-                        _this.mixin_successDialog(
+                    .then(response => {
+                        this.mixin_successDialog(
                             response.data.status,
                             response.data.message
                         );
 
-                        _this.$router.push({
+                        this.$router.push({
                             name: "admin.expense_reports.index"
                         });
                     })
-                    .catch(function(error) {
-                        _this.loader = false;
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.errors = error.response.data.errors;
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
+                    .catch(error => {
+                        this.loader = false;
+                        this.errors = error.response.data.errors;
+                        this.mixin_showErrors(error);
                     });
 
                 return;

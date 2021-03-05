@@ -329,17 +329,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          self.loading = false;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-          self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
-          self.loading = false;
-        });
+          _this.mixin_showErrors(error);
+        })["finally"](_this.loading = false);
       });
     },
     onRefresh: function onRefresh() {
@@ -397,9 +393,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
             self.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-            self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+            this.mixin_showErrors(error);
           });
         }
       });
@@ -427,9 +421,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             });
             self.selected = [];
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-            self.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+            this.mixin_showErrors(error);
           });
         }
       });

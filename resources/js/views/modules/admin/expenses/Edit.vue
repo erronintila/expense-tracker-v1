@@ -223,9 +223,6 @@ export default {
                     this.form.reimbursable_amount = data.reimbursable_amount;
                     this.form.user.remaining_fund +=
                         data.amount - data.reimbursable_amount;
-
-                    console.log("data", data);
-                    console.log("form", this.form);
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);

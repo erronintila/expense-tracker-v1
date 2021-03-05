@@ -690,8 +690,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.totalUnsubmitted = (_total$data$total_uns = total.data.total_unsubmitted) !== null && _total$data$total_uns !== void 0 ? _total$data$total_uns : 0;
         _this.totalUnapproved = (_total$data$total_una = total.data.total_unapproved) !== null && _total$data$total_una !== void 0 ? _total$data$total_una : 0;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this.mixin_showErrors(error);
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {
@@ -700,8 +699,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/api/data/expense_types?only=true").then(function (response) {
         _this2.expense_types = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this2.mixin_showErrors(error);
       });
     },
     loadReportData: function loadReportData(report_type) {
@@ -734,9 +732,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var item = response.data.data;
           resolve(item);
         })["catch"](function (error) {
+          _this3.mixin_showErrors(error);
+
           reject();
-          console.log(error);
-          console.log(error.response);
         });
       });
     },
@@ -1136,20 +1134,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this5.loading = false;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
+          _this5.mixin_showErrors(error);
+
           reject();
-          console.log(error);
-          console.log(error.response);
-
-          _this5.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this5.loading = false;
-        });
+        })["finally"](_this5.loading = false);
       });
     },
     onRefresh: function onRefresh() {
@@ -1258,12 +1251,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       //             this.selected = [];
       //         })
       //         .catch(function(error) {
-      //             console.log(error);
-      //             console.log(error.response);
-      //             this.mixin_errorDialog(
-      //                 `Error ${error.response.status}`,
-      //                 error.response.statusText
-      //             );
+      //             this.mixin_showErrors(error);
       //         });
       // }
       // // return;
@@ -1515,12 +1503,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //                         this.selected = [];
     //                     })
     //                     .catch(function(error) {
-    //                         console.log(error);
-    //                         console.log(error.response);
-    //                         this.mixin_errorDialog(
-    //                             `Error ${error.response.status}`,
-    //                             error.response.statusText
-    //                         );
+    //                         this.mixin_showErrors(error);
     //                     });
     //             }
     //         }

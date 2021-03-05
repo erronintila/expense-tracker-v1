@@ -776,13 +776,6 @@ export default {
                 return;
             }
 
-            console.log("before value", {
-                ...this.expenseForm,
-                ...{ itemize: this.itemize },
-                ...{ items: this.expenseForm.details },
-                ...{ amount_to_reimburse: this.amount_to_reimburse }
-            });
-
             this.$emit("onSave", {
                 ...this.expenseForm,
                 ...{ itemize: this.itemize },
@@ -1053,7 +1046,6 @@ export default {
             );
         },
         itemize() {
-            console.log(this.itemize);
             this.expenseForm.amount = this.expenseForm.details.reduce(
                 (total, item) => parseFloat(total) + parseFloat(item.total),
                 0

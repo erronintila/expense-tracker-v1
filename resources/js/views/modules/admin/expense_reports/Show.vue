@@ -1170,15 +1170,8 @@ export default {
                         resolve({ items });
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
                     });
             });
         },
@@ -1237,20 +1230,11 @@ export default {
                         _this.form.expenses = data.items;
                         _this.totalItems = data.total;
                     });
-
-                    _this.loader = false;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
-                    _this.loader = false;
-                });
+                    this.mixin_showErrors(error);
+                })
+                .finally((this.loader = false));
         },
         getDataFromApi() {
             let _this = this;
@@ -1278,22 +1262,12 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         }
     },
@@ -1358,6 +1332,6 @@ export default {
     deactivated() {
         this.form.expenses = [];
         Object.assign(this.$data.form, this.$options.data());
-    },
+    }
 };
 </script>

@@ -179,40 +179,34 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/users/" + this.$route.params.id).then(function (response) {
         _this.user = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this2 = this;
 
       if (this.new_fund < 0 || this.new_remaining_fund < 0) {
         this.mixin_errorDialog("Error", "Revolving fund/Remaining fund should not be lesser than current amount");
         return;
       }
 
-      if (_this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         this.$confirm("Do you want to update revolving fund?").then(function (res) {
           if (res) {
-            axios.put("/api/users/update_fund/".concat(_this.$route.params.id), {
-              fund: _this.new_fund,
-              remaining_fund: _this.new_remaining_fund
+            axios.put("/api/users/update_fund/".concat(_this2.$route.params.id), {
+              fund: _this2.new_fund,
+              remaining_fund: _this2.new_remaining_fund
             }).then(function (response) {
-              _this.$dialog.message.success("Revolving Fund updated.", {
+              _this2.$dialog.message.success("Revolving Fund updated.", {
                 position: "top-right",
                 timeout: 2000
               });
 
-              _this.$store.dispatch("AUTH_USER");
+              _this2.$store.dispatch("AUTH_USER");
 
-              _this.$router.push("/admin/users");
+              _this2.$router.push("/admin/users");
             })["catch"](function (error) {
-              console.log(error);
-              console.log(error.response);
-
-              _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+              _this2.mixin_showErrors(error);
             });
           }
         }); // let add_amount =
@@ -221,31 +215,26 @@ __webpack_require__.r(__webpack_exports__);
         //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
         // axios
         //     .put("/api/users", {
-        //         user: _this.user.id,
-        //         reference: _this.reference,
-        //         code: _this.code,
-        //         description: _this.description,
-        //         remarks: _this.remarks,
-        //         // amount: _this.amount,
+        //         user: this.user.id,
+        //         reference: this.reference,
+        //         code: this.code,
+        //         description: this.description,
+        //         remarks: this.remarks,
+        //         // amount: this.amount,
         //         add_amount: add_amount,
         //         subtract_amount: subtract_amount,
-        //         type: _this.type
+        //         type: this.type
         //     })
-        //     .then(function(response) {
-        //         _this.mixin_successDialog(
+        //     .then(response => {
+        //         this.mixin_successDialog(
         //             "Success",
         //             "Adjustment created successfully."
         //         );
-        //         _this.$router.push({ name: "admin.adjustments.index" });
+        //         this.$router.push({ name: "admin.adjustments.index" });
         //     })
-        //     .catch(function(error) {
-        //         console.log(error);
-        //         console.log(error.response);
-        //         _this.errors = error.response.data.errors;
-        //         _this.mixin_errorDialog(
-        //             `Error ${error.response.status}`,
-        //             error.response.statusText
-        //         );
+        //     .catch(error => {
+        //          this.mixin_showErrors(error);
+        //         this.errors = error.response.data.errors;
         //     });
       }
     }

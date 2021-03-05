@@ -132,26 +132,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
+      var _this2 = this;
+
       var _this = this;
 
       this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
         var data = response.data.data;
-        console.log(data);
         _this.form.is_admin = data.is_admin;
         _this.form.can_login = data.can_login;
         _this.form.permissions = data.permissions;
         _this.form.old_permissions = data.permissions;
         _this.form.role = data.role[0];
         _this.form.old_role = data.role[0];
-        _this.loader = false;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = false;
-      }));
+        _this2.mixin_showErrors(error);
+      })["finally"](this.loader = false));
     },
     loadPermissions: function loadPermissions() {
       var _this = this;
@@ -208,11 +203,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     "form.role": function formRole() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.loadPermissions().then(function () {
-        if (_this2.form.old_role == _this2.form.role) {
-          _this2.form.permissions = _this2.form.old_permissions;
+        if (_this3.form.old_role == _this3.form.role) {
+          _this3.form.permissions = _this3.form.old_permissions;
         }
       });
     }

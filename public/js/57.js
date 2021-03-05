@@ -33,11 +33,8 @@ __webpack_require__.r(__webpack_exports__);
     loadItem: function loadItem() {
       var _this = this;
 
-      axios.get("/api/users/".concat(_this.$route.params.id)).then(function (response) {})["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+      axios.get("/api/users/".concat(this.$route.params.id)).then(function (response) {})["catch"](function (error) {
+        _this.mixin_showErrors(error);
       });
     }
   },

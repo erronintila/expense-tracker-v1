@@ -96,7 +96,14 @@
                                 Expense Reports
                             </div>
 
-                            <small v-if="errors.expense_reports  && errors.expense_reports.length > 0" class="red--text">{{errors.expense_reports[0]}}</small>
+                            <small
+                                v-if="
+                                    errors.expense_reports &&
+                                        errors.expense_reports.length > 0
+                                "
+                                class="red--text"
+                                >{{ errors.expense_reports[0] }}</small
+                            >
 
                             <v-data-table
                                 :headers="headers"
@@ -173,13 +180,15 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <strong>Created</strong
-                                                        >
+                                                        <strong>Created</strong>
                                                     </td>
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss")
+                                                            mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
@@ -253,9 +262,7 @@
                                 </template>
                                 <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.last_name +
-                                            ", " +
-                                            item.first_name
+                                        item.last_name + ", " + item.first_name
                                     }}
                                 </template>
                                 <template v-slot:[`item.updated_at`]="{ item }">
@@ -421,35 +428,25 @@ export default {
             });
         },
         loadUsers() {
-            let _this = this;
-
             axios
                 .get("/api/data/users")
                 .then(response => {
-                    _this.users = response.data.data;
+                    this.users = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.form.user.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.form.user.id;
+                let range = this.date_range;
 
                 axios
                     .get("/api/expense_reports", {
@@ -470,57 +467,35 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
-                        console.log(items);
-
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                        this.mixin_showErrors(error);
+                    })
+                    .finally((this.loading = false));
             });
         },
         // loadExpenseReports() {
         //     let start_date = this.date_range[0];
         //     let end_date = this.date_range[1];
-        //     let _this = this;
-
         //     axios
         //         .get("/api/data/expense_reports", {
         //             params: {
         //                 create_payment: true,
         //                 start_date: start_date,
         //                 end_date: end_date,
-        //                 user_id: _this.form.user.id
+        //                 user_id: this.form.user.id
         //             }
         //         })
         //         .then(response => {
-        //             _this.items = response.data.data;
+        //             this.items = response.data.data;
         //         })
         //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
+        //              this.mixin_showErrors(error);
         //         });
         // },
         onSave() {
-            let _this = this;
-
-            _this.$refs.form.validate();
+            this.$refs.form.validate();
 
             if (this.form.user.id == null || !this.form.user) {
                 this.mixin_errorDialog("Error", "No Employee selected.");
@@ -532,56 +507,45 @@ export default {
                 return;
             }
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.loader = true;
 
                 axios
                     .post("/api/payments", {
-                        code: _this.form.code,
-                        reference_no: _this.form.reference_no,
-                        voucher_no: _this.form.voucher_no,
-                        description: _this.form.description,
-                        date: _this.form.date,
-                        cheque_no: _this.form.cheque_no,
-                        cheque_date: _this.form.cheque_date,
-                        amount: _this.total,
-                        payee: _this.form.payee,
-                        payee_address: _this.form.payee_address,
-                        payee_phone: _this.form.payee_phone,
-                        remarks: _this.form.remarks,
-                        notes: _this.form.notes,
-                        expense_reports: _this.selected,
-                        user_id: _this.form.user.id
+                        code: this.form.code,
+                        reference_no: this.form.reference_no,
+                        voucher_no: this.form.voucher_no,
+                        description: this.form.description,
+                        date: this.form.date,
+                        cheque_no: this.form.cheque_no,
+                        cheque_date: this.form.cheque_date,
+                        amount: this.total,
+                        payee: this.form.payee,
+                        payee_address: this.form.payee_address,
+                        payee_phone: this.form.payee_phone,
+                        remarks: this.form.remarks,
+                        notes: this.form.notes,
+                        expense_reports: this.selected,
+                        user_id: this.form.user.id
                     })
-                    .then(function(response) {
-                        _this.onRefresh();
+                    .then(response => {
+                        this.onRefresh();
 
-                        _this.$dialog.message.success(
+                        this.$dialog.message.success(
                             "Payment created successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
                             }
                         );
-
-                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                        // _this.$store.dispatch("AUTH_USER");
-
-                        _this.$router.push({ name: "admin.payments.index" });
+                        this.$store.dispatch("AUTH_NOTIFICATIONS");
+                        this.$router.push({ name: "admin.payments.index" });
                     })
-                    .catch(function(error) {
-                        _this.loader = false;
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.errors = error.response.data.errors;
-                    });
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
+                    })
+                    .finally((this.loader = false));
 
                 return;
             }

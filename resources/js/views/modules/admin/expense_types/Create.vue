@@ -33,8 +33,6 @@ export default {
     },
     methods: {
         onSave(value) {
-            // console.log(value);
-            // return;
             ExpenseTypeDataService.store(value)
                 .then(response => {
                     this.mixin_successDialog(

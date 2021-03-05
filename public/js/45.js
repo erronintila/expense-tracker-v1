@@ -391,62 +391,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.date_range = e; // this.loadExpenses();
     },
     updateUser: function updateUser() {
-      var _this2 = this;
+      var _this = this;
 
       this.getDataFromApi().then(function (data) {
-        _this2.items = data.items;
-        _this2.totalItems = data.total;
+        _this.items = data.items;
+        _this.totalItems = data.total;
       });
       this.errors.user_id = [];
     },
     loadExpenses: function loadExpenses() {
+      var _this2 = this;
+
       var start_date = this.date_range[0];
       var end_date = this.date_range[1];
-
-      var _this = this;
-
       axios.get("/api/data/expenses", {
         params: {
           create_report: true,
-          user_id: _this.form.user == null ? null : _this.form.user.id,
+          user_id: this.form.user == null ? null : this.form.user.id,
           start_date: start_date,
           end_date: end_date
         }
       }).then(function (response) {
-        _this.items = response.data.data; // _this.total = response.data.total;
+        _this2.items = response.data.data; // this.total = response.data.total;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this2.mixin_showErrors(error);
       });
     },
     loadUsers: function loadUsers() {
-      var _this = this;
+      var _this3 = this;
 
       axios.get("/api/data/users").then(function (response) {
-        _this.users = response.data.data;
+        _this3.users = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this3.mixin_showErrors(error);
       });
     },
     getDataFromApi: function getDataFromApi() {
-      var _this3 = this;
+      var _this4 = this;
 
-      var _this = this;
-
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this3$options = _this3.options,
-            sortBy = _this3$options.sortBy,
-            sortDesc = _this3$options.sortDesc,
-            page = _this3$options.page,
-            itemsPerPage = _this3$options.itemsPerPage;
-        var range = _this.date_range;
-        var user_id = _this.form.user == null ? null : _this.form.user.id;
+        var _this4$options = _this4.options,
+            sortBy = _this4$options.sortBy,
+            sortDesc = _this4$options.sortDesc,
+            page = _this4$options.page,
+            itemsPerPage = _this4$options.itemsPerPage;
+        var range = _this4.date_range;
+        var user_id = _this4.form.user == null ? null : _this4.form.user.id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -460,60 +451,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
-
-          _this.loading = false;
-        });
+          _this4.mixin_showErrors(error);
+        })["finally"](_this4.loading = false);
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this5 = this;
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
-      if (_this.form.user == null) {
-        _this.mixin_errorDialog("Error", "No employee selected");
-
+      if (this.form.user == null) {
+        this.mixin_errorDialog("Error", "No employee selected");
         return;
       }
 
-      if (_this.selected.length == 0) {
-        _this.mixin_errorDialog("Error", "No expense(s) selected");
-
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No expense(s) selected");
         return;
       }
 
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
+      if (this.$refs.form.validate()) {
+        this.loader = true;
         axios.post("/api/expense_reports", {
-          code: _this.form.code,
-          description: _this.form.description,
-          remarks: _this.form.remarks,
-          notes: _this.form.notes,
-          user_id: _this.form.user == null ? null : _this.form.user.id,
-          expenses: _this.selected
+          code: this.form.code,
+          description: this.form.description,
+          remarks: this.form.remarks,
+          notes: this.form.notes,
+          user_id: this.form.user == null ? null : this.form.user.id,
+          expenses: this.selected
         }).then(function (response) {
-          _this.mixin_successDialog(response.data.status, response.data.message);
+          _this5.mixin_successDialog(response.data.status, response.data.message);
 
-          _this.$router.push({
+          _this5.$router.push({
             name: "admin.expense_reports.index"
           });
         })["catch"](function (error) {
-          _this.loader = false;
-          console.log(error);
-          console.log(error.response);
-          _this.errors = error.response.data.errors;
+          _this5.loader = false;
+          _this5.errors = error.response.data.errors;
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.data.message);
+          _this5.mixin_showErrors(error);
         });
         return;
       }
@@ -522,11 +503,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this4 = this;
+        var _this6 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this4.items = data.items;
-          _this4.totalItems = data.total;
+          _this6.items = data.items;
+          _this6.totalItems = data.total;
         });
       },
       deep: true

@@ -235,7 +235,6 @@ __webpack_require__.r(__webpack_exports__);
       value.user_id = value.user.id;
       value.vendor_id = value.vendor ? value.vendor.id : null;
       value.reimbursable_amount = value.amount_to_reimburse;
-      console.log("value", value);
       _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].store(value).then(function (response) {
         _this.mixin_successDialog(response.data.status, response.data.message);
 

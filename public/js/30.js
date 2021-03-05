@@ -493,12 +493,11 @@ __webpack_require__.r(__webpack_exports__);
       axios.put("/api/notifications/".concat(item.id, "?action=", "read", "&type=", "single")).then(function (response) {
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-        window.location.replace("/admin/".concat(item.data.data.model, "/").concat(item.data.data.id)); // _this.$router.replace(
+        window.location.replace("/admin/".concat(item.data.data.model, "/").concat(item.data.data.id)); // this.$router.replace(
         //     `/admin/${item.data.data.model}/${item.data.data.id}`
         // );
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this.mixin_showErrors(error);
       });
     },
     toProfile: function toProfile() {
@@ -520,21 +519,21 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
+    var _this3 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.user = response;
+      _this3.user = response;
 
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this3.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   },
   activated: function activated() {
-    var _this = this;
+    var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.user = response;
+      _this4.user = response;
 
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this4.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   }
 });

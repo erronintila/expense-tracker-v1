@@ -540,6 +540,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -659,16 +662,11 @@ __webpack_require__.r(__webpack_exports__);
           full_name: "All Users"
         });
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     load_department_expenses: function load_department_expenses(start, end, user) {
       var _this2 = this;
-
-      var _this = this;
 
       axios.get("/api/data/departments_expenses_summary", {
         params: {
@@ -678,7 +676,7 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
-        _this.expenses_by_category = response.data;
+        _this2.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
         });
@@ -686,7 +684,7 @@ __webpack_require__.r(__webpack_exports__);
           return item.value;
         });
 
-        var backgroundColors = _this.getBackgroundColors(data.length);
+        var backgroundColors = _this2.getBackgroundColors(data.length);
 
         var sum = response.data.reduce(function (a, b) {
           return a + b.value;
@@ -699,16 +697,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this2.mixin_showErrors(error);
       });
     },
     load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
       var _this3 = this;
-
-      var _this = this;
 
       axios.get("/api/data/expense_types_expenses_summary", {
         params: {
@@ -718,7 +711,7 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
-        _this.expenses_by_category = response.data;
+        _this3.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
         });
@@ -726,7 +719,7 @@ __webpack_require__.r(__webpack_exports__);
           return item.value;
         });
 
-        var backgroundColors = _this.getBackgroundColors(data.length);
+        var backgroundColors = _this3.getBackgroundColors(data.length);
 
         var sum = response.data.reduce(function (a, b) {
           return a + b.value;
@@ -739,16 +732,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this3.mixin_showErrors(error);
       });
     },
     load_users_expenses: function load_users_expenses(start, end, user) {
       var _this4 = this;
-
-      var _this = this;
 
       axios.get("/api/data/users_expenses_summary", {
         params: {
@@ -758,7 +746,7 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
-        _this.expenses_by_category = response.data;
+        _this4.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
         });
@@ -766,7 +754,7 @@ __webpack_require__.r(__webpack_exports__);
           return item.value;
         });
 
-        var backgroundColors = _this.getBackgroundColors(data.length);
+        var backgroundColors = _this4.getBackgroundColors(data.length);
 
         var sum = response.data.reduce(function (a, b) {
           return a + b.value;
@@ -779,16 +767,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this4.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this4.mixin_showErrors(error);
       });
     },
     load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
       var _this5 = this;
-
-      var _this = this;
 
       axios.get("/api/data/expenses_summary", {
         params: {
@@ -799,33 +782,33 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
-        switch (_this.groupBy) {
+        switch (_this5.groupBy) {
           case "day":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this5.lineChart_labels = response.data.map(function (item) {
               return item.text;
             });
             break;
 
           case "week":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this5.lineChart_labels = response.data.map(function (item) {
               return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this5.getWeekInMonth(new Date(item.text)));
             });
             break;
 
           case "month":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this5.lineChart_labels = response.data.map(function (item) {
               return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("MMM YYYY");
             });
             break;
 
           case "quarter":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this5.lineChart_labels = response.data.map(function (item) {
               return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY"), " Q:").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("Q"));
             });
             break;
 
           case "year":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this5.lineChart_labels = response.data.map(function (item) {
               return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY");
             });
             break;
@@ -834,16 +817,13 @@ __webpack_require__.r(__webpack_exports__);
             break;
         }
 
-        _this.lineChart_data = response.data.map(function (item) {
+        _this5.lineChart_data = response.data.map(function (item) {
           return item.value;
         });
 
-        _this5.updateLineChartValues(_this.lineChart_labels, _this.lineChart_data);
+        _this5.updateLineChartValues(_this5.lineChart_labels, _this5.lineChart_data);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this5.mixin_showErrors(error);
       });
     },
     load_bar_chart: function load_bar_chart() {
@@ -1063,32 +1043,21 @@ __webpack_require__.r(__webpack_exports__);
     getExpenseStats: function getExpenseStats(start, end, emp) {
       var _this7 = this;
 
-      var _this = this;
-
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&user_id=").concat(emp)).then(function (response) {
-        _this.total = response.data.total;
-        _this.count = response.data.count;
-        _this.loader = false;
+        _this7.total = response.data.total;
+        _this7.count = response.data.count;
 
         _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.user.id);
 
         _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.user.id);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = true;
-      });
+        _this7.mixin_showErrors(error);
+      })["finally"](this.loader = false);
     } // loadStatistics(start, end, user_id) {
-    //     let _this = this;
     //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
     //     .then(response => {
-    //         console.log(response);
     //     }).catch(error => {
-    //         console.log(error);
-    //         console.log(error.response);
+    //         this.mixin_showErrors(error);
     //     });
     // }
 
@@ -1308,7 +1277,9 @@ var render = function() {
                 "v-card-subtitle",
                 [
                   _vm._v(
-                    " \n            " + _vm._s(_vm.formattedDateRange) + " "
+                    "\n            " +
+                      _vm._s(_vm.formattedDateRange) +
+                      "\n            "
                   ),
                   _vm.user != null && _vm.user.id > 0
                     ? _c("v-chip", { attrs: { small: "" } }, [
