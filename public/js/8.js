@@ -1264,15 +1264,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     "expenseForm.details": function expenseFormDetails() {
-      this.expenseForm.amount = this.expenseForm.details.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.total);
-      }, 0);
-      this.expenseForm.details_amount = this.expenseForm.details.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.amount);
-      }, 0);
-      this.expenseForm.details_quantity = this.expenseForm.details.reduce(function (total, item) {
-        return parseFloat(total) + parseFloat(item.quantity);
-      }, 0);
+      if (this.expenseForm.details) {
+        this.expenseForm.amount = this.expenseForm.details.reduce(function (total, item) {
+          return parseFloat(total) + parseFloat(item.total);
+        }, 0);
+        this.expenseForm.details_amount = this.expenseForm.details.reduce(function (total, item) {
+          return parseFloat(total) + parseFloat(item.amount);
+        }, 0);
+        this.expenseForm.details_quantity = this.expenseForm.details.reduce(function (total, item) {
+          return parseFloat(total) + parseFloat(item.quantity);
+        }, 0);
+      }
     },
     itemize: function itemize() {
       this.expenseForm.amount = this.expenseForm.details.reduce(function (total, item) {

@@ -102,7 +102,10 @@ export default {
         return {
             loader: false,
             usersParameters: {
-                params: { with_expense_types: true }
+                params: { 
+                    with_expense_types: true,
+                    is_superadmin: false
+                }
             },
             itemize: false,
             form: {

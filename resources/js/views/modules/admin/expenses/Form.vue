@@ -667,7 +667,7 @@ export default {
             ],
             items: [],
             expense_types: [],
-            sub_types: [],
+            sub_types: []
         };
     },
     methods: {
@@ -1030,20 +1030,24 @@ export default {
     },
     watch: {
         "expenseForm.details": function() {
-            this.expenseForm.amount = this.expenseForm.details.reduce(
-                (total, item) => parseFloat(total) + parseFloat(item.total),
-                0
-            );
+            if (this.expenseForm.details) {
+                this.expenseForm.amount = this.expenseForm.details.reduce(
+                    (total, item) => parseFloat(total) + parseFloat(item.total),
+                    0
+                );
 
-            this.expenseForm.details_amount = this.expenseForm.details.reduce(
-                (total, item) => parseFloat(total) + parseFloat(item.amount),
-                0
-            );
+                this.expenseForm.details_amount = this.expenseForm.details.reduce(
+                    (total, item) =>
+                        parseFloat(total) + parseFloat(item.amount),
+                    0
+                );
 
-            this.expenseForm.details_quantity = this.expenseForm.details.reduce(
-                (total, item) => parseFloat(total) + parseFloat(item.quantity),
-                0
-            );
+                this.expenseForm.details_quantity = this.expenseForm.details.reduce(
+                    (total, item) =>
+                        parseFloat(total) + parseFloat(item.quantity),
+                    0
+                );
+            }
         },
         itemize() {
             this.expenseForm.amount = this.expenseForm.details.reduce(

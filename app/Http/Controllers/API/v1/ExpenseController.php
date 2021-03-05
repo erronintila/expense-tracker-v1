@@ -589,12 +589,17 @@ class ExpenseController extends Controller
                     $q->where("expense_report_id", request("expense_report_id"));
                     // $q->orWhere("expense_report_id", null);
                 })
-                ->where(function ($q) use ($request) {
-                    $q->whereBetween("date", [request("start_date"), request("end_date")]);
-                    // $q->orWhere("expense_report_id", request("")expense_report_id);
-                })
-                ->where("user_id", request("user_id"))
-                ->get();
+                ->where("user_id", request("user_id"));
+
+                if (request()->has('start_date') && request()->has('end_date')) {
+                    $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
+                }
+                // ->where(function ($q) use ($request) {
+                //     $q->whereBetween("date", [request("start_date"), request("end_date")]);
+                //     // $q->orWhere("expense_report_id", request("")expense_report_id);
+                // })
+                
+                $expenses = $expenses->get();
 
             return response()->json([
                 "data" => ExpenseResource::collection($expenses),
