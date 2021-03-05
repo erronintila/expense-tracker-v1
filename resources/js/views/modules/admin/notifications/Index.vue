@@ -50,19 +50,19 @@
                                 v-bind="attrs"
                                 v-on="menu"
                             >
-                                {{ status ? status.text : "" }}
+                                {{ status ? status : "" }}
                             </v-chip>
                         </template>
                         <v-card>
-                            <ListItemGroup
-                                v-model="status"
-                                :items="statuses"
-                                @onChange="onChangeStatus"
-                            >
-                                <template v-slot:itemText="{ item }">
-                                    {{ item.text }}
-                                </template>
-                            </ListItemGroup>
+                            <v-list>
+                                <v-list-item>
+                                    <v-select
+                                        v-model="status"
+                                        :items="statuses"
+                                        label="Status"
+                                    ></v-select>
+                                </v-list-item>
+                            </v-list>
                         </v-card>
                     </v-menu>
 
@@ -269,10 +269,9 @@ import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import NotificationDataService from "../../../../services/NotificationDataService";
-import ListItemGroup from "../../../../components/list_item_group/ListItemGroup";
 
 export default {
-    components: { DateRangePicker, ListItemGroup },
+    components: { DateRangePicker },
     data() {
         return {
             loading: true,
@@ -286,17 +285,11 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            status: {
-                text: "All Unread"
-            },
-            // status: "All Unread",
+            status: "All Unread",
             statuses: [
-                { text: "All Unread" },
-                { text: "All Read" },
-                { text: "All Notifications" }
-                // "All Unread",
-                // "All Read",
-                // "All Notifications"
+                "All Unread",
+                "All Read",
+                "All Notifications"
             ],
             selected: [],
             search: "",
@@ -350,7 +343,7 @@ export default {
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
                 let search = this.search.trim().toLowerCase();
-                let status = this.status?.text;
+                let status = this.status;
                 let range = this.date_range;
                 let data = {
                     params: {
@@ -373,13 +366,9 @@ export default {
                     .finally(() => (this.loading = false));
             });
         },
-        onChangeStatus(value) {
-            this.status = value;
-        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.selected = [];
-            this.onChangeStatus({ text: "All Unread" });
         },
         onShow(item) {
             this.$router.push({

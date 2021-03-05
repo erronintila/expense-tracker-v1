@@ -213,7 +213,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -552,30 +551,25 @@ var render = function() {
                     var menu = ref.on
                     var attrs = ref.attrs
                     return [
-                      _vm.status != null
-                        ? _c(
+                      _c(
+                        "v-chip",
+                        _vm._g(
+                          _vm._b(
+                            { staticClass: "mr-2 mb-2", attrs: { small: "" } },
                             "v-chip",
-                            _vm._g(
-                              _vm._b(
-                                {
-                                  staticClass: "mr-2 mb-2",
-                                  attrs: { small: "" }
-                                },
-                                "v-chip",
-                                attrs,
-                                false
-                              ),
-                              menu
-                            ),
-                            [
-                              _vm._v(
-                                "\n                    " +
-                                  _vm._s(_vm.status) +
-                                  "\n                "
-                              )
-                            ]
+                            attrs,
+                            false
+                          ),
+                          menu
+                        ),
+                        [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(_vm.status) +
+                              "\n                "
                           )
-                        : _vm._e()
+                        ]
+                      )
                     ]
                   }
                 }

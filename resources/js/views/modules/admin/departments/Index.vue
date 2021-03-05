@@ -91,7 +91,6 @@
             >
                 <template v-slot:activator="{ on: menu, attrs }">
                     <v-chip
-                        v-if="status != null"
                         class="mr-2 mb-2"
                         small
                         v-bind="attrs"
