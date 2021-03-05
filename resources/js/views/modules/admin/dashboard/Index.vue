@@ -44,15 +44,45 @@
                                 ></DateRangePicker>
                             </v-list-item>
                             <v-list-item>
-                                <v-select
-                                    label="User"
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    return-object
-                                    @change="updateUser"
-                                ></v-select>
+                                <v-text-field
+                                    :value="
+                                        user
+                                            ? user.full_name
+                                            : 'All Employees'
+                                    "
+                                    label="Employee"
+                                    readonly
+                                >
+                                    <template v-slot:append>
+                                        <UserDialogSelector
+                                            ref="userDialogSelector"
+                                            @selectUser="selectUser"
+                                            @onReset="resetUser"
+                                            :selectedUser="user"
+                                            :usersParameters="{params: { is_superadmin: false }}"
+                                        >
+                                            <template
+                                                v-slot:openDialog="{
+                                                    bind,
+                                                    on
+                                                }"
+                                            >
+                                                <v-btn
+                                                    fab
+                                                    color="primary"
+                                                    text
+                                                    x-small
+                                                    v-bind="bind"
+                                                    v-on="on"
+                                                >
+                                                    <v-icon dark
+                                                        >mdi-magnify</v-icon
+                                                    >
+                                                </v-btn>
+                                            </template>
+                                        </UserDialogSelector>
+                                    </template>
+                                </v-text-field>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -530,6 +560,7 @@ import DateRangePicker from "../../../../components/daterangepicker/DateRangePic
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 
 export default {
     components: {
@@ -538,7 +569,8 @@ export default {
         // BarChart,
         HorizontalBarChart,
         LineChart,
-        DateRangePicker
+        DateRangePicker,
+        UserDialogSelector
     },
     data() {
         return {
@@ -636,25 +668,19 @@ export default {
             ],
             items: [],
 
-            user: { id: 0, full_name: "All Users" },
-            users: []
+            user: null,
         };
     },
     methods: {
-        loadUsers() {
-            axios
-                .get("/api/data/users")
-                .then(response => {
-                    this.users = response.data.data;
-
-                    this.users.unshift({
-                        id: 0,
-                        full_name: "All Users"
-                    });
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                });
+        selectUser(e) {
+            if (e == null || e == undefined) {
+                this.user = null;
+                return;
+            }
+            this.user = e;
+        },
+        resetUser() {
+            this.user = null;
         },
         load_department_expenses(start, end, user) {
             axios
@@ -1029,16 +1055,16 @@ export default {
 
             switch (this.filter) {
                 case "expense_type":
-                    this.load_expense_types_expenses(start, end, this.user.id);
+                    this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
                     break;
                 case "department":
-                    this.load_department_expenses(start, end, this.user.id);
+                    this.load_department_expenses(start, end, this.user ? this.user.id : null);
                     break;
                 case "user":
-                    this.load_users_expenses(start, end, this.user.id);
+                    this.load_users_expenses(start, end, this.user ? this.user.id : null);
                     break;
                 default:
-                    this.load_expense_types_expenses(start, end, this.user.id);
+                    this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
                     break;
             }
         },
@@ -1047,7 +1073,7 @@ export default {
                 this.date_range[0],
                 this.date_range[1],
                 this.groupBy,
-                this.user.id
+                this.user ? this.user.id : null
             );
         },
         updateDates(e) {
@@ -1062,18 +1088,7 @@ export default {
             this.getExpenseStats(
                 this.date_range[0],
                 this.date_range[1],
-                this.user.id
-            );
-        },
-        updateUser() {
-            // this.onCategoryChange();
-
-            this.onTimeUnitChange();
-
-            this.getExpenseStats(
-                this.date_range[0],
-                this.date_range[1],
-                this.user.id
+                this.user ? this.user.id : null
             );
         },
         getExpenseStats(start, end, emp) {
@@ -1087,13 +1102,13 @@ export default {
                     this.load_expense_types_expenses(
                         this.date_range[0],
                         this.date_range[1],
-                        this.user.id
+                        this.user ? this.user.id : null
                     );
                     this.load_expenses_summary(
                         this.date_range[0],
                         this.date_range[1],
                         this.groupBy,
-                        this.user.id
+                        this.user ? this.user.id : null
                     );
                 })
                 .catch(error => {
@@ -1125,9 +1140,17 @@ export default {
             return `${start_date} ~ ${end_date}`;
         }
     },
+    watch: {
+        user() {
+            this.onTimeUnitChange();
+            this.getExpenseStats(
+                this.date_range[0],
+                this.date_range[1],
+                this.user ? this.user.id : null
+            );
+        }
+    },
     mounted() {
-        this.loadUsers();
-
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
@@ -1135,7 +1158,7 @@ export default {
         this.getExpenseStats(
             this.date_range[0],
             this.date_range[1],
-            this.user.id
+            this.user ? this.user.id : null
         );
 
         // this.loadStatistics();
@@ -1147,8 +1170,6 @@ export default {
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-        this.loadUsers();
-
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
@@ -1156,7 +1177,7 @@ export default {
         this.getExpenseStats(
             this.date_range[0],
             this.date_range[1],
-            this.user.id
+            this.user ? this.user.id : null
         );
     }
 };

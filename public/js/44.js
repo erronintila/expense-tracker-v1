@@ -19,6 +19,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_chart_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/chart/DoughnutChart */ "./resources/js/components/chart/DoughnutChart.vue");
 /* harmony import */ var _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/chart/HorizontalBarChart */ "./resources/js/components/chart/HorizontalBarChart.vue");
 /* harmony import */ var _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/chart/LineChart */ "./resources/js/components/chart/LineChart.vue");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
 //
 //
 //
@@ -543,6 +544,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -557,7 +589,8 @@ __webpack_require__.r(__webpack_exports__);
     // BarChart,
     HorizontalBarChart: _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__["default"],
     LineChart: _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__["default"],
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"]
+    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"],
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   data: function data() {
     return {
@@ -643,32 +676,60 @@ __webpack_require__.r(__webpack_exports__);
         value: "iron"
       }],
       items: [],
-      user: {
-        id: 0,
-        full_name: "All Users"
-      },
-      users: []
+      user: null
     };
   },
   methods: {
-    loadUsers: function loadUsers() {
+    selectUser: function selectUser(e) {
+      if (e == null || e == undefined) {
+        this.user = null;
+        return;
+      }
+
+      this.user = e;
+    },
+    resetUser: function resetUser() {
+      this.user = null;
+    },
+    load_department_expenses: function load_department_expenses(start, end, user) {
       var _this = this;
 
-      axios.get("/api/data/users").then(function (response) {
-        _this.users = response.data.data;
-
-        _this.users.unshift({
-          id: 0,
-          full_name: "All Users"
+      axios.get("/api/data/departments_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          user_id: user,
+          admin_page: true
+        }
+      }).then(function (response) {
+        _this.expenses_by_category = response.data;
+        var labels = response.data.map(function (item) {
+          return item.text;
         });
+        var data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        var backgroundColors = _this.getBackgroundColors(data.length);
+
+        var sum = response.data.reduce(function (a, b) {
+          return a + b.value;
+        }, 0);
+        var percentages = response.data.map(function (item) {
+          return item.value / sum * 100;
+        });
+
+        _this.updatePieChartValues(labels, percentages, backgroundColors);
+
+        _this.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
       });
     },
-    load_department_expenses: function load_department_expenses(start, end, user) {
+    load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
       var _this2 = this;
 
-      axios.get("/api/data/departments_expenses_summary", {
+      axios.get("/api/data/expense_types_expenses_summary", {
         params: {
           start_date: start,
           end_date: end,
@@ -700,10 +761,10 @@ __webpack_require__.r(__webpack_exports__);
         _this2.mixin_showErrors(error);
       });
     },
-    load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
+    load_users_expenses: function load_users_expenses(start, end, user) {
       var _this3 = this;
 
-      axios.get("/api/data/expense_types_expenses_summary", {
+      axios.get("/api/data/users_expenses_summary", {
         params: {
           start_date: start,
           end_date: end,
@@ -735,43 +796,8 @@ __webpack_require__.r(__webpack_exports__);
         _this3.mixin_showErrors(error);
       });
     },
-    load_users_expenses: function load_users_expenses(start, end, user) {
-      var _this4 = this;
-
-      axios.get("/api/data/users_expenses_summary", {
-        params: {
-          start_date: start,
-          end_date: end,
-          user_id: user,
-          admin_page: true
-        }
-      }).then(function (response) {
-        _this4.expenses_by_category = response.data;
-        var labels = response.data.map(function (item) {
-          return item.text;
-        });
-        var data = response.data.map(function (item) {
-          return item.value;
-        });
-
-        var backgroundColors = _this4.getBackgroundColors(data.length);
-
-        var sum = response.data.reduce(function (a, b) {
-          return a + b.value;
-        }, 0);
-        var percentages = response.data.map(function (item) {
-          return item.value / sum * 100;
-        });
-
-        _this4.updatePieChartValues(labels, percentages, backgroundColors);
-
-        _this4.updateBarChartValues(labels, data, backgroundColors);
-      })["catch"](function (error) {
-        _this4.mixin_showErrors(error);
-      });
-    },
     load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get("/api/data/expenses_summary", {
         params: {
@@ -782,33 +808,33 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: true
         }
       }).then(function (response) {
-        switch (_this5.groupBy) {
+        switch (_this4.groupBy) {
           case "day":
-            _this5.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return item.text;
             });
             break;
 
           case "week":
-            _this5.lineChart_labels = response.data.map(function (item) {
-              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this5.getWeekInMonth(new Date(item.text)));
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this4.getWeekInMonth(new Date(item.text)));
             });
             break;
 
           case "month":
-            _this5.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("MMM YYYY");
             });
             break;
 
           case "quarter":
-            _this5.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY"), " Q:").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("Q"));
             });
             break;
 
           case "year":
-            _this5.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY");
             });
             break;
@@ -817,13 +843,13 @@ __webpack_require__.r(__webpack_exports__);
             break;
         }
 
-        _this5.lineChart_data = response.data.map(function (item) {
+        _this4.lineChart_data = response.data.map(function (item) {
           return item.value;
         });
 
-        _this5.updateLineChartValues(_this5.lineChart_labels, _this5.lineChart_data);
+        _this4.updateLineChartValues(_this4.lineChart_labels, _this4.lineChart_data);
       })["catch"](function (error) {
-        _this5.mixin_showErrors(error);
+        _this4.mixin_showErrors(error);
       });
     },
     load_bar_chart: function load_bar_chart() {
@@ -862,7 +888,7 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     load_pie_chart: function load_pie_chart() {
-      var _this6 = this;
+      var _this5 = this;
 
       this.doughnutChartOptions = {
         hoverBorderWidth: 20,
@@ -881,7 +907,7 @@ __webpack_require__.r(__webpack_exports__);
             },
             backgroundColor: "lightgray",
             formatter: function formatter(value, ctx) {
-              return _this6.mixin_formatNumber(value) + " %";
+              return _this5.mixin_formatNumber(value) + " %";
             }
           }
         }
@@ -1009,49 +1035,44 @@ __webpack_require__.r(__webpack_exports__);
 
       switch (this.filter) {
         case "expense_type":
-          this.load_expense_types_expenses(start, end, this.user.id);
+          this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
           break;
 
         case "department":
-          this.load_department_expenses(start, end, this.user.id);
+          this.load_department_expenses(start, end, this.user ? this.user.id : null);
           break;
 
         case "user":
-          this.load_users_expenses(start, end, this.user.id);
+          this.load_users_expenses(start, end, this.user ? this.user.id : null);
           break;
 
         default:
-          this.load_expense_types_expenses(start, end, this.user.id);
+          this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
           break;
       }
     },
     onTimeUnitChange: function onTimeUnitChange() {
-      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.user.id);
+      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.user ? this.user.id : null);
     },
     updateDates: function updateDates(e) {
       this.date_range = e;
       this.expenses_by_category = []; // this.onCategoryChange();
 
       this.onTimeUnitChange();
-      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
-    },
-    updateUser: function updateUser() {
-      // this.onCategoryChange();
-      this.onTimeUnitChange();
-      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null);
     },
     getExpenseStats: function getExpenseStats(start, end, emp) {
-      var _this7 = this;
+      var _this6 = this;
 
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&user_id=").concat(emp)).then(function (response) {
-        _this7.total = response.data.total;
-        _this7.count = response.data.count;
+        _this6.total = response.data.total;
+        _this6.count = response.data.count;
 
-        _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.user.id);
+        _this6.load_expense_types_expenses(_this6.date_range[0], _this6.date_range[1], _this6.user ? _this6.user.id : null);
 
-        _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.user.id);
+        _this6.load_expenses_summary(_this6.date_range[0], _this6.date_range[1], _this6.groupBy, _this6.user ? _this6.user.id : null);
       })["catch"](function (error) {
-        _this7.mixin_showErrors(error);
+        _this6.mixin_showErrors(error);
       })["finally"](this.loader = false);
     } // loadStatistics(start, end, user_id) {
     //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
@@ -1078,23 +1099,27 @@ __webpack_require__.r(__webpack_exports__);
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
+  watch: {
+    user: function user() {
+      this.onTimeUnitChange();
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null);
+    }
+  },
   mounted: function mounted() {
-    this.loadUsers();
     this.load_pie_chart();
     this.load_bar_chart();
     this.load_line_chart();
-    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id); // this.loadStatistics();
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null); // this.loadStatistics();
   },
   created: function created() {
     this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.$store.dispatch("AUTH_USER");
   },
   activated: function activated() {
     this.$store.dispatch("AUTH_NOTIFICATIONS");
-    this.loadUsers();
     this.load_pie_chart();
     this.load_bar_chart();
     this.load_line_chart();
-    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null);
   }
 });
 
@@ -1240,22 +1265,86 @@ var render = function() {
                               _c(
                                 "v-list-item",
                                 [
-                                  _c("v-select", {
+                                  _c("v-text-field", {
                                     attrs: {
-                                      label: "User",
-                                      items: _vm.users,
-                                      "item-text": "full_name",
-                                      "item-value": "id",
-                                      "return-object": ""
+                                      value: _vm.user
+                                        ? _vm.user.full_name
+                                        : "All Employees",
+                                      label: "Employee",
+                                      readonly: ""
                                     },
-                                    on: { change: _vm.updateUser },
-                                    model: {
-                                      value: _vm.user,
-                                      callback: function($$v) {
-                                        _vm.user = $$v
-                                      },
-                                      expression: "user"
-                                    }
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "append",
+                                        fn: function() {
+                                          return [
+                                            _c("UserDialogSelector", {
+                                              ref: "userDialogSelector",
+                                              attrs: {
+                                                selectedUser: _vm.user,
+                                                usersParameters: {
+                                                  params: {
+                                                    is_superadmin: false
+                                                  }
+                                                }
+                                              },
+                                              on: {
+                                                selectUser: _vm.selectUser,
+                                                onReset: _vm.resetUser
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "openDialog",
+                                                  fn: function(ref) {
+                                                    var bind = ref.bind
+                                                    var on = ref.on
+                                                    return [
+                                                      _c(
+                                                        "v-btn",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                fab: "",
+                                                                color:
+                                                                  "primary",
+                                                                text: "",
+                                                                "x-small": ""
+                                                              }
+                                                            },
+                                                            "v-btn",
+                                                            bind,
+                                                            false
+                                                          ),
+                                                          on
+                                                        ),
+                                                        [
+                                                          _c(
+                                                            "v-icon",
+                                                            {
+                                                              attrs: {
+                                                                dark: ""
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "mdi-magnify"
+                                                              )
+                                                            ]
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ])
+                                            })
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
                                   })
                                 ],
                                 1
