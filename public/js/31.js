@@ -268,9 +268,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _services_ActivityLogDataService__WEBPACK_IMPORTED_MODULE_3__["default"].getAll(data).then(function (response) {
           resolve(response.data);
         })["catch"](function (error) {
-          reject();
-
           _this.mixin_showErrors(error);
+
+          reject();
         })["finally"](function () {
           _this.loading = false;
         });

@@ -582,7 +582,7 @@ export default {
                     showHead: "everyPage",
                     headStyles: { halign: "center", fillColor: [76, 175, 10] },
                     columnStyles: { 4: { halign: "right" } }
-                    // didParseCell: function(data) {
+                    // didParseCell: (data) => {
                     //     var rows = data.table.body;
                     //     if (data.row.index === rows.length - 1) {
                     //         data.cell.styles.fillColor = [76, 175, 10];
@@ -1176,59 +1176,58 @@ export default {
             });
         },
         getData() {
-            let _this = this;
             axios
-                .get(`/api/expense_reports/${_this.router_params_id}`)
+                .get(`/api/expense_reports/${this.router_params_id}`)
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.form.code = data.code;
-                    _this.form.reference_no = data.reference_no;
-                    _this.form.description = data.description;
-                    _this.form.remarks = data.remarks;
-                    _this.form.notes = data.notes;
-                    _this.form.submission_period = data.submission_period;
-                    _this.form.approval_period = data.approval_period;
-                    _this.form.from = data.from;
-                    _this.form.to = data.to;
-                    _this.form.status = data.status;
-                    _this.form.is_late_submitted = data.is_late_submitted;
-                    _this.form.is_late_approved = data.is_late_approved;
+                    this.form.code = data.code;
+                    this.form.reference_no = data.reference_no;
+                    this.form.description = data.description;
+                    this.form.remarks = data.remarks;
+                    this.form.notes = data.notes;
+                    this.form.submission_period = data.submission_period;
+                    this.form.approval_period = data.approval_period;
+                    this.form.from = data.from;
+                    this.form.to = data.to;
+                    this.form.status = data.status;
+                    this.form.is_late_submitted = data.is_late_submitted;
+                    this.form.is_late_approved = data.is_late_approved;
 
-                    _this.form.total = data.total;
-                    _this.form.total_reimbursable = data.total_reimbursable;
-                    _this.form.paid = data.paid;
-                    _this.form.payments = data.payments;
-                    _this.form.payment_id = data.payment_id;
-                    _this.form.balance = data.balance;
+                    this.form.total = data.total;
+                    this.form.total_reimbursable = data.total_reimbursable;
+                    this.form.paid = data.paid;
+                    this.form.payments = data.payments;
+                    this.form.payment_id = data.payment_id;
+                    this.form.balance = data.balance;
 
-                    _this.form.user = data.user;
-                    _this.form.payment = data.payment;
-                    // _this.form.expenses = data.expenses;
+                    this.form.user = data.user;
+                    this.form.payment = data.payment;
+                    // this.form.expenses = data.expenses;
 
-                    // _this.form.created = data.created;
-                    // _this.form.updated = data.updated;
-                    // _this.form.deleted = data.deleted;
-                    // _this.form.submitted = data.submitted;
-                    // _this.form.approved = data.approved;
-                    // _this.form.rejected = data.rejected;
-                    // _this.form.cancelled = data.cancelled;
+                    // this.form.created = data.created;
+                    // this.form.updated = data.updated;
+                    // this.form.deleted = data.deleted;
+                    // this.form.submitted = data.submitted;
+                    // this.form.approved = data.approved;
+                    // this.form.rejected = data.rejected;
+                    // this.form.cancelled = data.cancelled;
 
-                    _this.form.created_at = data.created_at;
-                    _this.form.updated_at = data.updated_at;
-                    _this.form.deleted_at = data.deleted_at;
-                    _this.form.submitted_at = data.submitted_at;
-                    _this.form.approved_at = data.approved_at;
-                    _this.form.rejected_at = data.rejected_at;
-                    _this.form.cancelled_at = data.cancelled_at;
+                    this.form.created_at = data.created_at;
+                    this.form.updated_at = data.updated_at;
+                    this.form.deleted_at = data.deleted_at;
+                    this.form.submitted_at = data.submitted_at;
+                    this.form.approved_at = data.approved_at;
+                    this.form.rejected_at = data.rejected_at;
+                    this.form.cancelled_at = data.cancelled_at;
 
-                    _this.form.logs = data.logs;
+                    this.form.logs = data.logs;
 
-                    // _this.loadExpenses();
+                    // this.loadExpenses();
 
-                    _this.getDataFromApi().then(data => {
-                        _this.form.expenses = data.items;
-                        _this.totalItems = data.total;
+                    this.getDataFromApi().then(data => {
+                        this.form.expenses = data.items;
+                        this.totalItems = data.total;
                     });
                 })
                 .catch(error => {
@@ -1237,15 +1236,13 @@ export default {
                 .finally((this.loader = false));
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let range = [_this.form.from, _this.form.to];
-                let expense_report_id = _this.router_params_id;
+                let range = [this.form.from, this.form.to];
+                let expense_report_id = this.router_params_id;
 
                 axios
                     .get("/api/expenses", {
@@ -1266,6 +1263,7 @@ export default {
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        reject();
                     })
                     .finally((this.loading = false));
             });

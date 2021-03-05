@@ -623,13 +623,7 @@ export default {
                         this.password_confirmation = "";
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {

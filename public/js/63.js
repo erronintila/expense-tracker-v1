@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+var _this4 = undefined;
+
 //
 //
 //
@@ -132,11 +134,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
-      var _this2 = this;
-
       var _this = this;
 
-      this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
+      this.loadPermissions().then(axios.get("/api/users/" + this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.form.is_admin = data.is_admin;
         _this.form.can_login = data.can_login;
@@ -145,69 +145,58 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.role = data.role[0];
         _this.form.old_role = data.role[0];
       })["catch"](function (error) {
-        _this2.mixin_showErrors(error);
+        _this.mixin_showErrors(error);
       })["finally"](this.loader = false));
     },
     loadPermissions: function loadPermissions() {
-      var _this = this;
+      var _this2 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
-          console.log(response);
-          _this.permissions = response.data;
-          _this.form.permissions = [];
+        axios.get("/api/data/permissions?role=".concat(_this2.form.role)).then(function (response) {
+          _this2.permissions = response.data;
+          _this2.form.permissions = [];
           resolve();
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_showErrors(error);
 
           reject();
         });
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this3 = this;
 
       var is_administrator = this.form.role == "Administrator" ? true : false;
+      this.$refs.form.validate();
 
-      _this.$refs.form.validate();
-
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
-        axios.put("/api/users/update_permissions/" + _this.$route.params.id, {
+      if (this.$refs.form.validate()) {
+        this.loader = true;
+        axios.put("/api/users/update_permissions/" + this.$route.params.id, {
           is_admin: is_administrator,
-          can_login: _this.form.can_login,
-          permissions: _this.form.permissions
+          can_login: this.form.can_login,
+          permissions: this.form.permissions
         }).then(function (response) {
-          _this.mixin_successDialog(response.data.status, response.data.message);
+          _this3.mixin_successDialog(response.data.status, response.data.message);
 
           window.location.replace("/admin/users");
         })["catch"](function (error) {
-          _this.loader = false;
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {
-              _this.errors = error.response.data.errors;
+              _this3.errors = error.response.data.errors;
             }
           }
-        });
+        })["finally"](this.loader = false);
         return;
       }
     }
   },
   watch: {
     "form.role": function formRole() {
-      var _this3 = this;
-
-      this.loadPermissions().then(function () {
-        if (_this3.form.old_role == _this3.form.role) {
-          _this3.form.permissions = _this3.form.old_permissions;
+      _this4.loadPermissions().then(function () {
+        if (_this4.form.old_role == _this4.form.role) {
+          _this4.form.permissions = _this4.form.old_permissions;
         }
       });
     }

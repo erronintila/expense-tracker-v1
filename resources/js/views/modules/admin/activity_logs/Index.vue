@@ -259,8 +259,8 @@ export default {
                         resolve(response.data);
                     })
                     .catch(error => {
-                        reject();
                         this.mixin_showErrors(error);
+                        reject();
                     })
                     .finally(() => {
                         this.loading = false;

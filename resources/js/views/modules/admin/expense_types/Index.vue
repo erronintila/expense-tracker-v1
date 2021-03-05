@@ -258,6 +258,7 @@ export default {
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        reject();
                     })
                     .finally((this.loading = false));
             });

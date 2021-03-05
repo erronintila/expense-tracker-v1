@@ -118,19 +118,17 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
-
             this.loadPermissions().then(
                 axios
-                    .get("/api/users/" + _this.$route.params.id)
+                    .get("/api/users/" + this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
-                        _this.form.is_admin = data.is_admin;
-                        _this.form.can_login = data.can_login;
-                        _this.form.permissions = data.permissions;
-                        _this.form.old_permissions = data.permissions;
-                        _this.form.role = data.role[0];
-                        _this.form.old_role = data.role[0];
+                        this.form.is_admin = data.is_admin;
+                        this.form.can_login = data.can_login;
+                        this.form.permissions = data.permissions;
+                        this.form.old_permissions = data.permissions;
+                        this.form.role = data.role[0];
+                        this.form.old_role = data.role[0];
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
@@ -139,83 +137,64 @@ export default {
             );
         },
         loadPermissions() {
-            let _this = this;
-
             return new Promise((resolve, reject) => {
                 axios
-                    .get(`/api/data/permissions?role=${_this.form.role}`)
+                    .get(`/api/data/permissions?role=${this.form.role}`)
                     .then(response => {
-                        console.log(response);
-                        _this.permissions = response.data;
-                        _this.form.permissions = [];
+                        this.permissions = response.data;
+                        this.form.permissions = [];
                         resolve();
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        this.mixin_showErrors(error);
                         reject();
                     });
             });
         },
         onSave() {
-            let _this = this;
-
             let is_administrator =
                 this.form.role == "Administrator" ? true : false;
 
-            _this.$refs.form.validate();
+            this.$refs.form.validate();
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.loader = true;
 
                 axios
                     .put(
                         "/api/users/update_permissions/" +
-                            _this.$route.params.id,
+                            this.$route.params.id,
                         {
                             is_admin: is_administrator,
-                            can_login: _this.form.can_login,
-                            permissions: _this.form.permissions
+                            can_login: this.form.can_login,
+                            permissions: this.form.permissions
                         }
                     )
-                    .then(function(response) {
-                        _this.mixin_successDialog(
+                    .then(response => {
+                        this.mixin_successDialog(
                             response.data.status,
                             response.data.message
                         );
 
                         window.location.replace("/admin/users");
                     })
-                    .catch(function(error) {
-                        _this.loader = false;
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                    .catch(error => {
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.errors = error.response.data.errors;
+                                this.errors = error.response.data.errors;
                             }
                         }
-                    });
+                    })
+                    .finally((this.loader = false));
 
                 return;
             }
         }
     },
     watch: {
-        "form.role": function() {
+        "form.role": () => {
             this.loadPermissions().then(() => {
                 if (this.form.old_role == this.form.role) {
                     this.form.permissions = this.form.old_permissions;

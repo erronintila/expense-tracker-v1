@@ -448,9 +448,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
-        })["finally"](function () {
-          _this.loading = false;
-        });
+
+          reject();
+        })["finally"](_this.loading = false);
       });
     },
     onRefresh: function onRefresh() {

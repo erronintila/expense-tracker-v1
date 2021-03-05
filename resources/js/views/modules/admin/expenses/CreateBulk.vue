@@ -267,7 +267,12 @@
                                         <v-text-field
                                             v-model="form.amount"
                                             label="Amount"
-                                            :rules="[...mixin_validation.required, ...mixin_validation.minNumberValue(1)]"
+                                            :rules="[
+                                                ...mixin_validation.required,
+                                                ...mixin_validation.minNumberValue(
+                                                    1
+                                                )
+                                            ]"
                                             :readonly="itemize"
                                             type="number"
                                         ></v-text-field>
@@ -736,32 +741,22 @@ export default {
             this.expense_types = this.form.employee.expense_types;
         },
         loadEmployees() {
-            let _this = this;
-
             axios
                 .get("/api/data/employees")
                 .then(response => {
-                    _this.employees = response.data.data;
+                    this.employees = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors();
                 });
         },
         loadVendors() {
-            let _this = this;
-
             axios
                 .get("/api/data/vendors")
                 .then(response => {
-                    _this.vendors = response.data.data;
+                    this.vendors = response.data.data;
 
-                    _this.vendors.unshift({
+                    this.vendors.unshift({
                         id: null,
                         name: "No Vendor",
                         tin: "",
@@ -769,51 +764,31 @@ export default {
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
-            let _this = this;
-
-            if (
-                _this.form.employee.id == null
-            ) {
-                _this.$dialog.message.error(
-                    "No Employee Selected",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+            if (this.form.employee.id == null) {
+                this.$dialog.message.error("No Employee Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 
-            if (
-                _this.form.expense_type.id == null
-            ) {
-                _this.$dialog.message.error(
-                    "No Expense Type Selected",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+            if (this.form.expense_type.id == null) {
+                this.$dialog.message.error("No Expense Type Selected", {
+                    position: "top-right",
+                    timeout: 2000
+                });
                 return;
             }
 
-            if (
-                _this.amount_to_replenish > _this.form.employee.remaining_fund
-            ) {
-                _this.$dialog.message.error(
+            if (this.amount_to_replenish > this.form.employee.remaining_fund) {
+                this.$dialog.message.error(
                     "Revolving fund amount is greater than remaining fund",
                     {
                         position: "top-right",
@@ -823,33 +798,33 @@ export default {
                 return;
             }
 
-            _this.$refs.form.validate();
+            this.$refs.form.validate();
 
-            if (_this.$refs.form.validate()) {
+            if (this.$refs.form.validate()) {
                 axios
                     .post("/api/expenses", {
-                        code: _this.form.code,
-                        description: _this.form.description,
-                        amount: _this.form.amount,
-                        reimbursable_amount: _this.form.reimbursable_amount,
-                        receipt_number: _this.form.receipt_number,
-                        date: _this.form.date,
-                        remarks: _this.form.remarks,
-                        is_active: _this.form.is_active,
-                        expense_type_id: _this.form.expense_type.id,
-                        sub_type_id: _this.form.sub_type.id,
-                        employee_id: _this.form.employee.id,
-                        vendor_id: _this.form.vendor.id,
-                        details: _this.itemize ? _this.items : null,
+                        code: this.form.code,
+                        description: this.form.description,
+                        amount: this.form.amount,
+                        reimbursable_amount: this.form.reimbursable_amount,
+                        receipt_number: this.form.receipt_number,
+                        date: this.form.date,
+                        remarks: this.form.remarks,
+                        is_active: this.form.is_active,
+                        expense_type_id: this.form.expense_type.id,
+                        sub_type_id: this.form.sub_type.id,
+                        employee_id: this.form.employee.id,
+                        vendor_id: this.form.vendor.id,
+                        details: this.itemize ? this.items : null,
                         tax_name: "",
-                        tax_rate: _this.form.tax_rate,
-                        tax_amount: _this.form.tax_amount,
-                        is_tax_inclusive: _this.form.is_tax_inclusive
+                        tax_rate: this.form.tax_rate,
+                        tax_amount: this.form.tax_amount,
+                        is_tax_inclusive: this.form.is_tax_inclusive
                     })
-                    .then(function(response) {
-                        _this.onRefresh();
+                    .then(response => {
+                        this.onRefresh();
 
-                        _this.$dialog.message.success(
+                        this.$dialog.message.success(
                             "Expense created successfully.",
                             {
                                 position: "top-right",
@@ -857,20 +832,13 @@ export default {
                             }
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
+                        this.$store.dispatch("AUTH_USER");
 
-                        _this.$router.go(-1);
+                        this.$router.go(-1);
                     })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.errors = error.response.data.errors;
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
 
                 return;
@@ -1011,7 +979,7 @@ export default {
             );
         },
         taxable_amount: {
-            get: function() {
+            get() {
                 if (!this.form.is_tax_inclusive) {
                     this.form.tax_amount = this.tax_exclusive.toFixed(2);
                     return this.tax_exclusive.toFixed(2);
@@ -1020,7 +988,7 @@ export default {
                 this.form.tax_amount = this.tax_inclusive.toFixed(2);
                 return this.tax_inclusive.toFixed(2);
             },
-            set: function(amount) {
+            set(amount) {
                 this.form.tax_amount = amount;
                 return amount;
             }
@@ -1073,7 +1041,7 @@ export default {
                 0
             );
         },
-        "form.vendor": function() {
+        "form.vendor": () => {
             this.form.tax_rate = 0;
             this.form.tax_amount = 0;
             this.form.is_tax_inclusive = true;

@@ -837,9 +837,8 @@ export default {
                         resolve();
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-                        console.log(error);
-                        console.log(error.response);
                     });
             });
         },
@@ -859,9 +858,9 @@ export default {
                         resolve();
                     })
                     .catch(error => {
-                        reject();
                         console.log(error);
                         console.log(error.response);
+                        reject();
                     });
             });
         },

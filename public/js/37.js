@@ -628,10 +628,7 @@ __webpack_require__.r(__webpack_exports__);
           _this3.password = "";
           _this3.password_confirmation = "";
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {

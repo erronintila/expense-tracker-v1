@@ -411,8 +411,8 @@ export default {
                         resolve();
                     })
                     .catch(error => {
-                        reject();
                         this.mixin_showErrors(error);
+                        reject();
                     })
                     .finally((this.loader = false));
             });
@@ -445,8 +445,8 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        reject();
                         this.mixin_showErrors(error);
+                        reject();
                     })
                     .finally((this.loading = false));
             });

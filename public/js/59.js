@@ -667,6 +667,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);
+
+          reject();
         })["finally"](_this2.loading = false);
       });
     },

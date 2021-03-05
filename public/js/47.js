@@ -525,7 +525,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     generatePDF: function generatePDF(action) {
-      var _this2 = this;
+      var _this = this;
 
       this.loadExpenses().then(function (data) {
         // var source = this.$refs["myTable"];
@@ -539,7 +539,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           temp.push(element.expense_type.name);
           temp.push(element.receipt_number);
           temp.push(element.vendor.name);
-          temp.push(_this2.mixin_formatNumber(element.amount));
+          temp.push(_this.mixin_formatNumber(element.amount));
           table_rows.push(temp);
         }); // table_footer = [
         //     "Total",
@@ -558,22 +558,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }); // header details
         // 1st row
 
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.user.full_name), 0.5, 0.7);
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this2.form.code), 6.0, 0.7); // end of 1st row
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this.form.user.full_name), 0.5, 0.7);
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this.form.code), 6.0, 0.7); // end of 1st row
         // 2nd row
 
-        doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(_this2.mixin_formatNumber(_this2.form.total)), 0.5, 1.0);
-        doc.setFontSize(11).setTextColor(76, 175, 10).text(_this2.form.status.status, 6.0, 1.0); // end of 2nd row
+        doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(_this.mixin_formatNumber(_this.form.total)), 0.5, 1.0);
+        doc.setFontSize(11).setTextColor(76, 175, 10).text(_this.form.status.status, 6.0, 1.0); // end of 2nd row
         // 3rd row
 
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(_this2.form.from, " ~ ").concat(_this2.form.to), 0.5, 1.2); // end of 3rd row
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(_this.form.from, " ~ ").concat(_this.form.to), 0.5, 1.2); // end of 3rd row
         // 4th row
 
         doc.setLineWidth(0.01);
         doc.line(0.5, 1.35, 8.0, 1.35); //end of 4th row
         // 5th row
 
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(_this2.form.description), 0.5, 1.6); // end of 5th row
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(_this.form.description), 0.5, 1.6); // end of 5th row
         // 6th row
 
         doc.autoTable({
@@ -592,7 +592,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             4: {
               halign: "right"
             }
-          } // didParseCell: function(data) {
+          } // didParseCell: (data) => {
           //     var rows = data.table.body;
           //     if (data.row.index === rows.length - 1) {
           //         data.cell.styles.fillColor = [76, 175, 10];
@@ -601,7 +601,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         });
         doc.autoTable({
-          body: [["No. of Expenses", data.items.length], ["Total Expenses Amount", _this2.mixin_formatNumber(_this2.form.total)], ["Paid Amount", _this2.mixin_formatNumber(_this2.form.paid)], ["Amount to be reimbursed", _this2.mixin_formatNumber(_this2.form.balance)]],
+          body: [["No. of Expenses", data.items.length], ["Total Expenses Amount", _this.mixin_formatNumber(_this.form.total)], ["Paid Amount", _this.mixin_formatNumber(_this.form.paid)], ["Amount to be reimbursed", _this.mixin_formatNumber(_this.form.balance)]],
           margin: {
             left: 0.5
           },
@@ -750,7 +750,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     generateExpenseReport: function generateExpenseReport(action) {
-      var _this3 = this;
+      var _this2 = this;
 
       this.loadExpenses().then(function (data) {
         var table_columns = [];
@@ -791,7 +791,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             style: "tableOfExpensesBody"
           });
           temp.push({
-            text: _this3.mixin_formatNumber(element.amount),
+            text: _this2.mixin_formatNumber(element.amount),
             style: {
               fontSize: 9,
               alignment: "right"
@@ -844,22 +844,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           },
           content: [{
             columns: [{
-              text: _this3.form.user.full_name,
+              text: _this2.form.user.full_name,
               style: "pageStyle"
             }, {
-              text: _this3.form.code,
+              text: _this2.form.code,
               alignment: "right",
               style: "pageStyle"
             }]
           }, {
             columns: [{
-              text: "PHP ".concat(_this3.mixin_formatNumber(_this3.form.total)),
+              text: "PHP ".concat(_this2.mixin_formatNumber(_this2.form.total)),
               style: {
                 fontSize: 18,
                 color: "#4caf50"
               }
             }, {
-              text: _this3.form.status.status,
+              text: _this2.form.status.status,
               alignment: "right",
               style: {
                 fontSize: 11,
@@ -867,7 +867,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               }
             }]
           }, {
-            text: "Period: ".concat(_this3.form.from, " ~ ").concat(_this3.form.to),
+            text: "Period: ".concat(_this2.form.from, " ~ ").concat(_this2.form.to),
             style: "pageStyle"
           }, {
             canvas: [{
@@ -880,7 +880,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }],
             margin: [0, 0.1 * 72, 0, 0.1 * 72]
           }, {
-            text: _this3.form.description,
+            text: _this2.form.description,
             style: "pageStyle"
           }, {
             canvas: [{
@@ -931,7 +931,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               text: "Total Expenses Amount",
               style: "pageStyle"
             }, {
-              text: _this3.mixin_formatNumber(_this3.form.total),
+              text: _this2.mixin_formatNumber(_this2.form.total),
               alignment: "right",
               style: "pageStyle"
             }],
@@ -941,7 +941,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               text: "Paid Amount",
               style: "pageStyle"
             }, {
-              text: _this3.mixin_formatNumber(_this3.form.paid),
+              text: _this2.mixin_formatNumber(_this2.form.paid),
               alignment: "right",
               style: "pageStyle"
             }],
@@ -951,7 +951,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               text: "Amount to be reimbursed",
               style: "pageStyle"
             }, {
-              text: _this3.mixin_formatNumber(_this3.form.balance),
+              text: _this2.mixin_formatNumber(_this2.form.balance),
               alignment: "right",
               style: "pageStyle"
             }],
@@ -1004,87 +1004,83 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     loadExpenses: function loadExpenses() {
-      var _this4 = this;
+      var _this3 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/expenses?expense_report_id=".concat(_this4.router_params_id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
+        axios.get("/api/data/expenses?expense_report_id=".concat(_this3.router_params_id, "&only=true&sortBy=date&sortType=asc")).then(function (response) {
           var items = response.data.data;
           resolve({
             items: items
           });
         })["catch"](function (error) {
-          _this4.mixin_showErrors(error);
+          _this3.mixin_showErrors(error);
 
           reject();
         });
       });
     },
     getData: function getData() {
-      var _this5 = this;
+      var _this4 = this;
 
-      var _this = this;
-
-      axios.get("/api/expense_reports/".concat(_this.router_params_id)).then(function (response) {
+      axios.get("/api/expense_reports/".concat(this.router_params_id)).then(function (response) {
         var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.reference_no = data.reference_no;
-        _this.form.description = data.description;
-        _this.form.remarks = data.remarks;
-        _this.form.notes = data.notes;
-        _this.form.submission_period = data.submission_period;
-        _this.form.approval_period = data.approval_period;
-        _this.form.from = data.from;
-        _this.form.to = data.to;
-        _this.form.status = data.status;
-        _this.form.is_late_submitted = data.is_late_submitted;
-        _this.form.is_late_approved = data.is_late_approved;
-        _this.form.total = data.total;
-        _this.form.total_reimbursable = data.total_reimbursable;
-        _this.form.paid = data.paid;
-        _this.form.payments = data.payments;
-        _this.form.payment_id = data.payment_id;
-        _this.form.balance = data.balance;
-        _this.form.user = data.user;
-        _this.form.payment = data.payment; // _this.form.expenses = data.expenses;
-        // _this.form.created = data.created;
-        // _this.form.updated = data.updated;
-        // _this.form.deleted = data.deleted;
-        // _this.form.submitted = data.submitted;
-        // _this.form.approved = data.approved;
-        // _this.form.rejected = data.rejected;
-        // _this.form.cancelled = data.cancelled;
+        _this4.form.code = data.code;
+        _this4.form.reference_no = data.reference_no;
+        _this4.form.description = data.description;
+        _this4.form.remarks = data.remarks;
+        _this4.form.notes = data.notes;
+        _this4.form.submission_period = data.submission_period;
+        _this4.form.approval_period = data.approval_period;
+        _this4.form.from = data.from;
+        _this4.form.to = data.to;
+        _this4.form.status = data.status;
+        _this4.form.is_late_submitted = data.is_late_submitted;
+        _this4.form.is_late_approved = data.is_late_approved;
+        _this4.form.total = data.total;
+        _this4.form.total_reimbursable = data.total_reimbursable;
+        _this4.form.paid = data.paid;
+        _this4.form.payments = data.payments;
+        _this4.form.payment_id = data.payment_id;
+        _this4.form.balance = data.balance;
+        _this4.form.user = data.user;
+        _this4.form.payment = data.payment; // this.form.expenses = data.expenses;
+        // this.form.created = data.created;
+        // this.form.updated = data.updated;
+        // this.form.deleted = data.deleted;
+        // this.form.submitted = data.submitted;
+        // this.form.approved = data.approved;
+        // this.form.rejected = data.rejected;
+        // this.form.cancelled = data.cancelled;
 
-        _this.form.created_at = data.created_at;
-        _this.form.updated_at = data.updated_at;
-        _this.form.deleted_at = data.deleted_at;
-        _this.form.submitted_at = data.submitted_at;
-        _this.form.approved_at = data.approved_at;
-        _this.form.rejected_at = data.rejected_at;
-        _this.form.cancelled_at = data.cancelled_at;
-        _this.form.logs = data.logs; // _this.loadExpenses();
+        _this4.form.created_at = data.created_at;
+        _this4.form.updated_at = data.updated_at;
+        _this4.form.deleted_at = data.deleted_at;
+        _this4.form.submitted_at = data.submitted_at;
+        _this4.form.approved_at = data.approved_at;
+        _this4.form.rejected_at = data.rejected_at;
+        _this4.form.cancelled_at = data.cancelled_at;
+        _this4.form.logs = data.logs; // this.loadExpenses();
 
-        _this.getDataFromApi().then(function (data) {
-          _this.form.expenses = data.items;
-          _this.totalItems = data.total;
+        _this4.getDataFromApi().then(function (data) {
+          _this4.form.expenses = data.items;
+          _this4.totalItems = data.total;
         });
       })["catch"](function (error) {
-        _this5.mixin_showErrors(error);
+        _this4.mixin_showErrors(error);
       })["finally"](this.loader = false);
     },
     getDataFromApi: function getDataFromApi() {
-      var _this6 = this;
+      var _this5 = this;
 
-      var _this = this;
-
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this6$options = _this6.options,
-            sortBy = _this6$options.sortBy,
-            sortDesc = _this6$options.sortDesc,
-            page = _this6$options.page,
-            itemsPerPage = _this6$options.itemsPerPage;
-        var range = [_this.form.from, _this.form.to];
-        var expense_report_id = _this.router_params_id;
+        var _this5$options = _this5.options,
+            sortBy = _this5$options.sortBy,
+            sortDesc = _this5$options.sortDesc,
+            page = _this5$options.page,
+            itemsPerPage = _this5$options.itemsPerPage;
+        var range = [_this5.form.from, _this5.form.to];
+        var expense_report_id = _this5.router_params_id;
         axios.get("/api/expenses", {
           params: {
             page: page,
@@ -1103,19 +1099,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          _this6.mixin_showErrors(error);
-        })["finally"](_this6.loading = false);
+          _this5.mixin_showErrors(error);
+
+          reject();
+        })["finally"](_this5.loading = false);
       });
     }
   },
   watch: {
     params: {
       handler: function handler() {
-        var _this7 = this;
+        var _this6 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this7.form.expenses = data.items;
-          _this7.totalItems = data.total;
+          _this6.form.expenses = data.items;
+          _this6.totalItems = data.total;
         });
       },
       deep: true

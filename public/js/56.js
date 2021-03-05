@@ -506,6 +506,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         })["catch"](function (error) {
           _this4.mixin_showErrors(error);
+
+          reject();
         })["finally"](_this4.loading = false);
       });
     },

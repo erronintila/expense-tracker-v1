@@ -422,9 +422,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this3.total = data.total;
           resolve();
         })["catch"](function (error) {
-          reject();
-
           _this3.mixin_showErrors(error);
+
+          reject();
         })["finally"](_this3.loader = false);
       });
     },
@@ -458,9 +458,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          reject();
-
           _this4.mixin_showErrors(error);
+
+          reject();
         })["finally"](_this4.loading = false);
       });
     },
