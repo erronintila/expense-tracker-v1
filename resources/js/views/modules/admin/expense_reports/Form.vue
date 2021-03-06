@@ -10,7 +10,7 @@
                 {{ expenseReportForm.status.status }}
             </v-chip>
         </div>
-        <DateRangePicker2></DateRangePicker2>
+        <!-- <DateRangePicker2></DateRangePicker2> -->
         <DateRangePicker
             :preset="preset"
             :presets="presets"
@@ -258,7 +258,7 @@ export default {
     },
     components: {
         DateRangePicker,
-        DateRangePicker2
+        // DateRangePicker2
     },
     data() {
         return {

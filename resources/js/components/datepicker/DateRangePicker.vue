@@ -1,30 +1,19 @@
 <template>
     <div>
-        <!-- <v-date-picker v-model="dates" range></v-date-picker> -->
         <v-dialog
             ref="dialog"
             v-model="modal"
-            :return-value.sync="dates"
+            :return-value.sync="range"
             persistent
             width="290px"
         >
             <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                    v-model="dateRangeText"
-                    label="Date"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                ></v-text-field>
+                <slot
+                    name="openDialog"
+                    v-bind="{ on, attrs, computedDateRangeText }"
+                ></slot>
             </template>
             <v-card>
-                <!-- <v-select
-                    :items="['asdasd', 'asdasdas']"
-                    label="Presets"
-                    flat
-                    max-width="10"
-                ></v-select> -->
                 <v-container>
                     <v-row>
                         <v-col>
@@ -39,26 +28,33 @@
                                             text
                                         >
                                             <v-icon>mdi-calendar</v-icon>&nbsp;
-                                            {{ dateRangeText }}
+                                            {{ computedDateRangeText }}
                                         </v-btn>
                                     </template>
                                     <v-list
                                         style="max-height: 200px"
                                         class="overflow-y-auto"
                                     >
-                                        <v-list-item-group v-model="selectedPreset" mandatory>
-                                            <v-list-item v-for="(item, index) in presets" :key="index">
+                                        <v-list-item-group
+                                            v-model="preset"
+                                            mandatory
+                                        >
+                                            <v-list-item
+                                                v-for="(item,
+                                                index) in computedPresets"
+                                                :key="index"
+                                                :value="item"
+                                            >
                                                 <v-list-item-title>
-                                                    {{item}}
+                                                    {{ item }}
                                                 </v-list-item-title>
                                             </v-list-item>
                                         </v-list-item-group>
                                     </v-list>
-                                    <v-btn @click="selectPreset">hi</v-btn>
                                 </v-menu>
                             </div>
                             <div
-                                v-if="this.dates.length != 2"
+                                v-if="this.computedDateRange.length != 2"
                                 class="overline red--text text-capitalize"
                             >
                                 *select 1 more
@@ -69,15 +65,15 @@
                 </v-container>
 
                 <v-date-picker
-                    v-model="dates"
+                    v-model="range"
                     color="green"
                     no-title
                     range
                     scrollable
-                    :readonly="isPickerReadOnly"
                 >
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="modal = false">
+                    <v-btn text color="green" @click="onReset">Reset</v-btn>
+                    <v-btn text color="primary" @click="onCancel">
                         Cancel
                     </v-btn>
                     <v-btn text color="primary" @click="onSave">
@@ -88,14 +84,28 @@
         </v-dialog>
     </div>
 </template>
+
 <script>
+import moment from "moment";
+
 export default {
     props: {
-        preset: {
-            type: String,
-            default: "This Month"
+        dateRange: {
+            type: Array,
+            default: () => [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ]
         },
-        presets: {
+        datePreset: {
+            type: String,
+            default: "Custom"
+        },
+        datePresets: {
             type: Array,
             default: () => {
                 return [
@@ -103,6 +113,7 @@ export default {
                     "Today",
                     "This Week",
                     "This Month",
+                    "This Quarter",
                     "This Year"
                 ];
             }
@@ -110,55 +121,246 @@ export default {
     },
     data() {
         return {
-            dates: ["2021-03-01", "2021-03-01"],
-            // date: new Date().toISOString().substr(0, 10),
+            range: null,
+            preset: null,
+            presets: null,
             menu: false,
-            modal: false,
-            menu2: false
+            menu2: false,
+            modal: false
         };
     },
     methods: {
-        selectPreset() {
-            console.log(this.selectedPreset);
+        onChangePreset() {
+            let value = [];
+            switch (this.preset) {
+                case "Custom":
+                    value = this.range;
+                    break;
+                case "Today":
+                    value = [
+                        moment().format("YYYY-MM-DD"),
+                        moment().format("YYYY-MM-DD")
+                    ];
+                    break;
+                case "Yesterday":
+                    value = [
+                        moment()
+                            .subtract(1, "days")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "days")
+                            .format("YYYY-MM-DD")
+                    ];
+                    break;
+                case "Last 7 Days":
+                    value = [
+                        moment()
+                            .subtract(7, "days")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "days")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "Last 30 Days":
+                    value = [
+                        moment()
+                            .subtract(30, "days")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "days")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "This Week":
+                    value = [
+                        moment()
+                            .startOf("week")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .endOf("week")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "Last Week":
+                    value = [
+                        moment()
+                            .subtract(1, "weeks")
+                            .startOf("week")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "weeks")
+                            .endOf("week")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "This Month":
+                    value = [
+                        moment()
+                            .startOf("month")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .endOf("month")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "Last Month":
+                    value = [
+                        moment()
+                            .subtract(1, "months")
+                            .startOf("month")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "months")
+                            .endOf("month")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "This Quarter":
+                    value = [
+                        moment()
+                            .startOf("quarter")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .endOf("quarter")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "Last Quarter":
+                    value = [
+                        moment()
+                            .subtract(1, "quarters")
+                            .startOf("quarter")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "quarters")
+                            .endOf("quarter")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "This Year":
+                    value = [
+                        moment()
+                            .startOf("year")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .endOf("year")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "Last Year":
+                    value = [
+                        moment()
+                            .subtract(1, "years")
+                            .startOf("year")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "years")
+                            .endOf("year")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                case "Last 5 Years":
+                    value = [
+                        moment()
+                            .subtract(5, "years")
+                            .startOf("year")
+                            .format("YYYY-MM-DD"),
+                        moment()
+                            .subtract(1, "years")
+                            .endOf("year")
+                            .format("YYYY-MM-DD")
+                    ];
+
+                    break;
+                default:
+                    break;
+            }
+
+            this.range = value;
+            // this.$emit("onChange", value);
+        },
+        onReset() {
+            this.preset = "Custom";
+            this.range = this.dateRange;
+            this.$emit("onChange", this.range);
+        },
+        onCancel() {
+            this.modal = false;
+            this.preset = "Custom";
         },
         onSave() {
-            if (this.dates && this.dates.length == 2) {
-                let sortedDates = this.dates.sort((a, b) => {
+            if (this.computedDateRange && this.computedDateRange.length == 2) {
+                let sortedDates = this.computedDateRange.sort((a, b) => {
                     return new Date(a) - new Date(b);
                 });
-
                 this.$refs.dialog.save(sortedDates);
+                this.$emit("onChange", sortedDates);
                 return;
             }
             this.modal = true;
         }
     },
     computed: {
-        dateRangeText() {
-            let sortedDates = this.dates.sort((a, b) => {
+        computedDateRangeText() {
+            let sortedDates = this.computedDateRange.sort((a, b) => {
                 return new Date(a) - new Date(b);
             });
             return sortedDates.join(" ~ ");
         },
-        selectedPreset: {
+        computedDateRange: {
             get() {
-                return this.preset
+                return this.range || this.dateRange;
             },
             set(value) {
-                return value;
+                this.range = value;
             }
         },
-        isPickerReadOnly() {
-            if(this.selectedPreset == "Custom") {
-                return false;
+        // computedPreset: {
+        //     get() {
+        //         return this.preset || this.datePreset;
+        //     },
+        //     set(value) {
+        //         this.preset = value;
+        //     }
+        // },
+        computedPresets: {
+            get() {
+                return this.presets || this.datePresets;
+            },
+            set(value) {
+                this.presets = value;
             }
-            return true;
-        }
+        },
     },
     watch: {
-        selectedPreset() {
-            console.log(this.selectedPreset);
-        }
+        preset() {
+            this.onChangePreset();
+        },
+        dateRange(newVal, oldVal) {
+            this.range = newVal;
+        },
+        datePreset(newVal, oldVal) {
+            this.preset = newVal;
+        },
+        datePresets(newVal, oldVal) {
+            this.presets = newVal;
+        },
+    },
+    mounted() {
+        this.range = this.range || this.dateRange;
+        this.preset = this.preset || this.datePreset;
+        this.presets = this.presets || this.datePresets;
     }
 };
 </script>
