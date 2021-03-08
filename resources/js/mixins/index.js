@@ -88,11 +88,11 @@ export default {
         mixin_showErrors: function(error) {
             let error_status = error.response ? error.response.status : "";
             let errorTitle = "Error " + error_status;
-            let errorMesssage = error.response.data
+            let errorMesssage = error.response ? (error.response.data
                 ? error.response.data.message == ""
                     ? error.response.statusText
                     : error.response.data.message
-                : error.response.statusText;
+                : error.response.statusText) : "";
 
             console.log(error);
             console.log(error.response);

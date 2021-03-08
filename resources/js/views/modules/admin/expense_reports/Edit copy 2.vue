@@ -25,11 +25,12 @@
             </v-card-title>
             <v-container>
                 <Form
-                    :expenseReportForm="form"
-                    :expenseReportErrors="errors"
-                    :expenseReportRules="rules"
+                    :form="form"
+                    :errors="errors"
+                    :rules="rules"
                     :expense_report_id="expense_report_id"
-                    @on-save="onSave"
+                    :dateRange="date_range"
+                    @onSave="onSave"
                 >
                     <template v-slot:userSelector>
                         <v-row>
@@ -111,9 +112,7 @@ export default {
                 notes: "",
                 user: null,
                 expenses: [],
-                status: null,
-                from: "",
-                to: ""
+                status: null
             },
             errors: {
                 date_range: [],
@@ -125,9 +124,38 @@ export default {
                 expenses: []
             },
             rules: {},
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
         };
     },
     methods: {
+        // updateDates(e) {
+        //     this.date_range = e;
+        //     this.loadExpenses(
+        //         this.form.user == null ? null : this.form.user.id
+        //     ).then(() => {
+        //         this.getDataFromApi().then(data => {
+        //             this.items = data.items;
+        //             this.totalItems = data.total;
+        //         });
+        //     });
+        // },
+        // updateUser() {
+        //     this.loadExpenses(
+        //         this.form.user == null ? null : this.form.user.id
+        //     ).then(() => {
+        //         this.getDataFromApi().then(data => {
+        //             this.items = data.items;
+        //             this.totalItems = data.total;
+        //         });
+        //     });
+        // },
         selectUser(e) {
             if (e == null || e == undefined) {
                 this.form.user = null;
@@ -143,7 +171,21 @@ export default {
                 axios
                     .get(`/api/expense_reports/${this.$route.params.id}`)
                     .then(response => {
-                        resolve(response.data.data);
+                        let data = response.data.data;
+                        console.log(data);
+
+                        // this.form = data;
+                        this.form.id = data.id;
+                        this.form.code = data.code;
+                        this.form.description = data.description;
+                        this.form.remarks = data.remarks;
+                        this.form.notes = data.notes;
+                        this.form.user = data.user;
+                        this.form.status = data.status;
+                        this.form.from = data.from;
+                        this.form.to = data.to;
+                        // this.total = data.total;
+                        resolve(data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
@@ -152,8 +194,47 @@ export default {
                     .finally((this.loader = false));
             });
         },
+        // getDataFromApi() {
+        //     this.loading = true;
+
+        //     return new Promise((resolve, reject) => {
+        //         const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
+        //         let range = this.date_range;
+        //         let user_id = this.form.user == null ? null : this.form.user.id;
+
+        //         axios
+        //             .get("/api/expenses", {
+        //                 params: {
+        //                     page: page,
+        //                     itemsPerPage: itemsPerPage,
+        //                     start_date: range[0],
+        //                     end_date: range[1] ? range[1] : range[0],
+        //                     user_id: user_id,
+        //                     expense_report_id: this.$route.params.id,
+        //                     update_report: true
+        //                 }
+        //             })
+        //             .then(response => {
+        //                 let items = response.data.data;
+        //                 let total = response.data.meta.total;
+        //                 resolve({ items, total });
+        //             })
+        //             .catch(error => {
+        //                 this.mixin_showErrors(error);
+        //                 reject();
+        //             })
+        //             .finally((this.loading = false));
+        //     });
+        // },
         loadExpenses(reportData) {
-            let user_id = reportData.user ? reportData.user.id : null;
+            // let start_date = moment()
+            //     .startOf("month")
+            //     .format("YYYY-MM-DD");
+            // let end_date = moment()
+            //     .endOf("month")
+            //     .format("YYYY-MM-DD");
+            let user_id = this.form.user ? this.form.user.id : null;
 
             return new Promise((resolve, reject) => {
                 axios
@@ -161,10 +242,8 @@ export default {
                         params: {
                             update_report: true,
                             user_id: user_id,
-                            start_date: reportData.from,
-                            end_date: moment()
-                                .endOf()
-                                .format("YYYY-MM-DD"),
+                            // start_date: reportData.from,
+                            // end_date: moment().endOf().format("YYYY-MM-DD"),
                             expense_report_id: this.$route.params.id
                         }
                     })
@@ -178,7 +257,36 @@ export default {
                     });
             });
         },
+        // loadUsers() {
+        //     return new Promise((resolve, reject) => {
+        //         axios
+        //             .get("/api/data/users")
+        //             .then(response => {
+        //                 this.users = response.data.data;
+        //                 resolve();
+        //             })
+        //             .catch(error => {
+        //                 this.mixin_showErrors(error);
+        //                 reject();
+        //             });
+        //     });
+        // },
+        // onRefresh() {
+        //     Object.assign(this.$data, this.$options.data.apply(this));
+        // },
         onSave(value) {
+            // this.$refs.form.validate();
+
+            // if (this.selected.length == 0) {
+            //     this.$dialog.message.error("No Expenses selected", {
+            //         position: "top-right",
+            //         timeout: 2000
+            //     });
+
+            //     return;
+            // }
+
+            // if (this.$refs.form.validate()) {
             this.loader = true;
             value.user_id = value.user ? value.user.id : null;
             ExpenseReportDataService.update(this.$route.params.id, value)
@@ -196,17 +304,53 @@ export default {
                     this.errors = error.response.data.errors;
                 })
                 .finally((this.loader = false));
+
+            //     return;
+            // }
         }
     },
+    watch: {
+        // params: {
+        //     handler() {
+        //         this.getDataFromApi().then(data => {
+        //             this.items = data.items;
+        //             this.totalItems = data.total;
+        //         });
+        //     },
+        //     deep: true
+        // },
+        // selected() {
+        //     this.total = this.selected.reduce(
+        //         (total, item) => total + item.amount,
+        //         0
+        //     );
+        // }
+    },
+    computed: {
+        // params(nv) {
+        //     return {
+        //         ...this.options,
+        //         query: this.date_range,
+        //         query: this.expense_report_id,
+        //         query: this.form.user == null ? null : this.form.user.id
+        //     };
+        // },
+        // default_description() {
+        //     return `Expense Report Summary (${moment(this.date_range[0]).format(
+        //         "LL"
+        //     )} - ${moment(this.date_range[1]).format("LL")})`;
+        // },
+        // balance() {
+        //     return this.total - this.paid;
+        // }
+    },
     created() {
-        this.getData().then(data => {
-            this.form = data;
+        this.getData().then((data) => {
             this.loadExpenses(data);
         });
     },
     activated() {
-        this.getData().then(data => {
-            this.form = data;
+        this.getData().then((data) => {
             this.loadExpenses(data);
         });
     }

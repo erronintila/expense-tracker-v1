@@ -24,7 +24,12 @@
                 <h4 class="title green--text">New Expense Report</h4>
             </v-card-title>
             <v-container>
-                <Form :form="form" :errors="errors" :rules="rules" @onSave="onSave">
+                <Form
+                    :expenseReportForm="form"
+                    :expenseReportErrors="errors"
+                    :expenseReportRules="rules"
+                    @on-save="onSave"
+                >
                     <template v-slot:userSelector>
                         <v-row>
                             <v-col>
@@ -79,6 +84,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Form from "./Form";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
@@ -103,7 +109,13 @@ export default {
                 notes: "",
                 user: null,
                 expenses: [],
-                status: null
+                status: null,
+                from: moment()
+                    .startOf("week")
+                    .format("YYYY-MM-DD"),
+                to: moment()
+                    .endOf("week")
+                    .format("YYYY-MM-DD")
             },
             errors: {
                 date_range: [],
@@ -114,7 +126,7 @@ export default {
                 user_id: [],
                 expenses: []
             },
-            rules: {}
+            rules: {},
         };
     },
     methods: {

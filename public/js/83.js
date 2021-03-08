@@ -100,7 +100,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -126,7 +125,9 @@ __webpack_require__.r(__webpack_exports__);
         notes: "",
         user: null,
         expenses: [],
-        status: null
+        status: null,
+        from: "",
+        to: ""
       },
       errors: {
         date_range: [],
@@ -142,27 +143,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // updateDates(e) {
-    //     this.date_range = e;
-    //     this.loadExpenses(
-    //         this.form.user == null ? null : this.form.user.id
-    //     ).then(() => {
-    //         this.getDataFromApi().then(data => {
-    //             this.items = data.items;
-    //             this.totalItems = data.total;
-    //         });
-    //     });
-    // },
-    // updateUser() {
-    //     this.loadExpenses(
-    //         this.form.user == null ? null : this.form.user.id
-    //     ).then(() => {
-    //         this.getDataFromApi().then(data => {
-    //             this.items = data.items;
-    //             this.totalItems = data.total;
-    //         });
-    //     });
-    // },
     selectUser: function selectUser(e) {
       if (e == null || e == undefined) {
         this.form.user = null;
@@ -179,17 +159,7 @@ __webpack_require__.r(__webpack_exports__);
 
       return new Promise(function (resolve, reject) {
         axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
-          var data = response.data.data;
-          console.log(data); // this.form = data;
-
-          _this.form.code = data.code;
-          _this.form.description = data.description;
-          _this.form.remarks = data.remarks;
-          _this.form.notes = data.notes;
-          _this.form.user = data.user;
-          _this.form.status = data.status; // this.total = data.total;
-
-          resolve(data);
+          resolve(response.data.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
@@ -197,53 +167,17 @@ __webpack_require__.r(__webpack_exports__);
         })["finally"](_this.loader = false);
       });
     },
-    // getDataFromApi() {
-    //     this.loading = true;
-    //     return new Promise((resolve, reject) => {
-    //         const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-    //         let range = this.date_range;
-    //         let user_id = this.form.user == null ? null : this.form.user.id;
-    //         axios
-    //             .get("/api/expenses", {
-    //                 params: {
-    //                     page: page,
-    //                     itemsPerPage: itemsPerPage,
-    //                     start_date: range[0],
-    //                     end_date: range[1] ? range[1] : range[0],
-    //                     user_id: user_id,
-    //                     expense_report_id: this.$route.params.id,
-    //                     update_report: true
-    //                 }
-    //             })
-    //             .then(response => {
-    //                 let items = response.data.data;
-    //                 let total = response.data.meta.total;
-    //                 resolve({ items, total });
-    //             })
-    //             .catch(error => {
-    //                 this.mixin_showErrors(error);
-    //                 reject();
-    //             })
-    //             .finally((this.loading = false));
-    //     });
-    // },
     loadExpenses: function loadExpenses(reportData) {
       var _this2 = this;
 
-      // let start_date = moment()
-      //     .startOf("month")
-      //     .format("YYYY-MM-DD");
-      // let end_date = moment()
-      //     .endOf("month")
-      //     .format("YYYY-MM-DD");
-      var user_id = this.form.user ? this.form.user.id : null;
+      var user_id = reportData.user ? reportData.user.id : null;
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/expenses", {
           params: {
             update_report: true,
             user_id: user_id,
-            // start_date: reportData.from,
-            // end_date: moment().endOf().format("YYYY-MM-DD"),
+            start_date: reportData.from,
+            end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf().format("YYYY-MM-DD"),
             expense_report_id: _this2.$route.params.id
           }
         }).then(function (response) {
@@ -256,35 +190,9 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    // loadUsers() {
-    //     return new Promise((resolve, reject) => {
-    //         axios
-    //             .get("/api/data/users")
-    //             .then(response => {
-    //                 this.users = response.data.data;
-    //                 resolve();
-    //             })
-    //             .catch(error => {
-    //                 this.mixin_showErrors(error);
-    //                 reject();
-    //             });
-    //     });
-    // },
-    // onRefresh() {
-    //     Object.assign(this.$data, this.$options.data.apply(this));
-    // },
     onSave: function onSave(value) {
       var _this3 = this;
 
-      // this.$refs.form.validate();
-      // if (this.selected.length == 0) {
-      //     this.$dialog.message.error("No Expenses selected", {
-      //         position: "top-right",
-      //         timeout: 2000
-      //     });
-      //     return;
-      // }
-      // if (this.$refs.form.validate()) {
       this.loader = true;
       value.user_id = value.user ? value.user.id : null;
       _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_1__["default"].update(this.$route.params.id, value).then(function (response) {
@@ -297,47 +205,16 @@ __webpack_require__.r(__webpack_exports__);
         _this3.mixin_showErrors(error);
 
         _this3.errors = error.response.data.errors;
-      })["finally"](this.loader = false); //     return;
-      // }
+      })["finally"](this.loader = false);
     }
-  },
-  watch: {// params: {
-    //     handler() {
-    //         this.getDataFromApi().then(data => {
-    //             this.items = data.items;
-    //             this.totalItems = data.total;
-    //         });
-    //     },
-    //     deep: true
-    // },
-    // selected() {
-    //     this.total = this.selected.reduce(
-    //         (total, item) => total + item.amount,
-    //         0
-    //     );
-    // }
-  },
-  computed: {// params(nv) {
-    //     return {
-    //         ...this.options,
-    //         query: this.date_range,
-    //         query: this.expense_report_id,
-    //         query: this.form.user == null ? null : this.form.user.id
-    //     };
-    // },
-    // default_description() {
-    //     return `Expense Report Summary (${moment(this.date_range[0]).format(
-    //         "LL"
-    //     )} - ${moment(this.date_range[1]).format("LL")})`;
-    // },
-    // balance() {
-    //     return this.total - this.paid;
-    // }
   },
   created: function created() {
     var _this4 = this;
 
     this.getData().then(function (data) {
+      _this4.form = data;
+      _this4.date_range = [data.from, moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
+
       _this4.loadExpenses(data);
     });
   },
@@ -345,6 +222,9 @@ __webpack_require__.r(__webpack_exports__);
     var _this5 = this;
 
     this.getData().then(function (data) {
+      _this5.form = data;
+      _this5.date_range = [data.from, moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
+
       _this5.loadExpenses(data);
     });
   }
@@ -453,13 +333,12 @@ var render = function() {
                 [
                   _c("Form", {
                     attrs: {
-                      form: _vm.form,
-                      errors: _vm.errors,
-                      rules: _vm.rules,
-                      expense_report_id: _vm.expense_report_id,
-                      dateRange: _vm.date_range
+                      expenseReportForm: _vm.form,
+                      expenseReportErrors: _vm.errors,
+                      expenseReportRules: _vm.rules,
+                      expense_report_id: _vm.expense_report_id
                     },
-                    on: { onSave: _vm.onSave },
+                    on: { "on-save": _vm.onSave },
                     scopedSlots: _vm._u([
                       {
                         key: "userSelector",

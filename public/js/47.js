@@ -9,9 +9,11 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form */ "./resources/js/views/modules/admin/expense_reports/Form.vue");
-/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
-/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/views/modules/admin/expense_reports/Form.vue");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
 //
 //
 //
@@ -92,13 +94,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Form: _Form__WEBPACK_IMPORTED_MODULE_0__["default"],
-    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Form: _Form__WEBPACK_IMPORTED_MODULE_1__["default"],
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -115,7 +123,9 @@ __webpack_require__.r(__webpack_exports__);
         notes: "",
         user: null,
         expenses: [],
-        status: null
+        status: null,
+        from: moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"),
+        to: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")
       },
       errors: {
         date_range: [],
@@ -146,7 +156,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loader = true;
       value.user_id = value.user == null ? null : value.user.id;
-      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].store(value).then(function (response) {
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__["default"].store(value).then(function (response) {
         _this.mixin_successDialog(response.data.status, response.data.message);
 
         _this.$router.push({
@@ -269,11 +279,11 @@ var render = function() {
                 [
                   _c("Form", {
                     attrs: {
-                      form: _vm.form,
-                      errors: _vm.errors,
-                      rules: _vm.rules
+                      expenseReportForm: _vm.form,
+                      expenseReportErrors: _vm.errors,
+                      expenseReportRules: _vm.rules
                     },
-                    on: { onSave: _vm.onSave },
+                    on: { "on-save": _vm.onSave },
                     scopedSlots: _vm._u([
                       {
                         key: "userSelector",

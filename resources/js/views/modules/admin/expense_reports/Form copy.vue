@@ -2,13 +2,17 @@
     <v-form ref="form" v-model="valid">
         <div class="overline green--text">
             BASIC DETAILS
-            <v-chip v-if="form.status" x-small color="form.status.color">
-                {{ form.status.status }}
+            <v-chip
+                v-if="expenseReportForm.status"
+                x-small
+                color="expenseReportForm.status.color"
+            >
+                {{ expenseReportForm.status.status }}
             </v-chip>
         </div>
-        <DateRangePicker
+        <DateRangePicker2
             ref="dateRangePicker"
-            :dateRange="dateRange"
+            :dateRange="date_range"
             @on-change="updateDates"
         >
             <template v-slot:openDialog="{ on, attrs, dateRangeText }">
@@ -21,28 +25,38 @@
                 >
                 </v-text-field>
             </template>
-        </DateRangePicker>
+        </DateRangePicker2>
+        <!-- <DateRangePicker
+            :preset="preset"
+            :presets="presets"
+            :value="date_range"
+            :solo="false"
+            :buttonType="false"
+            :buttonColor="'white'"
+            :buttonDark="false"
+            @updateDates="updateDates"
+        >
+        </DateRangePicker> -->
         <slot name="userSelector"></slot>
         <v-combobox
-            v-model="form.description"
+            v-model="expenseReportForm.description"
             :rules="[
                 ...mixin_validation.required,
                 ...mixin_validation.minLength(100)
             ]"
             :counter="100"
             :items="[default_description]"
-            :error-messages="expenseReportErrors.description"
-            @input="expenseReportErrors.description = []"
+            :error-messages="errors.description"
+            @input="errors.description = []"
             label="Description"
-        >
-        </v-combobox>
+        ></v-combobox>
 
         <div class="overline green--text">
             Expenses
         </div>
 
         <v-data-table
-            v-model="form.expenses"
+            v-model="expenseReportForm.expenses"
             :headers="headers"
             :items="items"
             :loading="loading"
@@ -63,11 +77,11 @@
             class="elevation-0"
         >
             <template v-slot:top>
-                <div v-if="selectedExpenses.length">
+                <div v-if="expenseReportForm.expenses.length > 0">
                     <div class="d-inline">
-                        {{ selectedExpenses.length }} Item(s) Selected
+                        {{ expenseReportForm.expenses.length }} Item(s) Selected
                     </div>
-                    <v-btn @click="form.expenses = []">
+                    <v-btn @click="expenseReportForm.expenses = []">
                         Clear All Selected
                     </v-btn>
                 </div>
@@ -144,13 +158,17 @@
             </template>
         </v-data-table>
 
-        <div class="red--text" v-if="expenseReportErrors.expenses.length > 0">
-            <small>{{ expenseReportErrors.expenses[0] }}</small>
+        <div class="red--text" v-if="errors.expenses.length > 0">
+            <small>{{ errors.expenses[0] }}</small>
         </div>
 
         <v-row>
             <v-col cols="12" md="6">
-                <v-textarea v-model="form.remarks" label="Remarks" :rows="3">
+                <v-textarea
+                    v-model="expenseReportForm.remarks"
+                    label="Remarks"
+                    :rows="3"
+                >
                 </v-textarea>
             </v-col>
 
@@ -209,46 +227,32 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+// import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 import ExpenseDataService from "../../../../services/ExpenseDataService";
-import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import DateRangePicker2 from "../../../../components/datepicker/DateRangePicker";
 
 export default {
     props: {
-        expenseReportForm: {
+        form: {
             type: Object,
             default: () => {
                 return {
-                    id: null,
                     code: "",
-                    reference_no: "",
                     description: "",
                     remarks: "",
                     notes: "",
-                    submission_period: null,
-                    approval_period: null,
-                    from: null,
-                    to: null,
-                    status: {},
-                    is_late_submitted: false,
-                    is_late_approved: false,
-                    total: 0,
-                    total_reimbursable: 0,
-                    paid: 0,
-                    balance: 0,
-                    total_received_payment: 0,
-                    expenses: [],
-                    payments: [],
-                    user: {}
+                    user: null,
+                    expenses: []
                 };
             }
         },
-        expenseReportRules: {
+        rules: {
             type: Object,
             default: () => {
                 return {};
             }
         },
-        expenseReportErrors: {
+        errors: {
             type: Object,
             default: () => {
                 return {
@@ -265,44 +269,40 @@ export default {
         expense_report_id: {
             type: Number,
             default: null
-        },
-        expenseReportDateRange: {
-            type: Array,
-            default: () => []
         }
     },
     components: {
-        DateRangePicker
+        // DateRangePicker
+        DateRangePicker2
     },
     data() {
         return {
             loading: true,
             valid: false,
-            preset: {},
-            presets: [],
-            form: {
-                id: null,
-                code: "",
-                reference_no: "",
-                description: "",
-                remarks: "",
-                notes: "",
-                submission_period: null,
-                approval_period: null,
-                from: null,
-                to: null,
-                status: {},
-                is_late_submitted: false,
-                is_late_approved: false,
-                total: 0,
-                total_reimbursable: 0,
-                paid: 0,
-                balance: 0,
-                total_received_payment: 0,
-                expenses: [],
-                payments: [],
-                user: {}
-            },
+            date_range: [
+                moment()
+                    .startOf("month")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("month")
+                    .format("YYYY-MM-DD")
+            ],
+            preset: "",
+            presets: [
+                "Today",
+                "Yesterday",
+                "Last 7 Days",
+                "Last 30 Days",
+                "This Week",
+                "This Month",
+                "This Quarter",
+                "This Year",
+                "Last Week",
+                "Last Month",
+                "Last Quarter",
+                "Last Year",
+                "Last 5 Years"
+            ],
             headers: [
                 { text: "Date", value: "date" },
                 { text: "Type", value: "expense_type.name" },
@@ -316,6 +316,7 @@ export default {
             total: 0,
             paid: 0,
             totalItems: 0,
+            // form: {},
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
@@ -326,7 +327,7 @@ export default {
     },
     methods: {
         updateDates(e) {
-            this.dateRange = e;
+            this.date_range = e;
         },
         getDataFromApi() {
             this.loading = true;
@@ -334,8 +335,10 @@ export default {
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let range = this.dateRange;
-                let user_id = this.form.user ? this.form.user.id : null;
+                let range = this.date_range;
+                let user_id = this.expenseReportForm.user
+                    ? this.expenseReportForm.user.id
+                    : null;
 
                 let data = {
                     params: {
@@ -344,7 +347,9 @@ export default {
                         start_date: range[0],
                         end_date: range[1] ? range[1] : range[0],
                         user_id: user_id,
-                        expense_report_id: this.form ? this.form.id : null,
+                        expense_report_id: this.expenseReportForm
+                            ? this.expenseReportForm.id
+                            : null,
                         update_report: true
                     }
                 };
@@ -365,71 +370,43 @@ export default {
         onSave() {
             this.$refs.form.validate();
 
-            if (this.form.user == null) {
+            if (this.expenseReportForm.user == null) {
                 this.mixin_errorDialog("Error", "No employee selected");
                 return;
             }
 
-            if (this.selectedExpenses.length == 0) {
+            if (this.expenseReportForm.expenses.length == 0) {
                 this.mixin_errorDialog("Error", "No expense(s) selected");
                 return;
             }
 
-            this.$emit("on-save", this.form);
+            this.$emit("onSave", this.expenseReportForm);
         }
     },
     computed: {
+        expenseReportForm: {
+            get() {
+                console.log(this.form);
+                return this.form;
+            },
+            set(value) {
+                return value;
+            }
+        },
         params(nv) {
             return {
                 ...this.options,
-                query: this.dateRange,
-                query: this.form.user
+                query: this.date_range,
+                query: this.expenseReportForm.user
             };
         },
         default_description() {
-            return `Expense Report Summary (${this.form.from} - ${this.form.to})`;
+            return `Expense Report Summary (${moment(this.date_range[0]).format(
+                "LL"
+            )} - ${moment(this.date_range[1]).format("LL")})`;
         },
         balance() {
             return this.total - this.paid;
-        },
-        selectedExpenses() {
-            if (this.form) {
-                if (this.form.expenses && this.form.expenses.length) {
-                    return this.form.expenses;
-                }
-            }
-
-            return [];
-        },
-        dateRange: {
-            get() {
-                if (this.form) {
-                    return [this.form.from, this.form.to];
-                }
-
-                return [
-                    moment()
-                        .startOf("week")
-                        .format("YYYY-MM-DD"),
-                    moment()
-                        .endOf("week")
-                        .format("YYYY-MM-DD")
-                ];
-            },
-            set(value) {
-                if (this.form) {
-                    this.form.from = value[0];
-                    this.form.to = value[1];
-                    return;
-                }
-
-                this.form.from = moment()
-                    .startOf("week")
-                    .format("YYYY-MM-DD");
-                this.form.to = moment()
-                    .endOf("week")
-                    .format("YYYY-MM-DD");
-            }
         }
     },
     watch: {
@@ -442,30 +419,21 @@ export default {
             },
             deep: true
         },
-        expenseReportForm: {
-            deep: true,
-            immediate: true,
-            handler(newValue, oldValue) {
-                this.form = newValue;
-                this.dateRange = [
-                    newValue.from,
-                    newValue.to
-                ];
-                if (newValue && newValue.expenses) {
-                    this.total = newValue.expenses.reduce(
-                        (total, item) => total + item.amount,
-                        0
-                    );
-                    if (newValue.expenses.length > 0) {
-                        this.expenseReportErrors.expenses = [];
-                    }
-                }
+        "expenseReportForm.expenses": function() {
+            this.total = this.expenseReportForm.expenses.reduce(
+                (total, item) => total + item.amount,
+                0
+            );
 
-                this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
-                });
+            if (this.expenseReportForm.expenses.length > 0) {
+                this.errors.expenses = [];
             }
+        },
+        "expenseReportForm.user": function() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
         }
     }
 };
