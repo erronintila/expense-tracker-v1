@@ -1,9 +1,9 @@
 <template>
     <div>
         <v-container>
-            <DateRangePicker ref="dateRangePicker" :dateRange="dates" @onChange="onChangeDate">
+            <DateRangePicker ref="dateRangePicker" :dateRange="dates" @on-change="onChangeDate">
                 <template
-                    v-slot:openDialog="{ on, attrs, computedDateRangeText }"
+                    v-slot:openDialog="{ on, attrs, dateRangeText }"
                 >
                     <v-text-field
                         label="Date"
@@ -11,7 +11,7 @@
                         v-on="on"
                         readonly
                         prepend-icon="mdi-calendar"
-                        :value="computedDateRangeText"
+                        :value="dateRangeText"
                     >
                     </v-text-field>
                 </template>

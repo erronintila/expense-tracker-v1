@@ -112,14 +112,14 @@ var render = function() {
           _c("DateRangePicker", {
             ref: "dateRangePicker",
             attrs: { dateRange: _vm.dates },
-            on: { onChange: _vm.onChangeDate },
+            on: { "on-change": _vm.onChangeDate },
             scopedSlots: _vm._u([
               {
                 key: "openDialog",
                 fn: function(ref) {
                   var on = ref.on
                   var attrs = ref.attrs
-                  var computedDateRangeText = ref.computedDateRangeText
+                  var dateRangeText = ref.dateRangeText
                   return [
                     _c(
                       "v-text-field",
@@ -130,7 +130,7 @@ var render = function() {
                               label: "Date",
                               readonly: "",
                               "prepend-icon": "mdi-calendar",
-                              value: computedDateRangeText
+                              value: dateRangeText
                             }
                           },
                           "v-text-field",

@@ -92,12 +92,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -114,159 +108,90 @@ __webpack_require__.r(__webpack_exports__);
     datePresets: {
       type: Array,
       "default": function _default() {
-        return ["Custom", "Today", "This Week", "This Month", "This Quarter", "This Year"];
+        return [{
+          label: "Today",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")]
+        }, {
+          label: "Yesterday",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")]
+        }, {
+          label: "This Week",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")]
+        }, {
+          label: "This Month",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")]
+        }, {
+          label: "This Quarter",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("quarter").format("YYYY-MM-DD")]
+        }, {
+          label: "This Year",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")]
+        }];
       }
     }
   },
   data: function data() {
     return {
-      range: null,
-      preset: null,
-      presets: null,
-      menu: false,
-      menu2: false,
-      modal: false
+      range: [],
+      preset: {},
+      presets: [],
+      dialog: false
     };
   },
   methods: {
-    onChangePreset: function onChangePreset() {
-      var value = [];
-
-      switch (this.preset) {
-        case "Custom":
-          value = this.range;
-          break;
-
-        case "Today":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-          break;
-
-        case "Yesterday":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          break;
-
-        case "Last 7 Days":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(7, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          break;
-
-        case "Last 30 Days":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(30, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          break;
-
-        case "This Week":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")];
-          break;
-
-        case "Last Week":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").endOf("week").format("YYYY-MM-DD")];
-          break;
-
-        case "This Month":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-          break;
-
-        case "Last Month":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").endOf("month").format("YYYY-MM-DD")];
-          break;
-
-        case "This Quarter":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("quarter").format("YYYY-MM-DD")];
-          break;
-
-        case "Last Quarter":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").endOf("quarter").format("YYYY-MM-DD")];
-          break;
-
-        case "This Year":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")];
-          break;
-
-        case "Last Year":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")];
-          break;
-
-        case "Last 5 Years":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(5, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")];
-          break;
-
-        default:
-          break;
-      }
-
-      this.range = value; // this.$emit("onChange", value);
-    },
-    onReset: function onReset() {
-      this.preset = "Custom";
-      this.range = this.dateRange;
-      this.$emit("onChange", this.range);
-    },
     onCancel: function onCancel() {
-      this.modal = false;
-      this.preset = "Custom";
+      this.dialog = false;
+      this.preset = {};
     },
     onSave: function onSave() {
-      if (this.computedDateRange && this.computedDateRange.length == 2) {
-        var sortedDates = this.computedDateRange.sort(function (a, b) {
+      if (this.range && this.range.length == 2) {
+        var sortedDates = this.range.sort(function (a, b) {
           return new Date(a) - new Date(b);
         });
         this.$refs.dialog.save(sortedDates);
-        this.$emit("onChange", sortedDates);
+        this.$emit("on-change", sortedDates);
         return;
       }
 
-      this.modal = true;
+      this.dialog = true;
     }
   },
   computed: {
-    computedDateRangeText: function computedDateRangeText() {
-      var sortedDates = this.computedDateRange.sort(function (a, b) {
-        return new Date(a) - new Date(b);
-      });
-      return sortedDates.join(" ~ ");
-    },
-    computedDateRange: {
-      get: function get() {
-        return this.range || this.dateRange;
-      },
-      set: function set(value) {
-        this.range = value;
+    dateRangeText: function dateRangeText() {
+      if (this.range && this.range.length) {
+        var sortedDates = this.range.sort(function (a, b) {
+          return new Date(a) - new Date(b);
+        });
+        return sortedDates.join(" ~ ");
       }
-    },
-    // computedPreset: {
-    //     get() {
-    //         return this.preset || this.datePreset;
-    //     },
-    //     set(value) {
-    //         this.preset = value;
-    //     }
-    // },
-    computedPresets: {
-      get: function get() {
-        return this.presets || this.datePresets;
-      },
-      set: function set(value) {
-        this.presets = value;
-      }
+
+      return "";
     }
   },
   watch: {
     preset: function preset() {
-      this.onChangePreset();
+      if (this.preset && Object.keys(this.preset).length) {
+        this.range = this.preset.range;
+      }
     },
-    dateRange: function dateRange(newVal, oldVal) {
-      this.range = newVal;
+    dateRange: {
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.range = newValue;
+      }
     },
-    datePreset: function datePreset(newVal, oldVal) {
-      this.preset = newVal;
+    datePreset: {
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.preset = newValue;
+      }
     },
-    datePresets: function datePresets(newVal, oldVal) {
-      this.presets = newVal;
+    datePresets: {
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.presets = newValue;
+      }
     }
-  },
-  mounted: function mounted() {
-    this.range = this.range || this.dateRange;
-    this.preset = this.preset || this.datePreset;
-    this.presets = this.presets || this.datePresets;
   }
 });
 
@@ -288,158 +213,141 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
-    [
-      _c(
-        "v-dialog",
-        {
-          ref: "dialog",
-          attrs: { "return-value": _vm.range, persistent: "", width: "290px" },
-          on: {
-            "update:returnValue": function($event) {
-              _vm.range = $event
-            },
-            "update:return-value": function($event) {
-              _vm.range = $event
-            }
-          },
-          scopedSlots: _vm._u(
-            [
-              {
-                key: "activator",
-                fn: function(ref) {
-                  var on = ref.on
-                  var attrs = ref.attrs
-                  return [
-                    _vm._t("openDialog", null, null, {
-                      on: on,
-                      attrs: attrs,
-                      computedDateRangeText: _vm.computedDateRangeText
-                    })
-                  ]
-                }
-              }
-            ],
-            null,
-            true
-          ),
-          model: {
-            value: _vm.modal,
-            callback: function($$v) {
-              _vm.modal = $$v
-            },
-            expression: "modal"
-          }
+    "v-dialog",
+    {
+      ref: "dialog",
+      attrs: { "return-value": _vm.range, persistent: "", width: "290px" },
+      on: {
+        "update:returnValue": function($event) {
+          _vm.range = $event
         },
+        "update:return-value": function($event) {
+          _vm.range = $event
+        }
+      },
+      scopedSlots: _vm._u(
         [
-          _vm._v(" "),
+          {
+            key: "activator",
+            fn: function(ref) {
+              var on = ref.on
+              var attrs = ref.attrs
+              return [
+                _vm._t("openDialog", null, null, {
+                  on: on,
+                  attrs: attrs,
+                  dateRangeText: _vm.dateRangeText
+                })
+              ]
+            }
+          }
+        ],
+        null,
+        true
+      ),
+      model: {
+        value: _vm.dialog,
+        callback: function($$v) {
+          _vm.dialog = $$v
+        },
+        expression: "dialog"
+      }
+    },
+    [
+      _vm._v(" "),
+      _c(
+        "v-card",
+        [
           _c(
-            "v-card",
+            "v-container",
             [
               _c(
-                "v-container",
+                "v-row",
                 [
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", [
+                  _c("v-col", [
+                    _c(
+                      "div",
+                      { staticClass: "text-center" },
+                      [
                         _c(
-                          "div",
-                          { staticClass: "text-center" },
-                          [
-                            _c(
-                              "v-menu",
+                          "v-menu",
+                          {
+                            attrs: { "offset-y": "" },
+                            scopedSlots: _vm._u([
                               {
-                                attrs: { "offset-y": "" },
-                                scopedSlots: _vm._u([
-                                  {
-                                    key: "activator",
-                                    fn: function(ref) {
-                                      var on = ref.on
-                                      var attrs = ref.attrs
-                                      return [
-                                        _c(
-                                          "v-btn",
-                                          _vm._g(
-                                            _vm._b(
-                                              {
-                                                attrs: {
-                                                  color: "primary",
-                                                  dark: "",
-                                                  text: ""
-                                                }
-                                              },
-                                              "v-btn",
-                                              attrs,
-                                              false
-                                            ),
-                                            on
-                                          ),
-                                          [
-                                            _c("v-icon", [
-                                              _vm._v("mdi-calendar")
-                                            ]),
-                                            _vm._v(
-                                              " \n                                        " +
-                                                _vm._s(
-                                                  _vm.computedDateRangeText
-                                                ) +
-                                                "\n                                    "
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ]
-                                    }
-                                  }
-                                ])
-                              },
-                              [
-                                _vm._v(" "),
-                                _c(
-                                  "v-list",
-                                  {
-                                    staticClass: "overflow-y-auto",
-                                    staticStyle: { "max-height": "200px" }
-                                  },
-                                  [
+                                key: "activator",
+                                fn: function(ref) {
+                                  var on = ref.on
+                                  var attrs = ref.attrs
+                                  return [
                                     _c(
-                                      "v-list-item-group",
-                                      {
-                                        attrs: { mandatory: "" },
-                                        model: {
-                                          value: _vm.preset,
-                                          callback: function($$v) {
-                                            _vm.preset = $$v
-                                          },
-                                          expression: "preset"
-                                        }
-                                      },
-                                      _vm._l(_vm.computedPresets, function(
-                                        item,
-                                        index
-                                      ) {
-                                        return _c(
-                                          "v-list-item",
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
                                           {
-                                            key: index,
-                                            attrs: { value: item }
+                                            attrs: {
+                                              color: "primary",
+                                              dark: "",
+                                              text: ""
+                                            }
                                           },
-                                          [
-                                            _c("v-list-item-title", [
-                                              _vm._v(
-                                                "\n                                                " +
-                                                  _vm._s(item) +
-                                                  "\n                                            "
-                                              )
-                                            ])
-                                          ],
-                                          1
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _c("v-icon", [_vm._v("mdi-calendar")]),
+                                        _vm._v(
+                                          " \n                                    " +
+                                            _vm._s(_vm.dateRangeText) +
+                                            "\n                                "
                                         )
-                                      }),
+                                      ],
                                       1
                                     )
-                                  ],
+                                  ]
+                                }
+                              }
+                            ])
+                          },
+                          [
+                            _vm._v(" "),
+                            _c(
+                              "v-list",
+                              {
+                                staticClass: "overflow-y-auto",
+                                staticStyle: { "max-height": "200px" }
+                              },
+                              [
+                                _c(
+                                  "v-list-item-group",
+                                  {
+                                    model: {
+                                      value: _vm.preset,
+                                      callback: function($$v) {
+                                        _vm.preset = $$v
+                                      },
+                                      expression: "preset"
+                                    }
+                                  },
+                                  _vm._l(_vm.presets, function(item, index) {
+                                    return _c(
+                                      "v-list-item",
+                                      { key: index, attrs: { value: item } },
+                                      [
+                                        _c("v-list-item-title", [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(item.label) +
+                                              "\n                                        "
+                                          )
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  }),
                                   1
                                 )
                               ],
@@ -447,80 +355,73 @@ var render = function() {
                             )
                           ],
                           1
-                        ),
-                        _vm._v(" "),
-                        this.computedDateRange.length != 2
-                          ? _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "overline red--text text-capitalize"
-                              },
-                              [
-                                _vm._v(
-                                  "\n                            *select 1 more\n                        "
-                                )
-                              ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm.range && _vm.range.length != 2
+                      ? _c(
+                          "div",
+                          { staticClass: "overline red--text text-capitalize" },
+                          [
+                            _vm._v(
+                              "\n                        *select 1 more\n                    "
                             )
-                          : _vm._e()
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider")
+                          ]
+                        )
+                      : _vm._e()
+                  ])
                 ],
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-date-picker",
-                {
-                  attrs: {
-                    color: "green",
-                    "no-title": "",
-                    range: "",
-                    scrollable: ""
-                  },
-                  model: {
-                    value: _vm.range,
-                    callback: function($$v) {
-                      _vm.range = $$v
-                    },
-                    expression: "range"
-                  }
+              _c("v-divider")
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-date-picker",
+            {
+              attrs: {
+                color: "green",
+                "no-title": "",
+                range: "",
+                scrollable: ""
+              },
+              on: {
+                change: function($event) {
+                  _vm.preset = {}
+                }
+              },
+              model: {
+                value: _vm.range,
+                callback: function($$v) {
+                  _vm.range = $$v
                 },
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { text: "", color: "green" },
-                      on: { click: _vm.onReset }
-                    },
-                    [_vm._v("Reset")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { text: "", color: "primary" },
-                      on: { click: _vm.onCancel }
-                    },
-                    [_vm._v("\n                    Cancel\n                ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { text: "", color: "primary" },
-                      on: { click: _vm.onSave }
-                    },
-                    [_vm._v("\n                    OK\n                ")]
-                  )
-                ],
-                1
+                expression: "range"
+              }
+            },
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { text: "", color: "primary" },
+                  on: { click: _vm.onCancel }
+                },
+                [_vm._v("\n                Cancel\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                {
+                  attrs: { text: "", color: "primary" },
+                  on: { click: _vm.onSave }
+                },
+                [_vm._v("\n                OK\n            ")]
               )
             ],
             1
