@@ -403,6 +403,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onSave: function onSave() {
+      console.log(this.dateRange);
+      return;
       this.$refs.form.validate();
 
       if (this.form.user == null) {
@@ -448,6 +450,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")];
       },
       set: function set(value) {
+        console.log("set date", value);
+
         if (this.form) {
           this.form.from = value[0];
           this.form.to = value[1];

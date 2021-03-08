@@ -363,6 +363,8 @@ export default {
             });
         },
         onSave() {
+            console.log(this.dateRange);
+            return;
             this.$refs.form.validate();
 
             if (this.form.user == null) {
@@ -417,6 +419,7 @@ export default {
                 ];
             },
             set(value) {
+                console.log("set date", value);
                 if (this.form) {
                     this.form.from = value[0];
                     this.form.to = value[1];
