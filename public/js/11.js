@@ -131,12 +131,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    form: {
+    expenseTypeForm: {
       type: Object,
       "default": function _default() {
         return {
@@ -173,7 +170,12 @@ __webpack_require__.r(__webpack_exports__);
         text: "",
         value: "actions",
         sortable: false
-      }]
+      }],
+      form: {
+        name: "",
+        limit: null,
+        sub_types: []
+      }
     };
   },
   methods: {
@@ -182,14 +184,14 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.$emit("onSave", this.expenseTypeForm);
+      this.$emit("on-save", this.form);
     },
     addItem: function addItem() {
       if (this.subtype.length == 0 || this.subtype == "") {
         return;
       }
 
-      this.expenseTypeForm.sub_types.push({
+      this.form.sub_types.push({
         id: null,
         name: this.subtype,
         limit: this.subtype_limit
@@ -198,17 +200,15 @@ __webpack_require__.r(__webpack_exports__);
       this.subtype_limit = null;
     },
     removeItem: function removeItem(item) {
-      var index = this.expenseTypeForm.sub_types.indexOf(item);
-      this.expenseTypeForm.sub_types.splice(index, 1);
+      var index = this.form.sub_types.indexOf(item);
+      this.form.sub_types.splice(index, 1);
     }
   },
-  computed: {
+  watch: {
     expenseTypeForm: {
-      get: function get() {
-        return this.form;
-      },
-      set: function set(value) {
-        return value;
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.form = newValue;
       }
     }
   }
@@ -267,11 +267,11 @@ var render = function() {
                   }
                 },
                 model: {
-                  value: _vm.expenseTypeForm.name,
+                  value: _vm.form.name,
                   callback: function($$v) {
-                    _vm.$set(_vm.expenseTypeForm, "name", $$v)
+                    _vm.$set(_vm.form, "name", $$v)
                   },
-                  expression: "expenseTypeForm.name"
+                  expression: "form.name"
                 }
               })
             ],
@@ -296,11 +296,11 @@ var render = function() {
                   }
                 },
                 model: {
-                  value: _vm.expenseTypeForm.limit,
+                  value: _vm.form.limit,
                   callback: function($$v) {
-                    _vm.$set(_vm.expenseTypeForm, "limit", $$v)
+                    _vm.$set(_vm.form, "limit", $$v)
                   },
-                  expression: "expenseTypeForm.limit"
+                  expression: "form.limit"
                 }
               })
             ],
@@ -319,10 +319,7 @@ var render = function() {
               _c("div", { staticClass: "overline" }, [_vm._v("Sub Types")]),
               _vm._v(" "),
               _c("v-data-table", {
-                attrs: {
-                  headers: _vm.headers,
-                  items: _vm.expenseTypeForm.sub_types
-                },
+                attrs: { headers: _vm.headers, items: _vm.form.sub_types },
                 scopedSlots: _vm._u(
                   [
                     {

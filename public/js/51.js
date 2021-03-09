@@ -28,6 +28,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -143,8 +147,8 @@ var render = function() {
             "v-container",
             [
               _c("Form", {
-                attrs: { errors: _vm.errors, form: _vm.form },
-                on: { onSave: _vm.onSave }
+                attrs: { errors: _vm.errors, expenseTypeForm: _vm.form },
+                on: { "on-save": _vm.onSave }
               })
             ],
             1

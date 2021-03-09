@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="12" md="8">
                 <v-text-field
-                    v-model="expenseTypeForm.name"
+                    v-model="form.name"
                     :rules="[
                         ...mixin_validation.required,
                         ...mixin_validation.minLength(100)
@@ -22,7 +22,7 @@
 
             <v-col cols="12" md="4">
                 <v-text-field
-                    v-model="expenseTypeForm.limit"
+                    v-model="form.limit"
                     :rules="[]"
                     :error-messages="errors.limit"
                     @input="
@@ -40,10 +40,7 @@
         <v-row>
             <v-col>
                 <div class="overline">Sub Types</div>
-                <v-data-table
-                    :headers="headers"
-                    :items="expenseTypeForm.sub_types"
-                >
+                <v-data-table :headers="headers" :items="form.sub_types">
                     <template v-slot:top>
                         <v-row>
                             <v-col cols="12" md="8">
@@ -126,7 +123,7 @@
 <script>
 export default {
     props: {
-        form: {
+        expenseTypeForm: {
             type: Object,
             default: () => {
                 return {
@@ -163,7 +160,12 @@ export default {
                     value: "limit"
                 },
                 { text: "", value: "actions", sortable: false }
-            ]
+            ],
+            form: {
+                name: "",
+                limit: null,
+                sub_types: []
+            }
         };
     },
     methods: {
@@ -171,13 +173,13 @@ export default {
             if (!this.$refs.form.validate()) {
                 return;
             }
-            this.$emit("onSave", this.expenseTypeForm);
+            this.$emit("on-save", this.form);
         },
         addItem() {
             if (this.subtype.length == 0 || this.subtype == "") {
                 return;
             }
-            this.expenseTypeForm.sub_types.push({
+            this.form.sub_types.push({
                 id: null,
                 name: this.subtype,
                 limit: this.subtype_limit
@@ -186,17 +188,15 @@ export default {
             this.subtype_limit = null;
         },
         removeItem(item) {
-            const index = this.expenseTypeForm.sub_types.indexOf(item);
-            this.expenseTypeForm.sub_types.splice(index, 1);
+            const index = this.form.sub_types.indexOf(item);
+            this.form.sub_types.splice(index, 1);
         }
     },
-    computed: {
+    watch: {
         expenseTypeForm: {
-            get() {
-                return this.form;
-            },
-            set(value) {
-                return value;
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.form = newValue;
             }
         }
     }

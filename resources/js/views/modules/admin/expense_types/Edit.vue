@@ -9,7 +9,11 @@
                 <h4 class="title green--text">Edit Expense Type</h4>
             </v-card-title>
             <v-container>
-                <Form @onSave="onSave" :errors="errors" :form="form"></Form>
+                <Form
+                    @on-save="onSave"
+                    :errors="errors"
+                    :expenseTypeForm="form"
+                ></Form>
             </v-container>
         </v-card>
     </div>
