@@ -253,8 +253,12 @@ var render = function() {
                 "v-container",
                 [
                   _c("Form", {
-                    attrs: { isEdit: true, errors: _vm.errors, form: _vm.form },
-                    on: { onSave: _vm.onSave }
+                    attrs: {
+                      isEdit: true,
+                      errors: _vm.errors,
+                      userForm: _vm.form
+                    },
+                    on: { "on-save": _vm.onSave }
                   })
                 ],
                 1

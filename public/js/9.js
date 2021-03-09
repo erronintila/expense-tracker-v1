@@ -400,10 +400,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -412,7 +408,7 @@ __webpack_require__.r(__webpack_exports__);
     JobSelector: _components_selector_dropdown_Jobs__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    form: {
+    userForm: {
       type: Object,
       "default": function _default() {
         return {
@@ -489,48 +485,72 @@ __webpack_require__.r(__webpack_exports__);
           value: "name",
           sortable: false
         }]
+      },
+      form: {
+        code: null,
+        first_name: null,
+        middle_name: "",
+        last_name: null,
+        suffix: "",
+        gender: null,
+        birthdate: null,
+        mobile_number: null,
+        telephone_number: "",
+        address: null,
+        fund: 0,
+        remaining_fund: 0,
+        username: "",
+        email: null,
+        password: "password",
+        password_confirmation: "password",
+        is_admin: false,
+        is_superadmin: false,
+        can_login: true,
+        type: "employee",
+        job: null,
+        permissions: [],
+        role: "Standard User"
       }
     };
   },
   methods: {
     onChangeJob: function onChangeJob(e) {
       this.errors.job_id = [];
-      this.userForm.job = e;
+      this.form.job = e;
     },
     onSave: function onSave() {
       if (!this.$refs.form.validate()) {
         return;
       }
 
-      this.$emit("onSave", this.userForm);
+      this.$emit("on-save", this.form);
     },
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-      axios.get("/api/data/permissions?role=".concat(this.userForm.role)).then(function (response) {
+      axios.get("/api/data/permissions?role=".concat(this.form.role)).then(function (response) {
         _this.collections.permissions = response.data;
-        _this.userForm.permissions = response.data;
+        _this.form.permissions = response.data;
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
       });
     }
   },
   computed: {
-    userForm: {
-      get: function get() {
-        return this.form;
-      },
-      set: function set(value) {
-        return value;
-      }
-    },
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
   watch: {
-    "userForm.role": function userFormRole() {
+    "form.role": function formRole() {
       this.loadPermissions();
+    },
+    userForm: {
+      deep: true,
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.form = newValue;
+      }
     }
   },
   created: function created() {
@@ -653,15 +673,15 @@ var render = function() {
                               showAll: false,
                               rules: _vm.mixin_validation.required,
                               errors: _vm.errors.job_id,
-                              selectedJob: _vm.userForm.job
+                              selectedJob: _vm.form.job
                             },
                             on: { changeData: _vm.onChangeJob },
                             model: {
-                              value: _vm.userForm.job,
+                              value: _vm.form.job,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "job", $$v)
+                                _vm.$set(_vm.form, "job", $$v)
                               },
-                              expression: "userForm.job"
+                              expression: "form.job"
                             }
                           })
                         ],
@@ -688,11 +708,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.code,
+                              value: _vm.form.code,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "code", $$v)
+                                _vm.$set(_vm.form, "code", $$v)
                               },
-                              expression: "userForm.code"
+                              expression: "form.code"
                             }
                           })
                         ],
@@ -725,11 +745,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.first_name,
+                              value: _vm.form.first_name,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "first_name", $$v)
+                                _vm.$set(_vm.form, "first_name", $$v)
                               },
-                              expression: "userForm.first_name"
+                              expression: "form.first_name"
                             }
                           })
                         ],
@@ -752,11 +772,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.middle_name,
+                              value: _vm.form.middle_name,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "middle_name", $$v)
+                                _vm.$set(_vm.form, "middle_name", $$v)
                               },
-                              expression: "userForm.middle_name"
+                              expression: "form.middle_name"
                             }
                           })
                         ],
@@ -783,11 +803,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.last_name,
+                              value: _vm.form.last_name,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "last_name", $$v)
+                                _vm.$set(_vm.form, "last_name", $$v)
                               },
-                              expression: "userForm.last_name"
+                              expression: "form.last_name"
                             }
                           })
                         ],
@@ -811,11 +831,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.suffix,
+                              value: _vm.form.suffix,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "suffix", $$v)
+                                _vm.$set(_vm.form, "suffix", $$v)
                               },
-                              expression: "userForm.suffix"
+                              expression: "form.suffix"
                             }
                           })
                         ],
@@ -840,11 +860,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.gender,
+                              value: _vm.form.gender,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "gender", $$v)
+                                _vm.$set(_vm.form, "gender", $$v)
                               },
-                              expression: "userForm.gender"
+                              expression: "form.gender"
                             }
                           })
                         ],
@@ -891,15 +911,15 @@ var render = function() {
                                                 }
                                               },
                                               model: {
-                                                value: _vm.userForm.birthdate,
+                                                value: _vm.form.birthdate,
                                                 callback: function($$v) {
                                                   _vm.$set(
-                                                    _vm.userForm,
+                                                    _vm.form,
                                                     "birthdate",
                                                     $$v
                                                   )
                                                 },
-                                                expression: "userForm.birthdate"
+                                                expression: "form.birthdate"
                                               }
                                             },
                                             "v-text-field",
@@ -931,11 +951,11 @@ var render = function() {
                                   max: _vm.maxDate
                                 },
                                 model: {
-                                  value: _vm.userForm.birthdate,
+                                  value: _vm.form.birthdate,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.userForm, "birthdate", $$v)
+                                    _vm.$set(_vm.form, "birthdate", $$v)
                                   },
-                                  expression: "userForm.birthdate"
+                                  expression: "form.birthdate"
                                 }
                               })
                             ],
@@ -963,11 +983,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.mobile_number,
+                              value: _vm.form.mobile_number,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "mobile_number", $$v)
+                                _vm.$set(_vm.form, "mobile_number", $$v)
                               },
-                              expression: "userForm.mobile_number"
+                              expression: "form.mobile_number"
                             }
                           })
                         ],
@@ -991,11 +1011,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.telephone_number,
+                              value: _vm.form.telephone_number,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "telephone_number", $$v)
+                                _vm.$set(_vm.form, "telephone_number", $$v)
                               },
-                              expression: "userForm.telephone_number"
+                              expression: "form.telephone_number"
                             }
                           })
                         ],
@@ -1020,11 +1040,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.email,
+                              value: _vm.form.email,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "email", $$v)
+                                _vm.$set(_vm.form, "email", $$v)
                               },
-                              expression: "userForm.email"
+                              expression: "form.email"
                             }
                           })
                         ],
@@ -1054,11 +1074,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.address,
+                              value: _vm.form.address,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "address", $$v)
+                                _vm.$set(_vm.form, "address", $$v)
                               },
-                              expression: "userForm.address"
+                              expression: "form.address"
                             }
                           })
                         ],
@@ -1082,11 +1102,11 @@ var render = function() {
                                   "error-messages": _vm.errors.has_fund
                                 },
                                 model: {
-                                  value: _vm.userForm.has_fund,
+                                  value: _vm.form.has_fund,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.userForm, "has_fund", $$v)
+                                    _vm.$set(_vm.form, "has_fund", $$v)
                                   },
-                                  expression: "userForm.has_fund"
+                                  expression: "form.has_fund"
                                 }
                               })
                             ],
@@ -1097,7 +1117,7 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.userForm.has_fund && !_vm.isEdit
+                  _vm.form.has_fund && !_vm.isEdit
                     ? _c(
                         "v-row",
                         [
@@ -1117,11 +1137,11 @@ var render = function() {
                                   }
                                 },
                                 model: {
-                                  value: _vm.userForm.fund,
+                                  value: _vm.form.fund,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.userForm, "fund", $$v)
+                                    _vm.$set(_vm.form, "fund", $$v)
                                   },
-                                  expression: "userForm.fund"
+                                  expression: "form.fund"
                                 }
                               })
                             ],
@@ -1181,11 +1201,11 @@ var render = function() {
                               }
                             },
                             model: {
-                              value: _vm.userForm.username,
+                              value: _vm.form.username,
                               callback: function($$v) {
-                                _vm.$set(_vm.userForm, "username", $$v)
+                                _vm.$set(_vm.form, "username", $$v)
                               },
-                              expression: "userForm.username"
+                              expression: "form.username"
                             }
                           })
                         ],
@@ -1203,11 +1223,11 @@ var render = function() {
                                   "error-messages": _vm.errors.can_login
                                 },
                                 model: {
-                                  value: _vm.userForm.can_login,
+                                  value: _vm.form.can_login,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.userForm, "can_login", $$v)
+                                    _vm.$set(_vm.form, "can_login", $$v)
                                   },
-                                  expression: "userForm.can_login"
+                                  expression: "form.can_login"
                                 }
                               })
                             ],
@@ -1225,11 +1245,11 @@ var render = function() {
                                 {
                                   attrs: { row: "", label: "Role" },
                                   model: {
-                                    value: _vm.userForm.role,
+                                    value: _vm.form.role,
                                     callback: function($$v) {
-                                      _vm.$set(_vm.userForm, "role", $$v)
+                                      _vm.$set(_vm.form, "role", $$v)
                                     },
-                                    expression: "userForm.role"
+                                    expression: "form.role"
                                   }
                                 },
                                 [
@@ -1273,11 +1293,11 @@ var render = function() {
                                   "group-by": "category"
                                 },
                                 model: {
-                                  value: _vm.userForm.permissions,
+                                  value: _vm.form.permissions,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.userForm, "permissions", $$v)
+                                    _vm.$set(_vm.form, "permissions", $$v)
                                   },
-                                  expression: "userForm.permissions"
+                                  expression: "form.permissions"
                                 }
                               })
                             ],

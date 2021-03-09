@@ -24,7 +24,7 @@
                 <h4 class="title success--text">New Employee</h4>
             </v-card-title>
             <v-container>
-                <Form :errors="errors" @onSave="onSave"></Form>
+                <Form :errors="errors" @on-save="onSave"></Form>
             </v-container>
         </v-card>
     </div>

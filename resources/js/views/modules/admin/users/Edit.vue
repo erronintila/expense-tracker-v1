@@ -31,8 +31,8 @@
                 <Form
                     :isEdit="true"
                     :errors="errors"
-                    @onSave="onSave"
-                    :form="form"
+                    @on-save="onSave"
+                    :userForm="form"
                 ></Form>
             </v-container>
         </v-card>

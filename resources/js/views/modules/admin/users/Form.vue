@@ -11,12 +11,12 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <JobSelector
-                                v-model="userForm.job"
+                                v-model="form.job"
                                 ref="jobSelector"
                                 :showAll="false"
                                 :rules="mixin_validation.required"
                                 :errors="errors.job_id"
-                                :selectedJob="userForm.job"
+                                :selectedJob="form.job"
                                 @changeData="onChangeJob"
                             >
                             </JobSelector>
@@ -24,7 +24,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.code"
+                                v-model="form.code"
                                 :rules="[
                                     ...mixin_validation.required,
                                     ...mixin_validation.minLength(100)
@@ -41,7 +41,7 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.first_name"
+                                v-model="form.first_name"
                                 :rules="[
                                     ...mixin_validation.required,
                                     ...mixin_validation.minLength(100)
@@ -56,7 +56,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.middle_name"
+                                v-model="form.middle_name"
                                 :counter="100"
                                 :error-messages="errors.middle_name"
                                 @input="errors.middle_name = []"
@@ -66,7 +66,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.last_name"
+                                v-model="form.last_name"
                                 :rules="[
                                     ...mixin_validation.required,
                                     ...mixin_validation.minLength(100)
@@ -81,7 +81,7 @@
 
                         <v-col cols="12" md="4">
                             <v-combobox
-                                v-model="userForm.suffix"
+                                v-model="form.suffix"
                                 :counter="30"
                                 :items="['Jr', 'Sr', 'II', 'III']"
                                 :error-messages="errors.suffix"
@@ -92,7 +92,7 @@
 
                         <v-col cols="12" md="4">
                             <v-select
-                                v-model="userForm.gender"
+                                v-model="form.gender"
                                 :rules="mixin_validation.required"
                                 :items="['Male', 'Female']"
                                 :error-messages="errors.gender"
@@ -114,7 +114,7 @@
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        v-model="userForm.birthdate"
+                                        v-model="form.birthdate"
                                         :rules="mixin_validation.required"
                                         :error-messages="errors.birthdate"
                                         @input="errors.birthdate = []"
@@ -125,7 +125,7 @@
                                     ></v-text-field>
                                 </template>
                                 <v-date-picker
-                                    v-model="userForm.birthdate"
+                                    v-model="form.birthdate"
                                     no-title
                                     scrollable
                                     color="success"
@@ -137,7 +137,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.mobile_number"
+                                v-model="form.mobile_number"
                                 :rules="mixin_validation.required"
                                 :counter="30"
                                 :error-messages="errors.mobile_number"
@@ -149,7 +149,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.telephone_number"
+                                v-model="form.telephone_number"
                                 :counter="30"
                                 :error-messages="errors.telephone_number"
                                 @input="errors.telephone_number = []"
@@ -160,7 +160,7 @@
 
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.email"
+                                v-model="form.email"
                                 :rules="[
                                     ...mixin_validation.required,
                                     ...mixin_validation.email
@@ -175,7 +175,7 @@
                     <v-row>
                         <v-col cols="12">
                             <v-textarea
-                                v-model="userForm.address"
+                                v-model="form.address"
                                 :rules="mixin_validation.required"
                                 :error-messages="errors.address"
                                 @input="errors.address = []"
@@ -188,17 +188,17 @@
                     <v-row v-if="!isEdit">
                         <v-col cols="12" md="4">
                             <v-checkbox
-                                v-model="userForm.has_fund"
+                                v-model="form.has_fund"
                                 label="has Revolving Fund"
                                 :error-messages="errors.has_fund"
                             ></v-checkbox>
                         </v-col>
                     </v-row>
 
-                    <v-row v-if="userForm.has_fund && !isEdit">
+                    <v-row v-if="form.has_fund && !isEdit">
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.fund"
+                                v-model="form.fund"
                                 label="Revolving Fund"
                                 :error-messages="errors.fund"
                                 @input="errors.fund = []"
@@ -222,7 +222,7 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-text-field
-                                v-model="userForm.username"
+                                v-model="form.username"
                                 :rules="[
                                     ...mixin_validation.required,
                                     ...mixin_validation.minLength(50)
@@ -236,17 +236,13 @@
                         </v-col>
                         <v-col cols="12" md="4" v-if="!isEdit">
                             <v-checkbox
-                                v-model="userForm.can_login"
+                                v-model="form.can_login"
                                 label="Allow Login"
                                 :error-messages="errors.can_login"
                             ></v-checkbox>
                         </v-col>
                         <v-col cols="12" md="4" v-if="!isEdit">
-                            <v-radio-group
-                                v-model="userForm.role"
-                                row
-                                label="Role"
-                            >
+                            <v-radio-group v-model="form.role" row label="Role">
                                 <v-radio
                                     label="Standard User"
                                     value="Standard User"
@@ -262,7 +258,7 @@
                     <v-row v-if="!isEdit">
                         <v-col>
                             <v-data-table
-                                v-model="userForm.permissions"
+                                v-model="form.permissions"
                                 show-select
                                 :items-per-page="-1"
                                 :headers="collections.headers"
@@ -293,7 +289,7 @@ export default {
         JobSelector
     },
     props: {
-        form: {
+        userForm: {
             type: Object,
             default: () => {
                 return {
@@ -368,26 +364,51 @@ export default {
                 headers: [
                     { text: "Permission", value: "name", sortable: false }
                 ]
+            },
+            form: {
+                code: null,
+                first_name: null,
+                middle_name: "",
+                last_name: null,
+                suffix: "",
+                gender: null,
+                birthdate: null,
+                mobile_number: null,
+                telephone_number: "",
+                address: null,
+                fund: 0,
+                remaining_fund: 0,
+                username: "",
+                email: null,
+                password: "password",
+                password_confirmation: "password",
+                is_admin: false,
+                is_superadmin: false,
+                can_login: true,
+                type: "employee",
+                job: null,
+                permissions: [],
+                role: "Standard User"
             }
         };
     },
     methods: {
         onChangeJob(e) {
             this.errors.job_id = [];
-            this.userForm.job = e;
+            this.form.job = e;
         },
         onSave() {
             if (!this.$refs.form.validate()) {
                 return;
             }
-            this.$emit("onSave", this.userForm);
+            this.$emit("on-save", this.form);
         },
         loadPermissions() {
             axios
-                .get(`/api/data/permissions?role=${this.userForm.role}`)
+                .get(`/api/data/permissions?role=${this.form.role}`)
                 .then(response => {
                     this.collections.permissions = response.data;
-                    this.userForm.permissions = response.data;
+                    this.form.permissions = response.data;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
@@ -395,21 +416,20 @@ export default {
         }
     },
     computed: {
-        userForm: {
-            get() {
-                return this.form;
-            },
-            set(value) {
-                return value;
-            }
-        },
         maxDate() {
             return moment().format("YYYY-MM-DD");
         }
     },
     watch: {
-        "userForm.role": function() {
+        "form.role": function() {
             this.loadPermissions();
+        },
+        userForm: {
+            deep: true,
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.form = newValue;
+            }
         }
     },
     created() {
