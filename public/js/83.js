@@ -11,9 +11,15 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
-/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Form */ "./resources/js/views/modules/admin/expense_reports/Form.vue");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/views/modules/admin/expense_reports/Form.vue");
+/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -107,11 +113,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_3__["default"],
-    Form: _Form__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Form: _Form__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
       loader: true,
+      formDataLoaded: false,
       usersParameters: {
         params: {
           is_superadmin: false
@@ -138,8 +145,7 @@ __webpack_require__.r(__webpack_exports__);
         user_id: [],
         expenses: []
       },
-      rules: {},
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")]
+      rules: {}
     };
   },
   methods: {
@@ -158,7 +164,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].show(_this.$route.params.id).then(function (response) {
           resolve(response.data.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
@@ -170,12 +176,11 @@ __webpack_require__.r(__webpack_exports__);
     loadExpenses: function loadExpenses(reportData) {
       var _this2 = this;
 
-      var user_id = reportData.user ? reportData.user.id : null;
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/expenses", {
           params: {
             update_report: true,
-            user_id: user_id,
+            user_id: reportData.user ? reportData.user.id : null,
             start_date: reportData.from,
             end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf().format("YYYY-MM-DD"),
             expense_report_id: _this2.$route.params.id
@@ -187,7 +192,7 @@ __webpack_require__.r(__webpack_exports__);
           _this2.mixin_showErrors(error);
 
           reject();
-        });
+        })["finally"](_this2.loader = false);
       });
     },
     onSave: function onSave(value) {
@@ -195,7 +200,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loader = true;
       value.user_id = value.user ? value.user.id : null;
-      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_1__["default"].update(this.$route.params.id, value).then(function (response) {
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].update(this.$route.params.id, value).then(function (response) {
         _this3.mixin_successDialog(response.data.status, response.data.message);
 
         _this3.$router.push({
@@ -213,21 +218,24 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getData().then(function (data) {
       _this4.form = data;
-      _this4.date_range = [data.from, moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
 
       _this4.loadExpenses(data);
-    });
-  },
-  activated: function activated() {
-    var _this5 = this;
 
-    this.getData().then(function (data) {
-      _this5.form = data;
-      _this5.date_range = [data.from, moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-
-      _this5.loadExpenses(data);
+      _this4.formDataLoaded = true;
     });
-  }
+  } // created() {
+  //     this.getData().then(data => {
+  //         this.form = data;
+  //         this.loadExpenses(data);
+  //     });
+  // },
+  // activated() {
+  //     this.getData().then(data => {
+  //         this.form = data;
+  //         this.loadExpenses(data);
+  //     });
+  // }
+
 });
 
 /***/ }),
@@ -331,121 +339,129 @@ var render = function() {
               _c(
                 "v-container",
                 [
-                  _c("Form", {
-                    attrs: {
-                      expenseReportForm: _vm.form,
-                      expenseReportErrors: _vm.errors,
-                      expenseReportRules: _vm.rules,
-                      expense_report_id: _vm.expense_report_id
-                    },
-                    on: { "on-save": _vm.onSave },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "userSelector",
-                        fn: function() {
-                          return [
-                            _c(
-                              "v-row",
-                              [
+                  !_vm.formDataLoaded
+                    ? _c("v-skeleton-loader", {
+                        attrs: { type: "article, article, actions" }
+                      })
+                    : _c("Form", {
+                        attrs: {
+                          expenseReportForm: _vm.form,
+                          expenseReportErrors: _vm.errors,
+                          expenseReportRules: _vm.rules,
+                          expense_report_id: _vm.expense_report_id
+                        },
+                        on: { "on-save": _vm.onSave },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "userSelector",
+                            fn: function() {
+                              return [
                                 _c(
-                                  "v-col",
+                                  "v-row",
                                   [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        value: _vm.form.user
-                                          ? _vm.form.user.full_name
-                                          : "No Employee",
-                                        "error-messages": _vm.errors.user_id,
-                                        label: "Employee",
-                                        readonly: ""
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          _vm.errors.user_id = []
-                                        }
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "append",
-                                          fn: function() {
-                                            return [
-                                              _c("UserDialogSelector", {
-                                                ref: "userDialogSelector",
-                                                attrs: {
-                                                  selectedUser: _vm.form.user,
-                                                  usersParameters:
-                                                    _vm.usersParameters
-                                                },
-                                                on: {
-                                                  selectUser: _vm.selectUser,
-                                                  onReset: _vm.resetUser
-                                                },
-                                                scopedSlots: _vm._u([
-                                                  {
-                                                    key: "openDialog",
-                                                    fn: function(ref) {
-                                                      var bind = ref.bind
-                                                      var on = ref.on
-                                                      return [
-                                                        _c(
-                                                          "v-btn",
-                                                          _vm._g(
-                                                            _vm._b(
-                                                              {
-                                                                attrs: {
-                                                                  fab: "",
-                                                                  color:
-                                                                    "primary",
-                                                                  text: "",
-                                                                  "x-small": ""
-                                                                }
-                                                              },
-                                                              "v-btn",
-                                                              bind,
-                                                              false
-                                                            ),
-                                                            on
-                                                          ),
-                                                          [
-                                                            _c(
-                                                              "v-icon",
-                                                              {
-                                                                attrs: {
-                                                                  dark: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "mdi-magnify"
-                                                                )
-                                                              ]
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ]
-                                                    }
-                                                  }
-                                                ])
-                                              })
-                                            ]
+                                    _c(
+                                      "v-col",
+                                      [
+                                        _c("v-text-field", {
+                                          attrs: {
+                                            value: _vm.form.user
+                                              ? _vm.form.user.full_name
+                                              : "No Employee",
+                                            "error-messages":
+                                              _vm.errors.user_id,
+                                            label: "Employee",
+                                            readonly: ""
                                           },
-                                          proxy: true
-                                        }
-                                      ])
-                                    })
+                                          on: {
+                                            input: function($event) {
+                                              _vm.errors.user_id = []
+                                            }
+                                          },
+                                          scopedSlots: _vm._u([
+                                            {
+                                              key: "append",
+                                              fn: function() {
+                                                return [
+                                                  _c("UserDialogSelector", {
+                                                    ref: "userDialogSelector",
+                                                    attrs: {
+                                                      selectedUser:
+                                                        _vm.form.user,
+                                                      usersParameters:
+                                                        _vm.usersParameters
+                                                    },
+                                                    on: {
+                                                      selectUser:
+                                                        _vm.selectUser,
+                                                      onReset: _vm.resetUser
+                                                    },
+                                                    scopedSlots: _vm._u([
+                                                      {
+                                                        key: "openDialog",
+                                                        fn: function(ref) {
+                                                          var bind = ref.bind
+                                                          var on = ref.on
+                                                          return [
+                                                            _c(
+                                                              "v-btn",
+                                                              _vm._g(
+                                                                _vm._b(
+                                                                  {
+                                                                    attrs: {
+                                                                      fab: "",
+                                                                      color:
+                                                                        "primary",
+                                                                      text: "",
+                                                                      "x-small":
+                                                                        ""
+                                                                    }
+                                                                  },
+                                                                  "v-btn",
+                                                                  bind,
+                                                                  false
+                                                                ),
+                                                                on
+                                                              ),
+                                                              [
+                                                                _c(
+                                                                  "v-icon",
+                                                                  {
+                                                                    attrs: {
+                                                                      dark: ""
+                                                                    }
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "mdi-magnify"
+                                                                    )
+                                                                  ]
+                                                                )
+                                                              ],
+                                                              1
+                                                            )
+                                                          ]
+                                                        }
+                                                      }
+                                                    ])
+                                                  })
+                                                ]
+                                              },
+                                              proxy: true
+                                            }
+                                          ])
+                                        })
+                                      ],
+                                      1
+                                    )
                                   ],
                                   1
                                 )
-                              ],
-                              1
-                            )
-                          ]
-                        },
-                        proxy: true
-                      }
-                    ])
-                  })
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ])
+                      })
                 ],
                 1
               )

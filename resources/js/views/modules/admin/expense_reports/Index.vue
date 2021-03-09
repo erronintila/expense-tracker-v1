@@ -202,7 +202,12 @@
             </v-row>
 
             <v-card-subtitle>
+                <v-skeleton-loader
+                    v-if="!formDataLoaded"
+                    type="list-item-one-line"
+                ></v-skeleton-loader>
                 <v-text-field
+                    v-else
                     v-model="search"
                     append-icon="mdi-magnify"
                     label="Search"
@@ -212,7 +217,12 @@
             </v-card-subtitle>
 
             <v-card-text>
+                <v-skeleton-loader
+                    v-if="!formDataLoaded"
+                    type="article, article, image, actions, article"
+                ></v-skeleton-loader>
                 <v-data-table
+                    v-else
                     :headers="headers"
                     :items="items"
                     :loading="loading"
@@ -552,6 +562,7 @@ export default {
     components: { DateRangePicker, UserDialogSelector },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             warning: null,
             headers: [
@@ -1198,7 +1209,8 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         reject();
-                    }).finally(this.loading = false);
+                    })
+                    .finally((this.loading = false));
             });
         },
         onRefresh() {
@@ -1346,6 +1358,7 @@ export default {
                                 this.getDataFromApi().then(data => {
                                     this.items = data.items;
                                     this.totalItems = data.total;
+                                    this.formDataLoaded = true;
                                 });
                                 this.selected = [];
                             })
@@ -1657,6 +1670,7 @@ export default {
                                 this.getDataFromApi().then(data => {
                                     this.items = data.items;
                                     this.totalItems = data.total;
+                                    this.formDataLoaded = true;
                                 });
                                 this.selected = [];
                                 this.loadTotalCountReportStatus();
@@ -1771,6 +1785,7 @@ export default {
                         this.getDataFromApi().then(data => {
                             this.items = data.items;
                             this.totalItems = data.total;
+                            this.formDataLoaded = true;
                         });
                         this.$store.dispatch("AUTH_NOTIFICATIONS");
                         this.selected = [];
@@ -1809,6 +1824,7 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
+                    this.formDataLoaded = true;
                 });
             },
             deep: true
@@ -2132,6 +2148,7 @@ export default {
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;
+            this.formDataLoaded = true;
         });
     }
 };

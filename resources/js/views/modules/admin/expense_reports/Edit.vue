@@ -1,21 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-card v-else class="elevation-0 pt-0">
+        <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -23,8 +8,10 @@
                 <v-spacer></v-spacer>
                 <h4 class="title green--text">Edit Expense Report</h4>
             </v-card-title>
+
             <v-container>
                 <Form
+                    v-if="formDataLoaded"
                     :expenseReportForm="form"
                     :expenseReportErrors="errors"
                     :expenseReportRules="rules"
@@ -98,6 +85,7 @@ export default {
     data() {
         return {
             loader: true,
+            formDataLoaded: false,
             usersParameters: {
                 params: {
                     is_superadmin: false
@@ -124,7 +112,7 @@ export default {
                 user_id: [],
                 expenses: []
             },
-            rules: {},
+            rules: {}
         };
     },
     methods: {
@@ -140,8 +128,7 @@ export default {
         },
         getData() {
             return new Promise((resolve, reject) => {
-                axios
-                    .get(`/api/expense_reports/${this.$route.params.id}`)
+                ExpenseReportDataService.show(this.$route.params.id)
                     .then(response => {
                         resolve(response.data.data);
                     })
@@ -153,14 +140,14 @@ export default {
             });
         },
         loadExpenses(reportData) {
-            let user_id = reportData.user ? reportData.user.id : null;
-
             return new Promise((resolve, reject) => {
                 axios
                     .get("/api/data/expenses", {
                         params: {
                             update_report: true,
-                            user_id: user_id,
+                            user_id: reportData.user
+                                ? reportData.user.id
+                                : null,
                             start_date: reportData.from,
                             end_date: moment()
                                 .endOf()
@@ -175,7 +162,8 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         reject();
-                    });
+                    })
+                    .finally((this.loader = false));
             });
         },
         onSave(value) {
@@ -202,13 +190,20 @@ export default {
         this.getData().then(data => {
             this.form = data;
             this.loadExpenses(data);
-        });
-    },
-    activated() {
-        this.getData().then(data => {
-            this.form = data;
-            this.loadExpenses(data);
+            this.formDataLoaded = true;
         });
     }
+    // created() {
+    //     this.getData().then(data => {
+    //         this.form = data;
+    //         this.loadExpenses(data);
+    //     });
+    // },
+    // activated() {
+    //     this.getData().then(data => {
+    //         this.form = data;
+    //         this.loadExpenses(data);
+    //     });
+    // }
 };
 </script>

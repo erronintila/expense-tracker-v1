@@ -87,19 +87,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -112,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       loader: true,
+      formDataLoaded: false,
       usersParameters: {
         params: {
           is_superadmin: false
@@ -157,7 +145,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/expense_reports/".concat(_this.$route.params.id)).then(function (response) {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].show(_this.$route.params.id).then(function (response) {
           resolve(response.data.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
@@ -169,12 +157,11 @@ __webpack_require__.r(__webpack_exports__);
     loadExpenses: function loadExpenses(reportData) {
       var _this2 = this;
 
-      var user_id = reportData.user ? reportData.user.id : null;
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/expenses", {
           params: {
             update_report: true,
-            user_id: user_id,
+            user_id: reportData.user ? reportData.user.id : null,
             start_date: reportData.from,
             end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf().format("YYYY-MM-DD"),
             expense_report_id: _this2.$route.params.id
@@ -186,7 +173,7 @@ __webpack_require__.r(__webpack_exports__);
           _this2.mixin_showErrors(error);
 
           reject();
-        });
+        })["finally"](_this2.loader = false);
       });
     },
     onSave: function onSave(value) {
@@ -214,17 +201,22 @@ __webpack_require__.r(__webpack_exports__);
       _this4.form = data;
 
       _this4.loadExpenses(data);
-    });
-  },
-  activated: function activated() {
-    var _this5 = this;
 
-    this.getData().then(function (data) {
-      _this5.form = data;
-
-      _this5.loadExpenses(data);
+      _this4.formDataLoaded = true;
     });
-  }
+  } // created() {
+  //     this.getData().then(data => {
+  //         this.form = data;
+  //         this.loadExpenses(data);
+  //     });
+  // },
+  // activated() {
+  //     this.getData().then(data => {
+  //         this.form = data;
+  //         this.loadExpenses(data);
+  //     });
+  // }
+
 });
 
 /***/ }),
@@ -247,88 +239,43 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
+      _c(
+        "v-card",
+        { staticClass: "elevation-0 pt-0" },
+        [
+          _c(
+            "v-card-title",
+            { staticClass: "pt-0" },
             [
               _c(
-                "v-row",
+                "v-btn",
                 {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
+                  staticClass: "mr-3",
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.go(-1)
+                    }
+                  }
                 },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0 pt-0" },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Edit Expense Report")
-                  ])
-                ],
+                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-container",
-                [
-                  _c("Form", {
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("h4", { staticClass: "title green--text" }, [
+                _vm._v("Edit Expense Report")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _vm.formDataLoaded
+                ? _c("Form", {
                     attrs: {
                       expenseReportForm: _vm.form,
                       expenseReportErrors: _vm.errors,
@@ -336,119 +283,139 @@ var render = function() {
                       expense_report_id: _vm.expense_report_id
                     },
                     on: { "on-save": _vm.onSave },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "userSelector",
-                        fn: function() {
-                          return [
-                            _c(
-                              "v-row",
-                              [
-                                _c(
-                                  "v-col",
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        value: _vm.form.user
-                                          ? _vm.form.user.full_name
-                                          : "No Employee",
-                                        "error-messages": _vm.errors.user_id,
-                                        label: "Employee",
-                                        readonly: ""
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          _vm.errors.user_id = []
-                                        }
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "append",
-                                          fn: function() {
-                                            return [
-                                              _c("UserDialogSelector", {
-                                                ref: "userDialogSelector",
-                                                attrs: {
-                                                  selectedUser: _vm.form.user,
-                                                  usersParameters:
-                                                    _vm.usersParameters
-                                                },
-                                                on: {
-                                                  selectUser: _vm.selectUser,
-                                                  onReset: _vm.resetUser
-                                                },
-                                                scopedSlots: _vm._u([
-                                                  {
-                                                    key: "openDialog",
-                                                    fn: function(ref) {
-                                                      var bind = ref.bind
-                                                      var on = ref.on
-                                                      return [
-                                                        _c(
-                                                          "v-btn",
-                                                          _vm._g(
-                                                            _vm._b(
-                                                              {
-                                                                attrs: {
-                                                                  fab: "",
-                                                                  color:
-                                                                    "primary",
-                                                                  text: "",
-                                                                  "x-small": ""
-                                                                }
-                                                              },
-                                                              "v-btn",
-                                                              bind,
-                                                              false
-                                                            ),
-                                                            on
-                                                          ),
-                                                          [
-                                                            _c(
-                                                              "v-icon",
-                                                              {
-                                                                attrs: {
-                                                                  dark: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "mdi-magnify"
-                                                                )
-                                                              ]
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ]
-                                                    }
-                                                  }
-                                                ])
-                                              })
-                                            ]
-                                          },
-                                          proxy: true
-                                        }
-                                      ])
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ]
-                        },
-                        proxy: true
-                      }
-                    ])
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "userSelector",
+                          fn: function() {
+                            return [
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          value: _vm.form.user
+                                            ? _vm.form.user.full_name
+                                            : "No Employee",
+                                          "error-messages": _vm.errors.user_id,
+                                          label: "Employee",
+                                          readonly: ""
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            _vm.errors.user_id = []
+                                          }
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "append",
+                                              fn: function() {
+                                                return [
+                                                  _c("UserDialogSelector", {
+                                                    ref: "userDialogSelector",
+                                                    attrs: {
+                                                      selectedUser:
+                                                        _vm.form.user,
+                                                      usersParameters:
+                                                        _vm.usersParameters
+                                                    },
+                                                    on: {
+                                                      selectUser:
+                                                        _vm.selectUser,
+                                                      onReset: _vm.resetUser
+                                                    },
+                                                    scopedSlots: _vm._u(
+                                                      [
+                                                        {
+                                                          key: "openDialog",
+                                                          fn: function(ref) {
+                                                            var bind = ref.bind
+                                                            var on = ref.on
+                                                            return [
+                                                              _c(
+                                                                "v-btn",
+                                                                _vm._g(
+                                                                  _vm._b(
+                                                                    {
+                                                                      attrs: {
+                                                                        fab: "",
+                                                                        color:
+                                                                          "primary",
+                                                                        text:
+                                                                          "",
+                                                                        "x-small":
+                                                                          ""
+                                                                      }
+                                                                    },
+                                                                    "v-btn",
+                                                                    bind,
+                                                                    false
+                                                                  ),
+                                                                  on
+                                                                ),
+                                                                [
+                                                                  _c(
+                                                                    "v-icon",
+                                                                    {
+                                                                      attrs: {
+                                                                        dark: ""
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        "mdi-magnify"
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ]
+                                                          }
+                                                        }
+                                                      ],
+                                                      null,
+                                                      false,
+                                                      2729772431
+                                                    )
+                                                  })
+                                                ]
+                                              },
+                                              proxy: true
+                                            }
+                                          ],
+                                          null,
+                                          false,
+                                          4251958511
+                                        )
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ]
+                          },
+                          proxy: true
+                        }
+                      ],
+                      null,
+                      false,
+                      2473804440
+                    )
                   })
-                ],
-                1
-              )
+                : _vm._e()
             ],
             1
           )
+        ],
+        1
+      )
     ],
     1
   )

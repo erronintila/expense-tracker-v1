@@ -411,19 +411,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -431,6 +418,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      formDataLoaded: false,
       loading: true,
       loader: true,
       headers: [{
@@ -1022,52 +1010,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getData: function getData() {
       var _this4 = this;
 
-      axios.get("/api/expense_reports/".concat(this.router_params_id)).then(function (response) {
-        var data = response.data.data;
-        _this4.form.code = data.code;
-        _this4.form.reference_no = data.reference_no;
-        _this4.form.description = data.description;
-        _this4.form.remarks = data.remarks;
-        _this4.form.notes = data.notes;
-        _this4.form.submission_period = data.submission_period;
-        _this4.form.approval_period = data.approval_period;
-        _this4.form.from = data.from;
-        _this4.form.to = data.to;
-        _this4.form.status = data.status;
-        _this4.form.is_late_submitted = data.is_late_submitted;
-        _this4.form.is_late_approved = data.is_late_approved;
-        _this4.form.total = data.total;
-        _this4.form.total_reimbursable = data.total_reimbursable;
-        _this4.form.paid = data.paid;
-        _this4.form.payments = data.payments;
-        _this4.form.payment_id = data.payment_id;
-        _this4.form.balance = data.balance;
-        _this4.form.user = data.user;
-        _this4.form.payment = data.payment; // this.form.expenses = data.expenses;
-        // this.form.created = data.created;
-        // this.form.updated = data.updated;
-        // this.form.deleted = data.deleted;
-        // this.form.submitted = data.submitted;
-        // this.form.approved = data.approved;
-        // this.form.rejected = data.rejected;
-        // this.form.cancelled = data.cancelled;
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/expense_reports/".concat(_this4.router_params_id)).then(function (response) {
+          var data = response.data.data;
+          _this4.form.code = data.code;
+          _this4.form.reference_no = data.reference_no;
+          _this4.form.description = data.description;
+          _this4.form.remarks = data.remarks;
+          _this4.form.notes = data.notes;
+          _this4.form.submission_period = data.submission_period;
+          _this4.form.approval_period = data.approval_period;
+          _this4.form.from = data.from;
+          _this4.form.to = data.to;
+          _this4.form.status = data.status;
+          _this4.form.is_late_submitted = data.is_late_submitted;
+          _this4.form.is_late_approved = data.is_late_approved;
+          _this4.form.total = data.total;
+          _this4.form.total_reimbursable = data.total_reimbursable;
+          _this4.form.paid = data.paid;
+          _this4.form.payments = data.payments;
+          _this4.form.payment_id = data.payment_id;
+          _this4.form.balance = data.balance;
+          _this4.form.user = data.user;
+          _this4.form.payment = data.payment; // this.form.expenses = data.expenses;
+          // this.form.created = data.created;
+          // this.form.updated = data.updated;
+          // this.form.deleted = data.deleted;
+          // this.form.submitted = data.submitted;
+          // this.form.approved = data.approved;
+          // this.form.rejected = data.rejected;
+          // this.form.cancelled = data.cancelled;
 
-        _this4.form.created_at = data.created_at;
-        _this4.form.updated_at = data.updated_at;
-        _this4.form.deleted_at = data.deleted_at;
-        _this4.form.submitted_at = data.submitted_at;
-        _this4.form.approved_at = data.approved_at;
-        _this4.form.rejected_at = data.rejected_at;
-        _this4.form.cancelled_at = data.cancelled_at;
-        _this4.form.logs = data.logs; // this.loadExpenses();
+          _this4.form.created_at = data.created_at;
+          _this4.form.updated_at = data.updated_at;
+          _this4.form.deleted_at = data.deleted_at;
+          _this4.form.submitted_at = data.submitted_at;
+          _this4.form.approved_at = data.approved_at;
+          _this4.form.rejected_at = data.rejected_at;
+          _this4.form.cancelled_at = data.cancelled_at;
+          _this4.form.logs = data.logs; // this.loadExpenses();
 
-        _this4.getDataFromApi().then(function (data) {
-          _this4.form.expenses = data.items;
-          _this4.totalItems = data.total;
+          _this4.getDataFromApi().then(function (data) {
+            _this4.form.expenses = data.items;
+            _this4.totalItems = data.total;
+            _this4.formDataLoaded = true;
+          });
+
+          resolve();
+        })["catch"](function (error) {
+          _this4.mixin_showErrors(error);
+
+          reject();
         });
-      })["catch"](function (error) {
-        _this4.mixin_showErrors(error);
-      })["finally"](this.loader = false);
+      });
     },
     getDataFromApi: function getDataFromApi() {
       var _this5 = this;
@@ -1114,6 +1109,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.getDataFromApi().then(function (data) {
           _this6.form.expenses = data.items;
           _this6.totalItems = data.total;
+          _this6.formDataLoaded = true;
         });
       },
       deep: true
@@ -1150,7 +1146,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  created: function created() {
+  mounted: function mounted() {
     // this.$store.dispatch("AUTH_USER");
     this.getData();
   },
@@ -1183,85 +1179,43 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
+      _c(
+        "v-card",
+        { staticClass: "elevation-0 pt-0" },
+        [
+          _c(
+            "v-card-title",
+            { staticClass: "pt-0" },
             [
               _c(
-                "v-row",
+                "v-btn",
                 {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
+                  staticClass: "mr-3",
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.go(-1)
+                    }
+                  }
                 },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0 pt-0" },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Expense Report Details")
-                  ])
-                ],
+                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
               ),
               _vm._v(" "),
-              _c(
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("h4", { staticClass: "title green--text" }, [
+                _vm._v("Expense Report Details")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          !_vm.formDataLoaded
+            ? _c("v-skeleton-loader", {
+                attrs: { type: "article, article, image, actions, article" }
+              })
+            : _c(
                 "v-form",
                 { ref: "form" },
                 [
@@ -1937,9 +1891,9 @@ var render = function() {
                 ],
                 1
               )
-            ],
-            1
-          )
+        ],
+        1
+      )
     ],
     1
   )

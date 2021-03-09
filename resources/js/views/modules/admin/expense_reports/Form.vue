@@ -1,209 +1,233 @@
 <template>
-    <v-form ref="form" v-model="valid">
-        <div class="overline green--text">
-            BASIC DETAILS
-            <v-chip v-if="form.status" x-small color="form.status.color">
-                {{ form.status.status }}
-            </v-chip>
-        </div>
-        <DateRangePicker
-            ref="dateRangePicker"
-            :dateRange="dateRange"
-            @on-change="updateDates"
-        >
-            <template v-slot:openDialog="{ on, attrs, dateRangeText }">
-                <v-text-field
-                    label="Date"
-                    v-bind="attrs"
-                    v-on="on"
-                    readonly
-                    :value="dateRangeText"
-                >
-                </v-text-field>
-            </template>
-        </DateRangePicker>
-        <slot name="userSelector"></slot>
-        <v-combobox
-            v-model="form.description"
-            :rules="[
-                ...mixin_validation.required,
-                ...mixin_validation.minLength(100)
-            ]"
-            :counter="100"
-            :items="[default_description]"
-            :error-messages="expenseReportErrors.description"
-            @input="expenseReportErrors.description = []"
-            label="Description"
-        >
-        </v-combobox>
+    <div>
+        <v-skeleton-loader
+            v-if="!formDataLoaded"
+            type="article, article, article, image, actions"
+        ></v-skeleton-loader>
 
-        <div class="overline green--text">
-            Expenses
-        </div>
-
-        <v-data-table
-            v-model="form.expenses"
-            :headers="headers"
-            :items="items"
-            :loading="loading"
-            :options.sync="options"
-            :server-items-length="totalItems"
-            :footer-props="{
-                itemsPerPageOptions: [10, 20, 50, 100],
-                showFirstLastPage: true,
-                firstIcon: 'mdi-page-first',
-                lastIcon: 'mdi-page-last',
-                prevIcon: 'mdi-chevron-left',
-                nextIcon: 'mdi-chevron-right'
-            }"
-            show-select
-            show-expand
-            single-expand
-            item-key="id"
-            class="elevation-0"
-        >
-            <template v-slot:top>
-                <div v-if="selectedExpenses.length">
-                    <div class="d-inline">
-                        {{ selectedExpenses.length }} Item(s) Selected
-                    </div>
-                    <v-btn @click="form.expenses = []">
-                        Clear All Selected
-                    </v-btn>
-                </div>
-            </template>
-            <template v-slot:expanded-item="{ headers, item }">
-                <td :colspan="headers.length">
-                    <table>
-                        <tr>
-                            <td>
-                                <strong>Code</strong>
-                            </td>
-                            <td>:</td>
-                            <td>{{ item.code }}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Description</strong>
-                            </td>
-                            <td>:</td>
-                            <td>
-                                {{ item.description }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Receipt</strong>
-                            </td>
-                            <td>:</td>
-                            <td>
-                                {{ item.receipt_number }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <strong>Vendor</strong>
-                            </td>
-                            <td>:</td>
-                            <td>
-                                {{ item.vendor ? item.vendor.name : "" }}
-                            </td>
-                        </tr>
-                        <tr v-if="item.remarks">
-                            <td>
-                                <strong>Remarks</strong>
-                            </td>
-                            <td>:</td>
-                            <td>{{ item.remarks }}</td>
-                        </tr>
-                    </table>
-                </td>
-            </template>
-            <template v-slot:[`item.updated_at`]="{ item }">
-                {{ mixin_getHumanDate(item.updated_at) }}
-            </template>
-            <template v-slot:[`item.amount`]="{ item }">
-                {{ mixin_formatNumber(item.amount) }}
-            </template>
-            <template v-slot:[`item.replenishment`]="{ item }">
-                {{ mixin_formatNumber(item.amount - item.reimbursable_amount) }}
-            </template>
-            <template v-slot:[`item.status.status`]="{ item }">
-                <v-chip :color="item.status.color" dark small>
-                    {{ item.status.status }}
+        <v-form v-else ref="form" v-model="valid">
+            <div class="overline green--text">
+                BASIC DETAILS
+                <v-chip v-if="form.status" x-small color="form.status.color">
+                    {{ form.status.status }}
                 </v-chip>
-            </template>
-            <template v-slot:[`item.actions`]="{ item }">
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="$router.push(`/admin/expenses/${item.id}`)"
-                >
-                    mdi-eye
-                </v-icon>
-            </template>
-        </v-data-table>
+            </div>
+            <DateRangePicker
+                ref="dateRangePicker"
+                :dateRange="range"
+                @on-change="updateDates"
+            >
+                <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                    <v-text-field
+                        label="Date"
+                        v-bind="attrs"
+                        v-on="on"
+                        readonly
+                        :value="dateRangeText"
+                    >
+                    </v-text-field>
+                </template>
+            </DateRangePicker>
+            <slot name="userSelector"></slot>
+            <v-combobox
+                v-model="form.description"
+                :rules="[
+                    ...mixin_validation.required,
+                    ...mixin_validation.minLength(100)
+                ]"
+                :counter="100"
+                :items="[default_description]"
+                :error-messages="expenseReportErrors.description"
+                @input="expenseReportErrors.description = []"
+                label="Description"
+            >
+            </v-combobox>
 
-        <div class="red--text" v-if="expenseReportErrors.expenses.length > 0">
-            <small>{{ expenseReportErrors.expenses[0] }}</small>
-        </div>
+            <div class="overline green--text">
+                Expenses
+            </div>
 
-        <v-row>
-            <v-col cols="12" md="6">
-                <v-textarea v-model="form.remarks" label="Remarks" :rows="3">
-                </v-textarea>
-            </v-col>
+            <v-data-table
+                v-model="selected"
+                :headers="headers"
+                :items="items"
+                :loading="loading"
+                :options.sync="options"
+                :server-items-length="totalItems"
+                :footer-props="{
+                    itemsPerPageOptions: [10, 20, 50, 100],
+                    showFirstLastPage: true,
+                    firstIcon: 'mdi-page-first',
+                    lastIcon: 'mdi-page-last',
+                    prevIcon: 'mdi-chevron-left',
+                    nextIcon: 'mdi-chevron-right'
+                }"
+                show-select
+                show-expand
+                single-expand
+                item-key="id"
+                class="elevation-0"
+            >
+                <template v-slot:top>
+                    <div v-if="selected.length">
+                        <div class="d-inline">
+                            {{ selected.length }} Item(s) Selected
+                        </div>
+                        <v-btn @click="selected = []">
+                            Clear All Selected
+                        </v-btn>
+                    </div>
+                </template>
+                <template v-slot:expanded-item="{ headers, item }">
+                    <td :colspan="headers.length">
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Code</strong>
+                                </td>
+                                <td>:</td>
+                                <td>{{ item.code }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Description</strong>
+                                </td>
+                                <td>:</td>
+                                <td>
+                                    {{ item.description }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Receipt</strong>
+                                </td>
+                                <td>:</td>
+                                <td>
+                                    {{ item.receipt_number }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Vendor</strong>
+                                </td>
+                                <td>:</td>
+                                <td>
+                                    {{ item.vendor ? item.vendor.name : "" }}
+                                </td>
+                            </tr>
+                            <tr v-if="item.remarks">
+                                <td>
+                                    <strong>Remarks</strong>
+                                </td>
+                                <td>:</td>
+                                <td>{{ item.remarks }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </template>
+                <template v-slot:[`item.updated_at`]="{ item }">
+                    {{ mixin_getHumanDate(item.updated_at) }}
+                </template>
+                <template v-slot:[`item.amount`]="{ item }">
+                    {{ mixin_formatNumber(item.amount) }}
+                </template>
+                <template v-slot:[`item.replenishment`]="{ item }">
+                    {{
+                        mixin_formatNumber(
+                            item.amount - item.reimbursable_amount
+                        )
+                    }}
+                </template>
+                <template v-slot:[`item.status.status`]="{ item }">
+                    <v-chip :color="item.status.color" dark small>
+                        {{ item.status.status }}
+                    </v-chip>
+                </template>
+                <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="$router.push(`/admin/expenses/${item.id}`)"
+                    >
+                        mdi-eye
+                    </v-icon>
+                </template>
+            </v-data-table>
 
-            <v-col cols="12" md="6">
-                <table width="100%" class="mt-4">
-                    <tbody>
-                        <tr>
-                            <td>
-                                Total Expense Amount
-                            </td>
-                            <td>:</td>
-                            <td class="green--text text--darken-4 text-right">
-                                {{ mixin_formatNumber(total) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Paid Amount
-                            </td>
-                            <td>:</td>
-                            <td class="green--text text--darken-4 text-right">
-                                (-)
-                                {{ mixin_formatNumber(paid) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">
-                                <v-divider></v-divider>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-left">
-                                Amount to be reimbursed
-                            </th>
-                            <td>:</td>
-                            <td class="green--text text--darken-4 text-right">
-                                {{ mixin_formatNumber(balance) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </v-col>
-        </v-row>
+            <div
+                class="red--text"
+                v-if="expenseReportErrors.expenses.length > 0"
+            >
+                <small>{{ expenseReportErrors.expenses[0] }}</small>
+            </div>
 
-        <v-row>
-            <v-col class="text-right">
-                <v-btn color="green" dark @click="onSave">Save</v-btn>
-                <v-btn @click="$router.go(-1)">
-                    Cancel
-                </v-btn>
-            </v-col>
-        </v-row>
-    </v-form>
+            <v-row>
+                <v-col cols="12" md="6">
+                    <v-textarea
+                        v-model="form.remarks"
+                        label="Remarks"
+                        :rows="3"
+                    >
+                    </v-textarea>
+                </v-col>
+
+                <v-col cols="12" md="6">
+                    <table width="100%" class="mt-4">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Total Expense Amount
+                                </td>
+                                <td>:</td>
+                                <td
+                                    class="green--text text--darken-4 text-right"
+                                >
+                                    {{ mixin_formatNumber(total) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Paid Amount
+                                </td>
+                                <td>:</td>
+                                <td
+                                    class="green--text text--darken-4 text-right"
+                                >
+                                    (-)
+                                    {{ mixin_formatNumber(paid) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <v-divider></v-divider>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">
+                                    Amount to be reimbursed
+                                </th>
+                                <td>:</td>
+                                <td
+                                    class="green--text text--darken-4 text-right"
+                                >
+                                    {{ mixin_formatNumber(balance) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </v-col>
+            </v-row>
+
+            <v-row>
+                <v-col class="text-right">
+                    <v-btn color="green" dark @click="onSave">Save</v-btn>
+                    <v-btn @click="$router.go(-1)">
+                        Cancel
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-form>
+    </div>
 </template>
 
 <script>
@@ -265,10 +289,6 @@ export default {
         expense_report_id: {
             type: Number,
             default: null
-        },
-        expenseReportDateRange: {
-            type: Array,
-            default: () => []
         }
     },
     components: {
@@ -276,6 +296,16 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
+            range: [
+                moment()
+                    .startOf("week")
+                    .format("YYYY-MM-DD"),
+                moment()
+                    .endOf("week")
+                    .format("YYYY-MM-DD")
+            ],
+            selected: [],
             loading: true,
             valid: false,
             preset: {},
@@ -326,7 +356,13 @@ export default {
     },
     methods: {
         updateDates(e) {
-            this.dateRange = e;
+            this.range = e;
+
+            if (e && e.length == 2) {
+                this.form.from = e[0];
+                this.form.to = e[1];
+                this.$emit("on-update", this.form);
+            }
         },
         getDataFromApi() {
             this.loading = true;
@@ -334,7 +370,7 @@ export default {
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let range = this.dateRange;
+                let range = this.range;
                 let user_id = this.form.user ? this.form.user.id : null;
 
                 let data = {
@@ -363,8 +399,7 @@ export default {
             });
         },
         onSave() {
-            console.log(this.dateRange);
-            return;
+            console.log(this.selected);
             this.$refs.form.validate();
 
             if (this.form.user == null) {
@@ -372,67 +407,29 @@ export default {
                 return;
             }
 
-            if (this.selectedExpenses.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No expense(s) selected");
                 return;
             }
 
-            this.$emit("on-save", this.form);
+            if (this.$refs.form.validate()) {
+                this.$emit("on-save", this.form);
+            }
         }
     },
     computed: {
         params(nv) {
             return {
                 ...this.options,
-                query: this.dateRange,
+                query: this.range,
                 query: this.form.user
             };
         },
         default_description() {
-            return `Expense Report Summary (${this.form.from} - ${this.form.to})`;
+            return `Expense Report Summary (${this.range[0]} - ${this.range[1]})`;
         },
         balance() {
             return this.total - this.paid;
-        },
-        selectedExpenses() {
-            if (this.form) {
-                if (this.form.expenses && this.form.expenses.length) {
-                    return this.form.expenses;
-                }
-            }
-
-            return [];
-        },
-        dateRange: {
-            get() {
-                if (this.form) {
-                    return [this.form.from, this.form.to];
-                }
-
-                return [
-                    moment()
-                        .startOf("week")
-                        .format("YYYY-MM-DD"),
-                    moment()
-                        .endOf("week")
-                        .format("YYYY-MM-DD")
-                ];
-            },
-            set(value) {
-                console.log("set date", value);
-                if (this.form) {
-                    this.form.from = value[0];
-                    this.form.to = value[1];
-                    return;
-                }
-
-                this.form.from = moment()
-                    .startOf("week")
-                    .format("YYYY-MM-DD");
-                this.form.to = moment()
-                    .endOf("week")
-                    .format("YYYY-MM-DD");
-            }
         }
     },
     watch: {
@@ -441,19 +438,27 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
+
+                    this.formDataLoaded = true;
                 });
             },
             deep: true
         },
         expenseReportForm: {
-            deep: true,
             immediate: true,
+            deep: true,
             handler(newValue, oldValue) {
                 this.form = newValue;
-                this.dateRange = [
-                    newValue.from,
-                    newValue.to
-                ];
+                this.range = [newValue.from, newValue.to];
+                this.selected = newValue.expenses || [];
+
+                console.log("L O A D I N G . . . ");
+                console.log("F O R M V A L U E", newValue);
+                console.log(
+                    "S E L E C T E D E X P E N S E S",
+                    newValue.expenses
+                );
+
                 if (newValue && newValue.expenses) {
                     this.total = newValue.expenses.reduce(
                         (total, item) => total + item.amount,
@@ -464,11 +469,15 @@ export default {
                     }
                 }
 
-                this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
-                });
+                // this.getDataFromApi().then(data => {
+                //     this.items = data.items;
+                //     this.totalItems = data.total;
+                // });
             }
+        },
+        selected() {
+            this.form.expenses = this.selected;
+            this.$emit("on-update", this.form);
         }
     }
 };

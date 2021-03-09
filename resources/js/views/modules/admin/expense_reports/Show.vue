@@ -1,22 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-card v-else class="elevation-0 pt-0">
-            <!-- <v-card class="elevation-0 pt-0"> -->
+        <v-card class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -26,8 +10,11 @@
 
                 <h4 class="title green--text">Expense Report Details</h4>
             </v-card-title>
-
-            <v-form ref="form">
+            <v-skeleton-loader
+                v-if="!formDataLoaded"
+                type="article, article, image, actions, article"
+            ></v-skeleton-loader>
+            <v-form v-else ref="form">
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="8">
@@ -409,6 +396,7 @@ import "jspdf-autotable";
 export default {
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             loader: true,
             headers: [
@@ -1176,64 +1164,69 @@ export default {
             });
         },
         getData() {
-            axios
-                .get(`/api/expense_reports/${this.router_params_id}`)
-                .then(response => {
-                    let data = response.data.data;
+            return new Promise((resolve, reject) => {
+                axios
+                    .get(`/api/expense_reports/${this.router_params_id}`)
+                    .then(response => {
+                        let data = response.data.data;
 
-                    this.form.code = data.code;
-                    this.form.reference_no = data.reference_no;
-                    this.form.description = data.description;
-                    this.form.remarks = data.remarks;
-                    this.form.notes = data.notes;
-                    this.form.submission_period = data.submission_period;
-                    this.form.approval_period = data.approval_period;
-                    this.form.from = data.from;
-                    this.form.to = data.to;
-                    this.form.status = data.status;
-                    this.form.is_late_submitted = data.is_late_submitted;
-                    this.form.is_late_approved = data.is_late_approved;
+                        this.form.code = data.code;
+                        this.form.reference_no = data.reference_no;
+                        this.form.description = data.description;
+                        this.form.remarks = data.remarks;
+                        this.form.notes = data.notes;
+                        this.form.submission_period = data.submission_period;
+                        this.form.approval_period = data.approval_period;
+                        this.form.from = data.from;
+                        this.form.to = data.to;
+                        this.form.status = data.status;
+                        this.form.is_late_submitted = data.is_late_submitted;
+                        this.form.is_late_approved = data.is_late_approved;
 
-                    this.form.total = data.total;
-                    this.form.total_reimbursable = data.total_reimbursable;
-                    this.form.paid = data.paid;
-                    this.form.payments = data.payments;
-                    this.form.payment_id = data.payment_id;
-                    this.form.balance = data.balance;
+                        this.form.total = data.total;
+                        this.form.total_reimbursable = data.total_reimbursable;
+                        this.form.paid = data.paid;
+                        this.form.payments = data.payments;
+                        this.form.payment_id = data.payment_id;
+                        this.form.balance = data.balance;
 
-                    this.form.user = data.user;
-                    this.form.payment = data.payment;
-                    // this.form.expenses = data.expenses;
+                        this.form.user = data.user;
+                        this.form.payment = data.payment;
+                        // this.form.expenses = data.expenses;
 
-                    // this.form.created = data.created;
-                    // this.form.updated = data.updated;
-                    // this.form.deleted = data.deleted;
-                    // this.form.submitted = data.submitted;
-                    // this.form.approved = data.approved;
-                    // this.form.rejected = data.rejected;
-                    // this.form.cancelled = data.cancelled;
+                        // this.form.created = data.created;
+                        // this.form.updated = data.updated;
+                        // this.form.deleted = data.deleted;
+                        // this.form.submitted = data.submitted;
+                        // this.form.approved = data.approved;
+                        // this.form.rejected = data.rejected;
+                        // this.form.cancelled = data.cancelled;
 
-                    this.form.created_at = data.created_at;
-                    this.form.updated_at = data.updated_at;
-                    this.form.deleted_at = data.deleted_at;
-                    this.form.submitted_at = data.submitted_at;
-                    this.form.approved_at = data.approved_at;
-                    this.form.rejected_at = data.rejected_at;
-                    this.form.cancelled_at = data.cancelled_at;
+                        this.form.created_at = data.created_at;
+                        this.form.updated_at = data.updated_at;
+                        this.form.deleted_at = data.deleted_at;
+                        this.form.submitted_at = data.submitted_at;
+                        this.form.approved_at = data.approved_at;
+                        this.form.rejected_at = data.rejected_at;
+                        this.form.cancelled_at = data.cancelled_at;
 
-                    this.form.logs = data.logs;
+                        this.form.logs = data.logs;
 
-                    // this.loadExpenses();
+                        // this.loadExpenses();
 
-                    this.getDataFromApi().then(data => {
-                        this.form.expenses = data.items;
-                        this.totalItems = data.total;
+                        this.getDataFromApi().then(data => {
+                            this.form.expenses = data.items;
+                            this.totalItems = data.total;
+                            this.formDataLoaded = true;
+                        });
+
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        reject();
                     });
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                })
-                .finally((this.loader = false));
+            });
         },
         getDataFromApi() {
             this.loading = true;
@@ -1275,6 +1268,7 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.form.expenses = data.items;
                     this.totalItems = data.total;
+                    this.formDataLoaded = true;
                 });
             },
             deep: true
@@ -1320,7 +1314,7 @@ export default {
             }
         }
     },
-    created() {
+    mounted() {
         // this.$store.dispatch("AUTH_USER");
         this.getData();
     },
