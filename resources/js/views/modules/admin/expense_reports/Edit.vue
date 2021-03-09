@@ -156,8 +156,7 @@ export default {
                         }
                     })
                     .then(response => {
-                        this.form.expenses = response.data.data;
-                        resolve();
+                        resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
@@ -188,17 +187,13 @@ export default {
     },
     created() {
         this.getData().then(data => {
-            this.form = data;
-            this.loadExpenses(data);
-            this.formDataLoaded = true;
+            this.loadExpenses(data).then(expenses => {
+                this.form = data;
+                this.form.expenses = expenses;
+                this.formDataLoaded = true;
+            });
         });
     }
-    // created() {
-    //     this.getData().then(data => {
-    //         this.form = data;
-    //         this.loadExpenses(data);
-    //     });
-    // },
     // activated() {
     //     this.getData().then(data => {
     //         this.form = data;

@@ -167,8 +167,7 @@ __webpack_require__.r(__webpack_exports__);
             expense_report_id: _this2.$route.params.id
           }
         }).then(function (response) {
-          _this2.form.expenses = response.data.data;
-          resolve();
+          resolve(response.data.data);
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);
 
@@ -198,19 +197,13 @@ __webpack_require__.r(__webpack_exports__);
     var _this4 = this;
 
     this.getData().then(function (data) {
-      _this4.form = data;
-
-      _this4.loadExpenses(data);
-
-      _this4.formDataLoaded = true;
+      _this4.loadExpenses(data).then(function (expenses) {
+        _this4.form = data;
+        _this4.form.expenses = expenses;
+        _this4.formDataLoaded = true;
+      });
     });
-  } // created() {
-  //     this.getData().then(data => {
-  //         this.form = data;
-  //         this.loadExpenses(data);
-  //     });
-  // },
-  // activated() {
+  } // activated() {
   //     this.getData().then(data => {
   //         this.form = data;
   //         this.loadExpenses(data);

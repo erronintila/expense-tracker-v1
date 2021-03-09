@@ -481,7 +481,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.form = newValue;
         this.range = [newValue.from, newValue.to];
         this.selected = newValue.expenses || [];
-        console.log("L O A D I N G . . . ");
         console.log("F O R M V A L U E", newValue);
         console.log("S E L E C T E D E X P E N S E S", newValue.expenses);
 
