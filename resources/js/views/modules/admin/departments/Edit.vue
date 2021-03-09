@@ -11,7 +11,11 @@
         </v-card-title>
 
         <v-container>
-            <Form @onSave="onSave" :form="form" :errors="errors"></Form>
+            <Form
+                @on-save="onSave"
+                :departmentForm="form"
+                :errors="errors"
+            ></Form>
         </v-container>
     </v-card>
 </template>

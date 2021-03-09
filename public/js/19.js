@@ -102,7 +102,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    form: {
+    departmentForm: {
       type: Object,
       "default": function _default() {
         return {
@@ -129,7 +129,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      valid: false
+      valid: false,
+      form: {
+        name: ""
+      }
     };
   },
   methods: {
@@ -138,16 +141,14 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.$emit("onSave", this.departmentForm);
+      this.$emit("on-save", this.form);
     }
   },
-  computed: {
+  watch: {
     departmentForm: {
-      get: function get() {
-        return this.form;
-      },
-      set: function set(value) {
-        return value;
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.form = newValue;
       }
     }
   }
@@ -207,7 +208,7 @@ var render = function() {
         [
           _c("Form", {
             attrs: { errors: _vm.errors },
-            on: { onSave: _vm.onSave }
+            on: { "on-save": _vm.onSave }
           })
         ],
         1
@@ -273,11 +274,11 @@ var render = function() {
                   }
                 },
                 model: {
-                  value: _vm.departmentForm.name,
+                  value: _vm.form.name,
                   callback: function($$v) {
-                    _vm.$set(_vm.departmentForm, "name", $$v)
+                    _vm.$set(_vm.form, "name", $$v)
                   },
-                  expression: "departmentForm.name"
+                  expression: "form.name"
                 }
               })
             ],

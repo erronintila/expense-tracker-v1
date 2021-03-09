@@ -3,7 +3,7 @@
         <v-row>
             <v-col>
                 <v-text-field
-                    v-model="departmentForm.name"
+                    v-model="form.name"
                     label="Name"
                     :counter="100"
                     :rules="[
@@ -28,7 +28,7 @@
 <script>
 export default {
     props: {
-        form: {
+        departmentForm: {
             type: Object,
             default: () => {
                 return {
@@ -55,7 +55,10 @@ export default {
     },
     data() {
         return {
-            valid: false
+            valid: false,
+            form: {
+                name: ""
+            }
         };
     },
     methods: {
@@ -64,16 +67,14 @@ export default {
                 return;
             }
 
-            this.$emit("onSave", this.departmentForm);
+            this.$emit("on-save", this.form);
         }
     },
-    computed: {
+    watch: {
         departmentForm: {
-            get() {
-                return this.form;
-            },
-            set(value) {
-                return value;
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.form = newValue;
             }
         }
     }
