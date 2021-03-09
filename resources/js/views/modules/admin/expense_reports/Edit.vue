@@ -193,12 +193,15 @@ export default {
                 this.formDataLoaded = true;
             });
         });
+    },
+    activated() {
+        this.getData().then(data => {
+            this.loadExpenses(data).then(expenses => {
+                this.form = data;
+                this.form.expenses = expenses;
+                this.formDataLoaded = true;
+            });
+        });
     }
-    // activated() {
-    //     this.getData().then(data => {
-    //         this.form = data;
-    //         this.loadExpenses(data);
-    //     });
-    // }
 };
 </script>

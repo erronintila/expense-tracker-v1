@@ -203,13 +203,18 @@ __webpack_require__.r(__webpack_exports__);
         _this4.formDataLoaded = true;
       });
     });
-  } // activated() {
-  //     this.getData().then(data => {
-  //         this.form = data;
-  //         this.loadExpenses(data);
-  //     });
-  // }
+  },
+  activated: function activated() {
+    var _this5 = this;
 
+    this.getData().then(function (data) {
+      _this5.loadExpenses(data).then(function (expenses) {
+        _this5.form = data;
+        _this5.form.expenses = expenses;
+        _this5.formDataLoaded = true;
+      });
+    });
+  }
 });
 
 /***/ }),

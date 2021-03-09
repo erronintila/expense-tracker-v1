@@ -399,7 +399,6 @@ export default {
             });
         },
         onSave() {
-            console.log(this.selected);
             this.$refs.form.validate();
 
             if (this.form.user == null) {
@@ -438,7 +437,6 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
-
                     this.formDataLoaded = true;
                 });
             },
@@ -452,12 +450,6 @@ export default {
                 this.range = [newValue.from, newValue.to];
                 this.selected = newValue.expenses || [];
 
-                console.log("F O R M V A L U E", newValue);
-                console.log(
-                    "S E L E C T E D E X P E N S E S",
-                    newValue.expenses
-                );
-
                 if (newValue && newValue.expenses) {
                     this.total = newValue.expenses.reduce(
                         (total, item) => total + item.amount,
@@ -467,11 +459,6 @@ export default {
                         this.expenseReportErrors.expenses = [];
                     }
                 }
-
-                // this.getDataFromApi().then(data => {
-                //     this.items = data.items;
-                //     this.totalItems = data.total;
-                // });
             }
         },
         selected() {

@@ -430,7 +430,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onSave: function onSave() {
-      console.log(this.selected);
       this.$refs.form.validate();
 
       if (this.form.user == null) {
@@ -481,8 +480,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.form = newValue;
         this.range = [newValue.from, newValue.to];
         this.selected = newValue.expenses || [];
-        console.log("F O R M V A L U E", newValue);
-        console.log("S E L E C T E D E X P E N S E S", newValue.expenses);
 
         if (newValue && newValue.expenses) {
           this.total = newValue.expenses.reduce(function (total, item) {
@@ -492,11 +489,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if (newValue.expenses.length > 0) {
             this.expenseReportErrors.expenses = [];
           }
-        } // this.getDataFromApi().then(data => {
-        //     this.items = data.items;
-        //     this.totalItems = data.total;
-        // });
-
+        }
       }
     },
     selected: function selected() {
