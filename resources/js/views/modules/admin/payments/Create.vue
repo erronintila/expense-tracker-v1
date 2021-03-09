@@ -127,7 +127,7 @@
                                 class="elevation-0"
                             >
                                 <template v-slot:top>
-                                    <DateRangePicker
+                                    <!-- <DateRangePicker
                                         :preset="preset"
                                         :presets="presets"
                                         :value="date_range"
@@ -136,7 +136,30 @@
                                         :buttonColor="'white'"
                                         :buttonDark="false"
                                         @updateDates="updateDates"
-                                    ></DateRangePicker>
+                                    ></DateRangePicker> -->
+
+                                    <DateRangePicker
+                                        ref="dateRangePicker"
+                                        :dateRange="date_range"
+                                        @on-change="updateDates"
+                                    >
+                                        <template
+                                            v-slot:openDialog="{
+                                                on,
+                                                attrs,
+                                                dateRangeText
+                                            }"
+                                        >
+                                            <v-text-field
+                                                label="Date"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                readonly
+                                                :value="dateRangeText"
+                                            >
+                                            </v-text-field>
+                                        </template>
+                                    </DateRangePicker>
 
                                     <div v-if="selected.length > 0">
                                         <div class="d-inline">
@@ -318,7 +341,7 @@
 
 <script>
 import moment from "moment";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 
 export default {
     components: {

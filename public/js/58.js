@@ -11,7 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -336,11 +336,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"]
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     var _ref;
@@ -955,18 +978,44 @@ var render = function() {
                                         fn: function() {
                                           return [
                                             _c("DateRangePicker", {
+                                              ref: "dateRangePicker",
                                               attrs: {
-                                                preset: _vm.preset,
-                                                presets: _vm.presets,
-                                                value: _vm.date_range,
-                                                solo: false,
-                                                buttonType: false,
-                                                buttonColor: "white",
-                                                buttonDark: false
+                                                dateRange: _vm.date_range
                                               },
                                               on: {
-                                                updateDates: _vm.updateDates
-                                              }
+                                                "on-change": _vm.updateDates
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "openDialog",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    var dateRangeText =
+                                                      ref.dateRangeText
+                                                    return [
+                                                      _c(
+                                                        "v-text-field",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                label: "Date",
+                                                                readonly: "",
+                                                                value: dateRangeText
+                                                              }
+                                                            },
+                                                            "v-text-field",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        )
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ])
                                             }),
                                             _vm._v(" "),
                                             _vm.selected.length > 0
