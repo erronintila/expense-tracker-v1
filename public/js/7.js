@@ -154,7 +154,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    form: {
+    jobForm: {
       type: Object,
       "default": function _default() {
         return {
@@ -178,28 +178,30 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      valid: false
+      valid: false,
+      form: {
+        name: null,
+        department: null
+      }
     };
   },
   methods: {
     onChangeDepartment: function onChangeDepartment(value) {
-      this.jobForm.department = value;
+      this.form.department = value;
     },
     onSave: function onSave() {
       if (!this.$refs.form.validate()) {
         return;
       }
 
-      this.$emit("onSave", this.jobForm);
+      this.$emit("on-save", this.form);
     }
   },
-  computed: {
+  watch: {
     jobForm: {
-      get: function get() {
-        return this.form;
-      },
-      set: function set(value) {
-        return this.value;
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.form = newValue;
       }
     }
   }
@@ -287,7 +289,7 @@ var render = function() {
               _c("DepartmentDropdownSelector", {
                 ref: "departmentDropdownSelector",
                 attrs: {
-                  selectedDepartment: _vm.jobForm.department,
+                  selectedDepartment: _vm.form.department,
                   rules: _vm.mixin_validation.required,
                   errors: _vm.errors.department_id
                 },
@@ -317,11 +319,11 @@ var render = function() {
                   }
                 },
                 model: {
-                  value: _vm.jobForm.name,
+                  value: _vm.form.name,
                   callback: function($$v) {
-                    _vm.$set(_vm.jobForm, "name", $$v)
+                    _vm.$set(_vm.form, "name", $$v)
                   },
-                  expression: "jobForm.name"
+                  expression: "form.name"
                 }
               })
             ],

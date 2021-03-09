@@ -126,7 +126,7 @@ var render = function() {
             [
               _c("Form", {
                 attrs: { errors: _vm.errors },
-                on: { onSave: _vm.onSave }
+                on: { "on-save": _vm.onSave }
               })
             ],
             1

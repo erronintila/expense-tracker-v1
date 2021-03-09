@@ -9,7 +9,7 @@
                 <h4 class="title green--text">Edit Job Designation</h4>
             </v-card-title>
             <v-container>
-                <Form :errors="errors" :form="form" @onSave="onSave"></Form>
+                <Form :errors="errors" :jobForm="form" @on-save="onSave"></Form>
             </v-container>
         </v-card>
     </div>

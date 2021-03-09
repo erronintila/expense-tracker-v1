@@ -152,8 +152,8 @@ var render = function() {
             "v-container",
             [
               _c("Form", {
-                attrs: { errors: _vm.errors, form: _vm.form },
-                on: { onSave: _vm.onSave }
+                attrs: { errors: _vm.errors, jobForm: _vm.form },
+                on: { "on-save": _vm.onSave }
               })
             ],
             1
