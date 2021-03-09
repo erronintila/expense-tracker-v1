@@ -7,15 +7,15 @@
 
         <v-card-subtitle>
             <DateRangePicker
-                :buttonType="true"
-                :buttonText="true"
-                :buttonColor="'grey'"
-                :buttonClass="'ml-0 pl-0'"
-                :preset="filters.preset"
-                :presets="filters.presets"
-                :value="filters.date_range"
-                @updateDates="updateDates"
+                ref="dateRangePicker"
+                :dateRange="filters.date_range"
+                @on-change="updateDates"
             >
+                <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                    <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                        {{ dateRangeText }}
+                    </v-btn>
+                </template>
             </DateRangePicker>
         </v-card-subtitle>
 
@@ -134,7 +134,7 @@
 
 <script>
 import moment from "moment";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 import ActivityLogDataService from "../../../../services/ActivityLogDataService";
 

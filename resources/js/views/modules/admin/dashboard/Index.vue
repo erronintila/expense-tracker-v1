@@ -36,19 +36,40 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <DateRangePicker
+                                <!-- <DateRangePicker
                                     :preset="preset"
                                     :presets="presets"
                                     :value="date_range"
                                     @updateDates="updateDates"
-                                ></DateRangePicker>
+                                ></DateRangePicker> -->
+
+                                <DateRangePicker
+                                    ref="dateRangePicker"
+                                    :dateRange="date_range"
+                                    @on-change="updateDates"
+                                >
+                                    <template
+                                        v-slot:openDialog="{
+                                            on,
+                                            attrs,
+                                            dateRangeText
+                                        }"
+                                    >
+                                        <v-text-field
+                                            label="Date"
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            readonly
+                                            :value="dateRangeText"
+                                        >
+                                        </v-text-field>
+                                    </template>
+                                </DateRangePicker>
                             </v-list-item>
                             <v-list-item>
                                 <v-text-field
                                     :value="
-                                        user
-                                            ? user.full_name
-                                            : 'All Employees'
+                                        user ? user.full_name : 'All Employees'
                                     "
                                     label="Employee"
                                     readonly
@@ -59,7 +80,9 @@
                                             @selectUser="selectUser"
                                             @onReset="resetUser"
                                             :selectedUser="user"
-                                            :usersParameters="{params: { is_superadmin: false }}"
+                                            :usersParameters="{
+                                                params: { is_superadmin: false }
+                                            }"
                                         >
                                             <template
                                                 v-slot:openDialog="{
@@ -556,7 +579,7 @@
 import moment from "moment";
 import randomcolor from "randomcolor";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";
@@ -668,7 +691,7 @@ export default {
             ],
             items: [],
 
-            user: null,
+            user: null
         };
     },
     methods: {
@@ -1055,16 +1078,32 @@ export default {
 
             switch (this.filter) {
                 case "expense_type":
-                    this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
+                    this.load_expense_types_expenses(
+                        start,
+                        end,
+                        this.user ? this.user.id : null
+                    );
                     break;
                 case "department":
-                    this.load_department_expenses(start, end, this.user ? this.user.id : null);
+                    this.load_department_expenses(
+                        start,
+                        end,
+                        this.user ? this.user.id : null
+                    );
                     break;
                 case "user":
-                    this.load_users_expenses(start, end, this.user ? this.user.id : null);
+                    this.load_users_expenses(
+                        start,
+                        end,
+                        this.user ? this.user.id : null
+                    );
                     break;
                 default:
-                    this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
+                    this.load_expense_types_expenses(
+                        start,
+                        end,
+                        this.user ? this.user.id : null
+                    );
                     break;
             }
         },

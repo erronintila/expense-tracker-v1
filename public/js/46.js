@@ -15,11 +15,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(randomcolor__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 /* harmony import */ var _components_chart_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/chart/DoughnutChart */ "./resources/js/components/chart/DoughnutChart.vue");
 /* harmony import */ var _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/chart/HorizontalBarChart */ "./resources/js/components/chart/HorizontalBarChart.vue");
 /* harmony import */ var _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/chart/LineChart */ "./resources/js/components/chart/LineChart.vue");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -589,7 +612,7 @@ __webpack_require__.r(__webpack_exports__);
     // BarChart,
     HorizontalBarChart: _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__["default"],
     LineChart: _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__["default"],
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"],
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"],
     UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   data: function data() {
@@ -1251,12 +1274,39 @@ var render = function() {
                                 "v-list-item",
                                 [
                                   _c("DateRangePicker", {
-                                    attrs: {
-                                      preset: _vm.preset,
-                                      presets: _vm.presets,
-                                      value: _vm.date_range
-                                    },
-                                    on: { updateDates: _vm.updateDates }
+                                    ref: "dateRangePicker",
+                                    attrs: { dateRange: _vm.date_range },
+                                    on: { "on-change": _vm.updateDates },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "openDialog",
+                                        fn: function(ref) {
+                                          var on = ref.on
+                                          var attrs = ref.attrs
+                                          var dateRangeText = ref.dateRangeText
+                                          return [
+                                            _c(
+                                              "v-text-field",
+                                              _vm._g(
+                                                _vm._b(
+                                                  {
+                                                    attrs: {
+                                                      label: "Date",
+                                                      readonly: "",
+                                                      value: dateRangeText
+                                                    }
+                                                  },
+                                                  "v-text-field",
+                                                  attrs,
+                                                  false
+                                                ),
+                                                on
+                                              )
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ])
                                   })
                                 ],
                                 1

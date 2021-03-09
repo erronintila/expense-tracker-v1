@@ -13,7 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 /* harmony import */ var _services_NotificationDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/NotificationDataService */ "./resources/js/services/NotificationDataService.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -287,13 +287,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -547,16 +559,40 @@ var render = function() {
             "v-card-subtitle",
             [
               _c("DateRangePicker", {
-                attrs: {
-                  buttonType: true,
-                  buttonText: true,
-                  buttonColor: "grey",
-                  buttonClass: "ml-0 pl-0",
-                  preset: _vm.preset,
-                  presets: _vm.presets,
-                  value: _vm.date_range
-                },
-                on: { updateDates: _vm.updateDates }
+                ref: "dateRangePicker",
+                attrs: { dateRange: _vm.date_range },
+                on: { "on-change": _vm.updateDates },
+                scopedSlots: _vm._u([
+                  {
+                    key: "openDialog",
+                    fn: function(ref) {
+                      var on = ref.on
+                      var attrs = ref.attrs
+                      var dateRangeText = ref.dateRangeText
+                      return [
+                        _c(
+                          "v-btn",
+                          _vm._g(
+                            _vm._b(
+                              { staticClass: "ml-0 pl-0", attrs: { text: "" } },
+                              "v-btn",
+                              attrs,
+                              false
+                            ),
+                            on
+                          ),
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(dateRangeText) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                      ]
+                    }
+                  }
+                ])
               })
             ],
             1
