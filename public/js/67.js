@@ -174,8 +174,8 @@ var render = function() {
             "v-container",
             [
               _c("Form", {
-                attrs: { form: _vm.form, errors: _vm.errors },
-                on: { onSave: _vm.onSave }
+                attrs: { vendorForm: _vm.form, errors: _vm.errors },
+                on: { "on-save": _vm.onSave }
               })
             ],
             1

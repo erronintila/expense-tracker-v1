@@ -128,7 +128,7 @@ var _this = undefined;
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    form: {
+    vendorForm: {
       type: Object,
       "default": function _default() {
         return {
@@ -179,7 +179,20 @@ var _this = undefined;
     return {
       no_tin: false,
       valid: false,
-      row: null
+      row: null,
+      form: {
+        code: "",
+        name: "",
+        email: "",
+        tin: "",
+        contact_person: "",
+        mobile_number: "",
+        telephone_number: "",
+        remarks: "",
+        website: "",
+        is_vat_inclusive: true,
+        address: ""
+      }
     };
   },
   methods: {
@@ -188,31 +201,28 @@ var _this = undefined;
         return;
       }
 
-      this.$emit("onSave", this.vendorForm);
-    }
-  },
-  computed: {
-    vendorForm: {
-      get: function get() {
-        return this.form;
-      },
-      set: function set(value) {
-        return value;
-      }
+      this.$emit("on-save", this.form);
     }
   },
   watch: {
-    "vendorForm.is_vat_inclusive": function vendorFormIs_vat_inclusive() {
-      if (this.vendorForm.is_vat_inclusive) {
+    vendorForm: {
+      immediate: true,
+      deep: true,
+      handler: function handler(newValue, oldValue) {
+        this.form = newValue;
+      }
+    },
+    "form.is_vat_inclusive": function formIs_vat_inclusive() {
+      if (this.form.is_vat_inclusive) {
         this.no_tin = false;
         return;
       }
     },
     no_tin: function no_tin() {
-      this.vendorForm.tin = this.no_tin ? "N/A" : "";
+      this.form.tin = this.no_tin ? "N/A" : "";
     },
-    "vendorForm.tin": function vendorFormTin() {
-      if (this.vendorForm.tin == "N/A" || this.vendorForm.tin == null) {
+    "form.tin": function formTin() {
+      if (this.form.tin == "N/A" || this.form.tin == null) {
         this.no_tin = true;
       }
     }
@@ -271,11 +281,11 @@ var render = function() {
                   required: ""
                 },
                 model: {
-                  value: _vm.vendorForm.name,
+                  value: _vm.form.name,
                   callback: function($$v) {
-                    _vm.$set(_vm.vendorForm, "name", $$v)
+                    _vm.$set(_vm.form, "name", $$v)
                   },
-                  expression: "vendorForm.name"
+                  expression: "form.name"
                 }
               })
             ],
@@ -293,15 +303,15 @@ var render = function() {
                   on: {
                     change: function($event) {
                       _vm.no_tin = false
-                      _vm.vendorForm.tin = ""
+                      _vm.form.tin = ""
                     }
                   },
                   model: {
-                    value: _vm.vendorForm.is_vat_inclusive,
+                    value: _vm.form.is_vat_inclusive,
                     callback: function($$v) {
-                      _vm.$set(_vm.vendorForm, "is_vat_inclusive", $$v)
+                      _vm.$set(_vm.form, "is_vat_inclusive", $$v)
                     },
-                    expression: "vendorForm.is_vat_inclusive"
+                    expression: "form.is_vat_inclusive"
                   }
                 },
                 [
@@ -344,11 +354,11 @@ var render = function() {
                   }
                 ]),
                 model: {
-                  value: _vm.vendorForm.tin,
+                  value: _vm.form.tin,
                   callback: function($$v) {
-                    _vm.$set(_vm.vendorForm, "tin", $$v)
+                    _vm.$set(_vm.form, "tin", $$v)
                   },
-                  expression: "vendorForm.tin"
+                  expression: "form.tin"
                 }
               })
             ],
@@ -360,10 +370,7 @@ var render = function() {
             { attrs: { cols: "3", md: "3" } },
             [
               _c("v-checkbox", {
-                attrs: {
-                  label: "N/A",
-                  readonly: _vm.vendorForm.is_vat_inclusive
-                },
+                attrs: { label: "N/A", readonly: _vm.form.is_vat_inclusive },
                 model: {
                   value: _vm.no_tin,
                   callback: function($$v) {
@@ -386,11 +393,11 @@ var render = function() {
           label: "Email Address"
         },
         model: {
-          value: _vm.vendorForm.email,
+          value: _vm.form.email,
           callback: function($$v) {
-            _vm.$set(_vm.vendorForm, "email", $$v)
+            _vm.$set(_vm.form, "email", $$v)
           },
-          expression: "vendorForm.email"
+          expression: "form.email"
         }
       }),
       _vm._v(" "),
@@ -402,11 +409,11 @@ var render = function() {
           label: "Contact Person"
         },
         model: {
-          value: _vm.vendorForm.contact_person,
+          value: _vm.form.contact_person,
           callback: function($$v) {
-            _vm.$set(_vm.vendorForm, "contact_person", $$v)
+            _vm.$set(_vm.form, "contact_person", $$v)
           },
-          expression: "vendorForm.contact_person"
+          expression: "form.contact_person"
         }
       }),
       _vm._v(" "),
@@ -424,11 +431,11 @@ var render = function() {
           }
         },
         model: {
-          value: _vm.vendorForm.mobile_number,
+          value: _vm.form.mobile_number,
           callback: function($$v) {
-            _vm.$set(_vm.vendorForm, "mobile_number", $$v)
+            _vm.$set(_vm.form, "mobile_number", $$v)
           },
-          expression: "vendorForm.mobile_number"
+          expression: "form.mobile_number"
         }
       }),
       _vm._v(" "),
@@ -446,11 +453,11 @@ var render = function() {
           }
         },
         model: {
-          value: _vm.vendorForm.telephone_number,
+          value: _vm.form.telephone_number,
           callback: function($$v) {
-            _vm.$set(_vm.vendorForm, "telephone_number", $$v)
+            _vm.$set(_vm.form, "telephone_number", $$v)
           },
-          expression: "vendorForm.telephone_number"
+          expression: "form.telephone_number"
         }
       }),
       _vm._v(" "),
@@ -467,11 +474,11 @@ var render = function() {
           }
         },
         model: {
-          value: _vm.vendorForm.website,
+          value: _vm.form.website,
           callback: function($$v) {
-            _vm.$set(_vm.vendorForm, "website", $$v)
+            _vm.$set(_vm.form, "website", $$v)
           },
-          expression: "vendorForm.website"
+          expression: "form.website"
         }
       }),
       _vm._v(" "),
@@ -488,11 +495,11 @@ var render = function() {
           }
         },
         model: {
-          value: _vm.vendorForm.address,
+          value: _vm.form.address,
           callback: function($$v) {
-            _vm.$set(_vm.vendorForm, "address", $$v)
+            _vm.$set(_vm.form, "address", $$v)
           },
-          expression: "vendorForm.address"
+          expression: "form.address"
         }
       }),
       _vm._v(" "),

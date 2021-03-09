@@ -9,7 +9,7 @@
                 <h4 class="title green--text">Edit Vendor</h4>
             </v-card-title>
             <v-container>
-                <Form :form="form" :errors="errors" @onSave="onSave"></Form>
+                <Form :vendorForm="form" :errors="errors" @on-save="onSave"></Form>
             </v-container>
         </v-card>
     </div>
