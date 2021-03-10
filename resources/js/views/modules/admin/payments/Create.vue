@@ -59,20 +59,48 @@
                                 >
                                 </v-date-picker>
                             </v-menu>
-                            <v-autocomplete
-                                v-model="form.user"
-                                :items="users"
-                                :rules="mixin_validation.required"
+                            <v-text-field
+                                :value="
+                                    form.user
+                                        ? form.user.full_name
+                                        : 'No Employee'
+                                "
                                 :error-messages="errors.user_id"
-                                @input="errors.user = []"
-                                @change="updateUser"
-                                item-value="id"
-                                item-text="full_name"
+                                @input="errors.user_id = []"
                                 label="Employee"
-                                return-object
-                                required
+                                readonly
                             >
-                            </v-autocomplete>
+                                <template v-slot:append>
+                                    <UserDialogSelector
+                                        ref="userDialogSelector"
+                                        @selectUser="selectUser"
+                                        @onReset="resetUser"
+                                        :selectedUser="form.user"
+                                        :usersParameters="usersParameters"
+                                    >
+                                        <template
+                                            v-slot:openDialog="{
+                                                bind,
+                                                on
+                                            }"
+                                        >
+                                            <v-btn
+                                                fab
+                                                color="primary"
+                                                text
+                                                x-small
+                                                v-bind="bind"
+                                                v-on="on"
+                                            >
+                                                <v-icon dark
+                                                    >mdi-magnify</v-icon
+                                                >
+                                            </v-btn>
+                                        </template>
+                                    </UserDialogSelector>
+                                </template>
+                            </v-text-field>
+
                             <v-text-field
                                 v-model="form.description"
                                 :rules="[
@@ -127,17 +155,6 @@
                                 class="elevation-0"
                             >
                                 <template v-slot:top>
-                                    <!-- <DateRangePicker
-                                        :preset="preset"
-                                        :presets="presets"
-                                        :value="date_range"
-                                        :solo="false"
-                                        :buttonType="false"
-                                        :buttonColor="'white'"
-                                        :buttonDark="false"
-                                        @updateDates="updateDates"
-                                    ></DateRangePicker> -->
-
                                     <DateRangePicker
                                         ref="dateRangePicker"
                                         :dateRange="date_range"
@@ -342,10 +359,12 @@
 <script>
 import moment from "moment";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
+        UserDialogSelector
     },
     data() {
         return {
@@ -355,6 +374,12 @@ export default {
             menu: false,
             menu_payee: false,
             search: "",
+            usersParameters: {
+                params: {
+                    with_expense_types: true,
+                    is_superadmin: false
+                }
+            },
             date_range: [
                 moment()
                     .startOf("week")
@@ -410,7 +435,7 @@ export default {
                 payee_phone: "",
                 remarks: "",
                 notes: "",
-                user: { id: null }
+                user: null
             },
             errors: {
                 user_id: [],
@@ -432,6 +457,16 @@ export default {
         };
     },
     methods: {
+        selectUser(e) {
+            if (e == null || e == undefined) {
+                this.form.user = null;
+                return;
+            }
+            this.form.user = e;
+        },
+        resetUser() {
+            this.form.user = null;
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
@@ -450,16 +485,6 @@ export default {
                 this.totalItems = data.total;
             });
         },
-        loadUsers() {
-            axios
-                .get("/api/data/users")
-                .then(response => {
-                    this.users = response.data.data;
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                });
-        },
         getDataFromApi() {
             this.loading = true;
 
@@ -468,7 +493,7 @@ export default {
 
                 let search = this.search.trim().toLowerCase();
                 let status = this.status;
-                let user_id = this.form.user.id;
+                let user_id = this.form.user ? this.form.user.id : null;
                 let range = this.date_range;
 
                 axios
@@ -521,7 +546,7 @@ export default {
         onSave() {
             this.$refs.form.validate();
 
-            if (this.form.user.id == null || !this.form.user) {
+            if (!this.form.user) {
                 this.mixin_errorDialog("Error", "No Employee selected.");
                 return;
             }
@@ -550,7 +575,7 @@ export default {
                         remarks: this.form.remarks,
                         notes: this.form.notes,
                         expense_reports: this.selected,
-                        user_id: this.form.user.id
+                        user_id: this.form.user ? this.form.user.id : null
                     })
                     .then(response => {
                         this.onRefresh();
@@ -604,13 +629,5 @@ export default {
             );
         }
     },
-    created() {
-        // this.$store.dispatch("AUTH_USER");
-        this.loadUsers();
-    },
-    activated() {
-        // this.$store.dispatch("AUTH_USER");
-        this.loadUsers();
-    }
 };
 </script>
