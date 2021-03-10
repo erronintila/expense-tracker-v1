@@ -29,6 +29,7 @@
 
             <v-container>
                 <Form
+                    v-if="formDataLoaded"
                     :isEdit="true"
                     :errors="errors"
                     @on-save="onSave"
@@ -49,6 +50,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             loader: true,
             form: {
                 code: null,
@@ -94,18 +96,20 @@ export default {
     },
     methods: {
         getData() {
-            UserDataService.show(this.$route.params.id)
-                .then(response => {
-                    let data = response.data.data;
-                    this.form = data;
-                    this.form.job = data.job;
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                })
-                .finally(() => {
-                    this.loader = false;
-                });
+            return new Promise((resolve, reject) => {
+                UserDataService.show(this.$route.params.id)
+                    .then(response => {
+                        console.log(response.data.data.job);
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        reject();
+                    })
+                    .finally(() => {
+                        this.loader = false;
+                    });
+            });
         },
         onSave(value) {
             this.loader = true;
@@ -137,10 +141,18 @@ export default {
         }
     },
     created() {
-        this.getData();
+        this.getData().then(data => {
+            this.form = data.data;
+            this.form.job = data.data.job;
+            this.formDataLoaded = true;
+        });
     },
     activated() {
-        this.getData();
+        this.getData().then(data => {
+            this.form = data.data;
+            this.form.job = data.data.job;
+            this.formDataLoaded = true;
+        });
     }
 };
 </script>

@@ -1,11 +1,11 @@
 <template>
     <v-autocomplete
-        v-model="computedSelectedJob"
+        v-model="job"
         label="Job Designation"
         item-value="id"
         item-text="name"
         return-object
-        :items="collections.jobs"
+        :items="jobs"
         :rules="rules"
         :error-messages="errors"
         @change="onChange"
@@ -45,10 +45,9 @@ export default {
     },
     data() {
         return {
-            items: [],
-            collections: {
-                jobs: []
-            }
+            department: null,
+            jobs: [],
+            job: null
         };
     },
     methods: {
@@ -61,70 +60,104 @@ export default {
                 params
             };
 
-            JobDataService.getAll({
-                params: {
-                    department_id: this.computedSelectedDepartment?.id,
-                    // department_id: 1,
-                    itemsPerPage: 100
-                }
-            })
-                .then(response => {
-                    this.collections.jobs = response.data.data;
-
-                    if (this.showAll) {
-                        this.collections.jobs.unshift({
-                            id: null,
-                            name: "All Job Designations"
-                        });
+            return new Promise((resolve, reject) => {
+                JobDataService.getAll({
+                    params: {
+                        department_id: this.department
+                            ? this.department.id
+                            : null,
+                        itemsPerPage: 200
                     }
                 })
-                .catch(error => {
-                    console.log(error);
-                });
+                    .then(response => {
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject();
+                    });
+            });
         },
         onReset() {
-            this.computedSelectedJob = null;
-            this.getDataFromApi();
+            this.job = null;
+            this.getDataFromApi().then(data => {
+                this.jobs = data.data;
+                if (this.showAll) {
+                    this.jobs.unshift({
+                        id: null,
+                        name: "All Job Designations"
+                    });
+                }
+            });
             this.$emit("onReset");
         },
         onChange(e) {
-            this.computedSelectedJob = e;
-            this.getDataFromApi();
+            this.job = e;
+            this.getDataFromApi().then(data => {
+                this.jobs = data.data;
+                if (this.showAll) {
+                    this.jobs.unshift({
+                        id: null,
+                        name: "All Job Designations"
+                    });
+                }
+            });
             this.$emit("onChange", e);
-        }
-        // changeData(e) {
-        //     this.computedSelectedJob = e;
-        //     this.getData(this.department_id);
-        //     this.$emit("changeData", e);
-        // },
-        // resetData(department_id) {
-        //     this.computedSelectedJob = this.showAll ? this.defaultValue : null;
-        //     this.getData(department_id);
-        // }
-    },
-    computed: {
-        computedSelectedJob: {
-            get() {
-                return this.selectedJob;
-            },
-            set(value) {
-                return value;
-            }
-        },
-        computedSelectedDepartment: {
-            get() {
-                return this.selectedDepartment;
-            },
-            set(value) {
-                return value;
-            }
         }
     },
     created() {
-        this.getDataFromApi();
+        this.getDataFromApi().then(data => {
+            this.jobs = data.data;
+            if (this.showAll) {
+                this.jobs.unshift({
+                    id: null,
+                    name: "All Job Designations"
+                });
+            }
+        });
     },
     activated() {
-        this.getDataFromApi();
+        this.getDataFromApi().then(data => {
+            this.jobs = data.data;
+            if (this.showAll) {
+                this.jobs.unshift({
+                    id: null,
+                    name: "All Job Designations"
+                });
+            }
+        });
+    },
+    watch: {
+        selectedJob: {
+            deep: true, 
+            immediate: true,
+            handler(newValue, oldValue) {
+                console.log("old", this.job);
+                
+                this.job = newValue;
+
+                console.log("new", this.job);
+            }
+        },
+        selectedDepartment: {
+            deep: true, 
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.department = newValue;
+                this.job = null;
+            }
+        },
+        department() {
+            this.getDataFromApi().then(data => {
+                this.jobs = data.data;
+                if (this.showAll) {
+                    this.jobs.unshift({
+                        id: null,
+                        name: "All Job Designations"
+                    });
+                }
+            });
+        }
     }
 };
 </script>

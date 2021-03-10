@@ -54,52 +54,70 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      collections: {
-        departments: []
-      }
+      departments: [],
+      department: null
     };
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this = this;
-
-      _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll().then(function (response) {
-        _this.collections.departments = response.data.data;
-
-        if (_this.showAll) {
-          _this.collections.departments.unshift({
-            id: null,
-            name: "All Departments"
-          });
-        }
-      })["catch"](function (error) {
-        console.log(error);
+      return new Promise(function (resolve, reject) {
+        _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
+          params: {
+            itemsPerPage: 200
+          }
+        }).then(function (response) {
+          resolve(response.data);
+        })["catch"](function (error) {
+          console.log(error);
+          reject();
+        });
       });
     },
     onReset: function onReset() {
-      this.computedSelectedDepartment = null;
+      this.department = null;
       this.$emit("onReset");
     },
     onChange: function onChange(e) {
-      this.computedSelectedDepartment = e;
+      this.department = e;
       this.$emit("onChange", e);
     }
   },
-  computed: {
-    computedSelectedDepartment: {
-      get: function get() {
-        return this.selectedDepartment;
-      },
-      set: function set(value) {
-        return value;
+  watch: {
+    selectedDepartment: {
+      deep: true,
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.department = newValue;
       }
     }
   },
   created: function created() {
-    this.getDataFromApi();
+    var _this = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this.departments = data.data;
+
+      if (_this.showAll) {
+        _this.departments.unshift({
+          id: null,
+          name: "All Departments"
+        });
+      }
+    });
   },
   activated: function activated() {
-    this.getDataFromApi();
+    var _this2 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this2.departments = data.data;
+
+      if (_this2.showAll) {
+        _this2.departments.unshift({
+          id: null,
+          name: "All Departments"
+        });
+      }
+    });
   }
 });
 
@@ -601,17 +619,17 @@ var render = function() {
       "item-value": "id",
       "item-text": "name",
       "return-object": "",
-      items: _vm.collections.departments,
+      items: _vm.departments,
       rules: _vm.rules,
       "error-messages": _vm.errors
     },
     on: { change: _vm.onChange },
     model: {
-      value: _vm.computedSelectedDepartment,
+      value: _vm.department,
       callback: function($$v) {
-        _vm.computedSelectedDepartment = $$v
+        _vm.department = $$v
       },
-      expression: "computedSelectedDepartment"
+      expression: "department"
     }
   })
 }

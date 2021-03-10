@@ -52,6 +52,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -60,6 +61,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       loader: true,
       form: {
         code: null,
@@ -107,14 +109,17 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form = data;
-        _this.form.job = data.job;
-      })["catch"](function (error) {
-        _this.mixin_showErrors(error);
-      })["finally"](function () {
-        _this.loader = false;
+      return new Promise(function (resolve, reject) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(_this.$route.params.id).then(function (response) {
+          console.log(response.data.data.job);
+          resolve(response.data);
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
+
+          reject();
+        })["finally"](function () {
+          _this.loader = false;
+        });
       });
     },
     onSave: function onSave(value) {
@@ -144,10 +149,22 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getData();
+    var _this3 = this;
+
+    this.getData().then(function (data) {
+      _this3.form = data.data;
+      _this3.form.job = data.data.job;
+      _this3.formDataLoaded = true;
+    });
   },
   activated: function activated() {
-    this.getData();
+    var _this4 = this;
+
+    this.getData().then(function (data) {
+      _this4.form = data.data;
+      _this4.form.job = data.data.job;
+      _this4.formDataLoaded = true;
+    });
   }
 });
 
@@ -252,14 +269,16 @@ var render = function() {
               _c(
                 "v-container",
                 [
-                  _c("Form", {
-                    attrs: {
-                      isEdit: true,
-                      errors: _vm.errors,
-                      userForm: _vm.form
-                    },
-                    on: { "on-save": _vm.onSave }
-                  })
+                  _vm.formDataLoaded
+                    ? _c("Form", {
+                        attrs: {
+                          isEdit: true,
+                          errors: _vm.errors,
+                          userForm: _vm.form
+                        },
+                        on: { "on-save": _vm.onSave }
+                      })
+                    : _vm._e()
                 ],
                 1
               )

@@ -54,52 +54,70 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      collections: {
-        departments: []
-      }
+      departments: [],
+      department: null
     };
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this = this;
-
-      _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll().then(function (response) {
-        _this.collections.departments = response.data.data;
-
-        if (_this.showAll) {
-          _this.collections.departments.unshift({
-            id: null,
-            name: "All Departments"
-          });
-        }
-      })["catch"](function (error) {
-        console.log(error);
+      return new Promise(function (resolve, reject) {
+        _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
+          params: {
+            itemsPerPage: 200
+          }
+        }).then(function (response) {
+          resolve(response.data);
+        })["catch"](function (error) {
+          console.log(error);
+          reject();
+        });
       });
     },
     onReset: function onReset() {
-      this.computedSelectedDepartment = null;
+      this.department = null;
       this.$emit("onReset");
     },
     onChange: function onChange(e) {
-      this.computedSelectedDepartment = e;
+      this.department = e;
       this.$emit("onChange", e);
     }
   },
-  computed: {
-    computedSelectedDepartment: {
-      get: function get() {
-        return this.selectedDepartment;
-      },
-      set: function set(value) {
-        return value;
+  watch: {
+    selectedDepartment: {
+      deep: true,
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.department = newValue;
       }
     }
   },
   created: function created() {
-    this.getDataFromApi();
+    var _this = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this.departments = data.data;
+
+      if (_this.showAll) {
+        _this.departments.unshift({
+          id: null,
+          name: "All Departments"
+        });
+      }
+    });
   },
   activated: function activated() {
-    this.getDataFromApi();
+    var _this2 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this2.departments = data.data;
+
+      if (_this2.showAll) {
+        _this2.departments.unshift({
+          id: null,
+          name: "All Departments"
+        });
+      }
+    });
   }
 });
 
@@ -164,16 +182,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      items: [],
-      collections: {
-        jobs: []
-      }
+      department: null,
+      jobs: [],
+      job: null
     };
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
       var _this$department,
-          _this$computedSelecte,
           _this = this;
 
       var params = {
@@ -182,68 +198,113 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         params: params
       };
-      _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
-        params: {
-          department_id: (_this$computedSelecte = this.computedSelectedDepartment) === null || _this$computedSelecte === void 0 ? void 0 : _this$computedSelecte.id,
-          // department_id: 1,
-          itemsPerPage: 100
-        }
-      }).then(function (response) {
-        _this.collections.jobs = response.data.data;
+      return new Promise(function (resolve, reject) {
+        _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
+          params: {
+            department_id: _this.department ? _this.department.id : null,
+            itemsPerPage: 200
+          }
+        }).then(function (response) {
+          resolve(response.data);
+        })["catch"](function (error) {
+          console.log(error);
+          reject();
+        });
+      });
+    },
+    onReset: function onReset() {
+      var _this2 = this;
 
-        if (_this.showAll) {
-          _this.collections.jobs.unshift({
+      this.job = null;
+      this.getDataFromApi().then(function (data) {
+        _this2.jobs = data.data;
+
+        if (_this2.showAll) {
+          _this2.jobs.unshift({
             id: null,
             name: "All Job Designations"
           });
         }
-      })["catch"](function (error) {
-        console.log(error);
       });
-    },
-    onReset: function onReset() {
-      this.computedSelectedJob = null;
-      this.getDataFromApi();
       this.$emit("onReset");
     },
     onChange: function onChange(e) {
-      this.computedSelectedJob = e;
-      this.getDataFromApi();
-      this.$emit("onChange", e);
-    } // changeData(e) {
-    //     this.computedSelectedJob = e;
-    //     this.getData(this.department_id);
-    //     this.$emit("changeData", e);
-    // },
-    // resetData(department_id) {
-    //     this.computedSelectedJob = this.showAll ? this.defaultValue : null;
-    //     this.getData(department_id);
-    // }
+      var _this3 = this;
 
-  },
-  computed: {
-    computedSelectedJob: {
-      get: function get() {
-        return this.selectedJob;
-      },
-      set: function set(value) {
-        return value;
-      }
-    },
-    computedSelectedDepartment: {
-      get: function get() {
-        return this.selectedDepartment;
-      },
-      set: function set(value) {
-        return value;
-      }
+      this.job = e;
+      this.getDataFromApi().then(function (data) {
+        _this3.jobs = data.data;
+
+        if (_this3.showAll) {
+          _this3.jobs.unshift({
+            id: null,
+            name: "All Job Designations"
+          });
+        }
+      });
+      this.$emit("onChange", e);
     }
   },
   created: function created() {
-    this.getDataFromApi();
+    var _this4 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this4.jobs = data.data;
+
+      if (_this4.showAll) {
+        _this4.jobs.unshift({
+          id: null,
+          name: "All Job Designations"
+        });
+      }
+    });
   },
   activated: function activated() {
-    this.getDataFromApi();
+    var _this5 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this5.jobs = data.data;
+
+      if (_this5.showAll) {
+        _this5.jobs.unshift({
+          id: null,
+          name: "All Job Designations"
+        });
+      }
+    });
+  },
+  watch: {
+    selectedJob: {
+      deep: true,
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        console.log("old", this.job);
+        this.job = newValue;
+        console.log("new", this.job);
+      }
+    },
+    selectedDepartment: {
+      deep: true,
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.department = newValue;
+        this.job = null;
+      }
+    },
+    department: function department() {
+      var _this6 = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this6.jobs = data.data;
+
+        if (_this6.showAll) {
+          _this6.jobs.unshift({
+            id: null,
+            name: "All Job Designations"
+          });
+        }
+      });
+    }
   }
 });
 
@@ -899,6 +960,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -939,15 +1021,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      department: {
-        id: null,
-        name: "All Departments"
-      },
-      // departments: [],
-      job: {
-        id: null,
-        name: "All Job Designations"
-      },
+      department: null,
+      job: null,
       total_fund: 0,
       total_remaining_fund: 0,
       status: "Active",
@@ -1015,10 +1090,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     changeStatus: function changeStatus() {},
     onChangeDepartment: function onChangeDepartment(e) {
-      this.department = e; // this.job = null;
-
-      this.onChangeJob(null);
-      this.$refs.jobData.resetData(this.department.id);
+      this.department = e;
     },
     onResetDepartment: function onResetDepartment() {
       this.department = null;
@@ -1030,11 +1102,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onResetJob: function onResetJob() {
       this.job = null;
     },
-    // changeDepartment(e) {
-    //     this.department = e;
-    //     this.job = { id: null, name: "All Job Designations" };
-    //     this.$refs.jobData.resetData(this.department.id);
-    // },
     changeJob: function changeJob(e) {
       this.job = e;
     },
@@ -1265,17 +1332,17 @@ var render = function() {
       "item-value": "id",
       "item-text": "name",
       "return-object": "",
-      items: _vm.collections.departments,
+      items: _vm.departments,
       rules: _vm.rules,
       "error-messages": _vm.errors
     },
     on: { change: _vm.onChange },
     model: {
-      value: _vm.computedSelectedDepartment,
+      value: _vm.department,
       callback: function($$v) {
-        _vm.computedSelectedDepartment = $$v
+        _vm.department = $$v
       },
-      expression: "computedSelectedDepartment"
+      expression: "department"
     }
   })
 }
@@ -1307,17 +1374,17 @@ var render = function() {
       "item-value": "id",
       "item-text": "name",
       "return-object": "",
-      items: _vm.collections.jobs,
+      items: _vm.jobs,
       rules: _vm.rules,
       "error-messages": _vm.errors
     },
     on: { change: _vm.onChange },
     model: {
-      value: _vm.computedSelectedJob,
+      value: _vm.job,
       callback: function($$v) {
-        _vm.computedSelectedJob = $$v
+        _vm.job = $$v
       },
-      expression: "computedSelectedJob"
+      expression: "job"
     }
   })
 }
@@ -1673,10 +1740,20 @@ var render = function() {
                               _c("DepartmentDropdownSelector", {
                                 ref: "departmentDropdownSelector",
                                 attrs: {
-                                  selectedDepartment: _vm.department,
-                                  showAll: true
+                                  showAll: true,
+                                  selectedDepartment: _vm.department
                                 },
-                                on: { onChange: _vm.onChangeDepartment }
+                                on: {
+                                  onReset: _vm.onResetDepartment,
+                                  onChange: _vm.onChangeDepartment
+                                },
+                                model: {
+                                  value: _vm.department,
+                                  callback: function($$v) {
+                                    _vm.department = $$v
+                                  },
+                                  expression: "department"
+                                }
                               })
                             ],
                             1
@@ -1752,34 +1829,23 @@ var render = function() {
                           _c(
                             "v-list-item",
                             [
-                              _c("JobData", {
-                                ref: "jobData",
-                                attrs: {
-                                  showAll: true,
-                                  department_id: _vm.department
-                                    ? _vm.department.id
-                                    : null,
-                                  selectedJob: _vm.job
-                                },
-                                on: { changeData: _vm.changeJob }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            [
                               _c("JobDropdownSelector", {
                                 ref: "jobDropdownSelector",
                                 attrs: {
+                                  showAll: true,
                                   selectedJob: _vm.job,
-                                  selectedDepartment: _vm.department,
-                                  showAll: true
+                                  selectedDepartment: _vm.department
                                 },
                                 on: {
-                                  onChange: _vm.onChangeJob,
-                                  onReset: _vm.onResetJob
+                                  onReset: _vm.onResetJob,
+                                  onChange: _vm.onChangeJob
+                                },
+                                model: {
+                                  value: _vm.job,
+                                  callback: function($$v) {
+                                    _vm.job = $$v
+                                  },
+                                  expression: "job"
                                 }
                               })
                             ],
@@ -1923,7 +1989,7 @@ var render = function() {
                           value:
                             _vm.selected.length > 0 && _vm.status == "Active",
                           expression:
-                            "selected.length > 0  && status == 'Active'"
+                            "selected.length > 0 && status == 'Active'"
                         }
                       ],
                       staticClass: "mr-2 mb-2",

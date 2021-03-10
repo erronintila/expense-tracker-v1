@@ -1,11 +1,11 @@
 <template>
     <v-autocomplete
-        v-model="computedSelectedDepartment"
+        v-model="department"
         label="Department"
         item-value="id"
         item-text="name"
         return-object
-        :items="collections.departments"
+        :items="departments"
         :rules="rules"
         :error-messages="errors"
         @change="onChange"
@@ -40,49 +40,66 @@ export default {
     },
     data() {
         return {
-            collections: {
-                departments: []
-            }
+            departments: [],
+            department: null
         };
     },
     methods: {
         getDataFromApi() {
-            DepartmentDataService.getAll()
-                .then(response => {
-                    this.collections.departments = response.data.data;
-
-                    if (this.showAll) {
-                        this.collections.departments.unshift({id: null, name: "All Departments"});
+            return new Promise((resolve, reject) => {
+                DepartmentDataService.getAll({
+                    params: {
+                        itemsPerPage: 200
                     }
                 })
-                .catch(error => {
-                    console.log(error);
-                });
+                    .then(response => {
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject();
+                    });
+            });
         },
         onReset() {
-            this.computedSelectedDepartment = null;
+            this.department = null;
             this.$emit("onReset");
         },
         onChange(e) {
-            this.computedSelectedDepartment = e;
+            this.department = e;
             this.$emit("onChange", e);
         }
     },
-    computed: {
-        computedSelectedDepartment: {
-            get() {
-                return this.selectedDepartment;
-            },
-            set(value) {
-                return value;
+    watch: {
+        selectedDepartment: {
+            deep: true, 
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.department = newValue;
             }
         }
     },
     created() {
-        this.getDataFromApi();
+        this.getDataFromApi().then(data => {
+            this.departments = data.data;
+            if (this.showAll) {
+                this.departments.unshift({
+                    id: null,
+                    name: "All Departments"
+                });
+            }
+        });
     },
     activated() {
-        this.getDataFromApi();
+        this.getDataFromApi().then(data => {
+            this.departments = data.data;
+            if (this.showAll) {
+                this.departments.unshift({
+                    id: null,
+                    name: "All Departments"
+                });
+            }
+        });
     }
 };
 </script>

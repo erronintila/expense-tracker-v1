@@ -172,10 +172,20 @@
                                     :showAll="true"
                                     @changeData="changeDepartment"
                                 ></DepartmentData> -->
-                                <DepartmentDropdownSelector
+                                <!-- <DepartmentDropdownSelector
                                     ref="departmentDropdownSelector"
                                     :selectedDepartment="department"
                                     :showAll="true"
+                                    @onChange="onChangeDepartment"
+                                >
+                                </DepartmentDropdownSelector> -->
+
+                                <DepartmentDropdownSelector
+                                    v-model="department"
+                                    ref="departmentDropdownSelector"
+                                    :showAll="true"
+                                    :selectedDepartment="department"
+                                    @onReset="onResetDepartment"
                                     @onChange="onChangeDepartment"
                                 >
                                 </DepartmentDropdownSelector>
@@ -205,7 +215,7 @@
                     </template>
                     <v-card>
                         <v-list>
-                            <v-list-item>
+                            <!-- <v-list-item>
                                 <JobData
                                     ref="jobData"
                                     :showAll="true"
@@ -213,18 +223,29 @@
                                         department ? department.id : null
                                     "
                                     :selectedJob="job"
-                                    @changeData="changeJob"
+                                    @changeData="changeJob" 
                                 ></JobData>
-                            </v-list-item>
+                            </v-list-item> -->
                             <v-list-item>
-                                <JobDropdownSelector
+                                <!-- <JobDropdownSelector
                                     ref="jobDropdownSelector"
                                     :selectedJob="job"
                                     :selectedDepartment="department"
                                     :showAll="true"
                                     @onChange="onChangeJob"
                                     @onReset="onResetJob"
-                                ></JobDropdownSelector>
+                                ></JobDropdownSelector> -->
+
+                                <JobDropdownSelector
+                                    v-model="job"
+                                    ref="jobDropdownSelector"
+                                    :showAll="true"
+                                    :selectedJob="job"
+                                    :selectedDepartment="department"
+                                    @onReset="onResetJob"
+                                    @onChange="onChangeJob"
+                                >
+                                </JobDropdownSelector>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -287,7 +308,7 @@
                     Restore
                 </v-chip>
                 <v-chip
-                    v-show="selected.length > 0  && status == 'Active'"
+                    v-show="selected.length > 0 && status == 'Active'"
                     close
                     class="mr-2 mb-2"
                     small
@@ -298,7 +319,7 @@
                 >
                     Archive
                 </v-chip>
-            </v-row>    
+            </v-row>
 
             <v-card-subtitle>
                 <v-hover v-slot:default="{ hover }">
@@ -476,9 +497,8 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            department: { id: null, name: "All Departments" },
-            // departments: [],
-            job: { id: null, name: "All Job Designations" },
+            department: null,
+            job: null,
 
             total_fund: 0,
             total_remaining_fund: 0,
@@ -534,9 +554,6 @@ export default {
         changeStatus() {},
         onChangeDepartment(e) {
             this.department = e;
-            // this.job = null;
-            this.onChangeJob(null);
-            this.$refs.jobData.resetData(this.department.id);
         },
         onResetDepartment() {
             this.department = null;
@@ -548,11 +565,6 @@ export default {
         onResetJob() {
             this.job = null;
         },
-        // changeDepartment(e) {
-        //     this.department = e;
-        //     this.job = { id: null, name: "All Job Designations" };
-        //     this.$refs.jobData.resetData(this.department.id);
-        // },
         changeJob(e) {
             this.job = e;
         },

@@ -1,78 +1,66 @@
 <template>
     <div>
         <v-container>
-            <DateRangePicker ref="dateRangePicker" :dateRange="dates" @on-change="onChangeDate">
-                <template
-                    v-slot:openDialog="{ on, attrs, dateRangeText }"
-                >
-                    <v-text-field
-                        label="Date"
-                        v-bind="attrs"
-                        v-on="on"
-                        readonly
-                        prepend-icon="mdi-calendar"
-                        :value="dateRangeText"
-                    >
-                    </v-text-field>
-                </template>
-            </DateRangePicker>
-            <div class="overline">
-                {{ rangeText }}
-            </div>
-            <div>
-                <v-btn @click="onReset">Reset</v-btn>
-                <v-btn @click="onSave">Save</v-btn>
-            </div>
+            <DepartmentDropdownSelector
+                v-model="department"
+                :showAll="true"
+                :selectedDepartment="department"
+                @onReset="onResetDepartment"
+                @onChange="onChangeDepartment"
+            >
+            </DepartmentDropdownSelector>
+            <JobDropdownSelector
+                v-model="job"
+                :showAll="true"
+                :selectedJob="job"
+                :selectedDepartment="department"
+                @onReset="onResetJob"
+                @onChange="onChangeJob"
+            >
+            </JobDropdownSelector>
+            <v-btn @click="onResetDepartment">Reset Department</v-btn>
+            <v-btn @click="onResetJob">Reset Job</v-btn>
+            <v-btn @click="onReset">Reset All</v-btn>
         </v-container>
     </div>
 </template>
 <script>
-import DateRangePicker from "../components/datepicker/DateRangePicker";
-import moment from "moment";
+import DepartmentDropdownSelector from "../components/selector/DepartmentDropdownSelector";
+import JobDropdownSelector from "../components/selector/JobDropdownSelector";
 
 export default {
     components: {
-        DateRangePicker
+        DepartmentDropdownSelector,
+        JobDropdownSelector
     },
     data() {
         return {
-            dates: [
-                moment()
-                    .startOf("week")
-                    .format("YYYY-MM-DD"),
-                moment()
-                    .endOf("week")
-                    .format("YYYY-MM-DD")
-            ],
+            department: null,
+            job: null,
             user: {}
         };
     },
-    computed: {
-        rangeText() {
-            return this.dates.join(" ~ ");
-        }
-    },
+    computed: {},
     methods: {
-        onChangeDate(e) {
-            this.dates = e;
-            console.log("change date (PARENT)", e);
+        onResetDepartment() {
+            this.department = null;
+            console.log("Department reset", this.department);
+        },
+        onChangeDepartment(e) {
+            this.department = e;
+            console.log("Department changed", this.department);
+        },
+        onResetJob() {
+            this.job = null;
+            console.log("Job reset", this.job);
+        },
+        onChangeJob(e) {
+            this.job = e;
+            console.log("Job changed", this.job);
         },
         onReset() {
-            this.dates = [
-                moment()
-                    .startOf("week")
-                    .format("YYYY-MM-DD"),
-                moment()
-                    .endOf("week")
-                    .format("YYYY-MM-DD")
-            ];
-
-            console.log("resetted dates (PARENT)", this.dates);
-
-            // this.$refs.dateRangePicker.onReset();
-        },
-        onSave() {
-            console.log("save (PARENT)", this.dates);
+            this.onResetDepartment();
+            this.onResetJob();
         }
         // async getUser() {
         //     let res = await axios.get("/api/users/2");

@@ -10,7 +10,7 @@
                 <v-expansion-panel-content>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <JobSelector
+                            <!-- <JobSelector
                                 v-model="form.job"
                                 ref="jobSelector"
                                 :showAll="false"
@@ -19,7 +19,18 @@
                                 :selectedJob="form.job"
                                 @changeData="onChangeJob"
                             >
-                            </JobSelector>
+                            </JobSelector> -->
+
+                            <JobDropdownSelector
+                                v-model="form.job"
+                                ref="jobSelector"
+                                :selectedJob="form.job"
+                                :rules="mixin_validation.required"
+                                :errors="errors.job_id"
+                                @onChange="onChangeJob"
+                            >
+                            </JobDropdownSelector>
+                            <v-btn @click="form.job = {id: 2}">Reset</v-btn>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -281,12 +292,12 @@
 </template>
 <script>
 import moment from "moment";
-import JobSelector from "../../../../components/selector/dropdown/Jobs";
+import JobDropdownSelector from "../../../../components/selector/JobDropdownSelector"
 import PermissionDataService from "../../../../services/PermissionDataService";
 
 export default {
     components: {
-        JobSelector
+        JobDropdownSelector
     },
     props: {
         userForm: {

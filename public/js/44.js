@@ -9,11 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-//
-//
+/* harmony import */ var _components_selector_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/selector/DepartmentDropdownSelector */ "./resources/js/components/selector/DepartmentDropdownSelector.vue");
+/* harmony import */ var _components_selector_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/selector/JobDropdownSelector */ "./resources/js/components/selector/JobDropdownSelector.vue");
 //
 //
 //
@@ -44,30 +41,37 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_0__["default"]
+    DepartmentDropdownSelector: _components_selector_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_0__["default"],
+    JobDropdownSelector: _components_selector_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      dates: [moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().endOf("week").format("YYYY-MM-DD")],
+      department: null,
+      job: null,
       user: {}
     };
   },
-  computed: {
-    rangeText: function rangeText() {
-      return this.dates.join(" ~ ");
-    }
-  },
+  computed: {},
   methods: {
-    onChangeDate: function onChangeDate(e) {
-      this.dates = e;
-      console.log("change date (PARENT)", e);
+    onResetDepartment: function onResetDepartment() {
+      this.department = null;
+      console.log("Department reset", this.department);
+    },
+    onChangeDepartment: function onChangeDepartment(e) {
+      this.department = e;
+      console.log("Department changed", this.department);
+    },
+    onResetJob: function onResetJob() {
+      this.job = null;
+      console.log("Job reset", this.job);
+    },
+    onChangeJob: function onChangeJob(e) {
+      this.job = e;
+      console.log("Job changed", this.job);
     },
     onReset: function onReset() {
-      this.dates = [moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().endOf("week").format("YYYY-MM-DD")];
-      console.log("resetted dates (PARENT)", this.dates); // this.$refs.dateRangePicker.onReset();
-    },
-    onSave: function onSave() {
-      console.log("save (PARENT)", this.dates);
+      this.onResetDepartment();
+      this.onResetJob();
     } // async getUser() {
     //     let res = await axios.get("/api/users/2");
     //     try {
@@ -109,56 +113,44 @@ var render = function() {
       _c(
         "v-container",
         [
-          _c("DateRangePicker", {
-            ref: "dateRangePicker",
-            attrs: { dateRange: _vm.dates },
-            on: { "on-change": _vm.onChangeDate },
-            scopedSlots: _vm._u([
-              {
-                key: "openDialog",
-                fn: function(ref) {
-                  var on = ref.on
-                  var attrs = ref.attrs
-                  var dateRangeText = ref.dateRangeText
-                  return [
-                    _c(
-                      "v-text-field",
-                      _vm._g(
-                        _vm._b(
-                          {
-                            attrs: {
-                              label: "Date",
-                              readonly: "",
-                              "prepend-icon": "mdi-calendar",
-                              value: dateRangeText
-                            }
-                          },
-                          "v-text-field",
-                          attrs,
-                          false
-                        ),
-                        on
-                      )
-                    )
-                  ]
-                }
-              }
-            ])
+          _c("DepartmentDropdownSelector", {
+            attrs: { showAll: true, selectedDepartment: _vm.department },
+            on: {
+              onReset: _vm.onResetDepartment,
+              onChange: _vm.onChangeDepartment
+            },
+            model: {
+              value: _vm.department,
+              callback: function($$v) {
+                _vm.department = $$v
+              },
+              expression: "department"
+            }
           }),
           _vm._v(" "),
-          _c("div", { staticClass: "overline" }, [
-            _vm._v("\n            " + _vm._s(_vm.rangeText) + "\n        ")
+          _c("JobDropdownSelector", {
+            attrs: {
+              showAll: true,
+              selectedJob: _vm.job,
+              selectedDepartment: _vm.department
+            },
+            on: { onReset: _vm.onResetJob, onChange: _vm.onChangeJob },
+            model: {
+              value: _vm.job,
+              callback: function($$v) {
+                _vm.job = $$v
+              },
+              expression: "job"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-btn", { on: { click: _vm.onResetDepartment } }, [
+            _vm._v("Reset Department")
           ]),
           _vm._v(" "),
-          _c(
-            "div",
-            [
-              _c("v-btn", { on: { click: _vm.onReset } }, [_vm._v("Reset")]),
-              _vm._v(" "),
-              _c("v-btn", { on: { click: _vm.onSave } }, [_vm._v("Save")])
-            ],
-            1
-          )
+          _c("v-btn", { on: { click: _vm.onResetJob } }, [_vm._v("Reset Job")]),
+          _vm._v(" "),
+          _c("v-btn", { on: { click: _vm.onReset } }, [_vm._v("Reset All")])
         ],
         1
       )
