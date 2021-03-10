@@ -5,9 +5,666 @@
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\views\\modules\\admin\\payments\\Create.vue: Unexpected token, expected \":\" (598:20)\n\n\u001b[0m \u001b[90m 596 | \u001b[39m                        expense_reports\u001b[33m:\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mselected\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 597 | \u001b[39m                        user_id\u001b[33m:\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mform\u001b[33m.\u001b[39muser \u001b[33m?\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mform\u001b[33m.\u001b[39muser\u001b[33m.\u001b[39mid\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 598 | \u001b[39m                    })\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 599 | \u001b[39m                    \u001b[33m.\u001b[39mthen(response \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 600 | \u001b[39m                        \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39monRefresh()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 601 | \u001b[39m\u001b[0m\n    at Parser._raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:753:17)\n    at Parser.unexpected (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8966:16)\n    at Parser.expect (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8952:28)\n    at Parser.parseConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9671:12)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9663:17)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:39\n    at Parser.allowInAnd (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseMaybeAssignAllowIn (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:17)\n    at Parser.parseObjectProperty (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10816:101)\n    at Parser.parseObjPropValue (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10841:100)\n    at Parser.parsePropertyDefinition (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10772:10)\n    at Parser.parseObjectLike (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10664:25)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10198:23)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:39\n    at Parser.allowInAnd (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11303:12)\n    at Parser.parseMaybeAssignAllowIn (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9586:17)\n    at Parser.parseExprListItem (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11051:18)\n    at Parser.parseCallExpressionArguments (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10053:22)\n    at Parser.parseCoverCallAndAsyncArrowHead (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9960:29)\n    at Parser.parseSubscript (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9896:19)\n    at Parser.parseSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9867:19)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9850:17)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"],
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    var _ref;
+
+    return _ref = {
+      loading: true,
+      loader: false,
+      valid: false,
+      menu: false,
+      menu_payee: false,
+      search: "",
+      usersParameters: {
+        params: {
+          with_expense_types: true,
+          is_superadmin: false
+        }
+      },
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
+      headers: [{
+        text: "Period",
+        value: "period",
+        sortable: false
+      }, {
+        text: "Code",
+        value: "code",
+        sortable: false
+      }, {
+        text: "Description",
+        value: "description",
+        sortable: false
+      }, {
+        text: "Amount",
+        value: "total",
+        sortable: false
+      }, {
+        text: "Balance",
+        value: "balance",
+        sortable: false
+      }, {
+        text: "Payment",
+        value: "balance",
+        sortable: false
+      }, {
+        text: "",
+        value: "actions",
+        sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand",
+        sortable: false
+      }],
+      items: [],
+      selected: [],
+      users: [],
+      total: 0,
+      totalAmount: 0,
+      totalItems: 0
+    }, _defineProperty(_ref, "search", ""), _defineProperty(_ref, "options", {
+      sortBy: ["created_at"],
+      sortDesc: [true],
+      page: 1,
+      itemsPerPage: 10
+    }), _defineProperty(_ref, "form", {
+      id: 0,
+      code: "",
+      reference_no: "",
+      voucher_no: "",
+      description: "",
+      date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
+      cheque_no: "",
+      cheque_date: "",
+      amount: "",
+      payee: "",
+      payee_address: "",
+      payee_phone: "",
+      remarks: "",
+      notes: "",
+      user: null
+    }), _defineProperty(_ref, "errors", {
+      user_id: [],
+      code: [],
+      reference_no: [],
+      voucher_no: [],
+      description: [],
+      date: [],
+      cheque_no: [],
+      cheque_date: [],
+      amount: [],
+      payee: [],
+      payee_address: [],
+      payee_phone: [],
+      remarks: [],
+      notes: [],
+      expense_reports: []
+    }), _ref;
+  },
+  methods: {
+    selectUser: function selectUser(e) {
+      if (e == null || e == undefined) {
+        this.form.user = null;
+        return;
+      }
+
+      this.form.user = e;
+    },
+    resetUser: function resetUser() {
+      this.form.user = null;
+    },
+    onRefresh: function onRefresh() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
+    updateDates: function updateDates(e) {
+      var _this = this;
+
+      this.date_range = e; // this.loadExpenseReports();
+
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.items;
+        _this.totalItems = data.total;
+      });
+    },
+    updateUser: function updateUser() {
+      var _this2 = this;
+
+      this.errors.user_id = [];
+      this.getDataFromApi().then(function (data) {
+        _this2.items = data.items;
+        _this2.totalItems = data.total;
+      });
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this3 = this;
+
+      this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this3$options = _this3.options,
+            sortBy = _this3$options.sortBy,
+            sortDesc = _this3$options.sortDesc,
+            page = _this3$options.page,
+            itemsPerPage = _this3$options.itemsPerPage;
+
+        var search = _this3.search.trim().toLowerCase();
+
+        var status = _this3.status;
+        var user_id = _this3.form.user ? _this3.form.user.id : null;
+        var range = _this3.date_range;
+        axios.get("/api/expense_reports", {
+          params: {
+            search: search,
+            sortBy: sortBy[0],
+            sortType: sortDesc[0] ? "desc" : "asc",
+            page: page,
+            itemsPerPage: itemsPerPage,
+            status: status,
+            user_id: user_id,
+            start_date: range[0],
+            end_date: range[1] ? range[1] : range[0],
+            admin_page: true,
+            create_payment: true
+          }
+        }).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          resolve({
+            items: items,
+            total: total
+          });
+        })["catch"](function (error) {
+          _this3.mixin_showErrors(error);
+
+          reject();
+        })["finally"](_this3.loading = false);
+      });
+    },
+    // loadExpenseReports() {
+    //     let start_date = this.date_range[0];
+    //     let end_date = this.date_range[1];
+    //     axios
+    //         .get("/api/data/expense_reports", {
+    //             params: {
+    //                 create_payment: true,
+    //                 start_date: start_date,
+    //                 end_date: end_date,
+    //                 user_id: this.form.user.id
+    //             }
+    //         })
+    //         .then(response => {
+    //             this.items = response.data.data;
+    //         })
+    //         .catch(error => {
+    //              this.mixin_showErrors(error);
+    //         });
+    // },
+    onSave: function onSave() {
+      var _this4 = this;
+
+      this.$refs.form.validate();
+
+      if (!this.form.user) {
+        this.mixin_errorDialog("Error", "No Employee selected.");
+        return;
+      }
+
+      if (this.selected == 0) {
+        this.mixin_errorDialog("Error", "No Expense Report selected.");
+        return;
+      }
+
+      if (this.$refs.form.validate()) {
+        this.loader = true;
+        axios.post("/api/payments", {
+          code: this.form.code,
+          reference_no: this.form.reference_no,
+          voucher_no: this.form.voucher_no,
+          description: this.form.description,
+          date: this.form.date,
+          cheque_no: this.form.cheque_no,
+          cheque_date: this.form.cheque_date,
+          amount: this.total,
+          payee: this.form.payee,
+          payee_address: this.form.payee_address,
+          payee_phone: this.form.payee_phone,
+          remarks: this.form.remarks,
+          notes: this.form.notes,
+          expense_reports: this.selected,
+          user_id: this.form.user ? this.form.user.id : null
+        }).then(function (response) {
+          _this4.onRefresh();
+
+          _this4.$dialog.message.success("Payment created successfully.", {
+            position: "top-right",
+            timeout: 2000
+          });
+
+          _this4.$store.dispatch("AUTH_NOTIFICATIONS");
+
+          _this4.$router.push({
+            name: "admin.payments.index"
+          });
+        })["catch"](function (error) {
+          _this4.mixin_showErrors(error);
+
+          _this4.errors = error.response.data.errors;
+        })["finally"](this.loader = false);
+        return;
+      }
+    }
+  },
+  computed: {
+    params: function params(nv) {
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
+        query: this.search
+      }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    },
+    maxDate: function maxDate() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+    }
+  },
+  watch: {
+    params: {
+      handler: function handler() {
+        var _this5 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
+        });
+      },
+      deep: true
+    },
+    selected: function selected() {
+      this.totalAmount = this.mixin_formatNumber(this.selected.reduce(function (total, item) {
+        return total + item.total;
+      }, 0));
+    }
+  }
+});
 
 /***/ }),
 
@@ -224,52 +881,77 @@ var render = function() {
                                 1
                               ),
                               _vm._v(" "),
-                              _c("UserDialogSelector", {
-                                ref: "userDialogSelector",
+                              _c("v-text-field", {
                                 attrs: {
-                                  selectedUser: _vm.form.user,
-                                  usersParameters: _vm.usersParameters
+                                  value: _vm.form.user
+                                    ? _vm.form.user.full_name
+                                    : "No Employee",
+                                  "error-messages": _vm.errors.user_id,
+                                  label: "Employee",
+                                  readonly: ""
                                 },
                                 on: {
-                                  selectUser: _vm.selectUser,
-                                  onReset: _vm.resetUser
+                                  input: function($event) {
+                                    _vm.errors.user_id = []
+                                  }
                                 },
                                 scopedSlots: _vm._u([
                                   {
-                                    key: "openDialog",
-                                    fn: function(ref) {
-                                      var bind = ref.bind
-                                      var on = ref.on
+                                    key: "append",
+                                    fn: function() {
                                       return [
-                                        _c(
-                                          "v-btn",
-                                          _vm._g(
-                                            _vm._b(
-                                              {
-                                                attrs: {
-                                                  fab: "",
-                                                  color: "primary",
-                                                  text: "",
-                                                  "x-small": ""
-                                                }
-                                              },
-                                              "v-btn",
-                                              bind,
-                                              false
-                                            ),
-                                            on
-                                          ),
-                                          [
-                                            _c(
-                                              "v-icon",
-                                              { attrs: { dark: "" } },
-                                              [_vm._v("mdi-magnify")]
-                                            )
-                                          ],
-                                          1
-                                        )
+                                        _c("UserDialogSelector", {
+                                          ref: "userDialogSelector",
+                                          attrs: {
+                                            selectedUser: _vm.form.user,
+                                            usersParameters: _vm.usersParameters
+                                          },
+                                          on: {
+                                            selectUser: _vm.selectUser,
+                                            onReset: _vm.resetUser
+                                          },
+                                          scopedSlots: _vm._u([
+                                            {
+                                              key: "openDialog",
+                                              fn: function(ref) {
+                                                var bind = ref.bind
+                                                var on = ref.on
+                                                return [
+                                                  _c(
+                                                    "v-btn",
+                                                    _vm._g(
+                                                      _vm._b(
+                                                        {
+                                                          attrs: {
+                                                            fab: "",
+                                                            color: "primary",
+                                                            text: "",
+                                                            "x-small": ""
+                                                          }
+                                                        },
+                                                        "v-btn",
+                                                        bind,
+                                                        false
+                                                      ),
+                                                      on
+                                                    ),
+                                                    [
+                                                      _c(
+                                                        "v-icon",
+                                                        { attrs: { dark: "" } },
+                                                        [_vm._v("mdi-magnify")]
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ])
+                                        })
                                       ]
-                                    }
+                                    },
+                                    proxy: true
                                   }
                                 ])
                               }),

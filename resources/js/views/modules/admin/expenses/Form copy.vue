@@ -5,7 +5,7 @@
         </div>
         <p class="text--disabled">
             Note: Due of encoding of expenses :
-            <!-- {{ $store.getters.settings.submission_period }} -->
+            {{ $store.getters.settings.submission_period }}
         </p>
 
         <v-row>
@@ -47,7 +47,11 @@
         <v-row>
             <v-col>
                 <v-text-field
-                    :value="form.vendor ? form.vendor.name : 'No Vendor'"
+                    :value="
+                        form.vendor
+                            ? form.vendor.name
+                            : 'No Vendor'
+                    "
                     :error-messages="errors.vendor_id"
                     @input="errors.vendor_id = []"
                     label="Vendor"
@@ -127,7 +131,9 @@
                         Remaining Fund:
                         <v-btn color="green" dark small outlined>{{
                             mixin_formatNumber(
-                                form.user ? form.user.remaining_fund : 0
+                                form.user
+                                    ? form.user.remaining_fund
+                                    : 0
                             )
                         }}</v-btn>
                     </p>
@@ -153,6 +159,35 @@
                 will be considered as reimbursable.
             </p>
         </div>
+
+        <!-- <v-list-item three-line>
+            <v-list-item-content>
+                <div class="overline mb-4 green--text">
+                    Expense Details
+                </div>
+                <v-list-item-subtitle>
+                    Remaining Fund:
+
+                    <v-btn color="green" dark small outlined>{{
+                        mixin_formatNumber(
+                            form.user
+                                ? form.user.remaining_fund
+                                : 0
+                        )
+                    }}</v-btn>
+                    ~ Expense Limit:
+                    <v-btn color="green" dark small outlined>{{
+                        expense_amount_limit == null
+                            ? "No Limit"
+                            : mixin_formatNumber(expense_amount_limit)
+                    }}</v-btn>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                    Note: Expense amount exceeding the remaining fund/expense
+                    limit will be considered as reimbursable.
+                </v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item> -->
 
         <v-row>
             <v-col cols="12" md="8">
@@ -241,10 +276,7 @@
                 itemsPerPageOptions: [5, 10, 20]
             }"
         >
-            <template
-                slot="body.append"
-                v-if="form.details ? form.details.length > 0 : false"
-            >
+            <template slot="body.append" v-if="form.details.length > 0">
                 <tr class="green--text hidden-md-and-up">
                     <td class="title">
                         Total:
@@ -290,20 +322,24 @@
                                 <v-row>
                                     <v-col cols="12">
                                         <v-text-field
-                                            v-model="sub_detail.description"
+                                            v-model="
+                                                form.details.description
+                                            "
                                             label="Particular"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="3">
                                         <v-text-field
-                                            v-model="sub_detail.quantity"
+                                            v-model="
+                                                form.details.quantity
+                                            "
                                             label="Quantity"
                                             type="number"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" md="9">
                                         <v-text-field
-                                            v-model="sub_detail.amount"
+                                            v-model="form.details.amount"
                                             label="Amount"
                                             type="number"
                                         ></v-text-field>
@@ -424,7 +460,7 @@
                                 <small>Inclusive</small>
                             </td>
                             <td class="text-right">
-                                {{ mixin_formatNumber(taxable_amount) }}
+                                {{ mixin_formatNumber(0) }}
                             </td>
                         </tr>
                         <tr>
@@ -466,7 +502,7 @@ import UserDialogSelector from "../.../../../../../components/selector/dialog/Us
 
 export default {
     props: {
-        expenseForm: {
+        form: {
             type: Object,
             default: () => {
                 return {
@@ -482,33 +518,29 @@ export default {
                     tax_amount: 0,
                     receipt_number: null,
                     date: moment().format("YYYY-MM-DD"),
-                    details: [],
-                    // details: {
-                    //     description: "",
-                    //     quantity: 1,
-                    //     amount: 0,
-                    //     total: 0
-                    // },
+                    details: {
+                        description: "",
+                        quantity: 1,
+                        amount: 0,
+                        total: 0
+                    },
                     remarks: "",
                     notes: "",
-                    // encoding_period: this.$store.getters.settings
-                    //     .expense_encoding_period,
-                    encoding_period: 5,
-                    // expense_type: {
-                    //     id: null,
-                    //     name: "",
-                    //     limit: null,
-                    //     sub_types: { id: null, name: "None", limit: null }
-                    // },
-                    // sub_type: { id: null, name: "", limit: null },
-                    expense_type: null,
-                    sub_type: null,
+                    encoding_period: this.$store.getters.settings
+                        .expense_encoding_period,
+                    expense_type: {
+                        id: null,
+                        name: "",
+                        limit: null,
+                        sub_types: { id: null, name: "None", limit: null }
+                    },
+                    sub_type: { id: null, name: "", limit: null },
                     user: null,
                     vendor: null,
                     expense_report_id: null,
                     tax_id: null,
                     expense_header_id: null,
-                    details_quantity: 0,
+                    detials_quantity: 0,
                     details_amount: 0,
                     is_active: true,
                     // particular: "",
@@ -582,7 +614,6 @@ export default {
             dialog: false,
             valid: false,
             menu: false,
-            itemize: false,
             headers: [
                 { text: "Particulars", value: "description", sortable: false },
                 { text: "Quantity", value: "quantity", sortable: false },
@@ -590,12 +621,6 @@ export default {
                 { text: "Total", value: "total", sortable: false },
                 { text: "", value: "actions", sortable: false }
             ],
-            sub_detail: {
-                description: "",
-                quantity: 1,
-                amount: 0,
-                total: 0
-            },
             form: {
                 code: null,
                 reference_no: null,
@@ -609,33 +634,29 @@ export default {
                 tax_amount: 0,
                 receipt_number: null,
                 date: moment().format("YYYY-MM-DD"),
-                details: [],
-                // details: {
-                //     description: "",
-                //     quantity: 1,
-                //     amount: 0,
-                //     total: 0
-                // },
+                details: {
+                    description: "",
+                    quantity: 1,
+                    amount: 0,
+                    total: 0
+                },
                 remarks: "",
                 notes: "",
-                // encoding_period: this.$store.getters.settings
-                //     .expense_encoding_period,
-                encoding_period: 5,
-                expense_type: null,
-                sub_type: null,
-                // expense_type: {
-                //     id: null,
-                //     name: "",
-                //     limit: null,
-                //     sub_types: { id: null, name: "None", limit: null }
-                // },
-                // sub_type: { id: null, name: "", limit: null },
+                encoding_period: this.$store.getters.settings
+                    .expense_encoding_period,
+                expense_type: {
+                    id: null,
+                    name: "",
+                    limit: null,
+                    sub_types: { id: null, name: "None", limit: null }
+                },
+                sub_type: { id: null, name: "", limit: null },
                 user: null,
                 vendor: null,
                 expense_report_id: null,
                 tax_id: null,
                 expense_header_id: null,
-                details_quantity: 0,
+                detials_quantity: 0,
                 details_amount: 0,
                 is_active: true,
                 // particular: "",
@@ -664,12 +685,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
-            let expense_type_limit = this.form.expense_type
-                ? this.form.expense_type.limit
-                : null;
-            let sub_type_limit = this.form.sub_type
-                ? this.form.sub_type.limit
-                : null;
+            let expense_type_limit = this.form.expense_type.limit;
+            let sub_type_limit = this.form.sub_type.limit;
             let expense_limit = sub_type_limit
                 ? sub_type_limit
                 : expense_type_limit;
@@ -706,14 +723,16 @@ export default {
                 return;
             }
 
-            if (!this.form.expense_type) {
+            if (this.form.expense_type.id == null) {
                 this.mixin_errorDialog("Error", "No Expense Type Selected");
                 return;
             }
 
             if (
                 this.amount_to_replenish >
-                (this.form.user ? this.form.user.remaining_fund : 0)
+                (this.form.user
+                    ? this.form.user.remaining_fund
+                    : 0)
             ) {
                 this.mixin_errorDialog(
                     "Error",
@@ -754,10 +773,16 @@ export default {
             });
         },
         addItem() {
-            let description = this.sub_detail.description;
-            let quantity = this.mixin_convertToNumber(this.sub_detail.quantity);
-            let amount = this.mixin_convertToNumber(this.sub_detail.amount);
-            let total = this.mixin_convertToNumber(this.sub_detail.total);
+            let description = this.form.details.description;
+            let quantity = this.mixin_convertToNumber(
+                this.form.details.quantity
+            );
+            let amount = this.mixin_convertToNumber(
+                this.form.details.amount
+            );
+            let total = this.mixin_convertToNumber(
+                this.form.details.total
+            );
             let limit = this.expense_amount_limit;
 
             if (description == "" || total <= 0) {
@@ -780,34 +805,37 @@ export default {
             });
 
             this.dialog = false;
-            this.sub_detail.description = "";
-            this.sub_detail.quantity = 1;
-            this.sub_detail.amount = 0;
-            this.sub_detail.total = 0;
+            this.form.details.description = "";
+            this.form.details.quantity = 1;
+            this.form.details.amount = 0;
+            this.form.details.total = 0;
         },
         onRemove(item) {
-            if (this.form.details) {
-                const index = this.form.details.indexOf(item);
-                confirm("Are you sure you want to remove this item?") &&
-                    this.form.details.splice(index, 1);
-            }
+            const index = this.form.details.indexOf(item);
+            confirm("Are you sure you want to remove this item?") &&
+                this.form.details.splice(index, 1);
         },
         loadSubTypes(e) {
-            // this.form.sub_type = null;
-            if (e) {
-                this.sub_types = e.sub_types;
-                this.sub_types.unshift({ id: null, name: "None", limit: null });
-            }
+            this.form.sub_type = { id: null, name: "", limit: null };
+            this.sub_types = e.sub_types;
+            this.sub_types.unshift({ id: null, name: "None", limit: null });
         }
     },
     computed: {
+        itemize: {
+            get() {
+                return this.itemizeExpenses;
+            },
+            set(value) {
+                return value;
+            }
+        },
         minDate() {
             if (this.mixin_can("add expenses beyond encoding period")) {
                 return null;
             }
 
-            // let settings = this.$store.getters.settings;
-            let settings = [];
+            let settings = this.$store.getters.settings;
             let submissionMinDate = moment().endOf("day");
             let encodingMinDate = moment()
                 .subtract(settings.expense_encoding_period - 1, "days")
@@ -836,8 +864,7 @@ export default {
                 : submissionMinDate;
         },
         maxDate() {
-            // let settings = this.$store.getters.settings ?? null;
-            let settings = [];
+            let settings = this.$store.getters.settings ?? null;
             let today = moment().format("YYYY-MM-DD");
             let maxDate = moment().endOf("day");
 
@@ -924,7 +951,11 @@ export default {
         display_reimbursable_amount() {
             return (
                 parseFloat(this.form.amount) >
-                parseFloat(this.form.user ? this.form.user.remaining_fund : 0)
+                parseFloat(
+                    this.form.user
+                        ? this.form.user.remaining_fund
+                        : 0
+                )
             );
         },
         taxable_amount: {
@@ -946,7 +977,8 @@ export default {
             return (
                 (this.mixin_convertToNumber(this.form.amount) /
                     (1 +
-                        this.mixin_convertToNumber(this.form.tax_rate) / 100)) *
+                        this.mixin_convertToNumber(this.form.tax_rate) /
+                            100)) *
                 (this.mixin_convertToNumber(this.form.tax_rate) / 100)
             );
         },
@@ -957,43 +989,25 @@ export default {
             );
         },
         total_details_amount() {
-            if (this.sub_detail) {
-                let total = (
-                    this.mixin_convertToNumber(this.sub_detail.quantity) *
-                    this.mixin_convertToNumber(this.sub_detail.amount)
-                ).toFixed(2);
+            let total = (
+                this.mixin_convertToNumber(this.form.details.quantity) *
+                this.mixin_convertToNumber(this.form.details.amount)
+            ).toFixed(2);
 
-                this.sub_detail.total = total;
+            this.form.details.total = total;
 
-                return total;
-            }
-            // if (this.form.details) {
-            //     let total = (
-            //         this.mixin_convertToNumber(this.form.details.quantity) *
-            //         this.mixin_convertToNumber(this.form.details.amount)
-            //     ).toFixed(2);
-
-            //     this.form.details.total = total;
-
-            //     return total;
-            // }
-
-            return 0;
+            return total;
         },
         expense_amount_limit() {
-            if (this.form.sub_type) {
-                return this.form.sub_type.limit == null
-                    ? this.form.expense_type
-                        ? this.form.expense_type.limit
-                        : null
-                    : this.form.sub_type.limit;
-            }
-
-            return null;
+            return this.form.sub_type.limit == null
+                ? this.form.expense_type.limit
+                : this.form.sub_type.limit;
         },
         isVendorTaxInclusive() {
-            return this.form.vendor ? this.form.vendor.is_vat_inclusive : false;
-        }
+            return this.form.vendor
+                ? this.form.vendor.is_vat_inclusive
+                : false;
+        },
     },
     watch: {
         expenseForm: {
@@ -1003,14 +1017,8 @@ export default {
                 this.form = newValue;
             }
         },
-        itemizeExpenses: {
-            immediate: true,
-            handler(newValue, oldValue) {
-                this.itemize = newValue;
-            }
-        },
         "form.details": function() {
-            if (this.form.details && this.form.details.length) {
+            if (this.form.details) {
                 this.form.amount = this.form.details.reduce(
                     (total, item) => parseFloat(total) + parseFloat(item.total),
                     0
@@ -1030,12 +1038,10 @@ export default {
             }
         },
         itemize() {
-            if (this.form.details && this.form.details.length) {
-                this.form.amount = this.form.details.reduce(
-                    (total, item) => parseFloat(total) + parseFloat(item.total),
-                    0
-                );
-            }
+            this.form.amount = this.form.details.reduce(
+                (total, item) => parseFloat(total) + parseFloat(item.total),
+                0
+            );
 
             if (this.form.user == null) {
                 this.itemize = false;
@@ -1043,15 +1049,14 @@ export default {
                 return;
             }
 
-            if (!this.form.expense_type) {
+            if (this.form.expense_type.id == null) {
                 this.itemize = false;
                 this.mixin_errorDialog("Error", "No expense type Selected");
                 return;
             }
         },
         "form.vendor": function() {
-            // this.form.tax_rate = this.$store.getters.settings.tax_rate;
-            this.form.tax_rate = 12;
+            this.form.tax_rate = this.$store.getters.settings.tax_rate;
             this.form.tax_amount = 0;
             this.form.is_tax_inclusive = true;
         },
@@ -1059,11 +1064,6 @@ export default {
             this.expense_types = this.form.user
                 ? this.form.user.expense_types
                 : [];
-        },
-        "form.expense_type": function() {
-            if (this.form) {
-                this.loadSubTypes(this.form.expense_type);
-            }
         }
     }
 };

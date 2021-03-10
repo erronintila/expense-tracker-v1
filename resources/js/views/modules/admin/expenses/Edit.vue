@@ -29,10 +29,12 @@
 
             <v-container>
                 <Form
-                    :form="form"
+                    v-if="formDataLoaded"
+                    :itemizeExpenses="itemize"
+                    :expenseForm="form"
                     :errors="errors"
                     :rules="rules"
-                    @onSave="onSave"
+                    @on-save="onSave"
                 >
                     <template v-slot:userSelector>
                         <v-row>
@@ -103,6 +105,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             loader: true,
             usersParameters: {
                 params: { with_expense_types: true }
@@ -113,32 +116,36 @@ export default {
                 code: null,
                 description: null,
                 amount: 0,
-                detials_quantity: 0,
+                details_quantity: 0,
                 details_amount: 0,
                 // reimbursable_amount: 0,
                 receipt_number: null,
                 date: null,
                 remarks: "",
                 is_active: true,
-                expense_type: {
-                    id: null,
-                    name: "",
-                    limit: null,
-                    sub_types: null
-                },
-                sub_type: { id: null, name: "", limit: null },
-                user: {
-                    id: null,
-                    remaining_fund: 0,
-                    fund: 0,
-                    expense_types: null
-                },
-                vendor: {
-                    id: null,
-                    name: "",
-                    tin: "",
-                    is_vat_inclusive: false
-                },
+                // expense_type: {
+                //     id: null,
+                //     name: "",
+                //     limit: null,
+                //     sub_types: null
+                // },
+                // sub_type: { id: null, name: "", limit: null },
+                expense_type: null,
+                sub_type: null,
+                // user: {
+                //     id: null,
+                //     remaining_fund: 0,
+                //     fund: 0,
+                //     expense_types: null
+                // },
+                // vendor: {
+                //     id: null,
+                //     name: "",
+                //     tin: "",
+                //     is_vat_inclusive: false
+                // },
+                user: null,
+                vendor: null,
                 // particular: "",
                 // particular_amount: 0,
                 // particular_reimbursable_amount: 0,
@@ -146,10 +153,11 @@ export default {
 
                 revolving_fund: 0,
                 reimbursable_amount: 0,
-                details: {
-                    description: "",
-                    amount: 0
-                },
+                details: [],
+                // details: {
+                //     description: "",
+                //     amount: 0
+                // },
 
                 is_tax_inclusive: true,
                 tax_name: "",
@@ -177,57 +185,63 @@ export default {
     },
     methods: {
         getData() {
-            ExpenseDataService.show(this.$route.params.id)
-                .then(response => {
-                    let data = response.data.data;
-                    this.form.code = data.code;
-                    this.form.description = data.description;
-                    this.form.receipt_number = data.receipt_number;
-                    this.form.date = data.date;
-                    this.form.remarks = data.remarks;
-                    this.form.is_active = data.is_active;
-                    this.form.user = data.user;
-                    this.form.vendor = data.vendor;
-                    this.form.expense_type = data.expense_type;
-                    this.expense_types = data.user.expense_types;
-                    this.sub_types = data.expense_type.sub_types;
-                    this.form.is_tax_inclusive = data.is_tax_inclusive;
-                    this.form.tax_name = data.tax_name;
-                    this.form.tax_rate = data.tax_rate;
-                    this.form.tax_amount = data.tax_amount;
-                    this.form.details = data.details;
+            return new Promise((resolve, reject) => {
+                ExpenseDataService.show(this.$route.params.id)
+                    .then(response => {
+                        let data = response.data.data;
+                        this.form.code = data.code;
+                        this.form.description = data.description;
+                        this.form.receipt_number = data.receipt_number;
+                        this.form.date = data.date;
+                        this.form.remarks = data.remarks;
+                        this.form.is_active = data.is_active;
+                        this.form.user = data.user;
+                        this.form.vendor = data.vendor;
+                        this.form.expense_type = data.expense_type;
+                        this.expense_types = data.user.expense_types;
+                        this.sub_types = data.expense_type.sub_types;
+                        this.form.is_tax_inclusive = data.is_tax_inclusive;
+                        this.form.tax_name = data.tax_name;
+                        this.form.tax_rate = data.tax_rate;
+                        this.form.tax_amount = data.tax_amount;
+                        this.form.details = data.details ?? [];
 
-                    if (data.details !== null) {
-                        this.itemize = true;
-                        this.items = data.details;
-                    } else {
-                        this.form.amount = data.amount;
-                    }
+                        if (data.details && data.details.length) {
+                            this.itemize = true;
+                            this.items = data.details;
+                        } else {
+                            this.form.amount = data.amount;
+                        }
 
-                    this.sub_types.unshift({
-                        id: null,
-                        name: "None",
-                        limit: null
-                    });
-                    this.form.sub_type =
-                        data.sub_type == null
-                            ? { id: null, name: "None", limit: null }
-                            : data.sub_type;
-                    if (data.revolving_fund > 0) {
-                        // this.paid_through_fund = true;
-                        this.form.revolving_fund = data.revolving_fund;
-                    } else {
-                        // this.paid_through_fund = false;
-                        this.form.revolving_fund = 0;
-                    }
-                    this.form.reimbursable_amount = data.reimbursable_amount;
-                    this.form.user.remaining_fund +=
-                        data.amount - data.reimbursable_amount;
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                })
-                .finally((this.loader = false));
+                        this.sub_types.unshift({
+                            id: null,
+                            name: "None",
+                            limit: null
+                        });
+                        this.form.sub_type =
+                            data.sub_type == null
+                                ? { id: null, name: "None", limit: null }
+                                : data.sub_type;
+                        if (data.revolving_fund > 0) {
+                            // this.paid_through_fund = true;
+                            this.form.revolving_fund = data.revolving_fund;
+                        } else {
+                            // this.paid_through_fund = false;
+                            this.form.revolving_fund = 0;
+                        }
+                        this.form.reimbursable_amount =
+                            data.reimbursable_amount;
+                        this.form.user.remaining_fund +=
+                            data.amount - data.reimbursable_amount;
+
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        reject();
+                    })
+                    .finally((this.loader = false));
+            });
         },
         selectUser(e) {
             if (e == null || e == undefined) {
@@ -250,9 +264,9 @@ export default {
             }
 
             value.details = value.itemize ? value.items : null;
-            value.expense_type_id = value.expense_type.id;
+            value.expense_type_id = value.expense_type ? value.expense_type.id : null;
             value.sub_type_id = value.sub_type ? value.sub_type.id : null;
-            value.user_id = value.user.id;
+            value.user_id = value.user ? value.user.id : null;
             value.vendor_id = value.vendor ? value.vendor.id : null;
             value.reimbursable_amount = value.amount_to_reimburse;
 
@@ -274,10 +288,10 @@ export default {
         }
     },
     created() {
-        this.getData();
+        this.getData().then(this.formDataLoaded = true);
     },
     activated() {
-        this.getData();
+        this.getData().then(this.formDataLoaded = true);
     }
 };
 </script>

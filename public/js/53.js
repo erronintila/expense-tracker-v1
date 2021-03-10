@@ -106,6 +106,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -120,6 +122,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       loader: true,
       usersParameters: {
         params: {
@@ -132,46 +135,47 @@ __webpack_require__.r(__webpack_exports__);
         code: null,
         description: null,
         amount: 0,
-        detials_quantity: 0,
+        details_quantity: 0,
         details_amount: 0,
         // reimbursable_amount: 0,
         receipt_number: null,
         date: null,
         remarks: "",
         is_active: true,
-        expense_type: {
-          id: null,
-          name: "",
-          limit: null,
-          sub_types: null
-        },
-        sub_type: {
-          id: null,
-          name: "",
-          limit: null
-        },
-        user: {
-          id: null,
-          remaining_fund: 0,
-          fund: 0,
-          expense_types: null
-        },
-        vendor: {
-          id: null,
-          name: "",
-          tin: "",
-          is_vat_inclusive: false
-        },
+        // expense_type: {
+        //     id: null,
+        //     name: "",
+        //     limit: null,
+        //     sub_types: null
+        // },
+        // sub_type: { id: null, name: "", limit: null },
+        expense_type: null,
+        sub_type: null,
+        // user: {
+        //     id: null,
+        //     remaining_fund: 0,
+        //     fund: 0,
+        //     expense_types: null
+        // },
+        // vendor: {
+        //     id: null,
+        //     name: "",
+        //     tin: "",
+        //     is_vat_inclusive: false
+        // },
+        user: null,
+        vendor: null,
         // particular: "",
         // particular_amount: 0,
         // particular_reimbursable_amount: 0,
         is_reimbursable: false,
         revolving_fund: 0,
         reimbursable_amount: 0,
-        details: {
-          description: "",
-          amount: 0
-        },
+        details: [],
+        // details: {
+        //     description: "",
+        //     amount: 0
+        // },
         is_tax_inclusive: true,
         tax_name: "",
         tax_rate: 0,
@@ -200,57 +204,64 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].show(this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form.code = data.code;
-        _this.form.description = data.description;
-        _this.form.receipt_number = data.receipt_number;
-        _this.form.date = data.date;
-        _this.form.remarks = data.remarks;
-        _this.form.is_active = data.is_active;
-        _this.form.user = data.user;
-        _this.form.vendor = data.vendor;
-        _this.form.expense_type = data.expense_type;
-        _this.expense_types = data.user.expense_types;
-        _this.sub_types = data.expense_type.sub_types;
-        _this.form.is_tax_inclusive = data.is_tax_inclusive;
-        _this.form.tax_name = data.tax_name;
-        _this.form.tax_rate = data.tax_rate;
-        _this.form.tax_amount = data.tax_amount;
-        _this.form.details = data.details;
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].show(_this.$route.params.id).then(function (response) {
+          var _data$details;
 
-        if (data.details !== null) {
-          _this.itemize = true;
-          _this.items = data.details;
-        } else {
-          _this.form.amount = data.amount;
-        }
+          var data = response.data.data;
+          _this.form.code = data.code;
+          _this.form.description = data.description;
+          _this.form.receipt_number = data.receipt_number;
+          _this.form.date = data.date;
+          _this.form.remarks = data.remarks;
+          _this.form.is_active = data.is_active;
+          _this.form.user = data.user;
+          _this.form.vendor = data.vendor;
+          _this.form.expense_type = data.expense_type;
+          _this.expense_types = data.user.expense_types;
+          _this.sub_types = data.expense_type.sub_types;
+          _this.form.is_tax_inclusive = data.is_tax_inclusive;
+          _this.form.tax_name = data.tax_name;
+          _this.form.tax_rate = data.tax_rate;
+          _this.form.tax_amount = data.tax_amount;
+          _this.form.details = (_data$details = data.details) !== null && _data$details !== void 0 ? _data$details : [];
 
-        _this.sub_types.unshift({
-          id: null,
-          name: "None",
-          limit: null
-        });
+          if (data.details && data.details.length) {
+            _this.itemize = true;
+            _this.items = data.details;
+          } else {
+            _this.form.amount = data.amount;
+          }
 
-        _this.form.sub_type = data.sub_type == null ? {
-          id: null,
-          name: "None",
-          limit: null
-        } : data.sub_type;
+          _this.sub_types.unshift({
+            id: null,
+            name: "None",
+            limit: null
+          });
 
-        if (data.revolving_fund > 0) {
-          // this.paid_through_fund = true;
-          _this.form.revolving_fund = data.revolving_fund;
-        } else {
-          // this.paid_through_fund = false;
-          _this.form.revolving_fund = 0;
-        }
+          _this.form.sub_type = data.sub_type == null ? {
+            id: null,
+            name: "None",
+            limit: null
+          } : data.sub_type;
 
-        _this.form.reimbursable_amount = data.reimbursable_amount;
-        _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
-      })["catch"](function (error) {
-        _this.mixin_showErrors(error);
-      })["finally"](this.loader = false);
+          if (data.revolving_fund > 0) {
+            // this.paid_through_fund = true;
+            _this.form.revolving_fund = data.revolving_fund;
+          } else {
+            // this.paid_through_fund = false;
+            _this.form.revolving_fund = 0;
+          }
+
+          _this.form.reimbursable_amount = data.reimbursable_amount;
+          _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
+          resolve();
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
+
+          reject();
+        })["finally"](_this.loader = false);
+      });
     },
     selectUser: function selectUser(e) {
       if (e == null || e == undefined) {
@@ -276,9 +287,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       value.details = value.itemize ? value.items : null;
-      value.expense_type_id = value.expense_type.id;
+      value.expense_type_id = value.expense_type ? value.expense_type.id : null;
       value.sub_type_id = value.sub_type ? value.sub_type.id : null;
-      value.user_id = value.user.id;
+      value.user_id = value.user ? value.user.id : null;
       value.vendor_id = value.vendor ? value.vendor.id : null;
       value.reimbursable_amount = value.amount_to_reimburse;
       _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].update(this.$route.params.id, value).then(function (response) {
@@ -295,10 +306,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getData();
+    this.getData().then(this.formDataLoaded = true);
   },
   activated: function activated() {
-    this.getData();
+    this.getData().then(this.formDataLoaded = true);
   }
 });
 
@@ -403,120 +414,149 @@ var render = function() {
               _c(
                 "v-container",
                 [
-                  _c("Form", {
-                    attrs: {
-                      form: _vm.form,
-                      errors: _vm.errors,
-                      rules: _vm.rules
-                    },
-                    on: { onSave: _vm.onSave },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "userSelector",
-                        fn: function() {
-                          return [
-                            _c(
-                              "v-row",
-                              [
-                                _c(
-                                  "v-col",
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        value: _vm.form.user
-                                          ? _vm.form.user.full_name
-                                          : "No Employee",
-                                        "error-messages": _vm.errors.user_id,
-                                        label: "Employee",
-                                        readonly: ""
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          _vm.errors.user_id = []
-                                        }
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "append",
-                                          fn: function() {
-                                            return [
-                                              _c("UserDialogSelector", {
-                                                ref: "userDialogSelector",
-                                                attrs: {
-                                                  selectedUser: _vm.form.user,
-                                                  usersParameters:
-                                                    _vm.usersParameters
-                                                },
-                                                on: {
-                                                  selectUser: _vm.selectUser,
-                                                  onReset: _vm.resetUser
-                                                },
-                                                scopedSlots: _vm._u([
-                                                  {
-                                                    key: "openDialog",
-                                                    fn: function(ref) {
-                                                      var bind = ref.bind
-                                                      var on = ref.on
-                                                      return [
-                                                        _c(
-                                                          "v-btn",
-                                                          _vm._g(
-                                                            _vm._b(
-                                                              {
-                                                                attrs: {
-                                                                  fab: "",
-                                                                  color:
-                                                                    "primary",
-                                                                  text: "",
-                                                                  "x-small": ""
-                                                                }
-                                                              },
-                                                              "v-btn",
-                                                              bind,
-                                                              false
-                                                            ),
-                                                            on
-                                                          ),
-                                                          [
-                                                            _c(
-                                                              "v-icon",
-                                                              {
-                                                                attrs: {
-                                                                  dark: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _vm._v(
-                                                                  "mdi-magnify"
-                                                                )
-                                                              ]
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ]
-                                                    }
-                                                  }
-                                                ])
-                                              })
-                                            ]
-                                          },
-                                          proxy: true
-                                        }
-                                      ])
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ]
+                  _vm.formDataLoaded
+                    ? _c("Form", {
+                        attrs: {
+                          itemizeExpenses: _vm.itemize,
+                          expenseForm: _vm.form,
+                          errors: _vm.errors,
+                          rules: _vm.rules
                         },
-                        proxy: true
-                      }
-                    ])
-                  })
+                        on: { "on-save": _vm.onSave },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "userSelector",
+                              fn: function() {
+                                return [
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              value: _vm.form.user
+                                                ? _vm.form.user.full_name
+                                                : "No Employee",
+                                              "error-messages":
+                                                _vm.errors.user_id,
+                                              label: "Employee",
+                                              readonly: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.user_id = []
+                                              }
+                                            },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "append",
+                                                  fn: function() {
+                                                    return [
+                                                      _c("UserDialogSelector", {
+                                                        ref:
+                                                          "userDialogSelector",
+                                                        attrs: {
+                                                          selectedUser:
+                                                            _vm.form.user,
+                                                          usersParameters:
+                                                            _vm.usersParameters
+                                                        },
+                                                        on: {
+                                                          selectUser:
+                                                            _vm.selectUser,
+                                                          onReset: _vm.resetUser
+                                                        },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "openDialog",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var bind =
+                                                                  ref.bind
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-btn",
+                                                                    _vm._g(
+                                                                      _vm._b(
+                                                                        {
+                                                                          attrs: {
+                                                                            fab:
+                                                                              "",
+                                                                            color:
+                                                                              "primary",
+                                                                            text:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        "v-btn",
+                                                                        bind,
+                                                                        false
+                                                                      ),
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-icon",
+                                                                        {
+                                                                          attrs: {
+                                                                            dark:
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _vm._v(
+                                                                            "mdi-magnify"
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          false,
+                                                          2729772431
+                                                        )
+                                                      })
+                                                    ]
+                                                  },
+                                                  proxy: true
+                                                }
+                                              ],
+                                              null,
+                                              false,
+                                              4251958511
+                                            )
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ]
+                              },
+                              proxy: true
+                            }
+                          ],
+                          null,
+                          false,
+                          2473804440
+                        )
+                      })
+                    : _vm._e()
                 ],
                 1
               )

@@ -135,36 +135,31 @@ __webpack_require__.r(__webpack_exports__);
         tax_amount: 0,
         receipt_number: null,
         date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
-        details: {
-          description: "",
-          quantity: 1,
-          amount: 0,
-          total: 0
-        },
+        details: [],
+        // details: {
+        //     description: "",
+        //     quantity: 1,
+        //     amount: 0,
+        //     total: 0
+        // },
         remarks: "",
         notes: "",
         encoding_period: this.$store.getters.settings.expense_encoding_period,
-        expense_type: {
-          id: null,
-          name: "",
-          limit: null,
-          sub_types: {
-            id: null,
-            name: "None",
-            limit: null
-          }
-        },
-        sub_type: {
-          id: null,
-          name: "",
-          limit: null
-        },
+        // expense_type: {
+        //     id: null,
+        //     name: "",
+        //     limit: null,
+        //     sub_types: { id: null, name: "None", limit: null }
+        // },
+        expense_type: null,
+        sub_type: null,
+        // sub_type: { id: null, name: "", limit: null },
         user: null,
         vendor: null,
         expense_report_id: null,
         tax_id: null,
         expense_header_id: null,
-        detials_quantity: 0,
+        details_quantity: 0,
         details_amount: 0,
         is_active: true,
         // particular: "",
@@ -231,9 +226,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       value.details = value.itemize ? value.items : null;
-      value.expense_type_id = value.expense_type.id;
-      value.sub_type ? value.sub_type.id : null;
-      value.user_id = value.user.id;
+      value.expense_type_id = value.expense_type ? value.expense_type.id : null;
+      value.sub_type = value.sub_type ? value.sub_type.id : null;
+      value.user_id = value.user ? value.user.id : null;
       value.vendor_id = value.vendor ? value.vendor.id : null;
       value.reimbursable_amount = value.amount_to_reimburse;
       _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].store(value).then(function (response) {
@@ -353,10 +348,10 @@ var render = function() {
                   _c("Form", {
                     attrs: {
                       errors: _vm.errors,
-                      form: _vm.form,
+                      expenseForm: _vm.form,
                       rules: _vm.rules
                     },
-                    on: { onSave: _vm.onSave },
+                    on: { "on-save": _vm.onSave },
                     scopedSlots: _vm._u([
                       {
                         key: "userSelector",
