@@ -26,8 +26,8 @@
     </div>
 </template>
 <script>
-import DepartmentDropdownSelector from "../components/selector/DepartmentDropdownSelector";
-import JobDropdownSelector from "../components/selector/JobDropdownSelector";
+import DepartmentDropdownSelector from "../components/selector/dropdown/DepartmentDropdownSelector";
+import JobDropdownSelector from "../components/selector/dropdown/JobDropdownSelector";
 
 export default {
     components: {

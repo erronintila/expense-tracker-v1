@@ -241,7 +241,7 @@
 
 <script>
 import JobDataService from "../../../../services/JobDataService";
-import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
+import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 
 export default {
     components: {

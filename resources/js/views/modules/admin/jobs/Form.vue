@@ -35,7 +35,7 @@
     </v-form>
 </template>
 <script>
-import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
+import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 
 export default {
     props: {

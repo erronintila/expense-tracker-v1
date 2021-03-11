@@ -13,7 +13,7 @@
     </v-autocomplete>
 </template>
 <script>
-import DepartmentDataService from "../../services/DepartmentDataService";
+import DepartmentDataService from "../../../services/DepartmentDataService";
 
 export default {
     props: {

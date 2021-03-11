@@ -280,7 +280,7 @@
 </template>
 <script>
 import moment from "moment";
-import JobDropdownSelector from "../../../../components/selector/JobDropdownSelector";
+import JobDropdownSelector from "../../../../components/selector/dropdown/JobDropdownSelector";
 import PermissionDataService from "../../../../services/PermissionDataService";
 
 export default {

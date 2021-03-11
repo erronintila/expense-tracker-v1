@@ -466,9 +466,9 @@
 
 <script>
 import UserDataService from "../../../../services/UserDataService";
-import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
+import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 import DepartmentData from "../../../../components/selector/dropdown/Departments";
-import JobDropdownSelector from "../../../../components/selector/JobDropdownSelector";
+import JobDropdownSelector from "../../../../components/selector/dropdown/JobDropdownSelector";
 import JobData from "../../../../components/selector/dropdown/Jobs";
 
 export default {

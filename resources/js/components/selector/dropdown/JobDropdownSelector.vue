@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import JobDataService from "../../services/JobDataService";
+import JobDataService from "../../../services/JobDataService";
 
 export default {
     props: {
