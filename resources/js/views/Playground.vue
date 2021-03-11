@@ -11,7 +11,6 @@
             </DepartmentDropdownSelector>
             <JobDropdownSelector
                 v-model="job"
-                :showAll="true"
                 :selectedJob="job"
                 :selectedDepartment="department"
                 @onReset="onResetJob"
@@ -21,6 +20,8 @@
             <v-btn @click="onResetDepartment">Reset Department</v-btn>
             <v-btn @click="onResetJob">Reset Job</v-btn>
             <v-btn @click="onReset">Reset All</v-btn>
+            <v-btn @click="onShowJob">Show Job</v-btn>
+            <v-btn @click="setJob">Set Job</v-btn>
         </v-container>
     </div>
 </template>
@@ -50,18 +51,31 @@ export default {
             this.department = e;
             console.log("Department changed", this.department);
         },
+        onShowJob() {
+            console.log(this.job);
+        },
+        setJob() {
+            if (!this.job) {
+                this.job = { id: 11 };
+                return;
+            }
+
+            this.job = this.job;
+        },
         onResetJob() {
             this.job = null;
             console.log("Job reset", this.job);
         },
         onChangeJob(e) {
             this.job = e;
-            console.log("Job changed", this.job);
         },
         onReset() {
             this.onResetDepartment();
             this.onResetJob();
-        }
+        },
+         getInitialJob() {
+            axios.get("api/jobs/20").then(response => this.job = response.data.data);
+        },
         // async getUser() {
         //     let res = await axios.get("/api/users/2");
         //     try {
@@ -74,8 +88,15 @@ export default {
         //     this.user = await this.getUser();
         //     console.log(this.user);
         // }
+        // async displayJob() {
+        //     let data = await this.getInitialJob();
+        //     this.job = data;
+        //     console.log(this.job);
+        // }
     },
     mounted() {
+        this.getInitialJob();
+        // this.job = { id: 3 };
         // this.displayUser();
     }
 };

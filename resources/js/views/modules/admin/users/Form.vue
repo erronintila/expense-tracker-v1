@@ -30,7 +30,6 @@
                                 @onChange="onChangeJob"
                             >
                             </JobDropdownSelector>
-                            <v-btn @click="form.job = {id: 2}">Reset</v-btn>
                         </v-col>
 
                         <v-col cols="12" md="4">
@@ -292,7 +291,7 @@
 </template>
 <script>
 import moment from "moment";
-import JobDropdownSelector from "../../../../components/selector/JobDropdownSelector"
+import JobDropdownSelector from "../../../../components/selector/JobDropdownSelector";
 import PermissionDataService from "../../../../services/PermissionDataService";
 
 export default {
@@ -432,15 +431,15 @@ export default {
         }
     },
     watch: {
-        "form.role": function() {
-            this.loadPermissions();
-        },
         userForm: {
             deep: true,
             immediate: true,
             handler(newValue, oldValue) {
                 this.form = newValue;
             }
+        },
+        "form.role": function() {
+            this.loadPermissions();
         }
     },
     created() {

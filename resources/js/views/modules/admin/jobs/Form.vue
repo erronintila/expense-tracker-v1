@@ -83,6 +83,7 @@ export default {
     },
     watch: {
         jobForm: {
+            deep: true,
             immediate: true,
             handler(newValue, oldValue) {
                 this.form = newValue;

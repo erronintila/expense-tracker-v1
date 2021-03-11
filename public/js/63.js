@@ -111,7 +111,6 @@ __webpack_require__.r(__webpack_exports__);
 
       return new Promise(function (resolve, reject) {
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(_this.$route.params.id).then(function (response) {
-          console.log(response.data.data.job);
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
@@ -122,8 +121,18 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    onSave: function onSave(value) {
+    getInitialJob: function getInitialJob() {
       var _this2 = this;
+
+      axios.get("/api/jobs/".concat(this.form.job.id)).then(function (response) {
+        _this2.form.job = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        reject();
+      });
+    },
+    onSave: function onSave(value) {
+      var _this3 = this;
 
       this.loader = true;
       var is_administrator = value.role == "Administrator" ? true : false;
@@ -132,38 +141,41 @@ __webpack_require__.r(__webpack_exports__);
       value.password = "password";
       value.password_confirmation = "password";
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].update(this.$route.params.id, value).then(function (response) {
-        _this2.mixin_successDialog(response.data.status, response.data.message);
+        _this3.mixin_successDialog(response.data.status, response.data.message);
 
         window.location.replace("/admin/users");
       })["catch"](function (error) {
-        _this2.mixin_showErrors(error);
+        _this3.mixin_showErrors(error);
 
         if (error.response) {
           if (error.response.data) {
-            _this2.errors = error.response.data.errors;
+            _this3.errors = error.response.data.errors;
           }
         }
       })["finally"](function () {
-        _this2.loader = false;
+        _this3.loader = false;
       });
     }
   },
   created: function created() {
-    var _this3 = this;
-
-    this.getData().then(function (data) {
-      _this3.form = data.data;
-      _this3.form.job = data.data.job;
-      _this3.formDataLoaded = true;
-    });
-  },
-  activated: function activated() {
     var _this4 = this;
 
     this.getData().then(function (data) {
       _this4.form = data.data;
-      _this4.form.job = data.data.job;
       _this4.formDataLoaded = true;
+
+      _this4.getInitialJob();
+    });
+  },
+  activated: function activated() {
+    var _this5 = this;
+
+    this.getData().then(function (data) {
+      _this5.form = data.data;
+      _this5.formDataLoaded = true;
+      console.log(data.data.job);
+
+      _this5.getInitialJob();
     });
   }
 });

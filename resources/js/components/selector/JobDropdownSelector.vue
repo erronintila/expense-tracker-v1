@@ -132,11 +132,7 @@ export default {
             deep: true, 
             immediate: true,
             handler(newValue, oldValue) {
-                console.log("old", this.job);
-                
                 this.job = newValue;
-
-                console.log("new", this.job);
             }
         },
         selectedDepartment: {
@@ -157,7 +153,7 @@ export default {
                     });
                 }
             });
-        }
+        },
     }
 };
 </script>

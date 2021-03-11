@@ -32,8 +32,8 @@
                     v-if="formDataLoaded"
                     :isEdit="true"
                     :errors="errors"
-                    @on-save="onSave"
                     :userForm="form"
+                    @on-save="onSave"
                 ></Form>
             </v-container>
         </v-card>
@@ -99,7 +99,6 @@ export default {
             return new Promise((resolve, reject) => {
                 UserDataService.show(this.$route.params.id)
                     .then(response => {
-                        console.log(response.data.data.job);
                         resolve(response.data);
                     })
                     .catch(error => {
@@ -110,6 +109,17 @@ export default {
                         this.loader = false;
                     });
             });
+        },
+        getInitialJob() {
+            axios
+                .get(`/api/jobs/${this.form.job.id}`)
+                .then(response => {
+                    this.form.job = response.data.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    reject();
+                });
         },
         onSave(value) {
             this.loader = true;
@@ -143,15 +153,16 @@ export default {
     created() {
         this.getData().then(data => {
             this.form = data.data;
-            this.form.job = data.data.job;
             this.formDataLoaded = true;
+            this.getInitialJob();
         });
     },
     activated() {
         this.getData().then(data => {
             this.form = data.data;
-            this.form.job = data.data.job;
             this.formDataLoaded = true;
+            console.log(data.data.job);
+            this.getInitialJob();
         });
     }
 };
