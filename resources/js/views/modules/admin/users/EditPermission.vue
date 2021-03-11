@@ -153,7 +153,6 @@ export default {
             });
         },
         onSave() {
-            this.loader = true;
             let is_administrator =
                 this.form.role == "Administrator" ? true : false;
 

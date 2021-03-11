@@ -14,7 +14,7 @@
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
-                            :to="{ name: 'user.expense_reports.create' }"
+                            :to="{ name: 'admin.expense_reports.create' }"
                             dark
                             fab
                             x-small
@@ -26,62 +26,70 @@
                     </template>
                     <span>Add New</span>
                 </v-tooltip>
+            </v-card-title>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
+            <v-card-subtitle>
+                <!-- <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker> -->
+
+                 <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
                         </v-btn>
                     </template>
-                    <span>Refresh</span>
-                </v-tooltip>
+                </DateRangePicker>
+            </v-card-subtitle>
+
+            <v-row class="ml-4 mb-2">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
+                </v-chip>
 
                 <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-y
-                    left
+                    right
                     bottom
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
+                        <v-chip
+                            v-if="status != null"
+                            class="mr-2"
+                            v-bind="attrs"
+                            v-on="menu"
+                            small
+                        >
+                            {{ status }}
+                        </v-chip>
                     </template>
 
                     <v-card>
                         <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
                             <v-list-item>
                                 <v-select
                                     v-model="status"
@@ -93,75 +101,6 @@
                     </v-card>
                 </v-menu>
 
-                <v-menu
-                    offset-y
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    left
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>
-                                        mdi-view-grid-plus-outline
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list max-width="250">
-                        <v-list-item @click="onSubmit">
-                            <v-list-item-icon>
-                                <v-icon>mdi-file-send-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Submit Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onDuplicate">
-                            <v-list-item-icon>
-                                <v-icon>mdi-content-copy</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Duplicate Report(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-            </v-card-title>
-
-            <v-card-subtitle>
-                {{ formattedDateRange }}
-            </v-card-subtitle>
-
-            <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
-                </v-chip>
-                <v-chip v-if="status != null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
                 <v-chip
                     close
                     class="mr-2"
@@ -198,8 +137,48 @@
                 </v-chip>
             </v-row>
 
+            <v-row v-if="selected.length > 0" class="ml-4">
+                <v-chip
+                    v-if="isValidSubmit"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onSubmit"
+                    close-icon="mdi-send"
+                    color="blue"
+                >
+                    Submit
+                </v-chip>
+                <v-chip
+                    v-if="isValidDelete"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-close"
+                    color="red"
+                >
+                    Cancel
+                </v-chip>
+                <v-chip
+                    v-if="isValidDuplicate"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onDuplicate"
+                    close-icon="mdi-content-copy"
+                >
+                    Duplicate
+                </v-chip>
+            </v-row>
+
             <v-card-subtitle>
+                <v-skeleton-loader
+                    v-if="!formDataLoaded"
+                    type="list-item-one-line"
+                ></v-skeleton-loader>
                 <v-text-field
+                    v-else
                     v-model="search"
                     append-icon="mdi-magnify"
                     label="Search"
@@ -209,7 +188,12 @@
             </v-card-subtitle>
 
             <v-card-text>
+                <v-skeleton-loader
+                    v-if="!formDataLoaded"
+                    type="article, article, image, actions, article"
+                ></v-skeleton-loader>
                 <v-data-table
+                    v-else
                     :headers="headers"
                     :items="items"
                     :loading="loading"
@@ -421,7 +405,7 @@
                             </h4>
                         </div>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="4" v-if="isValidPrint">
                         <div class="text-right">
                             <v-menu offset-y>
                                 <template v-slot:activator="{ attrs, on }">
@@ -489,7 +473,6 @@
                                             Group by expense
                                         </v-list-item-title>
                                     </v-list-item>
-
                                     <v-list-item
                                         @click="
                                             printReport(
@@ -516,12 +499,13 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 
 export default {
     components: { DateRangePicker },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             warning: null,
             headers: [
@@ -535,6 +519,7 @@ export default {
             ],
             items: [],
             user: this.$store.getters.user.id,
+            users: [],
             date_range: [
                 moment()
                     .startOf("month")
@@ -605,36 +590,29 @@ export default {
             ]);
         },
         loadTotalCountReportStatus() {
-            let _this = this;
-
             axios
-                .get(
-                    `/api/data/expense_reports?total_count=true&user_id=${this.$store.getters.user.id}`
-                )
+                .get(`/api/data/expense_reports?total_count=true&user_id=${this.$store.getters.user.id}`)
                 .then(response => {
                     let total = response.data ?? 0;
 
-                    _this.totalUnsubmitted = total.data.total_unsubmitted ?? 0;
-                    _this.totalUnapproved = total.data.total_unapproved ?? 0;
+                    this.totalUnsubmitted = total.data.total_unsubmitted ?? 0;
+                    this.totalUnapproved = total.data.total_unapproved ?? 0;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         loadExpenseTypes() {
-            let _this = this;
-
             axios
                 .get(`/api/data/expense_types?only=true`)
                 .then(response => {
-                    _this.expense_types = response.data.data;
+                    this.expense_types = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
+
         loadReportData(report_type) {
             return new Promise((resolve, reject) => {
                 let ids =
@@ -646,9 +624,6 @@ export default {
                 switch (report_type) {
                     case "all_expenses":
                         url = `/api/data/print_report?by_expense_id=true&ids=${ids}`;
-                        break;
-                    case "expenses_by_user":
-                        url = `/api/data/print_report?by_user_id=true&ids=${ids}`;
                         break;
                     case "expenses_by_date":
                         url = `/api/data/print_report?by_date=true&ids=${ids}`;
@@ -664,9 +639,8 @@ export default {
                         resolve(item);
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-                        console.log(error);
-                        console.log(error.response);
                     });
             });
         },
@@ -693,7 +667,6 @@ export default {
                 let maxDate = new Date(Math.max.apply(null, item_dates));
                 let minDate = new Date(Math.min.apply(null, item_dates));
 
-                // ADD PRIMARY TABLE COLUMNS BASED ON REPORT TYPE
                 switch (report_type) {
                     case "all_expenses":
                         table_columns.push({
@@ -709,16 +682,6 @@ export default {
                         subheader =
                             "Report No. : " +
                             this.selected.map(item => item.code);
-                        break;
-                    case "expenses_by_user":
-                        table_columns.push({
-                            text: "Employee",
-                            style: "tableOfExpensesHeader"
-                        });
-                        temp_table_body = {};
-                        subheader = `Period: ${moment(minDate).format(
-                            "YYYY-MM-DD"
-                        )} ~ ${moment(maxDate).format("YYYY-MM-DD")}`;
                         break;
                     case "expenses_by_date":
                         table_columns.push({
@@ -754,8 +717,6 @@ export default {
 
                     if (report_type == "all_expenses") {
                         condition = expense_id !== element.expense_id;
-                    } else if (report_type == "expenses_by_user") {
-                        condition = user_id !== element.user_id;
                     } else {
                         condition = expense_date !== element.expense_date;
                     }
@@ -805,24 +766,6 @@ export default {
                                     Total: 0
                                 };
 
-                                break;
-                            case "expenses_by_user":
-                                // SET DEFAULT VALUES FOR CURRENT ROW
-                                temp_table_body = {
-                                    User: `${element.last_name}, ${
-                                        element.first_name
-                                    } ${
-                                        element.middle_name == null
-                                            ? ""
-                                            : element.middle_name
-                                    } ${
-                                        element.suffix == null
-                                            ? ""
-                                            : element.suffix
-                                    }`,
-                                    ...temp_expense_types,
-                                    Total: 0
-                                };
                                 break;
                             case "expenses_by_date":
                                 temp_table_body = {
@@ -1127,21 +1070,20 @@ export default {
             this.date_range = e;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.user;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.user;
+                let range = this.date_range;
 
                 axios
                     .get("/api/expense_reports", {
                         params: {
+                            search: search,
                             sortBy: sortBy[0],
                             sortType: sortDesc[0] ? "desc" : "asc",
                             page: page,
@@ -1150,29 +1092,19 @@ export default {
                             status: status,
                             start_date: range[0],
                             end_date: range[1] ? range[1] : range[0],
-                            admin_page: false
+                            admin_page: true
                         }
                     })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
                         resolve({ items, total });
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-                    });
+                    })
+                    .finally((this.loading = false));
             });
         },
         onRefresh() {
@@ -1180,12 +1112,12 @@ export default {
             this.loadTotalCountReportStatus();
             this.loadExpenseTypes();
             this.selected = [];
-            this.$store.dispatch("AUTH_USER");
             this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.$store.dispatch("AUTH_SETTINGS");
         },
         onShow(item) {
             this.$router.push({
-                name: "user.expense_reports.show",
+                name: "admin.expense_reports.show",
                 params: { id: item.id }
             });
         },
@@ -1218,13 +1150,11 @@ export default {
             }
 
             this.$router.push({
-                name: "user.expense_reports.edit",
+                name: "admin.expense_reports.edit",
                 params: { id: item.id }
             });
         },
         onDelete() {
-            let _this = this;
-
             if (
                 this.selected
                     .map(item => item.status.status)
@@ -1255,7 +1185,7 @@ export default {
                 return;
             }
 
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.$dialog.message.error("No item(s) selected", {
                     position: "top-right",
                     timeout: 2000
@@ -1270,37 +1200,31 @@ export default {
 
             // if (notes) {
             //     axios
-            //         .delete(`/api/expense_reports/${_this.selected[0].id}`, {
+            //         .delete(`/api/expense_reports/${this.selected[0].id}`, {
             //             params: {
-            //                 ids: _this.selected.map(item => {
+            //                 ids: this.selected.map(item => {
             //                     return item.id;
             //                 }),
             //                 notes: notes
             //             }
             //         })
             //         .then(function(response) {
-            //             _this.$dialog.message.success(
+            //             this.$dialog.message.success(
             //                 "Expense report(s) cancelled successfully",
             //                 {
             //                     position: "top-right",
             //                     timeout: 2000
             //                 }
             //             );
-            //             _this.getDataFromApi().then(data => {
-            //                 _this.items = data.items;
-            //                 _this.totalItems = data.total;
+            //             this.getDataFromApi().then(data => {
+            //                 this.items = data.items;
+            //                 this.totalItems = data.total;
             //             });
 
-            //             _this.selected = [];
+            //             this.selected = [];
             //         })
             //         .catch(function(error) {
-            //             console.log(error);
-            //             console.log(error.response);
-
-            //             _this.mixin_errorDialog(
-            //                 `Error ${error.response.status}`,
-            //                 error.response.statusText
-            //             );
+            //             this.mixin_showErrors(error);
             //         });
             // }
 
@@ -1311,49 +1235,36 @@ export default {
                     if (res) {
                         axios
                             .delete(
-                                `/api/expense_reports/${_this.selected[0].id}`,
+                                `/api/expense_reports/${this.selected[0].id}`,
                                 {
                                     params: {
-                                        ids: _this.selected.map(item => {
+                                        ids: this.selected.map(item => {
                                             return item.id;
                                         })
                                     }
                                 }
                             )
-                            .then(function(response) {
-                                _this.$dialog.message.success(
-                                    "Expense report(s) cancelled successfully",
-                                    {
-                                        position: "top-right",
-                                        timeout: 2000
-                                    }
+                            .then(response => {
+                                this.mixin_successDialog(
+                                    response.data.status,
+                                    response.data.message
                                 );
-                                _this.getDataFromApi().then(data => {
-                                    _this.items = data.items;
-                                    _this.totalItems = data.total;
+                                this.getDataFromApi().then(data => {
+                                    this.items = data.items;
+                                    this.totalItems = data.total;
+                                    this.formDataLoaded = true;
                                 });
-
-                                // _this.$store.dispatch("AUTH_USER");
-
-                                _this.selected = [];
+                                this.selected = [];
                             })
-                            .catch(function(error) {
-                                console.log(error);
-                                console.log(error.response);
-
-                                _this.mixin_errorDialog(
-                                    `Error ${error.response.status}`,
-                                    error.response.statusText
-                                );
+                            .catch(error => {
+                                this.mixin_showErrors(error);
                             });
                     }
                 }
             );
         },
         // onUpdate(action, method) {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
+        //     if (this.selected.length == 0) {
         //         this.$dialog.message.error("No item(s) selected", {
         //             position: "top-right",
         //             timeout: 2000
@@ -1566,41 +1477,35 @@ export default {
         //     this.$confirm(`Do you want to ${action} expense report(s)?`).then(
         //         res => {
         //             if (res) {
-        //                 let ids = _this.selected.map(item => {
+        //                 let ids = this.selected.map(item => {
         //                     return item.id;
         //                 });
 
         //                 axios({
         //                     method: method,
-        //                     url: `/api/expense_reports/${_this.selected[0].id}`,
+        //                     url: `/api/expense_reports/${this.selected[0].id}`,
         //                     data: {
         //                         ids: ids,
         //                         action: action
         //                     }
         //                 })
         //                     .then(function(response) {
-        //                         _this.$dialog.message.success(
+        //                         this.$dialog.message.success(
         //                             response.data.message,
         //                             {
         //                                 position: "top-right",
         //                                 timeout: 2000
         //                             }
         //                         );
-        //                         _this.getDataFromApi().then(data => {
-        //                             _this.items = data.items;
-        //                             _this.totalItems = data.total;
+        //                         this.getDataFromApi().then(data => {
+        //                             this.items = data.items;
+        //                             this.totalItems = data.total;
         //                         });
 
-        //                         _this.selected = [];
+        //                         this.selected = [];
         //                     })
         //                     .catch(function(error) {
-        //                         console.log(error);
-        //                         console.log(error.response);
-
-        //                         _this.mixin_errorDialog(
-        //                             `Error ${error.response.status}`,
-        //                             error.response.statusText
-        //                         );
+        //                         this.mixin_showErrors(error);
         //                     });
         //             }
         //         }
@@ -1610,50 +1515,63 @@ export default {
         //
         // ------------------------------------------------------------------------------------------------------------------
         onUpdate(action, method) {
-            let _this = this;
+            let url = "";
+
+            switch (action) {
+                case "submit":
+                    url = `/api/expense_reports/submit/${this.selected[0].id}`;
+
+                    break;
+                case "approve":
+                    url = `/api/expense_reports/approve/${this.selected[0].id}`;
+
+                    break;
+                case "reject":
+                    url = `/api/expense_reports/reject/${this.selected[0].id}`;
+
+                    break;
+                case "duplicate":
+                    url = `/api/expense_reports/duplicate/${this.selected[0].id}`;
+
+                    break;
+
+                default:
+                    url = `/api/expense_reports/${this.selected[0].id}`;
+
+                    break;
+            }
 
             this.$confirm(`Do you want to ${action} expense report(s)?`).then(
                 res => {
                     if (res) {
-                        let ids = _this.selected.map(item => {
+                        let ids = this.selected.map(item => {
                             return item.id;
                         });
 
                         axios({
                             method: method,
-                            url: `/api/expense_reports/submit/${_this.selected[0].id}`,
+                            url: url,
                             data: {
                                 ids: ids,
                                 action: action
                             }
                         })
-                            .then(function(response) {
-                                _this.mixin_successDialog(
-                                    "Success",
+                            .then(response => {
+                                this.mixin_successDialog(
+                                    response.data.status,
                                     response.data.message
                                 );
-
-                                _this.getDataFromApi().then(data => {
-                                    _this.items = data.items;
-                                    _this.totalItems = data.total;
+                                this.getDataFromApi().then(data => {
+                                    this.items = data.items;
+                                    this.totalItems = data.total;
+                                    this.formDataLoaded = true;
                                 });
-
-                                // _this.$store.dispatch("AUTH_USER");
-
-                                _this.selected = [];
-
-                                _this.loadTotalCountReportStatus();
-
-                                _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                                this.selected = [];
+                                this.loadTotalCountReportStatus();
+                                this.$store.dispatch("AUTH_NOTIFICATIONS");
                             })
-                            .catch(function(error) {
-                                console.log(error);
-                                console.log(error.response);
-
-                                _this.mixin_errorDialog(
-                                    error.response.data.status,
-                                    error.response.data.message
-                                );
+                            .catch(error => {
+                                this.mixin_showErrors(error);
                             });
                     }
                 }
@@ -1757,6 +1675,7 @@ export default {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
+                    this.formDataLoaded = true;
                 });
             },
             deep: true
@@ -1926,25 +1845,110 @@ export default {
                 defaultStyle: {
                     font: this.$store.getters.settings.expense_report
                         .print_format.defaultStyle.font
-                },
+                }
             };
         },
         base64Image() {
-            let base64Image = this.$store.getters.settings.expense_report.print_format.background.image;
+            let base64Image = this.$store.getters.settings.expense_report
+                .print_format.background.image;
 
-            if(!base64Image) {
+            if (!base64Image) {
                 return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
             }
 
             return base64Image;
+        },
+        isValidSubmit() {
+            let selectedCount = this.selected.length;
+
+            if (selectedCount == 0) {
+                return false;
+            }
+            if (
+                this.selectedCount.submitted > 0 ||
+                this.selectedCount.approved > 0 ||
+                this.selectedCount.rejected > 0 ||
+                this.selectedCount.deleted > 0
+            ) {
+                return false;
+            }
+
+            return true;
+        },
+        isValidDelete() {
+            let selectedCount = this.selected.length;
+            let deletedCount = this.selected.filter(
+                item => item.deleted_at == null
+            ).length;
+
+            if (selectedCount == 0) {
+                return false;
+            }
+
+            if (this.selectedCount.deleted > 0) {
+                return false;
+            }
+
+            return true;
+        },
+        isValidDuplicate() {
+            let selectedCount = this.selected.length;
+
+            if (selectedCount !== 1) {
+                return false;
+            }
+            return true;
+        },
+        isValidPrint() {
+            let selectedItems = this.selected.filter(
+                item => item.submitted_at == null || item.deleted_at != null
+            ).length;
+
+            if (this.selected.length == 0) {
+                return false;
+            }
+
+            if (selectedItems > 0) {
+                return false;
+            }
+
+            return true;
+        },
+        selectedCount() {
+            let submitted = this.selected.filter(
+                item =>
+                    item.submitted_at != null &&
+                    item.approved_at == null &&
+                    item.rejected_at == null &&
+                    item.deleted_at == null
+            ).length;
+
+            let approved = this.selected.filter(
+                item =>
+                    item.submitted_at != null &&
+                    item.approved_at != null &&
+                    item.rejected_at == null &&
+                    item.deleted_at == null
+            ).length;
+
+            let rejected = this.selected.filter(
+                item => item.rejected_at != null && item.deleted_at == null
+            ).length;
+            let deleted = this.selected.filter(item => item.deleted_at != null)
+                .length;
+
+            return {
+                submitted,
+                approved,
+                rejected,
+                deleted
+            };
         }
     },
     created() {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadTotalCountReportStatus();
-        // this.loadUsers();
-        // this.loadUsers();
         this.loadExpenseTypes();
     },
     activated() {
@@ -1955,6 +1959,7 @@ export default {
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;
+            this.formDataLoaded = true;
         });
     }
 };

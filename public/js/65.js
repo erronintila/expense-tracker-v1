@@ -166,7 +166,6 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this3 = this;
 
-      this.loader = true;
       var is_administrator = this.form.role == "Administrator" ? true : false;
       this.$refs.form.validate();
 

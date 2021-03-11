@@ -319,16 +319,15 @@ export default {
     }),
     methods: {
         redirectPage(item) {
-            let _this = this;
 
             axios
                 .put(`/api/notifications/${item.id}?action=${'read'}&type=${'single'}`)
                 .then(response => {
                     console.log(response);
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                     window.location.replace(`/${item.data.data.model}/${item.data.data.id}`);
-                    // _this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
+                    // this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
                 })
                 .catch(error => {
                     console.log(error);
@@ -348,17 +347,15 @@ export default {
         }
     },
     created() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.user = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.user = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };
