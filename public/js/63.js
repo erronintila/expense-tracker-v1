@@ -173,7 +173,6 @@ __webpack_require__.r(__webpack_exports__);
     this.getData().then(function (data) {
       _this5.form = data.data;
       _this5.formDataLoaded = true;
-      console.log(data.data.job);
 
       _this5.getInitialJob();
     });

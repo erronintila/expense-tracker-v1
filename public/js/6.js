@@ -66,11 +66,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this$department,
-          _this = this;
+      var _this = this;
 
       var params = {
-        department_id: (_this$department = this.department) === null || _this$department === void 0 ? void 0 : _this$department.id
+        department_id: this.department ? this.department.id : null
       };
       var data = {
         params: params
@@ -198,17 +197,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_selector_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/JobDropdownSelector */ "./resources/js/components/selector/JobDropdownSelector.vue");
 /* harmony import */ var _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/PermissionDataService */ "./resources/js/services/PermissionDataService.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //

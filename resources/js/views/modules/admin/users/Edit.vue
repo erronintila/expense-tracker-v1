@@ -161,7 +161,6 @@ export default {
         this.getData().then(data => {
             this.form = data.data;
             this.formDataLoaded = true;
-            console.log(data.data.job);
             this.getInitialJob();
         });
     }

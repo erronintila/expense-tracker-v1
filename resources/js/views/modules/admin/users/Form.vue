@@ -10,17 +10,6 @@
                 <v-expansion-panel-content>
                     <v-row>
                         <v-col cols="12" md="4">
-                            <!-- <JobSelector
-                                v-model="form.job"
-                                ref="jobSelector"
-                                :showAll="false"
-                                :rules="mixin_validation.required"
-                                :errors="errors.job_id"
-                                :selectedJob="form.job"
-                                @changeData="onChangeJob"
-                            >
-                            </JobSelector> -->
-
                             <JobDropdownSelector
                                 v-model="form.job"
                                 ref="jobSelector"

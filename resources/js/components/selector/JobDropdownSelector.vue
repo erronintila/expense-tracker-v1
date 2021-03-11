@@ -1,5 +1,5 @@
 <template>
-    <v-autocomplete
+     <v-autocomplete
         v-model="job"
         label="Job Designation"
         item-value="id"
@@ -53,7 +53,7 @@ export default {
     methods: {
         getDataFromApi() {
             let params = {
-                department_id: this.department?.id
+                department_id: this.department ? this.department.id : null
             };
 
             let data = {
