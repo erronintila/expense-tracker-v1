@@ -118,7 +118,10 @@ export default {
     },
     methods: {
         getData() {
-            this.loadPermissions().then(
+            this.loadPermissions().then(data => {
+                this.permissions = data;
+                this.form.permissions = [];
+                
                 axios
                     .get("/api/users/" + this.$route.params.id)
                     .then(response => {
@@ -133,17 +136,15 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                     })
-                    .finally((this.loader = false))
-            );
+                    .finally((this.loader = false));
+            });
         },
         loadPermissions() {
             return new Promise((resolve, reject) => {
                 axios
                     .get(`/api/data/permissions?role=${this.form.role}`)
                     .then(response => {
-                        this.permissions = response.data;
-                        this.form.permissions = [];
-                        resolve();
+                        resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
@@ -152,6 +153,7 @@ export default {
             });
         },
         onSave() {
+            this.loader = true;
             let is_administrator =
                 this.form.role == "Administrator" ? true : false;
 
@@ -194,8 +196,10 @@ export default {
         }
     },
     watch: {
-        "form.role": () => {
-            this.loadPermissions().then(() => {
+        "form.role": function() {
+            this.loadPermissions().then(data => {
+                this.permissions = data;
+                this.form.permissions = [];
                 if (this.form.old_role == this.form.role) {
                     this.form.permissions = this.form.old_permissions;
                 }

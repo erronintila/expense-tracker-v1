@@ -9,8 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var _this4 = undefined;
-
 //
 //
 //
@@ -136,26 +134,28 @@ var _this4 = undefined;
     getData: function getData() {
       var _this = this;
 
-      this.loadPermissions().then(axios.get("/api/users/" + this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        _this.form.is_admin = data.is_admin;
-        _this.form.can_login = data.can_login;
-        _this.form.permissions = data.permissions;
-        _this.form.old_permissions = data.permissions;
-        _this.form.role = data.role[0];
-        _this.form.old_role = data.role[0];
-      })["catch"](function (error) {
-        _this.mixin_showErrors(error);
-      })["finally"](this.loader = false));
+      this.loadPermissions().then(function (data) {
+        _this.permissions = data;
+        _this.form.permissions = [];
+        axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
+          var data = response.data.data;
+          _this.form.is_admin = data.is_admin;
+          _this.form.can_login = data.can_login;
+          _this.form.permissions = data.permissions;
+          _this.form.old_permissions = data.permissions;
+          _this.form.role = data.role[0];
+          _this.form.old_role = data.role[0];
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
+        })["finally"](_this.loader = false);
+      });
     },
     loadPermissions: function loadPermissions() {
       var _this2 = this;
 
       return new Promise(function (resolve, reject) {
         axios.get("/api/data/permissions?role=".concat(_this2.form.role)).then(function (response) {
-          _this2.permissions = response.data;
-          _this2.form.permissions = [];
-          resolve();
+          resolve(response.data);
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);
 
@@ -166,6 +166,7 @@ var _this4 = undefined;
     onSave: function onSave() {
       var _this3 = this;
 
+      this.loader = true;
       var is_administrator = this.form.role == "Administrator" ? true : false;
       this.$refs.form.validate();
 
@@ -194,7 +195,12 @@ var _this4 = undefined;
   },
   watch: {
     "form.role": function formRole() {
-      _this4.loadPermissions().then(function () {
+      var _this4 = this;
+
+      this.loadPermissions().then(function (data) {
+        _this4.permissions = data;
+        _this4.form.permissions = [];
+
         if (_this4.form.old_role == _this4.form.role) {
           _this4.form.permissions = _this4.form.old_permissions;
         }
