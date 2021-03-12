@@ -37,11 +37,27 @@
                         <v-list>
                             <v-list-item>
                                 <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
+                                    ref="dateRangePicker"
+                                    :dateRange="date_range"
+                                    @on-change="updateDates"
+                                >
+                                    <template
+                                        v-slot:openDialog="{
+                                            on,
+                                            attrs,
+                                            dateRangeText
+                                        }"
+                                    >
+                                        <v-text-field
+                                            label="Date"
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            readonly
+                                            :value="dateRangeText"
+                                        >
+                                        </v-text-field>
+                                    </template>
+                                </DateRangePicker>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -477,7 +493,7 @@
 import moment from "moment";
 import randomcolor from "randomcolor";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";

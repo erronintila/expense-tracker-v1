@@ -36,13 +36,6 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <!-- <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker> -->
-
                                 <DateRangePicker
                                     ref="dateRangePicker"
                                     :dateRange="date_range"
