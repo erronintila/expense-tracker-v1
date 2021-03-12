@@ -586,10 +586,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -1266,48 +1262,6 @@ var render = function() {
                               _c(
                                 "v-list-item",
                                 [
-                                  _c("DateRangePicker", {
-                                    ref: "dateRangePicker",
-                                    attrs: { dateRange: _vm.date_range },
-                                    on: { "on-change": _vm.updateDates },
-                                    scopedSlots: _vm._u([
-                                      {
-                                        key: "openDialog",
-                                        fn: function(ref) {
-                                          var on = ref.on
-                                          var attrs = ref.attrs
-                                          var dateRangeText = ref.dateRangeText
-                                          return [
-                                            _c(
-                                              "v-text-field",
-                                              _vm._g(
-                                                _vm._b(
-                                                  {
-                                                    attrs: {
-                                                      label: "Date",
-                                                      readonly: "",
-                                                      value: dateRangeText
-                                                    }
-                                                  },
-                                                  "v-text-field",
-                                                  attrs,
-                                                  false
-                                                ),
-                                                on
-                                              )
-                                            )
-                                          ]
-                                        }
-                                      }
-                                    ])
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-list-item",
-                                [
                                   _c("v-text-field", {
                                     attrs: {
                                       value: _vm.user
@@ -1408,11 +1362,46 @@ var render = function() {
               _c(
                 "v-card-subtitle",
                 [
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(_vm.formattedDateRange) +
-                      "\n            "
-                  ),
+                  _c("DateRangePicker", {
+                    ref: "dateRangePicker",
+                    attrs: { dateRange: _vm.date_range },
+                    on: { "on-change": _vm.updateDates },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "openDialog",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          var dateRangeText = ref.dateRangeText
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-0 pl-0",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(dateRangeText) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  }),
+                  _vm._v(" "),
                   _vm.user != null && _vm.user.id > 0
                     ? _c("v-chip", { attrs: { small: "" } }, [
                         _vm._v(_vm._s(_vm.user.full_name))

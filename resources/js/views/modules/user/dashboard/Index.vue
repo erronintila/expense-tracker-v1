@@ -19,52 +19,25 @@
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Dashboard</h4>
-                <v-spacer></v-spacer>
-                <v-menu
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    ref="dateRangePicker"
-                                    :dateRange="date_range"
-                                    @on-change="updateDates"
-                                >
-                                    <template
-                                        v-slot:openDialog="{
-                                            on,
-                                            attrs,
-                                            dateRangeText
-                                        }"
-                                    >
-                                        <v-text-field
-                                            label="Date"
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            readonly
-                                            :value="dateRangeText"
-                                        >
-                                        </v-text-field>
-                                    </template>
-                                </DateRangePicker>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
             </v-card-title>
             <v-card-subtitle>
-                {{ formattedDateRange }}
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template
+                        v-slot:openDialog="{
+                            on,
+                            attrs,
+                            dateRangeText
+                        }"
+                    >
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
+                        </v-btn>
+                    </template>
+                </DateRangePicker>
             </v-card-subtitle>
 
             <v-row>

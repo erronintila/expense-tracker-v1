@@ -36,30 +36,6 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <DateRangePicker
-                                    ref="dateRangePicker"
-                                    :dateRange="date_range"
-                                    @on-change="updateDates"
-                                >
-                                    <template
-                                        v-slot:openDialog="{
-                                            on,
-                                            attrs,
-                                            dateRangeText
-                                        }"
-                                    >
-                                        <v-text-field
-                                            label="Date"
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            readonly
-                                            :value="dateRangeText"
-                                        >
-                                        </v-text-field>
-                                    </template>
-                                </DateRangePicker>
-                            </v-list-item>
-                            <v-list-item>
                                 <v-text-field
                                     :value="
                                         user ? user.full_name : 'All Employees'
@@ -105,7 +81,27 @@
                 </v-menu>
             </v-card-title>
             <v-card-subtitle>
-                {{ formattedDateRange }}
+                <!-- {{ formattedDateRange }} -->
+                
+
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template
+                        v-slot:openDialog="{
+                            on,
+                            attrs,
+                            dateRangeText
+                        }"
+                    >
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
+                        </v-btn>
+                    </template>
+                </DateRangePicker>
+
                 <v-chip v-if="user != null && user.id > 0" small>{{
                     user.full_name
                 }}</v-chip>
