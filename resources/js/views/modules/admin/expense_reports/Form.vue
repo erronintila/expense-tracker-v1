@@ -331,7 +331,7 @@ export default {
                 total_received_payment: 0,
                 expenses: [],
                 payments: [],
-                user: {}
+                user: null
             },
             headers: [
                 { text: "Date", value: "date" },

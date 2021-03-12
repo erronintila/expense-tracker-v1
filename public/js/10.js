@@ -345,7 +345,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         total_received_payment: 0,
         expenses: [],
         payments: [],
-        user: {}
+        user: null
       },
       headers: [{
         text: "Date",

@@ -126,6 +126,18 @@ Route::middleware('auth:sanctum')->group(function () {
             $query->with(['department' => function ($query) {
                 $query->withTrashed();
             }]);
+            // $query->with(['expense_types' => function ($query) {
+            //     $query->withTrashed();
+            //     $query->with(['sub_types' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }]);
+        }])
+        ->with(['expense_types' => function ($query) {
+            $query->withTrashed();
+            $query->with(['sub_types' => function ($query) {
+                $query->withTrashed();
+            }]);
         }])
         ->findOrFail(Auth::id());
 

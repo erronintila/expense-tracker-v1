@@ -5,7 +5,7 @@
         </div>
         <p class="text--disabled">
             Note: Due of encoding of expenses :
-            <!-- {{ $store.getters.settings.submission_period }} -->
+            {{ $store.getters.settings.submission_period }}
         </p>
 
         <v-row>
@@ -491,9 +491,9 @@ export default {
                     // },
                     remarks: "",
                     notes: "",
-                    // encoding_period: this.$store.getters.settings
-                    //     .expense_encoding_period,
-                    encoding_period: 5,
+                    encoding_period: this.$store.getters.settings
+                        .expense_encoding_period,
+                    // encoding_period: 5,
                     // expense_type: {
                     //     id: null,
                     //     name: "",
@@ -618,9 +618,9 @@ export default {
                 // },
                 remarks: "",
                 notes: "",
-                // encoding_period: this.$store.getters.settings
-                //     .expense_encoding_period,
-                encoding_period: 5,
+                encoding_period: this.$store.getters.settings
+                    .expense_encoding_period,
+                // encoding_period: 5,
                 expense_type: null,
                 sub_type: null,
                 // expense_type: {
@@ -664,6 +664,7 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
+            console.log(this.form);
             let expense_type_limit = this.form.expense_type
                 ? this.form.expense_type.limit
                 : null;
@@ -806,8 +807,8 @@ export default {
                 return null;
             }
 
-            // let settings = this.$store.getters.settings;
-            let settings = [];
+            let settings = this.$store.getters.settings;
+            // let settings = [];
             let submissionMinDate = moment().endOf("day");
             let encodingMinDate = moment()
                 .subtract(settings.expense_encoding_period - 1, "days")
@@ -836,8 +837,8 @@ export default {
                 : submissionMinDate;
         },
         maxDate() {
-            // let settings = this.$store.getters.settings ?? null;
-            let settings = [];
+            let settings = this.$store.getters.settings ?? null;
+            // let settings = [];
             let today = moment().format("YYYY-MM-DD");
             let maxDate = moment().endOf("day");
 
@@ -1001,6 +1002,10 @@ export default {
             deep: true,
             handler(newValue, oldValue) {
                 this.form = newValue;
+
+                if (newValue.user) {
+                    this.expense_types = newValue.user.expense_types;
+                }
             }
         },
         itemizeExpenses: {
@@ -1050,8 +1055,8 @@ export default {
             }
         },
         "form.vendor": function() {
-            // this.form.tax_rate = this.$store.getters.settings.tax_rate;
-            this.form.tax_rate = 12;
+            this.form.tax_rate = this.$store.getters.settings.tax_rate;
+            // this.form.tax_rate = 12;
             this.form.tax_amount = 0;
             this.form.is_tax_inclusive = true;
         },
