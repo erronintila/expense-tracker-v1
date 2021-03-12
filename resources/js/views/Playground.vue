@@ -22,20 +22,30 @@
             <v-btn @click="onReset">Reset All</v-btn>
             <v-btn @click="onShowJob">Show Job</v-btn>
             <v-btn @click="setJob">Set Job</v-btn>
+
+            <Loader :isLoading="isLoading"></Loader>
+            <loader-component></loader-component>
+
+            <v-btn @click="isLoading = true">open</v-btn>
+            <v-btn @click="isLoading = false">close</v-btn>
         </v-container>
     </div>
 </template>
 <script>
 import DepartmentDropdownSelector from "../components/selector/dropdown/DepartmentDropdownSelector";
 import JobDropdownSelector from "../components/selector/dropdown/JobDropdownSelector";
+import Loader from "../components/loader/Loader";
 
 export default {
     components: {
         DepartmentDropdownSelector,
-        JobDropdownSelector
+        JobDropdownSelector,
+        Loader
     },
     data() {
         return {
+            isLoading: false,
+            formDataLoaded: false,
             department: null,
             job: null,
             user: {}
@@ -73,9 +83,11 @@ export default {
             this.onResetDepartment();
             this.onResetJob();
         },
-         getInitialJob() {
-            axios.get("api/jobs/20").then(response => this.job = response.data.data);
-        },
+        getInitialJob() {
+            axios
+                .get("api/jobs/20")
+                .then(response => (this.job = response.data.data));
+        }
         // async getUser() {
         //     let res = await axios.get("/api/users/2");
         //     try {

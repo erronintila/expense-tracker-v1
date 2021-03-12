@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -10,11 +11,7 @@
 
                 <h4 class="title green--text">Expense Report Details</h4>
             </v-card-title>
-            <v-skeleton-loader
-                v-if="!formDataLoaded"
-                type="article, article, image, actions, article"
-            ></v-skeleton-loader>
-            <v-form v-else ref="form">
+            <v-form ref="form">
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="8">
@@ -1164,6 +1161,7 @@ export default {
             });
         },
         getData() {
+            this.formDataLoaded = false;
             return new Promise((resolve, reject) => {
                 axios
                     .get(`/api/expense_reports/${this.router_params_id}`)
@@ -1213,13 +1211,6 @@ export default {
                         this.form.logs = data.logs;
 
                         // this.loadExpenses();
-
-                        this.getDataFromApi().then(data => {
-                            this.form.expenses = data.items;
-                            this.totalItems = data.total;
-                            this.formDataLoaded = true;
-                        });
-
                         resolve();
                     })
                     .catch(error => {
@@ -1316,10 +1307,22 @@ export default {
     },
     mounted() {
         // this.$store.dispatch("AUTH_USER");
-        this.getData();
+        this.getData().then(() => {
+            this.getDataFromApi().then(data => {
+                this.form.expenses = data.items;
+                this.totalItems = data.total;
+                this.formDataLoaded = true;
+            });
+        });
     },
     activated() {
-        this.getData();
+        this.getData().then(() => {
+            this.getDataFromApi().then(data => {
+                this.form.expenses = data.items;
+                this.totalItems = data.total;
+                this.formDataLoaded = true;
+            });
+        });
     },
     deactivated() {
         this.form.expenses = [];

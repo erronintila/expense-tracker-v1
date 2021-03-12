@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Settings</h4>
                 <v-spacer></v-spacer>
@@ -412,6 +413,7 @@ import SettingDataService from "../../../../services/SettingDataService";
 export default {
     data() {
         return {
+            formDataLoaded: false,
             validExpenses: false,
             validExpenseReports: false,
             validTaxes: false,
@@ -472,14 +474,20 @@ export default {
     },
     methods: {
         onLoad() {
-            SettingDataService.getAll()
-                .then(response => {
-                    this.file_input = null;
-                    this.settings = response.data;
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                });
+            return new Promise((resolve, reject) => {
+                SettingDataService.getAll()
+                    .then(response => {
+                        this.file_input = null;
+                        this.settings = response.data;
+                        this.formDataLoaded = true;
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
         },
         onSave() {
             this.$refs.formExpenses.validate();

@@ -1,21 +1,6 @@
 <template>
     <div>
-        <v-container v-if="form.id == ''" style="height: 400px">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Profile</h4>
@@ -451,6 +436,7 @@ import moment from "moment";
 export default {
     data() {
         return {
+            formDataLoaded: false,
             showOldPassword: false,
             showNewPassword: false,
             showRetypePassword: false,
@@ -651,12 +637,14 @@ export default {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.form = response;
             this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.formDataLoaded = true;
         });
     },
     activated() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.form = response;
             this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.formDataLoaded = true;
         });
     }
 };

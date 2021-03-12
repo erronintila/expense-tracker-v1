@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -109,6 +110,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             panel: [0],
             valid: false,
             usersParameters: {
@@ -135,7 +137,7 @@ export default {
             pivot_sub_types: null,
 
             collections: {},
-            filters: {},
+            filters: {}
         };
     },
     methods: {
@@ -146,13 +148,19 @@ export default {
             this.user = null;
         },
         loadExpenseTypes() {
-            ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
-                .then(response => {
-                    this.all_expense_types = response.data.data;
-                })
-                .catch(error => {
-                    this.mixin_showErrors(error);
-                });
+            return new Promise((resolve, reject) => {
+                ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
+                    .then(response => {
+                        this.all_expense_types = response.data.data;
+                        this.formDataLoaded = true;
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
         },
         onSave() {
             if (this.user == null) {
@@ -182,7 +190,6 @@ export default {
                         );
 
                         this.$store.dispatch("AUTH_USER");
-
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);

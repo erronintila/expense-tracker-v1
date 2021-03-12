@@ -1,9 +1,6 @@
 <template>
     <div>
-        <v-skeleton-loader
-            v-if="!formDataLoaded"
-            type="article, article, article, image, actions"
-        ></v-skeleton-loader>
+        <loader-component v-if="!formDataLoaded"></loader-component>
 
         <v-form v-else ref="form" v-model="valid">
             <div class="overline green--text">

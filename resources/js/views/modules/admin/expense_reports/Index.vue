@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expense Reports</h4>
 
@@ -41,7 +42,7 @@
                 >
                 </DateRangePicker> -->
 
-                 <DateRangePicker
+                <DateRangePicker
                     ref="dateRangePicker"
                     :dateRange="date_range"
                     @on-change="updateDates"
@@ -214,12 +215,7 @@
             </v-row>
 
             <v-card-subtitle>
-                <v-skeleton-loader
-                    v-if="!formDataLoaded"
-                    type="list-item-one-line"
-                ></v-skeleton-loader>
                 <v-text-field
-                    v-else
                     v-model="search"
                     append-icon="mdi-magnify"
                     label="Search"
@@ -229,12 +225,7 @@
             </v-card-subtitle>
 
             <v-card-text>
-                <v-skeleton-loader
-                    v-if="!formDataLoaded"
-                    type="article, article, image, actions, article"
-                ></v-skeleton-loader>
                 <v-data-table
-                    v-else
                     :headers="headers"
                     :items="items"
                     :loading="loading"

@@ -1,135 +1,143 @@
 <template>
-    <v-card class="elevation-0 pt-0">
-        <v-card-title class="pt-0">
-            <h4 class="title green--text">Activity Logs</h4>
-            <v-spacer></v-spacer>
-        </v-card-title>
+    <div>
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
+            <v-card-title class="pt-0">
+                <h4 class="title green--text">Activity Logs</h4>
+                <v-spacer></v-spacer>
+            </v-card-title>
 
-        <v-card-subtitle>
-            <DateRangePicker
-                ref="dateRangePicker"
-                :dateRange="filters.date_range"
-                @on-change="updateDates"
-            >
-                <template v-slot:openDialog="{ on, attrs, dateRangeText }">
-                    <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
-                        {{ dateRangeText }}
-                    </v-btn>
-                </template>
-            </DateRangePicker>
-        </v-card-subtitle>
-
-        <v-row class="ml-4">
-            <v-chip
-                color="green"
-                dark
-                v-if="collections.selectedActivityLogs.length > 0"
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="collections.selectedActivityLogs = []"
-                close-icon="mdi-close"
-            >
-                {{ collections.selectedActivityLogs.length }} Selected
-            </v-chip>
-            <UserDialogSelector
-                ref="userDialogSelector"
-                @selectUser="selectUser"
-                @onReset="resetUser"
-                :selectedUser="filters.selectedUser"
-            >
-                <template
-                    v-slot:openDialog="{ bind, on, computedSelectedUser }"
+            <v-card-subtitle>
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="filters.date_range"
+                    @on-change="updateDates"
                 >
-                    <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
-                        {{
-                            computedSelectedUser
-                                ? computedSelectedUser.name
-                                : "All Employees"
-                        }}
-                    </v-chip>
-                </template>
-            </UserDialogSelector>
+                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
+                        </v-btn>
+                    </template>
+                </DateRangePicker>
+            </v-card-subtitle>
 
-            <v-chip
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="onReset"
-                close-icon="mdi-refresh"
-            >
-                Refresh
-            </v-chip>
-        </v-row>
-
-        <v-card-text>
-            <v-data-table
-                v-model="collections.selectedActivityLogs"
-                show-select
-                item-key="id"
-                class="elevation-0"
-                single-expand
-                show-expand
-                :headers="collections.headers"
-                :items="collections.activityLogs"
-                :loading="loading"
-                :options.sync="options"
-                :server-items-length="meta.total"
-                :footer-props="{
-                    itemsPerPageOptions: [10, 20, 50, 100],
-                    showFirstLastPage: true,
-                    firstIcon: 'mdi-page-first',
-                    lastIcon: 'mdi-page-last',
-                    prevIcon: 'mdi-chevron-left',
-                    nextIcon: 'mdi-chevron-right'
-                }"
-            >
-                <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon
-                        v-if="hasLink(item)"
-                        :key="item.id"
-                        small
-                        class="mr-2"
-                        @click="
-                            $router.push(
-                                hasLink(item)
-                                    ? `/admin/${item.properties.custom.link}`
-                                    : null
-                            )
-                        "
+            <v-row class="ml-4">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="collections.selectedActivityLogs.length > 0"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="collections.selectedActivityLogs = []"
+                    close-icon="mdi-close"
+                >
+                    {{ collections.selectedActivityLogs.length }} Selected
+                </v-chip>
+                <UserDialogSelector
+                    ref="userDialogSelector"
+                    @selectUser="selectUser"
+                    @onReset="resetUser"
+                    :selectedUser="filters.selectedUser"
+                >
+                    <template
+                        v-slot:openDialog="{ bind, on, computedSelectedUser }"
                     >
-                        mdi-open-in-new
-                    </v-icon>
-                </template>
-                <template v-slot:[`item.user`]="{ item }">
-                    {{ item.user == null ? "Default" : item.user.name }}
-                </template>
-                <template v-slot:expanded-item="{ headers, item }">
-                    <td :colspan="headers.length">
-                        <v-container :key="item.id">
-                            <table
-                                v-for="(items, key) in item.properties"
-                                :key="items.id"
-                            >
-                                <div v-if="key == 'attributes'">
-                                    <div class="green--text text-capitalize">
-                                        {{ key }}
+                        <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
+                            {{
+                                computedSelectedUser
+                                    ? computedSelectedUser.name
+                                    : "All Employees"
+                            }}
+                        </v-chip>
+                    </template>
+                </UserDialogSelector>
+
+                <v-chip
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onReset"
+                    close-icon="mdi-refresh"
+                >
+                    Refresh
+                </v-chip>
+            </v-row>
+
+            <v-card-text>
+                <v-data-table
+                    v-model="collections.selectedActivityLogs"
+                    show-select
+                    item-key="id"
+                    class="elevation-0"
+                    single-expand
+                    show-expand
+                    :headers="collections.headers"
+                    :items="collections.activityLogs"
+                    :loading="!formDataLoaded"
+                    :options.sync="options"
+                    :server-items-length="meta.total"
+                    :footer-props="{
+                        itemsPerPageOptions: [10, 20, 50, 100],
+                        showFirstLastPage: true,
+                        firstIcon: 'mdi-page-first',
+                        lastIcon: 'mdi-page-last',
+                        prevIcon: 'mdi-chevron-left',
+                        nextIcon: 'mdi-chevron-right'
+                    }"
+                >
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon
+                            v-if="hasLink(item)"
+                            :key="item.id"
+                            small
+                            class="mr-2"
+                            @click="
+                                $router.push(
+                                    hasLink(item)
+                                        ? `/admin/${item.properties.custom.link}`
+                                        : null
+                                )
+                            "
+                        >
+                            mdi-open-in-new
+                        </v-icon>
+                    </template>
+                    <template v-slot:[`item.user`]="{ item }">
+                        {{ item.user == null ? "Default" : item.user.name }}
+                    </template>
+                    <template v-slot:expanded-item="{ headers, item }">
+                        <td :colspan="headers.length">
+                            <v-container :key="item.id">
+                                <table
+                                    v-for="(items, key) in item.properties"
+                                    :key="items.id"
+                                >
+                                    <div v-if="key == 'attributes'">
+                                        <div
+                                            class="green--text text-capitalize"
+                                        >
+                                            {{ key }}
+                                        </div>
+                                        <tr
+                                            v-for="(item, key) in items"
+                                            :key="key"
+                                        >
+                                            <td>
+                                                <strong>{{ key }}</strong>
+                                            </td>
+                                            <td>:</td>
+                                            <td>{{ item }}</td>
+                                        </tr>
                                     </div>
-                                    <tr v-for="(item, key) in items" :key="key">
-                                        <td>
-                                            <strong>{{ key }}</strong>
-                                        </td>
-                                        <td>:</td>
-                                        <td>{{ item }}</td>
-                                    </tr>
-                                </div>
-                            </table>
-                        </v-container>
-                    </td>
-                </template>
-            </v-data-table>
-        </v-card-text>
-    </v-card>
+                                </table>
+                            </v-container>
+                        </td>
+                    </template>
+                </v-data-table>
+            </v-card-text>
+        </v-card>
+    </div>
 </template>
 
 <script>
@@ -146,6 +154,7 @@ export default {
     data() {
         return {
             loading: true,
+            formDataLoaded: false,
             collections: {
                 activityLogs: [],
                 selectedActivityLogs: [],
@@ -256,14 +265,13 @@ export default {
 
                 ActivityLogDataService.getAll(data)
                     .then(response => {
+                        this.formDataLoaded = true;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
                         reject();
-                    })
-                    .finally(() => {
-                        this.loading = false;
                     });
             });
         },
