@@ -500,6 +500,8 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
 
 export default {
     components: { DateRangePicker },
@@ -590,10 +592,12 @@ export default {
             ]);
         },
         loadTotalCountReportStatus() {
-            axios
-                .get(
-                    `/api/data/expense_reports?total_count=true&user_id=${this.$store.getters.user.id}`
-                )
+            ExpenseReportDataService.get({
+                params: {
+                    total_count: true,
+                    user_id: this.$store.getters.user.id
+                }
+            })
                 .then(response => {
                     let total = response.data ?? 0;
 
@@ -605,8 +609,11 @@ export default {
                 });
         },
         loadExpenseTypes() {
-            axios
-                .get(`/api/data/expense_types?only=true`)
+            ExpenseTypeDataService.get({
+                params: {
+                    only: true
+                }
+            })
                 .then(response => {
                     this.expense_types = response.data.data;
                 })
@@ -1082,21 +1089,20 @@ export default {
                 let user_id = this.user;
                 let range = this.date_range;
 
-                axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            user_id: user_id,
-                            status: status,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            admin_page: false
-                        }
-                    })
+                ExpenseReportDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        user_id: user_id,
+                        status: status,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        admin_page: false
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -1236,17 +1242,13 @@ export default {
             this.$confirm("Do you want to cancel expense report(s)?").then(
                 res => {
                     if (res) {
-                        axios
-                            .delete(
-                                `/api/expense_reports/${this.selected[0].id}`,
-                                {
-                                    params: {
-                                        ids: this.selected.map(item => {
-                                            return item.id;
-                                        })
-                                    }
-                                }
-                            )
+                        ExpenseReportDataService.delete(this.selected[0].id, {
+                            params: {
+                                ids: this.selected.map(item => {
+                                    return item.id;
+                                })
+                            }
+                        })
                             .then(response => {
                                 this.mixin_successDialog(
                                     response.data.status,

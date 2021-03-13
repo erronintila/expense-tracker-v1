@@ -37,9 +37,7 @@
                                     v-if="canEdit"
                                     text
                                     color="green"
-                                    :to="
-                                        `/expenses/${$route.params.id}/edit`
-                                    "
+                                    :to="`/expenses/${$route.params.id}/edit`"
                                 >
                                     Edit
                                 </v-btn>
@@ -354,6 +352,7 @@
 
 <script>
 import numeral from "numeral";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     data() {
@@ -448,8 +447,7 @@ export default {
     methods: {
         getData() {
             // this.loadUsers().then(
-            axios
-                .get("/api/expenses/" + this.$route.params.id)
+            ExpenseDataService.show(this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
 
@@ -553,15 +551,15 @@ export default {
                 return false;
             }
 
-            if(this.form.expense_report !== null) {
+            if (this.form.expense_report !== null) {
                 if (
-                this.form.expense_report.approved_at !== null ||
-                this.form.expense_report.cancelled_at !== null ||
-                this.form.expense_report.deleted_at !== null ||
-                this.form.expense_report.rejected_at !== null
-            ) {
-                return false;
-            }
+                    this.form.expense_report.approved_at !== null ||
+                    this.form.expense_report.cancelled_at !== null ||
+                    this.form.expense_report.deleted_at !== null ||
+                    this.form.expense_report.rejected_at !== null
+                ) {
+                    return false;
+                }
             }
 
             return true;

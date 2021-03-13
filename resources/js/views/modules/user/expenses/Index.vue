@@ -386,6 +386,8 @@
 import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     components: {
@@ -486,21 +488,20 @@ export default {
                 let expense_type_id = this.expense_type.id;
                 let range = this.date_range;
 
-                axios
-                    .get("/api/expenses", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            user_id: user_id,
-                            expense_type_id: expense_type_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0]
-                        }
-                    })
+                ExpenseDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        user_id: user_id,
+                        expense_type_id: expense_type_id,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0]
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -515,8 +516,11 @@ export default {
             });
         },
         loadExpenseTypes() {
-            axios
-                .get("/api/data/expense_types?only=true")
+            ExpenseTypeDataService.get({
+                params: {
+                    only: true
+                }
+            })
                 .then(response => {
                     this.expense_types = response.data.data;
                     this.expense_types.unshift({
@@ -597,14 +601,13 @@ export default {
 
             this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/expenses/${this.selected[0].id}`, {
-                            params: {
-                                ids: this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                    ExpenseDataService.delete(this.selected[0].id, {
+                        params: {
+                            ids: this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    })
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -646,12 +649,11 @@ export default {
 
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/expenses/restore/${this.selected[0].id}`, {
-                            ids: this.selected.map(item => {
-                                return item.id;
-                            })
+                    ExpenseDataService.restore(this.selected[0].id, {
+                        ids: this.selected.map(item => {
+                            return item.id;
                         })
+                    })
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,

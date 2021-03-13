@@ -28,6 +28,7 @@
 import moment from "moment";
 import Form from "../../admin/expense_reports/Form";
 import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     components: {
@@ -71,39 +72,36 @@ export default {
             return new Promise((resolve, reject) => {
                 ExpenseReportDataService.show(this.$route.params.id)
                     .then(response => {
-                        this.loader = false
+                        this.loader = false;
                         resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.loader = false
+                        this.loader = false;
                         reject();
                     });
             });
         },
         loadExpenses(reportData) {
             return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/data/expenses", {
-                        params: {
-                            update_report: true,
-                            user_id: reportData.user
-                                ? reportData.user.id
-                                : null,
-                            start_date: reportData.from,
-                            end_date: moment()
-                                .endOf()
-                                .format("YYYY-MM-DD"),
-                            expense_report_id: this.$route.params.id
-                        }
-                    })
+                ExpenseDataService.get({
+                    params: {
+                        update_report: true,
+                        user_id: reportData.user ? reportData.user.id : null,
+                        start_date: reportData.from,
+                        end_date: moment()
+                            .endOf()
+                            .format("YYYY-MM-DD"),
+                        expense_report_id: this.$route.params.id
+                    }
+                })
                     .then(response => {
-                        this.loader = false
+                        this.loader = false;
                         resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.loader = false
+                        this.loader = false;
                         reject();
                     });
             });
