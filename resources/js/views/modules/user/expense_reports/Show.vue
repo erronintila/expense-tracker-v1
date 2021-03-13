@@ -1266,6 +1266,7 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        reject();
                     });
             });
         }

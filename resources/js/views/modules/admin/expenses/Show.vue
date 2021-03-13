@@ -539,24 +539,7 @@ export default {
 
                     this.loader = false;
                 });
-            // );
         }
-        // loadUsers() {
-        //     return new Promise((resolve, reject) => {
-        //         axios
-        //             .get("/api/data/users")
-        //             .then(response => {
-        //                 this.users = response.data.data;
-
-        //                 resolve();
-        //             })
-        //             .catch(error => {
-        //                 this.mixin_showErrors(error);
-
-        //                 reject();
-        //             });
-        //     });
-        // }
     },
     computed: {
         canEdit() {
@@ -569,15 +552,15 @@ export default {
                 return false;
             }
 
-            if(this.form.expense_report !== null) {
+            if (this.form.expense_report !== null) {
                 if (
-                this.form.expense_report.approved_at !== null ||
-                this.form.expense_report.cancelled_at !== null ||
-                this.form.expense_report.deleted_at !== null ||
-                this.form.expense_report.rejected_at !== null
-            ) {
-                return false;
-            }
+                    this.form.expense_report.approved_at !== null ||
+                    this.form.expense_report.cancelled_at !== null ||
+                    this.form.expense_report.deleted_at !== null ||
+                    this.form.expense_report.rejected_at !== null
+                ) {
+                    return false;
+                }
             }
 
             return true;

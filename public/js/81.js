@@ -593,6 +593,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this2.mixin_showErrors(error);
 
           _this2.loading = false;
+          reject();
         });
       });
     },

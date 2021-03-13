@@ -1105,6 +1105,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this5.mixin_showErrors(error);
 
           _this5.loading = false;
+          reject();
         });
       });
     }

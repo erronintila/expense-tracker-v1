@@ -550,22 +550,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_showErrors(error);
 
         _this.loader = false;
-      }); // );
-    } // loadUsers() {
-    //     return new Promise((resolve, reject) => {
-    //         axios
-    //             .get("/api/data/users")
-    //             .then(response => {
-    //                 this.users = response.data.data;
-    //                 resolve();
-    //             })
-    //             .catch(error => {
-    //                 this.mixin_showErrors(error);
-    //                 reject();
-    //             });
-    //     });
-    // }
-
+      });
+    }
   },
   computed: {
     canEdit: function canEdit() {
