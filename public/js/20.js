@@ -30,6 +30,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
 /* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
+/* harmony import */ var _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../services/ExpenseTypeDataService */ "./resources/js/services/ExpenseTypeDataService.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -604,6 +605,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -699,7 +701,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadTotalCountReportStatus: function loadTotalCountReportStatus() {
       var _this = this;
 
-      axios.get("/api/data/expense_reports?total_count=true").then(function (response) {
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"].get({
+        params: {
+          total_count: true
+        }
+      }).then(function (response) {
         var _response$data, _total$data$total_uns, _total$data$total_una;
 
         var total = (_response$data = response.data) !== null && _response$data !== void 0 ? _response$data : 0;
@@ -712,7 +718,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     loadExpenseTypes: function loadExpenseTypes() {
       var _this2 = this;
 
-      axios.get("/api/data/expense_types?only=true").then(function (response) {
+      _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_6__["default"].get({
+        params: {
+          only: true
+        }
+      }).then(function (response) {
         _this2.expense_types = response.data.data;
       })["catch"](function (error) {
         _this2.mixin_showErrors(error);
@@ -1134,7 +1144,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var status = _this5.status;
         var user_id = _this5.user ? _this5.user.id : null;
         var range = _this5.date_range;
-        axios.get("/api/expense_reports", {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"].getAll({
           params: {
             search: search,
             sortBy: sortBy[0],
@@ -1240,44 +1250,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           timeout: 2000
         });
         return;
-      } // let notes = await this.$dialog.prompt({
-      //     text: "Please add note",
-      //     title: "Do you want to cancel expense report(s)?"
-      // });
-      // if (notes) {
-      //     axios
-      //         .delete(`/api/expense_reports/${this.selected[0].id}`, {
-      //             params: {
-      //                 ids: this.selected.map(item => {
-      //                     return item.id;
-      //                 }),
-      //                 notes: notes
-      //             }
-      //         })
-      //         .then(function(response) {
-      //             this.$dialog.message.success(
-      //                 "Expense report(s) cancelled successfully",
-      //                 {
-      //                     position: "top-right",
-      //                     timeout: 2000
-      //                 }
-      //             );
-      //             this.getDataFromApi().then(data => {
-      //                 this.items = data.items;
-      //                 this.totalItems = data.total;
-      //             });
-      //             this.selected = [];
-      //         })
-      //         .catch(function(error) {
-      //             this.mixin_showErrors(error);
-      //         });
-      // }
-      // // return;
-
+      }
 
       this.$confirm("Do you want to cancel expense report(s)?").then(function (res) {
         if (res) {
-          axios["delete"]("/api/expense_reports/".concat(_this6.selected[0].id), {
+          _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"](_this6.selected[0].id, {
             params: {
               ids: _this6.selected.map(function (item) {
                 return item.id;
@@ -1663,14 +1640,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   ids = _this8.selected.map(function (item) {
                     return item.id;
                   });
-                  axios({
-                    method: "put",
-                    url: "/api/expense_reports/reject/".concat(_this8.selected[0].id),
-                    data: {
-                      ids: ids,
-                      action: "reject",
-                      notes: notes
-                    }
+                  _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"].reject(_this8.selected[0].id, {
+                    ids: ids,
+                    action: "reject",
+                    notes: notes
                   }).then(function (response) {
                     _this8.mixin_successDialog("Success", response.data.message);
 
@@ -3365,12 +3338,101 @@ var ExpenseReportDataService = /*#__PURE__*/function () {
     value: function restore(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/restore/".concat(id), data);
     }
+  }, {
+    key: "submit",
+    value: function submit(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/submit/".concat(id), data);
+    }
+  }, {
+    key: "approve",
+    value: function approve(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/approve/".concat(id), data);
+    }
+  }, {
+    key: "reject",
+    value: function reject(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/reject/".concat(id), data);
+    }
+  }, {
+    key: "duplicate",
+    value: function duplicate(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/duplicate/".concat(id), data);
+    }
   }]);
 
   return ExpenseReportDataService;
 }();
 
 /* harmony default export */ __webpack_exports__["default"] = (new ExpenseReportDataService());
+
+/***/ }),
+
+/***/ "./resources/js/services/ExpenseTypeDataService.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/services/ExpenseTypeDataService.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var ExpenseTypeDataService = /*#__PURE__*/function () {
+  function ExpenseTypeDataService() {
+    _classCallCheck(this, ExpenseTypeDataService);
+  }
+
+  _createClass(ExpenseTypeDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_types", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_types", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/restore/".concat(id), data);
+    }
+  }]);
+
+  return ExpenseTypeDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseTypeDataService());
 
 /***/ }),
 

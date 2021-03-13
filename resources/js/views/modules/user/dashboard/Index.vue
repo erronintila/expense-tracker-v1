@@ -1,7 +1,6 @@
 <template>
     <div>
         <loader-component v-if="loader"></loader-component>
-
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Dashboard</h4>
@@ -739,9 +738,7 @@ export default {
                             break;
                     }
 
-                    this.lineChart_data = response.data.map(
-                        item => item.value
-                    );
+                    this.lineChart_data = response.data.map(item => item.value);
 
                     this.updateLineChartValues(
                         this.lineChart_labels,

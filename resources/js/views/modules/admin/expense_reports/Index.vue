@@ -561,6 +561,7 @@ import numeral from "numeral";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
 
 export default {
     components: { DateRangePicker, UserDialogSelector },
@@ -666,8 +667,11 @@ export default {
             ]);
         },
         loadTotalCountReportStatus() {
-            axios
-                .get("/api/data/expense_reports?total_count=true")
+            ExpenseReportDataService.get({
+                params: {
+                    total_count: true
+                }
+            })
                 .then(response => {
                     let total = response.data ?? 0;
 
@@ -679,8 +683,11 @@ export default {
                 });
         },
         loadExpenseTypes() {
-            axios
-                .get(`/api/data/expense_types?only=true`)
+            ExpenseTypeDataService.get({
+                params: {
+                    only: true
+                }
+            })
                 .then(response => {
                     this.expense_types = response.data.data;
                 })
@@ -1190,21 +1197,20 @@ export default {
                 let user_id = this.user ? this.user.id : null;
                 let range = this.date_range;
 
-                axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            user_id: user_id,
-                            status: status,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            admin_page: true
-                        }
-                    })
+                ExpenseReportDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        user_id: user_id,
+                        status: status,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        admin_page: true
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -1304,57 +1310,16 @@ export default {
                 return;
             }
 
-            // let notes = await this.$dialog.prompt({
-            //     text: "Please add note",
-            //     title: "Do you want to cancel expense report(s)?"
-            // });
-
-            // if (notes) {
-            //     axios
-            //         .delete(`/api/expense_reports/${this.selected[0].id}`, {
-            //             params: {
-            //                 ids: this.selected.map(item => {
-            //                     return item.id;
-            //                 }),
-            //                 notes: notes
-            //             }
-            //         })
-            //         .then(function(response) {
-            //             this.$dialog.message.success(
-            //                 "Expense report(s) cancelled successfully",
-            //                 {
-            //                     position: "top-right",
-            //                     timeout: 2000
-            //                 }
-            //             );
-            //             this.getDataFromApi().then(data => {
-            //                 this.items = data.items;
-            //                 this.totalItems = data.total;
-            //             });
-
-            //             this.selected = [];
-            //         })
-            //         .catch(function(error) {
-            //             this.mixin_showErrors(error);
-            //         });
-            // }
-
-            // // return;
-
             this.$confirm("Do you want to cancel expense report(s)?").then(
                 res => {
                     if (res) {
-                        axios
-                            .delete(
-                                `/api/expense_reports/${this.selected[0].id}`,
-                                {
-                                    params: {
-                                        ids: this.selected.map(item => {
-                                            return item.id;
-                                        })
-                                    }
-                                }
-                            )
+                        ExpenseReportDataService.delete(this.selected[0].id, {
+                            params: {
+                                ids: this.selected.map(item => {
+                                    return item.id;
+                                })
+                            }
+                        })
                             .then(response => {
                                 this.mixin_successDialog(
                                     response.data.status,
@@ -1772,14 +1737,10 @@ export default {
                     return item.id;
                 });
 
-                axios({
-                    method: "put",
-                    url: `/api/expense_reports/reject/${this.selected[0].id}`,
-                    data: {
-                        ids: ids,
-                        action: "reject",
-                        notes: notes
-                    }
+                ExpenseReportDataService.reject(this.selected[0].id, {
+                    ids: ids,
+                    action: "reject",
+                    notes: notes
                 })
                     .then(response => {
                         this.mixin_successDialog(

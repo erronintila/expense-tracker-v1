@@ -511,15 +511,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1033,6 +1024,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var items = response.data.data;
           var total = response.data.meta.total;
           _this5.loading = false;
+          _this5.formDataLoaded = true;
           resolve({
             items: items,
             total: total
@@ -1041,6 +1033,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this5.mixin_showErrors(error);
 
           _this5.loading = false;
+          _this5.formDataLoaded = true;
           reject();
         });
       });
@@ -1171,7 +1164,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this6.getDataFromApi().then(function (data) {
               _this6.items = data.items;
               _this6.totalItems = data.total;
-              _this6.formDataLoaded = true;
             });
 
             _this6.selected = [];
@@ -1459,7 +1451,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this7.getDataFromApi().then(function (data) {
               _this7.items = data.items;
               _this7.totalItems = data.total;
-              _this7.formDataLoaded = true;
             });
 
             _this7.selected = [];
@@ -1544,16 +1535,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     params: {
+      immediate: true,
+      deep: true,
       handler: function handler() {
         var _this8 = this;
 
         this.getDataFromApi().then(function (data) {
           _this8.items = data.items;
           _this8.totalItems = data.total;
-          _this8.formDataLoaded = true;
         });
-      },
-      deep: true
+      }
     },
     items: function items() {
       this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
@@ -1779,7 +1770,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getDataFromApi().then(function (data) {
       _this9.items = data.items;
       _this9.totalItems = data.total;
-      _this9.formDataLoaded = true;
     });
   }
 });
@@ -1804,220 +1794,232 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Expense Reports")
-              ]),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
               _c(
-                "v-tooltip",
-                {
-                  attrs: { bottom: "" },
-                  scopedSlots: _vm._u(
-                    [
-                      _vm.mixin_can("add expense reports")
-                        ? {
-                            key: "activator",
-                            fn: function(ref) {
-                              var on = ref.on
-                              var attrs = ref.attrs
-                              return [
-                                _c(
-                                  "v-btn",
-                                  _vm._g(
-                                    _vm._b(
-                                      {
-                                        staticClass: "elevation-3 mr-2",
-                                        attrs: {
-                                          color: "green",
-                                          to: {
-                                            name: "user.expense_reports.create"
-                                          },
-                                          dark: "",
-                                          fab: "",
-                                          "x-small": ""
-                                        }
-                                      },
-                                      "v-btn",
-                                      attrs,
-                                      false
-                                    ),
-                                    on
-                                  ),
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-plus")
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        : null
-                    ],
-                    null,
-                    true
-                  )
-                },
-                [_vm._v(" "), _c("span", [_vm._v("Add New")])]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-subtitle",
-            [
-              _c("DateRangePicker", {
-                ref: "dateRangePicker",
-                attrs: { dateRange: _vm.date_range },
-                on: { "on-change": _vm.updateDates },
-                scopedSlots: _vm._u([
-                  {
-                    key: "openDialog",
-                    fn: function(ref) {
-                      var on = ref.on
-                      var attrs = ref.attrs
-                      var dateRangeText = ref.dateRangeText
-                      return [
-                        _c(
-                          "v-btn",
-                          _vm._g(
-                            _vm._b(
-                              { staticClass: "ml-0 pl-0", attrs: { text: "" } },
-                              "v-btn",
-                              attrs,
-                              false
-                            ),
-                            on
-                          ),
-                          [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(dateRangeText) +
-                                "\n                    "
-                            )
-                          ]
-                        )
-                      ]
-                    }
-                  }
-                ])
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-row",
-            { staticClass: "ml-4 mb-2" },
-            [
-              _vm.selected.length > 0
-                ? _c(
-                    "v-chip",
-                    {
-                      staticClass: "mr-2",
-                      attrs: {
-                        color: "green",
-                        dark: "",
-                        close: "",
-                        small: "",
-                        "close-icon": "mdi-close"
-                      },
-                      on: {
-                        "click:close": function($event) {
-                          _vm.selected = []
-                        }
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(_vm.selected.length) +
-                          " Selected\n            "
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  attrs: {
-                    transition: "scale-transition",
-                    "close-on-content-click": false,
-                    "nudge-width": 200,
-                    "offset-y": "",
-                    right: "",
-                    bottom: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var menu = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _vm.status != null
-                            ? _c(
-                                "v-chip",
-                                _vm._g(
-                                  _vm._b(
-                                    {
-                                      staticClass: "mr-2",
-                                      attrs: { small: "" }
-                                    },
-                                    "v-chip",
-                                    attrs,
-                                    false
-                                  ),
-                                  menu
-                                ),
-                                [
-                                  _vm._v(
-                                    "\n                        " +
-                                      _vm._s(_vm.status) +
-                                      "\n                    "
-                                  )
-                                ]
-                              )
-                            : _vm._e()
-                        ]
-                      }
-                    }
-                  ])
-                },
+                "v-card-title",
+                { staticClass: "pt-0" },
                 [
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Expense Reports")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
                   _vm._v(" "),
                   _c(
-                    "v-card",
+                    "v-tooltip",
+                    {
+                      attrs: { bottom: "" },
+                      scopedSlots: _vm._u(
+                        [
+                          _vm.mixin_can("add expense reports")
+                            ? {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var on = ref.on
+                                  var attrs = ref.attrs
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            staticClass: "elevation-3 mr-2",
+                                            attrs: {
+                                              color: "green",
+                                              to: {
+                                                name:
+                                                  "user.expense_reports.create"
+                                              },
+                                              dark: "",
+                                              fab: "",
+                                              "x-small": ""
+                                            }
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-plus")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                }
+                              }
+                            : null
+                        ],
+                        null,
+                        true
+                      )
+                    },
+                    [_vm._v(" "), _c("span", [_vm._v("Add New")])]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-subtitle",
+                [
+                  _c("DateRangePicker", {
+                    ref: "dateRangePicker",
+                    attrs: { dateRange: _vm.date_range },
+                    on: { "on-change": _vm.updateDates },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "openDialog",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          var dateRangeText = ref.dateRangeText
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-0 pl-0",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(dateRangeText) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { staticClass: "ml-4 mb-2" },
+                [
+                  _vm.selected.length > 0
+                    ? _c(
+                        "v-chip",
+                        {
+                          staticClass: "mr-2",
+                          attrs: {
+                            color: "green",
+                            dark: "",
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-close"
+                          },
+                          on: {
+                            "click:close": function($event) {
+                              _vm.selected = []
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(_vm.selected.length) +
+                              " Selected\n            "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "v-menu",
+                    {
+                      attrs: {
+                        transition: "scale-transition",
+                        "close-on-content-click": false,
+                        "nudge-width": 200,
+                        "offset-y": "",
+                        right: "",
+                        bottom: ""
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var menu = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _vm.status != null
+                                ? _c(
+                                    "v-chip",
+                                    _vm._g(
+                                      _vm._b(
+                                        {
+                                          staticClass: "mr-2",
+                                          attrs: { small: "" }
+                                        },
+                                        "v-chip",
+                                        attrs,
+                                        false
+                                      ),
+                                      menu
+                                    ),
+                                    [
+                                      _vm._v(
+                                        "\n                        " +
+                                          _vm._s(_vm.status) +
+                                          "\n                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          }
+                        }
+                      ])
+                    },
                     [
+                      _vm._v(" "),
                       _c(
-                        "v-list",
+                        "v-card",
                         [
                           _c(
-                            "v-list-item",
+                            "v-list",
                             [
-                              _c("v-select", {
-                                attrs: { items: _vm.statuses, label: "Status" },
-                                model: {
-                                  value: _vm.status,
-                                  callback: function($$v) {
-                                    _vm.status = $$v
-                                  },
-                                  expression: "status"
-                                }
-                              })
+                              _c(
+                                "v-list-item",
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.statuses,
+                                      label: "Status"
+                                    },
+                                    model: {
+                                      value: _vm.status,
+                                      callback: function($$v) {
+                                        _vm.status = $$v
+                                      },
+                                      expression: "status"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             ],
                             1
                           )
@@ -2026,139 +2028,140 @@ var render = function() {
                       )
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-chip",
-                {
-                  staticClass: "mr-2",
-                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
-                  on: { "click:close": _vm.onRefresh }
-                },
-                [_vm._v("\n                Refresh\n            ")]
-              ),
-              _vm._v(" "),
-              _vm.totalUnsubmitted > 0
-                ? _c(
+                  ),
+                  _vm._v(" "),
+                  _c(
                     "v-chip",
                     {
                       staticClass: "mr-2",
                       attrs: {
-                        color: "red",
-                        dark: "",
-                        small: "",
-                        close: "",
-                        "close-icon": "mdi-alert"
-                      },
-                      on: { "click:close": _vm.showAllUnsubmitted }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Unsubmitted (" +
-                          _vm._s(_vm.totalUnsubmitted) +
-                          ")\n            "
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.totalUnapproved > 0
-                ? _c(
-                    "v-chip",
-                    {
-                      staticClass: "mr-2",
-                      attrs: {
-                        color: "red",
-                        dark: "",
                         close: "",
                         small: "",
-                        "close-icon": "mdi-alert"
+                        "close-icon": "mdi-refresh"
                       },
-                      on: { "click:close": _vm.showAllUnapproved }
+                      on: { "click:close": _vm.onRefresh }
                     },
-                    [
-                      _vm._v(
-                        "\n                For Approval (" +
-                          _vm._s(_vm.totalUnapproved) +
-                          ")\n            "
-                      )
-                    ]
-                  )
-                : _vm._e()
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.selected.length > 0
-            ? _c(
-                "v-row",
-                { staticClass: "ml-4" },
-                [
-                  _vm.isValidSubmit
+                    [_vm._v("\n                Refresh\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _vm.totalUnsubmitted > 0
                     ? _c(
                         "v-chip",
                         {
                           staticClass: "mr-2",
                           attrs: {
-                            close: "",
+                            color: "red",
+                            dark: "",
                             small: "",
-                            "close-icon": "mdi-send",
-                            color: "blue"
+                            close: "",
+                            "close-icon": "mdi-alert"
                           },
-                          on: { "click:close": _vm.onSubmit }
+                          on: { "click:close": _vm.showAllUnsubmitted }
                         },
-                        [_vm._v("\n                Submit\n            ")]
+                        [
+                          _vm._v(
+                            "\n                Unsubmitted (" +
+                              _vm._s(_vm.totalUnsubmitted) +
+                              ")\n            "
+                          )
+                        ]
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.isValidDelete
+                  _vm.totalUnapproved > 0
                     ? _c(
                         "v-chip",
                         {
                           staticClass: "mr-2",
                           attrs: {
+                            color: "red",
+                            dark: "",
                             close: "",
                             small: "",
-                            "close-icon": "mdi-close",
-                            color: "red"
+                            "close-icon": "mdi-alert"
                           },
-                          on: { "click:close": _vm.onDelete }
+                          on: { "click:close": _vm.showAllUnapproved }
                         },
-                        [_vm._v("\n                Cancel\n            ")]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.isValidDuplicate
-                    ? _c(
-                        "v-chip",
-                        {
-                          staticClass: "mr-2",
-                          attrs: {
-                            close: "",
-                            small: "",
-                            "close-icon": "mdi-content-copy"
-                          },
-                          on: { "click:close": _vm.onDuplicate }
-                        },
-                        [_vm._v("\n                Duplicate\n            ")]
+                        [
+                          _vm._v(
+                            "\n                For Approval (" +
+                              _vm._s(_vm.totalUnapproved) +
+                              ")\n            "
+                          )
+                        ]
                       )
                     : _vm._e()
                 ],
                 1
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-card-subtitle",
-            [
-              !_vm.formDataLoaded
-                ? _c("v-skeleton-loader", {
-                    attrs: { type: "list-item-one-line" }
-                  })
-                : _c("v-text-field", {
+              ),
+              _vm._v(" "),
+              _vm.selected.length > 0
+                ? _c(
+                    "v-row",
+                    { staticClass: "ml-4" },
+                    [
+                      _vm.isValidSubmit
+                        ? _c(
+                            "v-chip",
+                            {
+                              staticClass: "mr-2",
+                              attrs: {
+                                close: "",
+                                small: "",
+                                "close-icon": "mdi-send",
+                                color: "blue"
+                              },
+                              on: { "click:close": _vm.onSubmit }
+                            },
+                            [_vm._v("\n                Submit\n            ")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.isValidDelete
+                        ? _c(
+                            "v-chip",
+                            {
+                              staticClass: "mr-2",
+                              attrs: {
+                                close: "",
+                                small: "",
+                                "close-icon": "mdi-close",
+                                color: "red"
+                              },
+                              on: { "click:close": _vm.onDelete }
+                            },
+                            [_vm._v("\n                Cancel\n            ")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.isValidDuplicate
+                        ? _c(
+                            "v-chip",
+                            {
+                              staticClass: "mr-2",
+                              attrs: {
+                                close: "",
+                                small: "",
+                                "close-icon": "mdi-content-copy"
+                              },
+                              on: { "click:close": _vm.onDuplicate }
+                            },
+                            [
+                              _vm._v(
+                                "\n                Duplicate\n            "
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-card-subtitle",
+                [
+                  _c("v-text-field", {
                     attrs: {
                       "append-icon": "mdi-magnify",
                       label: "Search",
@@ -2173,18 +2176,14 @@ var render = function() {
                       expression: "search"
                     }
                   })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
-              !_vm.formDataLoaded
-                ? _c("v-skeleton-loader", {
-                    attrs: { type: "article, article, image, actions, article" }
-                  })
-                : _c(
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
                     "v-data-table",
                     {
                       staticClass: "elevation-0",
@@ -2685,271 +2684,271 @@ var render = function() {
                     ],
                     2
                   ),
-              _vm._v(" "),
-              _c(
-                "v-row",
-                [
-                  _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                    _c("div", [
-                      _c("h4", { staticClass: "green--text" }, [
-                        _vm._v(
-                          "\n                            Note:\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("h4", { staticClass: "grey--text" }, [
-                        _vm._v(
-                          "\n                            Due of submission of expense reports :\n                            " +
-                            _vm._s(
-                              _vm.$store.getters.settings.submission_period
-                            ) +
-                            "\n                            (" +
-                            _vm._s(_vm.maxDate) +
-                            ")\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("h4", { staticClass: "grey--text" }, [
-                        _vm._v(
-                          "\n                            Approval period of expense reports :\n                            " +
-                            _vm._s(
-                              _vm.$store.getters.settings.approval_period
-                            ) +
-                            "\n                            days upon submission\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _vm.warning
-                        ? _c("h4", { staticClass: "red--text" }, [
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                        _c("div", [
+                          _c("h4", { staticClass: "green--text" }, [
                             _vm._v(
-                              "\n                            " +
-                                _vm._s(_vm.warning) +
-                                "\n                        "
+                              "\n                            Note:\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("h4", { staticClass: "grey--text" }, [
+                            _vm._v(
+                              "\n                            Due of submission of expense reports :\n                            " +
+                                _vm._s(
+                                  _vm.$store.getters.settings.submission_period
+                                ) +
+                                "\n                            (" +
+                                _vm._s(_vm.maxDate) +
+                                ")\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("h4", { staticClass: "grey--text" }, [
+                            _vm._v(
+                              "\n                            Approval period of expense reports :\n                            " +
+                                _vm._s(
+                                  _vm.$store.getters.settings.approval_period
+                                ) +
+                                "\n                            days upon submission\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _vm.warning
+                            ? _c("h4", { staticClass: "red--text" }, [
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(_vm.warning) +
+                                    "\n                        "
+                                )
+                              ])
+                            : _vm._e()
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm.isValidPrint
+                        ? _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c(
+                              "div",
+                              { staticClass: "text-right" },
+                              [
+                                _c(
+                                  "v-menu",
+                                  {
+                                    attrs: { "offset-y": "" },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "activator",
+                                          fn: function(ref) {
+                                            var attrs = ref.attrs
+                                            var on = ref.on
+                                            return [
+                                              _c(
+                                                "v-btn",
+                                                _vm._g(
+                                                  _vm._b(
+                                                    {
+                                                      attrs: {
+                                                        color: "green",
+                                                        dark: ""
+                                                      }
+                                                    },
+                                                    "v-btn",
+                                                    attrs,
+                                                    false
+                                                  ),
+                                                  on
+                                                ),
+                                                [
+                                                  _vm._v(
+                                                    "\n                                    Print\n                                "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      3416937892
+                                    )
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-list",
+                                      [
+                                        _c(
+                                          "v-list-item",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.printReport(
+                                                  "",
+                                                  "all_expenses",
+                                                  false
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("v-list-item-title", [
+                                              _vm._v(
+                                                "\n                                        Group by expense\n                                    "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-item",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.printReport(
+                                                  "",
+                                                  "expenses_by_date",
+                                                  false
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("v-list-item-title", [
+                                              _vm._v(
+                                                "\n                                        Group by date\n                                    "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-menu",
+                                  {
+                                    attrs: { "offset-y": "" },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "activator",
+                                          fn: function(ref) {
+                                            var attrs = ref.attrs
+                                            var on = ref.on
+                                            return [
+                                              _c(
+                                                "v-btn",
+                                                _vm._g(
+                                                  _vm._b(
+                                                    {
+                                                      attrs: {
+                                                        color: "green",
+                                                        dark: ""
+                                                      }
+                                                    },
+                                                    "v-btn",
+                                                    attrs,
+                                                    false
+                                                  ),
+                                                  on
+                                                ),
+                                                [
+                                                  _vm._v(
+                                                    "\n                                    Export to PDF\n                                "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      406309944
+                                    )
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-list",
+                                      [
+                                        _c(
+                                          "v-list-item",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.printReport(
+                                                  "",
+                                                  "all_expenses",
+                                                  true
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("v-list-item-title", [
+                                              _vm._v(
+                                                "\n                                        Group by expense\n                                    "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-item",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.printReport(
+                                                  "",
+                                                  "expenses_by_date",
+                                                  true
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("v-list-item-title", [
+                                              _vm._v(
+                                                "\n                                        Group by date\n                                    "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
                             )
                           ])
                         : _vm._e()
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm.isValidPrint
-                    ? _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _c(
-                          "div",
-                          { staticClass: "text-right" },
-                          [
-                            _c(
-                              "v-menu",
-                              {
-                                attrs: { "offset-y": "" },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var attrs = ref.attrs
-                                        var on = ref.on
-                                        return [
-                                          _c(
-                                            "v-btn",
-                                            _vm._g(
-                                              _vm._b(
-                                                {
-                                                  attrs: {
-                                                    color: "green",
-                                                    dark: ""
-                                                  }
-                                                },
-                                                "v-btn",
-                                                attrs,
-                                                false
-                                              ),
-                                              on
-                                            ),
-                                            [
-                                              _vm._v(
-                                                "\n                                    Print\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  false,
-                                  3416937892
-                                )
-                              },
-                              [
-                                _vm._v(" "),
-                                _c(
-                                  "v-list",
-                                  [
-                                    _c(
-                                      "v-list-item",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.printReport(
-                                              "",
-                                              "all_expenses",
-                                              false
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("v-list-item-title", [
-                                          _vm._v(
-                                            "\n                                        Group by expense\n                                    "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-list-item",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.printReport(
-                                              "",
-                                              "expenses_by_date",
-                                              false
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("v-list-item-title", [
-                                          _vm._v(
-                                            "\n                                        Group by date\n                                    "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-menu",
-                              {
-                                attrs: { "offset-y": "" },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var attrs = ref.attrs
-                                        var on = ref.on
-                                        return [
-                                          _c(
-                                            "v-btn",
-                                            _vm._g(
-                                              _vm._b(
-                                                {
-                                                  attrs: {
-                                                    color: "green",
-                                                    dark: ""
-                                                  }
-                                                },
-                                                "v-btn",
-                                                attrs,
-                                                false
-                                              ),
-                                              on
-                                            ),
-                                            [
-                                              _vm._v(
-                                                "\n                                    Export to PDF\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  false,
-                                  406309944
-                                )
-                              },
-                              [
-                                _vm._v(" "),
-                                _c(
-                                  "v-list",
-                                  [
-                                    _c(
-                                      "v-list-item",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.printReport(
-                                              "",
-                                              "all_expenses",
-                                              true
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("v-list-item-title", [
-                                          _vm._v(
-                                            "\n                                        Group by expense\n                                    "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-list-item",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.printReport(
-                                              "",
-                                              "expenses_by_date",
-                                              true
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("v-list-item-title", [
-                                          _vm._v(
-                                            "\n                                        Group by date\n                                    "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ])
-                    : _vm._e()
+                    ],
+                    1
+                  )
                 ],
                 1
               )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )
@@ -3020,6 +3019,26 @@ var ExpenseReportDataService = /*#__PURE__*/function () {
     key: "restore",
     value: function restore(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/restore/".concat(id), data);
+    }
+  }, {
+    key: "submit",
+    value: function submit(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/submit/".concat(id), data);
+    }
+  }, {
+    key: "approve",
+    value: function approve(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/approve/".concat(id), data);
+    }
+  }, {
+    key: "reject",
+    value: function reject(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/reject/".concat(id), data);
+    }
+  }, {
+    key: "duplicate",
+    value: function duplicate(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/duplicate/".concat(id), data);
     }
   }]);
 

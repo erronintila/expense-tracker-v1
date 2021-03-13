@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expense Reports</h4>
 
@@ -173,12 +174,7 @@
             </v-row>
 
             <v-card-subtitle>
-                <v-skeleton-loader
-                    v-if="!formDataLoaded"
-                    type="list-item-one-line"
-                ></v-skeleton-loader>
                 <v-text-field
-                    v-else
                     v-model="search"
                     append-icon="mdi-magnify"
                     label="Search"
@@ -188,12 +184,7 @@
             </v-card-subtitle>
 
             <v-card-text>
-                <v-skeleton-loader
-                    v-if="!formDataLoaded"
-                    type="article, article, image, actions, article"
-                ></v-skeleton-loader>
                 <v-data-table
-                    v-else
                     :headers="headers"
                     :items="items"
                     :loading="loading"
@@ -1107,11 +1098,13 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -1257,7 +1250,6 @@ export default {
                                 this.getDataFromApi().then(data => {
                                     this.items = data.items;
                                     this.totalItems = data.total;
-                                    this.formDataLoaded = true;
                                 });
                                 this.selected = [];
                             })
@@ -1569,7 +1561,6 @@ export default {
                                 this.getDataFromApi().then(data => {
                                     this.items = data.items;
                                     this.totalItems = data.total;
-                                    this.formDataLoaded = true;
                                 });
                                 this.selected = [];
                                 this.loadTotalCountReportStatus();
@@ -1676,14 +1667,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
-                    this.formDataLoaded = true;
                 });
-            },
-            deep: true
+            }
         },
         items() {
             this.totalAmount = this.mixin_formatNumber(
@@ -1964,7 +1955,6 @@ export default {
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;
-            this.formDataLoaded = true;
         });
     }
 };

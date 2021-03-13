@@ -430,7 +430,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n#app[data-v-ff37d596] {\r\n    overflow: hidden;\r\n    width: 100vw;\n}\n.fade-enter[data-v-ff37d596], .fade-leave-to[data-v-ff37d596] {\r\n    opacity: 0;\r\n    transform: translateX(2em);\n}\n.fade-enter-active[data-v-ff37d596], .fade-leave-active[data-v-ff37d596] {\r\n    transition: all .3s ease;\n}\r\n", ""]);
+exports.push([module.i, "\n#app[data-v-ff37d596] {\r\n    overflow: hidden;\r\n    width: 100vw;\n}\n.fade-enter[data-v-ff37d596], .fade-leave-to[data-v-ff37d596] {\r\n    opacity: 0;\r\n    /* transform: translateX(2em); */\n}\n.fade-enter-active[data-v-ff37d596], .fade-leave-active[data-v-ff37d596] {\r\n    transition: all .3s ease;\n}\r\n", ""]);
 
 // exports
 
