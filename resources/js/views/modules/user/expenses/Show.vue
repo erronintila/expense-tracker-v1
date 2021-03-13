@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader-component v-if="loader"></loader-component>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
@@ -343,7 +343,7 @@ import ExpenseDataService from "../../../../services/ExpenseDataService";
 export default {
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             panel: [0, 1],
             itemize: false,
             // paid_through_fund: false,
@@ -517,11 +517,11 @@ export default {
 
                     this.form.logs = data.logs;
 
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
             // );
         }

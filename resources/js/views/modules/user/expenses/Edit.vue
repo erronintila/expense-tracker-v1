@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader-component v-if="loader"></loader-component>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
@@ -43,7 +43,6 @@ export default {
     data() {
         return {
             formDataLoaded: false,
-            loader: true,
             usersParameters: {
                 params: { with_expense_types: true }
             },
@@ -170,19 +169,17 @@ export default {
                             data.reimbursable_amount;
                         this.form.user.remaining_fund +=
                             data.amount - data.reimbursable_amount;
-                        this.loader = false;
+                        this.formDataLoaded = true;
                         resolve();
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.loader = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
         },
         onSave(value) {
-            this.loader = true;
-
             if (value.vendor) {
                 if (!value.vendor.is_vat_inclusive) {
                     value.tax_rate = 0;
@@ -206,14 +203,14 @@ export default {
                         response.data.message
                     );
                     this.$router.go(-1);
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     if (error.response.data.data !== null) {
                         this.errors = error.response.data.errors;
                     }
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
         }
     },

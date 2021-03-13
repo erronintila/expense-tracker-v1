@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -36,7 +37,6 @@ export default {
     },
     data() {
         return {
-            loader: true,
             formDataLoaded: false,
             usersParameters: {
                 params: {
@@ -72,12 +72,12 @@ export default {
             return new Promise((resolve, reject) => {
                 ExpenseReportDataService.show(this.$route.params.id)
                     .then(response => {
-                        this.loader = false;
+                        this.formDataLoaded = true;
                         resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.loader = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -96,18 +96,18 @@ export default {
                     }
                 })
                     .then(response => {
-                        this.loader = false;
+                        this.formDataLoaded = true;
                         resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.loader = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
         },
         onSave(value) {
-            this.loader = true;
+            this.formDataLoaded = false;
             value.user_id = value.user ? value.user.id : null;
             ExpenseReportDataService.update(this.$route.params.id, value)
                 .then(response => {
@@ -118,12 +118,12 @@ export default {
                     this.$router.push({
                         name: "user.expense_reports.index"
                     });
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.errors = error.response.data.errors;
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
         }
     },

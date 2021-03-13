@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -33,7 +34,7 @@ export default {
     },
     data() {
         return {
-            loader: false,
+            formDataLoaded: false,
             usersParameters: {
                 params: {
                     is_superadmin: false
@@ -71,8 +72,6 @@ export default {
             this.form = e || this.form;
         },
         onSave(value) {
-            this.loader = true;
-
             value.user_id = value.user == null ? null : value.user.id;
 
             ExpenseReportDataService.store(value)
@@ -84,12 +83,12 @@ export default {
                     this.$router.push({
                         name: "user.expense_reports.index"
                     });
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.errors = error.response.data.errors;
                     this.mixin_showErrors(error);
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
         }
     },
@@ -97,6 +96,9 @@ export default {
         "form.user": function() {
             this.errors.user_id = [];
         }
-    }
+    },
+    created() {
+        this.formDataLoaded = true;
+    },
 };
 </script>

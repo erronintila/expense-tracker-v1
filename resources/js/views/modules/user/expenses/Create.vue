@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader-component v-if="loader"></loader-component>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
@@ -35,7 +35,7 @@ export default {
     },
     data() {
         return {
-            loader: false,
+            formDataLoaded: false,
             usersParameters: {
                 params: {
                     with_expense_types: true,
@@ -126,8 +126,6 @@ export default {
     },
     methods: {
         onSave(value) {
-            this.loader = true;
-
             if (value.vendor) {
                 if (!value.vendor.is_vat_inclusive) {
                     value.tax_rate = 0;
@@ -151,12 +149,12 @@ export default {
                         response.data.message
                     );
                     this.$router.go(-1);
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.errors = error.response.data.errors;
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
         }
     }

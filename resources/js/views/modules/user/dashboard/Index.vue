@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader-component v-if="loader"></loader-component>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Dashboard</h4>
@@ -467,7 +467,7 @@ export default {
     },
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             total: {
                 awaiting_for_reimbursement_reports: 0,
                 expenses_by_date: 0,
@@ -1015,7 +1015,7 @@ export default {
                     this.total = response.data.total;
                     this.count = response.data.count;
 
-                    this.loader = false;
+                    this.formDataLoaded = true;
 
                     this.load_expense_types_expenses(
                         this.date_range[0],
@@ -1032,7 +1032,7 @@ export default {
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                    this.loader = true;
+                    this.formDataLoaded = true;
                 });
         }
     },

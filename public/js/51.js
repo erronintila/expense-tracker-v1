@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[51],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/notifications/Index.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/notifications/Index.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,16 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
-/* harmony import */ var _services_NotificationDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/NotificationDataService */ "./resources/js/services/NotificationDataService.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+/* harmony import */ var _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/SettingDataService */ "./resources/js/services/SettingDataService.js");
 //
 //
 //
@@ -288,236 +279,331 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
   data: function data() {
     return {
       formDataLoaded: false,
-      loading: true,
-      headers: [{
-        text: "Date",
-        value: "created_at"
-      }, {
-        text: "Employee",
-        value: "data.data.user.full_name"
-      }, {
-        text: "Description",
-        value: "data.data.description"
-      }, {
-        text: "Status",
-        value: "status"
-      }, {
-        text: "Actions",
-        value: "actions",
-        sortable: false
-      }, {
-        text: "",
-        value: "data-table-expand"
-      }],
-      totalAmount: 0,
-      items: [],
-      status: "All Unread",
-      statuses: ["All Unread", "All Read", "All Notifications"],
-      selected: [],
-      search: "",
-      options: {
-        sortBy: ["updated_at"],
-        sortDesc: [true],
-        page: 1,
-        itemsPerPage: 10
+      validExpenses: false,
+      validExpenseReports: false,
+      validTaxes: false,
+      file_input: null,
+      rules: {
+        file_input: [function (value) {
+          return !value || value.size < 30000 || "Report logo size should be less than 30 KB";
+        }]
       },
-      meta: {
-        current_page: 0,
-        from: 0,
-        last_page: 0,
-        path: "",
-        per_page: 10,
-        to: 0,
-        total: 0
+      settings: {
+        company_name: "Twin-Circa Marketing",
+        currency: "Philippine Peso",
+        expiry_period: 1,
+        expense_encoding_period: 1,
+        submission_period: "Weekly",
+        approval_period: 1,
+        tax_rate: 0,
+        expense_report: {
+          report_no: {
+            prefix: "",
+            length: 1
+          },
+          print_format: {
+            pageSize: {
+              width: 0,
+              height: 0
+            },
+            pageOrientation: "landscape",
+            pageMargins: {
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0
+            },
+            defaultStyle: {
+              font: "Roboto"
+            },
+            background: {
+              alignment: "left",
+              width: 0,
+              height: 0,
+              image: "",
+              margin: {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+              }
+            }
+          }
+        }
       },
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
-      preset: "",
-      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"]
+      panel: [0, 1, 2, 3]
     };
   },
   methods: {
-    updateDates: function updateDates(e) {
-      this.date_range = e;
-    },
-    getDataFromApi: function getDataFromApi() {
+    onLoad: function onLoad() {
       var _this = this;
 
-      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
-
-        var search = _this.search.trim().toLowerCase();
-
-        var status = _this.status;
-        var range = _this.date_range;
-        var data = {
-          params: {
-            search: search,
-            sortBy: sortBy[0],
-            sortType: sortDesc[0] ? "desc" : "asc",
-            page: page,
-            itemsPerPage: itemsPerPage,
-            status: status,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0]
-          }
-        };
-        _services_NotificationDataService__WEBPACK_IMPORTED_MODULE_3__["default"].getAll(data).then(function (response) {
-          _this.loading = false;
+        _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].getAll().then(function (response) {
+          _this.file_input = null;
+          _this.settings = response.data;
           _this.formDataLoaded = true;
-          resolve(response.data);
+          resolve();
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
-          _this.loading = false;
           _this.formDataLoaded = true;
           reject();
         });
       });
     },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-      this.selected = [];
-    },
-    onShow: function onShow(item) {
-      this.$router.push({
-        name: "admin.payments.show",
-        params: {
-          id: item.id
-        }
-      });
-    },
-    onReadUpdate: function onReadUpdate(item, action, type) {
+    onSave: function onSave() {
       var _this2 = this;
 
-      var parameters = {};
-      var item_id = item ? item : this.selected.map(function (item) {
-        return item.id;
-      })[0];
+      this.$refs.formExpenses.validate();
+      this.$refs.formExpenseReports.validate();
+      this.$refs.formTaxes.validate();
 
-      switch (type) {
-        case "all":
-          if (this.items.length <= 0) {
-            this.mixin_errorDialog("Error", "No data to be updated.");
-            return;
-          }
+      if (this.$refs.formExpenses.validate() && this.$refs.formExpenseReports.validate() && this.$refs.formTaxes.validate()) {
+        var data = {
+          settings: this.settings
+        };
+        _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(data).then(function (response) {
+          _this2.mixin_successDialog("Success", "Saved settings successfully");
 
-          parameters = {
-            action: action,
-            type: type
-          };
-          break;
+          _this2.$store.dispatch("AUTH_USER");
 
-        case "multiple":
-          if (this.selected.length <= 0) {
-            this.mixin_errorDialog("Error", "No data selected.");
-            return;
-          }
+          _this2.$store.dispatch("AUTH_SETTINGS");
 
-          parameters = {
-            action: action,
-            type: type,
-            ids: this.selected.map(function (item) {
-              return item.id;
-            })
-          };
-          break;
-
-        default:
-          parameters = {
-            action: action,
-            type: type
-          };
-          break;
-      }
-
-      _services_NotificationDataService__WEBPACK_IMPORTED_MODULE_3__["default"].update(item_id, parameters).then(function (response) {
-        _this2.getDataFromApi().then(function (data) {
-          _this2.items = data.data;
-          _this2.meta = data.meta;
+          window.location.replace("/admin/settings");
+        })["catch"](function (error) {
+          _this2.mixin_showErrors(error);
         });
-
-        _this2.$store.dispatch("AUTH_NOTIFICATIONS");
-
-        _this2.selected = [];
-      })["catch"](function (error) {
-        _this2.mixin_showErrors(error);
-
-        _this2.selected = [];
-      });
+      }
     }
   },
   computed: {
-    params: function params(nv) {
-      var _objectSpread2;
-
-      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    page_sizes: function page_sizes() {
+      return [{
+        name: "A4",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Letter",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Folio",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Legal",
+        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
+        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
+      }, {
+        name: "Custom",
+        width: 0,
+        height: 0
+      }];
     },
-    formattedDateRange: function formattedDateRange() {
-      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
-      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
-
-      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
-        return start_date;
+    url: function url() {
+      if (this.file_input) {
+        return URL.createObjectURL(this.file_input);
       }
 
-      if (JSON.stringify(end_date) == null) {
-        return start_date;
+      return this.$store.getters.settings.expense_report.print_format.background.image;
+    },
+    report_no: {
+      get: function get() {
+        var prefix = this.settings.expense_report.report_no.prefix;
+        var num_length = this.settings.expense_report.report_no.num_length;
+        var report_no = "";
+        report_no = prefix + moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYYMM") + String(1).padStart(num_length, "0");
+        return report_no;
       }
-
-      return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
   watch: {
-    params: {
-      immediate: true,
-      deep: true,
-      handler: function handler() {
-        var _this3 = this;
+    file_input: function file_input() {
+      var _this3 = this;
 
-        this.getDataFromApi().then(function (data) {
-          _this3.items = data.data;
-          _this3.meta = data.meta;
-        });
+      if (this.file_input) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.file_input);
+
+        reader.onload = function () {
+          _this3.settings.expense_report.print_format.background.image = reader.result;
+        };
+
+        reader.onerror = function (error) {
+          _this3.mixin_showErrors(error);
+        };
+      } else {
+        this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
       }
-    },
-    items: function items() {
-      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
-        return total + item.amount;
-      }, 0));
     }
   },
   created: function created() {
+    // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_SETTINGS");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.onLoad();
   },
   activated: function activated() {
+    this.$store.dispatch("AUTH_SETTINGS");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.onLoad();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/notifications/Index.vue?vue&type=template&id=2362758e&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/notifications/Index.vue?vue&type=template&id=2362758e& ***!
-  \******************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d& ***!
+  \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -543,170 +629,123 @@ var render = function() {
                 { staticClass: "pt-0" },
                 [
                   _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Notifications")
+                    _vm._v("Settings")
                   ]),
                   _vm._v(" "),
-                  _c("v-spacer")
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-subtitle",
-                [
-                  _c("DateRangePicker", {
-                    ref: "dateRangePicker",
-                    attrs: { dateRange: _vm.date_range },
-                    on: { "on-change": _vm.updateDates },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "openDialog",
-                        fn: function(ref) {
-                          var on = ref.on
-                          var attrs = ref.attrs
-                          var dateRangeText = ref.dateRangeText
-                          return [
-                            _c(
-                              "v-btn",
-                              _vm._g(
-                                _vm._b(
-                                  {
-                                    staticClass: "ml-0 pl-0",
-                                    attrs: { text: "" }
-                                  },
-                                  "v-btn",
-                                  attrs,
-                                  false
-                                ),
-                                on
-                              ),
-                              [
-                                _vm._v(
-                                  "\n                        " +
-                                    _vm._s(dateRangeText) +
-                                    "\n                    "
-                                )
-                              ]
-                            )
-                          ]
-                        }
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-2",
+                      attrs: {
+                        color: "green",
+                        to: { name: "admin.settings.user" },
+                        outlined: "",
+                        dark: ""
                       }
-                    ])
-                  })
+                    },
+                    [
+                      _vm._v(
+                        "\n                Employee Settings\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green", dark: "" },
+                      on: { click: _vm.onSave }
+                    },
+                    [_vm._v("Save Changes")]
+                  )
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
-                "v-row",
-                { staticClass: "ml-2" },
+                "v-expansion-panels",
+                {
+                  attrs: { multiple: "" },
+                  model: {
+                    value: _vm.panel,
+                    callback: function($$v) {
+                      _vm.panel = $$v
+                    },
+                    expression: "panel"
+                  }
+                },
                 [
                   _c(
-                    "v-col",
+                    "v-expansion-panel",
                     [
-                      _c(
-                        "v-chip",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.selected.length > 0,
-                              expression: "selected.length > 0"
-                            }
-                          ],
-                          staticClass: "mr-2 mb-2",
-                          attrs: {
-                            color: "green",
-                            dark: "",
-                            close: "",
-                            small: "",
-                            "close-icon": "mdi-close"
-                          },
-                          on: {
-                            "click:close": function($event) {
-                              _vm.selected = []
-                            }
-                          }
-                        },
-                        [
+                      _c("v-expansion-panel-header", [
+                        _c("div", { staticClass: "green--text" }, [
                           _vm._v(
-                            "\n                    " +
-                              _vm._s(_vm.selected.length) +
-                              " Selected\n                "
+                            "\n                        Expenses\n                    "
                           )
-                        ]
-                      ),
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
-                        "v-menu",
-                        {
-                          attrs: {
-                            transition: "scale-transition",
-                            "close-on-content-click": false,
-                            "nudge-width": 200,
-                            "offset-y": "",
-                            right: "",
-                            bottom: ""
-                          },
-                          scopedSlots: _vm._u([
-                            {
-                              key: "activator",
-                              fn: function(ref) {
-                                var menu = ref.on
-                                var attrs = ref.attrs
-                                return [
-                                  _c(
-                                    "v-chip",
-                                    _vm._g(
-                                      _vm._b(
-                                        {
-                                          staticClass: "mr-2 mb-2",
-                                          attrs: { small: "" }
-                                        },
-                                        "v-chip",
-                                        attrs,
-                                        false
-                                      ),
-                                      menu
-                                    ),
-                                    [
-                                      _vm._v(
-                                        "\n                            " +
-                                          _vm._s(_vm.status ? _vm.status : "") +
-                                          "\n                        "
-                                      )
-                                    ]
-                                  )
-                                ]
-                              }
-                            }
-                          ])
-                        },
+                        "v-expansion-panel-content",
                         [
-                          _vm._v(" "),
                           _c(
-                            "v-card",
+                            "v-container",
                             [
                               _c(
-                                "v-list",
+                                "v-form",
+                                {
+                                  ref: "formExpenses",
+                                  model: {
+                                    value: _vm.validExpenses,
+                                    callback: function($$v) {
+                                      _vm.validExpenses = $$v
+                                    },
+                                    expression: "validExpenses"
+                                  }
+                                },
                                 [
                                   _c(
-                                    "v-list-item",
+                                    "v-row",
                                     [
-                                      _c("v-select", {
-                                        attrs: {
-                                          items: _vm.statuses,
-                                          label: "Status"
-                                        },
-                                        model: {
-                                          value: _vm.status,
-                                          callback: function($$v) {
-                                            _vm.status = $$v
-                                          },
-                                          expression: "status"
-                                        }
-                                      })
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Expense Encoding Period",
+                                              suffix: "days",
+                                              rules: _vm.mixin_validation.required.concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  1
+                                                )
+                                              ),
+                                              hint:
+                                                "Allowed period for expenses to be encoded based on date",
+                                              "persistent-hint": "",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings
+                                                  .expense_encoding_period,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings,
+                                                  "expense_encoding_period",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_encoding_period\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
                                     ],
                                     1
                                   )
@@ -718,498 +757,784 @@ var render = function() {
                           )
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-chip",
-                        {
-                          staticClass: "mr-2 mb-2",
-                          attrs: {
-                            close: "",
-                            small: "",
-                            "close-icon": "mdi-refresh"
-                          },
-                          on: { "click:close": _vm.onRefresh }
-                        },
-                        [
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel",
+                    [
+                      _c("v-expansion-panel-header", [
+                        _c("div", { staticClass: "green--text" }, [
                           _vm._v(
-                            "\n                    Refresh\n                "
+                            "\n                        Expense Reports\n                    "
                           )
-                        ]
-                      ),
+                        ])
+                      ]),
                       _vm._v(" "),
                       _c(
-                        "v-chip",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value:
-                                _vm.items.filter(function(item) {
-                                  return item.read_at == null
-                                }).length > 0 && _vm.selected.length == 0,
-                              expression:
-                                "\n                        items.filter(item => item.read_at == null).length >\n                            0 && selected.length == 0\n                    "
-                            }
-                          ],
-                          staticClass: "mr-2 mb-2",
-                          attrs: {
-                            close: "",
-                            small: "",
-                            "close-icon": "mdi-check",
-                            color: "green",
-                            dark: ""
-                          },
-                          on: {
-                            "click:close": function($event) {
-                              return _vm.onReadUpdate(null, "read", "all")
-                            }
-                          }
-                        },
+                        "v-expansion-panel-content",
                         [
-                          _vm._v(
-                            "\n                    Mark all as read\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-chip",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value:
-                                _vm.selected.filter(function(item) {
-                                  return item.read_at == null
-                                }).length > 0,
-                              expression:
-                                "\n                        selected.filter(item => item.read_at == null)\n                            .length > 0\n                    "
-                            }
-                          ],
-                          staticClass: "mr-2 mb-2",
-                          attrs: {
-                            close: "",
-                            small: "",
-                            "close-icon": "mdi-check",
-                            color: "green",
-                            dark: ""
-                          },
-                          on: {
-                            "click:close": function($event) {
-                              return _vm.onReadUpdate(null, "read", "multiple")
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Mark as read\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-chip",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value:
-                                _vm.selected.filter(function(item) {
-                                  return item.read_at != null
-                                }).length > 0,
-                              expression:
-                                "\n                        selected.filter(item => item.read_at != null)\n                            .length > 0\n                    "
-                            }
-                          ],
-                          staticClass: "mr-2 mb-2",
-                          attrs: {
-                            close: "",
-                            small: "",
-                            "close-icon": "mdi-check",
-                            color: "red",
-                            dark: ""
-                          },
-                          on: {
-                            "click:close": function($event) {
-                              return _vm.onReadUpdate(
-                                null,
-                                "unread",
-                                "multiple"
+                          _c(
+                            "v-container",
+                            [
+                              _c(
+                                "v-form",
+                                {
+                                  ref: "formExpenseReports",
+                                  model: {
+                                    value: _vm.validExpenseReports,
+                                    callback: function($$v) {
+                                      _vm.validExpenseReports = $$v
+                                    },
+                                    expression: "validExpenseReports"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c("v-col", [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "overline green--text"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        General\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-select", {
+                                            attrs: {
+                                              label: "Submission Date",
+                                              items: [
+                                                "Daily",
+                                                "Weekly",
+                                                "Monthly"
+                                              ],
+                                              hint:
+                                                "Due date for submission of expense reports",
+                                              "persistent-hint": ""
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.submission_period,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings,
+                                                  "submission_period",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "settings.submission_period"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Approval Period",
+                                              suffix: "days",
+                                              rules: _vm.mixin_validation.required.concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  1
+                                                )
+                                              ),
+                                              hint:
+                                                "Allowed period for expense reports to be approved based on submission date",
+                                              "persistent-hint": "",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.approval_period,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings,
+                                                  "approval_period",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "settings.approval_period"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider"),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c("v-col", [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "overline  green--text"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        Report No. Format:\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "2" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: { label: "Prefix" },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .report_no.prefix,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .report_no,
+                                                  "prefix",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .report_no.prefix\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "2" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  0
+                                                )
+                                              ),
+                                              label: "Length",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .report_no.num_length,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .report_no,
+                                                  "num_length",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .report_no.num_length\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "green--text" },
+                                            [
+                                              _vm._v(
+                                                "\n                                        e.g. " +
+                                                  _vm._s(_vm.report_no) +
+                                                  "\n                                    "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("small", [
+                                            _vm._v(
+                                              "(Prefix + YYYYMM + (length + report\n                                        count))"
+                                            )
+                                          ])
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider"),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c("v-col", [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "overline green--text"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        Print Format\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-select", {
+                                            attrs: {
+                                              label: "Page Orientation",
+                                              items: ["portrait", "landscape"]
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageOrientation,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format,
+                                                  "pageOrientation",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format\n                                                .pageOrientation\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  1
+                                                )
+                                              ),
+                                              label: "Page Size (width)",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageSize.width,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.pageSize,
+                                                  "width",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.pageSize.width\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  1
+                                                )
+                                              ),
+                                              label: "Page Size (height)",
+                                              type: "number"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageSize.height,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.pageSize,
+                                                  "height",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.pageSize\n                                                .height\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  0
+                                                )
+                                              ),
+                                              type: "number",
+                                              label: "Page Margin (Left)"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageMargins
+                                                  .left,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.pageMargins,
+                                                  "left",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .left\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  0
+                                                )
+                                              ),
+                                              type: "number",
+                                              label: "Page Margin (Top)"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageMargins.top,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.pageMargins,
+                                                  "top",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .top\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  0
+                                                )
+                                              ),
+                                              type: "number",
+                                              label: "Page Margin (Right)"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageMargins
+                                                  .right,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.pageMargins,
+                                                  "right",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .right\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  0
+                                                )
+                                              ),
+                                              type: "number",
+                                              label: "Page Margin (Bottom)"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.pageMargins
+                                                  .bottom,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.pageMargins,
+                                                  "bottom",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .bottom\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-select", {
+                                            attrs: {
+                                              label: "Font",
+                                              items: ["Roboto"]
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.defaultStyle
+                                                  .font,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.defaultStyle,
+                                                  "font",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.defaultStyle\n                                                .font\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-divider"),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c("v-col", [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "overline green--text"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                        Report Logo\n                                    "
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _vm.url
+                                        ? _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", md: "3" } },
+                                            [
+                                              _c("v-img", {
+                                                attrs: {
+                                                  label: "Report Image Logo",
+                                                  src: _vm.url
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-file-input", {
+                                            attrs: {
+                                              rules: _vm.rules.file_input,
+                                              "prepend-icon": "mdi-upload",
+                                              "show-size": "",
+                                              label: "Upload",
+                                              accept:
+                                                "image/png, image/jpeg, image/bmp"
+                                            },
+                                            model: {
+                                              value: _vm.file_input,
+                                              callback: function($$v) {
+                                                _vm.file_input = $$v
+                                              },
+                                              expression: "file_input"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  1
+                                                )
+                                              ),
+                                              label: "Logo Width"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.background
+                                                  .width,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.background,
+                                                  "width",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .width\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "3" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: [].concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  1
+                                                )
+                                              ),
+                                              label: "Logo Height"
+                                            },
+                                            model: {
+                                              value:
+                                                _vm.settings.expense_report
+                                                  .print_format.background
+                                                  .height,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings.expense_report
+                                                    .print_format.background,
+                                                  "height",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .height\n                                        "
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
                               )
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Mark as unread\n                "
+                            ],
+                            1
                           )
-                        ]
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-expansion-panel",
+                    [
+                      _c("v-expansion-panel-header", [
+                        _c("div", { staticClass: "green--text" }, [
+                          _vm._v(
+                            "\n                        Taxes\n                    "
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-expansion-panel-content",
+                        [
+                          _c(
+                            "v-container",
+                            [
+                              _c(
+                                "v-form",
+                                {
+                                  ref: "formTaxes",
+                                  model: {
+                                    value: _vm.validTaxes,
+                                    callback: function($$v) {
+                                      _vm.validTaxes = $$v
+                                    },
+                                    expression: "validTaxes"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              label: "Tax Rate",
+                                              suffix: "%",
+                                              rules: _vm.mixin_validation.required.concat(
+                                                _vm.mixin_validation.minNumberValue(
+                                                  0
+                                                )
+                                              ),
+                                              hint:
+                                                "Tax rate to be imposed on expenses.",
+                                              "persistent-hint": ""
+                                            },
+                                            model: {
+                                              value: _vm.settings.tax_rate,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.settings,
+                                                  "tax_rate",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "settings.tax_rate"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
                       )
                     ],
                     1
                   )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("v-data-table", {
-                    staticClass: "elevation-0",
-                    attrs: {
-                      headers: _vm.headers,
-                      items: _vm.items,
-                      loading: _vm.loading,
-                      options: _vm.options,
-                      "server-items-length": _vm.meta.total,
-                      "footer-props": {
-                        itemsPerPageOptions: [10, 20, 50, 100],
-                        showFirstLastPage: true,
-                        firstIcon: "mdi-page-first",
-                        lastIcon: "mdi-page-last",
-                        prevIcon: "mdi-chevron-left",
-                        nextIcon: "mdi-chevron-right"
-                      },
-                      "show-select": "",
-                      "show-expand": "",
-                      "single-expand": "",
-                      "item-key": "id"
-                    },
-                    on: {
-                      "update:options": function($event) {
-                        _vm.options = $event
-                      }
-                    },
-                    scopedSlots: _vm._u(
-                      [
-                        {
-                          key: "expanded-item",
-                          fn: function(ref) {
-                            var headers = ref.headers
-                            var item = ref.item
-                            return [
-                              _c(
-                                "td",
-                                { attrs: { colspan: headers.length } },
-                                [
-                                  _c("v-container", [
-                                    _c("table", [
-                                      _c("tr", [
-                                        _c("td", [
-                                          _c("strong", [_vm._v("Last Updated")])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  item.updated_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("tr", [
-                                        _c("td", [
-                                          _c("strong", [_vm._v("Read at")])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v(":")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  item.read_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ])
-                                      ])
-                                    ])
-                                  ])
-                                ],
-                                1
-                              )
-                            ]
-                          }
-                        },
-                        {
-                          key: "item.actions",
-                          fn: function(ref) {
-                            var item = ref.item
-                            return [
-                              !item.read_at
-                                ? _c(
-                                    "v-tooltip",
-                                    {
-                                      attrs: { bottom: "" },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "activator",
-                                            fn: function(ref) {
-                                              var on = ref.on
-                                              var attrs = ref.attrs
-                                              return [
-                                                _c(
-                                                  "v-icon",
-                                                  _vm._g(
-                                                    _vm._b(
-                                                      {
-                                                        staticClass: "mr-2",
-                                                        attrs: { small: "" },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            return _vm.onReadUpdate(
-                                                              item.id,
-                                                              "read",
-                                                              "single"
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      "v-icon",
-                                                      attrs,
-                                                      false
-                                                    ),
-                                                    on
-                                                  ),
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                mdi-check\n                            "
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    },
-                                    [
-                                      _vm._v(" "),
-                                      _c("span", [_vm._v("Mark as read")])
-                                    ]
-                                  )
-                                : _c(
-                                    "v-tooltip",
-                                    {
-                                      attrs: { bottom: "" },
-                                      scopedSlots: _vm._u(
-                                        [
-                                          {
-                                            key: "activator",
-                                            fn: function(ref) {
-                                              var on = ref.on
-                                              var attrs = ref.attrs
-                                              return [
-                                                _c(
-                                                  "v-icon",
-                                                  _vm._g(
-                                                    _vm._b(
-                                                      {
-                                                        staticClass: "mr-2",
-                                                        attrs: { small: "" },
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            return _vm.onReadUpdate(
-                                                              item.id,
-                                                              "unread",
-                                                              "single"
-                                                            )
-                                                          }
-                                                        }
-                                                      },
-                                                      "v-icon",
-                                                      attrs,
-                                                      false
-                                                    ),
-                                                    on
-                                                  ),
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                mdi-close\n                            "
-                                                    )
-                                                  ]
-                                                )
-                                              ]
-                                            }
-                                          }
-                                        ],
-                                        null,
-                                        true
-                                      )
-                                    },
-                                    [
-                                      _vm._v(" "),
-                                      _c("span", [_vm._v("Mark as unread")])
-                                    ]
-                                  ),
-                              _vm._v(" "),
-                              _c(
-                                "v-tooltip",
-                                {
-                                  attrs: { bottom: "" },
-                                  scopedSlots: _vm._u(
-                                    [
-                                      {
-                                        key: "activator",
-                                        fn: function(ref) {
-                                          var on = ref.on
-                                          var attrs = ref.attrs
-                                          return [
-                                            _c(
-                                              "v-icon",
-                                              _vm._g(
-                                                _vm._b(
-                                                  {
-                                                    staticClass: "mr-2",
-                                                    attrs: { small: "" },
-                                                    on: {
-                                                      click: function($event) {
-                                                        return _vm.$router.push(
-                                                          "/admin/" +
-                                                            item.data.data
-                                                              .model +
-                                                            "/" +
-                                                            item.data.data.id
-                                                        )
-                                                      }
-                                                    }
-                                                  },
-                                                  "v-icon",
-                                                  attrs,
-                                                  false
-                                                ),
-                                                on
-                                              ),
-                                              [
-                                                _vm._v(
-                                                  "\n                                mdi-share\n                            "
-                                                )
-                                              ]
-                                            )
-                                          ]
-                                        }
-                                      }
-                                    ],
-                                    null,
-                                    true
-                                  )
-                                },
-                                [
-                                  _vm._v(" "),
-                                  _c("span", [_vm._v("Go to link")])
-                                ]
-                              )
-                            ]
-                          }
-                        },
-                        {
-                          key: "item.created_at",
-                          fn: function(ref) {
-                            var item = ref.item
-                            return [
-                              _vm._v(
-                                "\n                    " +
-                                  _vm._s(
-                                    _vm.mixin_formatDate(
-                                      item.created_at,
-                                      "MMM DD, YYYY HH:mm:ss"
-                                    )
-                                  ) +
-                                  "\n                "
-                              )
-                            ]
-                          }
-                        },
-                        {
-                          key: "item.description",
-                          fn: function(ref) {
-                            var item = ref.item
-                            return [
-                              _vm._v(
-                                "\n                    " +
-                                  _vm._s(item.data.data.description) +
-                                  " -\n                    " +
-                                  _vm._s(item.data.data.expense_report.code) +
-                                  "\n                "
-                              )
-                            ]
-                          }
-                        },
-                        {
-                          key: "item.status",
-                          fn: function(ref) {
-                            var item = ref.item
-                            return [
-                              item.read_at
-                                ? _c(
-                                    "v-chip",
-                                    {
-                                      attrs: {
-                                        color: "green",
-                                        dark: "",
-                                        small: ""
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                        Read\n                    "
-                                      )
-                                    ]
-                                  )
-                                : _c(
-                                    "v-chip",
-                                    {
-                                      attrs: {
-                                        color: "red",
-                                        dark: "",
-                                        small: ""
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                        Unread\n                    "
-                                      )
-                                    ]
-                                  )
-                            ]
-                          }
-                        }
-                      ],
-                      null,
-                      true
-                    ),
-                    model: {
-                      value: _vm.selected,
-                      callback: function($$v) {
-                        _vm.selected = $$v
-                      },
-                      expression: "selected"
-                    }
-                  })
                 ],
                 1
               )
@@ -1227,10 +1552,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/services/NotificationDataService.js":
-/*!**********************************************************!*\
-  !*** ./resources/js/services/NotificationDataService.js ***!
-  \**********************************************************/
+/***/ "./resources/js/services/SettingDataService.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/services/SettingDataService.js ***!
+  \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1247,41 +1572,41 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // import http from "../http-common";
 
 
-var NotificationDataService = /*#__PURE__*/function () {
-  function NotificationDataService() {
-    _classCallCheck(this, NotificationDataService);
+var SettingDataService = /*#__PURE__*/function () {
+  function SettingDataService() {
+    _classCallCheck(this, SettingDataService);
   }
 
-  _createClass(NotificationDataService, [{
+  _createClass(SettingDataService, [{
     key: "getAll",
     value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/notifications", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/settings", data);
     }
   }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/notifications/".concat(id), data);
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/settings", data);
     }
   }]);
 
-  return NotificationDataService;
+  return SettingDataService;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new NotificationDataService());
+/* harmony default export */ __webpack_exports__["default"] = (new SettingDataService());
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/notifications/Index.vue":
-/*!*****************************************************************!*\
-  !*** ./resources/js/views/modules/user/notifications/Index.vue ***!
-  \*****************************************************************/
+/***/ "./resources/js/views/modules/admin/settings/Index.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/views/modules/admin/settings/Index.vue ***!
+  \*************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_2362758e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=2362758e& */ "./resources/js/views/modules/user/notifications/Index.vue?vue&type=template&id=2362758e&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/notifications/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=2bdf5f8d& */ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1292,8 +1617,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_2362758e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_2362758e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1303,38 +1628,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/user/notifications/Index.vue"
+component.options.__file = "resources/js/views/modules/admin/settings/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/notifications/Index.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/views/modules/user/notifications/Index.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************/
+/***/ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/notifications/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/user/notifications/Index.vue?vue&type=template&id=2362758e&":
-/*!************************************************************************************************!*\
-  !*** ./resources/js/views/modules/user/notifications/Index.vue?vue&type=template&id=2362758e& ***!
-  \************************************************************************************************/
+/***/ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d& ***!
+  \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2362758e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=2362758e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/notifications/Index.vue?vue&type=template&id=2362758e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2362758e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=2bdf5f8d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2362758e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
