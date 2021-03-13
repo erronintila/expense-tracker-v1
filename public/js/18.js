@@ -466,12 +466,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         };
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
+          _this.loading = false;
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
+          _this.loading = false;
           reject();
-        })["finally"](_this.loading = false);
+        });
       });
     },
     onRefresh: function onRefresh() {

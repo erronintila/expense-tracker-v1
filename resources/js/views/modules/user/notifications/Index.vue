@@ -354,12 +354,15 @@ export default {
                     }
                 };
                 NotificationDataService.getAll(data)
-                    .then(response => resolve(response.data))
+                    .then(response => {
+                        this.loading = false;
+                        resolve(response.data);
+                    })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally(() => (this.loading = false));
+                    });
             });
         },
         onRefresh() {
@@ -417,11 +420,12 @@ export default {
                         this.meta = data.meta;
                     });
                     this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    this.selected = [];
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                })
-                .finally((this.selected = []));
+                    this.selected = [];
+                });
         }
     },
     computed: {

@@ -90,11 +90,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.$router.push({
           name: "user.expense_reports.index"
         });
+
+        _this.loader = false;
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
 
         _this.mixin_showErrors(error);
-      })["finally"](this.loader = false);
+
+        _this.loader = false;
+      });
     }
   },
   watch: {

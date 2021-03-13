@@ -87,6 +87,7 @@ export default {
                         response.data.status,
                         response.data.message
                     );
+                    this.loader = false;
                     window.location.replace("/admin/users");
                 })
                 .catch(error => {
@@ -96,8 +97,6 @@ export default {
                             this.errors = error.response.data.errors;
                         }
                     }
-                })
-                .finally(() => {
                     this.loader = false;
                 });
         }

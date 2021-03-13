@@ -388,13 +388,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         };
         _services_NotificationDataService__WEBPACK_IMPORTED_MODULE_3__["default"].getAll(data).then(function (response) {
-          return resolve(response.data);
+          _this.loading = false;
+          resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
+          _this.loading = false;
           reject();
-        })["finally"](function () {
-          return _this.loading = false;
         });
       });
     },

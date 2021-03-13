@@ -313,13 +313,14 @@ export default {
 
                 JobDataService.getAll(data)
                     .then(response => {
+                        this.loading = false;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally((this.loading = false));
+                    });
             });
         },
         onRefresh() {

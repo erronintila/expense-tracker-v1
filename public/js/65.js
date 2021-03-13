@@ -145,9 +145,12 @@ __webpack_require__.r(__webpack_exports__);
           _this.form.old_permissions = data.permissions;
           _this.form.role = data.role[0];
           _this.form.old_role = data.role[0];
+          _this.loader = false;
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
-        })["finally"](_this.loader = false);
+
+          _this.loader = false;
+        });
       });
     },
     loadPermissions: function loadPermissions() {
@@ -178,6 +181,7 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this3.mixin_successDialog(response.data.status, response.data.message);
 
+          _this3.loader = false;
           window.location.replace("/admin/users");
         })["catch"](function (error) {
           _this3.mixin_showErrors(error);
@@ -187,7 +191,9 @@ __webpack_require__.r(__webpack_exports__);
               _this3.errors = error.response.data.errors;
             }
           }
-        })["finally"](this.loader = false);
+
+          _this3.loader = false;
+        });
         return;
       }
     }

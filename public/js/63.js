@@ -111,13 +111,13 @@ __webpack_require__.r(__webpack_exports__);
 
       return new Promise(function (resolve, reject) {
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(_this.$route.params.id).then(function (response) {
+          _this.loader = false;
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
-          reject();
-        })["finally"](function () {
           _this.loader = false;
+          reject();
         });
       });
     },
@@ -144,6 +144,7 @@ __webpack_require__.r(__webpack_exports__);
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].update(this.$route.params.id, value).then(function (response) {
         _this3.mixin_successDialog(response.data.status, response.data.message);
 
+        _this3.loader = false;
         window.location.replace("/admin/users");
       })["catch"](function (error) {
         _this3.mixin_showErrors(error);
@@ -153,7 +154,7 @@ __webpack_require__.r(__webpack_exports__);
             _this3.errors = error.response.data.errors;
           }
         }
-      })["finally"](function () {
+
         _this3.loader = false;
       });
     }

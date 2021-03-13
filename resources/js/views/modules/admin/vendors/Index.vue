@@ -300,13 +300,14 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+                        this.loading = false;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally((this.loading = false));
+                    });
             });
         },
         onRefresh() {

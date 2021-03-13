@@ -515,13 +515,14 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+                        this.loading = false;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally((this.loading = false));
+                    });
             });
         },
         // loadExpenseReports() {
@@ -589,12 +590,13 @@ export default {
                         );
                         this.$store.dispatch("AUTH_NOTIFICATIONS");
                         this.$router.push({ name: "admin.payments.index" });
+                        this.loader = false;
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.errors = error.response.data.errors;
-                    })
-                    .finally((this.loader = false));
+                        this.loader = false;
+                    });
 
                 return;
             }

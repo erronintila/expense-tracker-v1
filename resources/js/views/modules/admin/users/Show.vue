@@ -413,11 +413,10 @@ export default {
                     this.department = data.job.department.name;
                     this.permissions = data.permissions;
                     this.user = data;
+                    this.loader = false;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                })
-                .finally(() => {
                     this.loader = false;
                 });
         },

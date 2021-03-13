@@ -166,14 +166,13 @@ export default {
 
                 UserDataService.getAll(data)
                     .then(response => {
+                        this.loading = false;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        reject();
-                    })
-                    .finally(() => {
                         this.loading = false;
+                        reject();
                     });
             });
         },

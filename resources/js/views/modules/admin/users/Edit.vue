@@ -99,14 +99,13 @@ export default {
             return new Promise((resolve, reject) => {
                 UserDataService.show(this.$route.params.id)
                     .then(response => {
+                        this.loader = false;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        reject();
-                    })
-                    .finally(() => {
                         this.loader = false;
+                        reject();
                     });
             });
         },
@@ -135,6 +134,7 @@ export default {
                         response.data.status,
                         response.data.message
                     );
+                    this.loader = false;
                     window.location.replace("/admin/users");
                 })
                 .catch(error => {
@@ -144,8 +144,6 @@ export default {
                             this.errors = error.response.data.errors;
                         }
                     }
-                })
-                .finally(() => {
                     this.loader = false;
                 });
         }

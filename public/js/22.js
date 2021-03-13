@@ -436,9 +436,10 @@ __webpack_require__.r(__webpack_exports__);
         _this2.department = data.job.department.name;
         _this2.permissions = data.permissions;
         _this2.user = data;
+        _this2.loader = false;
       })["catch"](function (error) {
         _this2.mixin_showErrors(error);
-      })["finally"](function () {
+
         _this2.loader = false;
       });
     },

@@ -624,9 +624,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.items = data.items;
           _this.totalItems = data.total;
         });
+
+        _this.loader = false;
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
-      })["finally"](this.loader = false);
+
+        _this.loader = false;
+      });
     },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
@@ -656,6 +660,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          _this2.loading = false;
           resolve({
             items: items,
             total: total
@@ -663,8 +668,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);
 
+          _this2.loading = false;
           reject();
-        })["finally"](_this2.loading = false);
+        });
       });
     },
     cancelPayment: function cancelPayment() {

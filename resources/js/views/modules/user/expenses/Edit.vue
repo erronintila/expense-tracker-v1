@@ -184,14 +184,14 @@ export default {
                             data.reimbursable_amount;
                         this.form.user.remaining_fund +=
                             data.amount - data.reimbursable_amount;
-
+                        this.loader = false;
                         resolve();
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loader = false;
                         reject();
-                    })
-                    .finally((this.loader = false));
+                    });
             });
         },
         onSave(value) {
@@ -205,7 +205,9 @@ export default {
             }
 
             value.details = value.itemize ? value.items : null;
-            value.expense_type_id = value.expense_type ? value.expense_type.id : null;
+            value.expense_type_id = value.expense_type
+                ? value.expense_type.id
+                : null;
             value.sub_type_id = value.sub_type ? value.sub_type.id : null;
             value.user_id = value.user ? value.user.id : null;
             value.vendor_id = value.vendor ? value.vendor.id : null;
@@ -218,21 +220,22 @@ export default {
                         response.data.message
                     );
                     this.$router.go(-1);
+                    this.loader = false;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     if (error.response.data.data !== null) {
                         this.errors = error.response.data.errors;
                     }
-                })
-                .finally((this.loader = false));
+                    this.loader = false;
+                });
         }
     },
     created() {
-        this.getData().then(this.formDataLoaded = true);
+        this.getData().then((this.formDataLoaded = true));
     },
     activated() {
-        this.getData().then(this.formDataLoaded = true);
+        this.getData().then((this.formDataLoaded = true));
     }
 };
 </script>

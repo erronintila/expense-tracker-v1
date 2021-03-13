@@ -143,12 +143,13 @@ export default {
                     this.$router.push({
                         name: "admin.expense_reports.index"
                     });
+                    this.loader = false;
                 })
                 .catch(error => {
                     this.errors = error.response.data.errors;
                     this.mixin_showErrors(error);
-                })
-                .finally((this.loader = false));
+                    this.loader = false;
+                });
         }
     },
     watch: {

@@ -41,7 +41,7 @@
                 >
                 </DateRangePicker> -->
 
-                 <DateRangePicker
+                <DateRangePicker
                     ref="dateRangePicker"
                     :dateRange="date_range"
                     @on-change="updateDates"
@@ -591,7 +591,9 @@ export default {
         },
         loadTotalCountReportStatus() {
             axios
-                .get(`/api/data/expense_reports?total_count=true&user_id=${this.$store.getters.user.id}`)
+                .get(
+                    `/api/data/expense_reports?total_count=true&user_id=${this.$store.getters.user.id}`
+                )
                 .then(response => {
                     let total = response.data ?? 0;
 
@@ -1098,13 +1100,14 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+                        this.loading = false;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally((this.loading = false));
+                    });
             });
         },
         onRefresh() {

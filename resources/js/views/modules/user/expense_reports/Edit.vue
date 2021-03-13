@@ -71,13 +71,14 @@ export default {
             return new Promise((resolve, reject) => {
                 ExpenseReportDataService.show(this.$route.params.id)
                     .then(response => {
+                        this.loader = false
                         resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loader = false
                         reject();
-                    })
-                    .finally((this.loader = false));
+                    });
             });
         },
         loadExpenses(reportData) {
@@ -97,13 +98,14 @@ export default {
                         }
                     })
                     .then(response => {
+                        this.loader = false
                         resolve(response.data.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loader = false
                         reject();
-                    })
-                    .finally((this.loader = false));
+                    });
             });
         },
         onSave(value) {
@@ -118,12 +120,13 @@ export default {
                     this.$router.push({
                         name: "user.expense_reports.index"
                     });
+                    this.loader = false;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.errors = error.response.data.errors;
-                })
-                .finally((this.loader = false));
+                    this.loader = false;
+                });
         }
     },
     created() {

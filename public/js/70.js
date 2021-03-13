@@ -85,12 +85,14 @@ __webpack_require__.r(__webpack_exports__);
 
       return new Promise(function (resolve, reject) {
         _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].show(_this.$route.params.id).then(function (response) {
+          _this.loader = false;
           resolve(response.data.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
+          _this.loader = false;
           reject();
-        })["finally"](_this.loader = false);
+        });
       });
     },
     loadExpenses: function loadExpenses(reportData) {
@@ -106,12 +108,14 @@ __webpack_require__.r(__webpack_exports__);
             expense_report_id: _this2.$route.params.id
           }
         }).then(function (response) {
+          _this2.loader = false;
           resolve(response.data.data);
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);
 
+          _this2.loader = false;
           reject();
-        })["finally"](_this2.loader = false);
+        });
       });
     },
     onSave: function onSave(value) {
@@ -125,11 +129,14 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$router.push({
           name: "user.expense_reports.index"
         });
+
+        _this3.loader = false;
       })["catch"](function (error) {
         _this3.mixin_showErrors(error);
 
         _this3.errors = error.response.data.errors;
-      })["finally"](this.loader = false);
+        _this3.loader = false;
+      });
     }
   },
   created: function created() {

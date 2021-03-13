@@ -329,6 +329,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          _this.loading = false;
           resolve({
             items: items,
             total: total
@@ -336,8 +337,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
+          _this.loading = false;
           reject();
-        })["finally"](_this.loading = false);
+        });
       });
     },
     onRefresh: function onRefresh() {

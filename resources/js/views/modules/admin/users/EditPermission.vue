@@ -132,11 +132,12 @@ export default {
                         this.form.old_permissions = data.permissions;
                         this.form.role = data.role[0];
                         this.form.old_role = data.role[0];
+                        this.loader = false;
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                    })
-                    .finally((this.loader = false));
+                        this.loader = false;
+                    });
             });
         },
         loadPermissions() {
@@ -176,7 +177,7 @@ export default {
                             response.data.status,
                             response.data.message
                         );
-
+                        this.loader = false;
                         window.location.replace("/admin/users");
                     })
                     .catch(error => {
@@ -187,8 +188,8 @@ export default {
                                 this.errors = error.response.data.errors;
                             }
                         }
-                    })
-                    .finally((this.loader = false));
+                        this.loader = false;
+                    });
 
                 return;
             }

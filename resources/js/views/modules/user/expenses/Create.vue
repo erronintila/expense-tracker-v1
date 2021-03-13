@@ -166,12 +166,13 @@ export default {
                         response.data.message
                     );
                     this.$router.go(-1);
+                    this.loader = false;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.errors = error.response.data.errors;
-                })
-                .finally((this.loader = false));
+                    this.loader = false;
+                });
         }
     },
 };

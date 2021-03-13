@@ -235,11 +235,14 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_successDialog(response.data.status, response.data.message);
 
         _this.$router.go(-1);
+
+        _this.loading = false;
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
 
         _this.errors = error.response.data.errors;
-      })["finally"](this.loader = false);
+        _this.loader = false;
+      });
     }
   }
 });

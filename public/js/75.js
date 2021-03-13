@@ -511,6 +511,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          _this.loading = false;
           resolve({
             items: items,
             total: total
@@ -518,8 +519,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
+          _this.loading = false;
           reject();
-        })["finally"](_this.loading = false);
+        });
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {

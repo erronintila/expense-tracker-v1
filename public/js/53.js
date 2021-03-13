@@ -255,12 +255,14 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.form.reimbursable_amount = data.reimbursable_amount;
           _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
+          _this.loading = false;
           resolve();
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
+          _this.loading = false;
           reject();
-        })["finally"](_this.loader = false);
+        });
       });
     },
     selectUser: function selectUser(e) {
@@ -296,13 +298,17 @@ __webpack_require__.r(__webpack_exports__);
         _this2.mixin_successDialog(response.data.status, response.data.message);
 
         _this2.$router.go(-1);
+
+        _this2.loading = false;
       })["catch"](function (error) {
         _this2.mixin_showErrors(error);
 
         if (error.response.data.data !== null) {
           _this2.errors = error.response.data.errors;
         }
-      })["finally"](this.loader = false);
+
+        _this2.loading = false;
+      });
     }
   },
   created: function created() {

@@ -461,13 +461,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
         _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
+          _this.loading = false;
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
-          reject();
-        })["finally"](function () {
           _this.loading = false;
+          reject();
         });
       });
     },

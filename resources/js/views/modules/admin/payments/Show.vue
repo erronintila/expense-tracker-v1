@@ -557,11 +557,12 @@ export default {
                         this.items = data.items;
                         this.totalItems = data.total;
                     });
+                    this.loader = false;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                })
-                .finally((this.loader = false));
+                    this.loader = false;
+                });
         },
         getDataFromApi() {
             this.loading = true;
@@ -590,13 +591,14 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
+                        this.loading = false;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally((this.loading = false));
+                    });
             });
         },
         cancelPayment() {

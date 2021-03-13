@@ -549,6 +549,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
+          _this3.loading = false;
           resolve({
             items: items,
             total: total
@@ -556,8 +557,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         })["catch"](function (error) {
           _this3.mixin_showErrors(error);
 
+          _this3.loading = false;
           reject();
-        })["finally"](_this3.loading = false);
+        });
       });
     },
     // loadExpenseReports() {
@@ -625,11 +627,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.$router.push({
             name: "admin.payments.index"
           });
+
+          _this4.loader = false;
         })["catch"](function (error) {
           _this4.mixin_showErrors(error);
 
           _this4.errors = error.response.data.errors;
-        })["finally"](this.loader = false);
+          _this4.loader = false;
+        });
         return;
       }
     }
