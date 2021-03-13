@@ -432,6 +432,7 @@
 
 <script>
 import moment from "moment";
+import UserDataService from "../../../../services/UserDataService";
 
 export default {
     data() {
@@ -542,32 +543,31 @@ export default {
     },
     methods: {
         onSave() {
-            // this.$refs.form.validate();
+            this.$refs.form.validate();
             if (this.$refs.form.validate()) {
-                axios
-                    .put("/api/users/update_profile/" + this.form.id, {
-                        code: this.form.code,
-                        first_name: this.form.first_name,
-                        middle_name: this.form.middle_name,
-                        last_name: this.form.last_name,
-                        suffix: this.form.suffix,
-                        gender: this.form.gender,
-                        birthdate: this.form.birthdate,
-                        mobile_number: this.form.mobile_number,
-                        telephone_number: this.form.telephone_number,
-                        address: this.form.address,
-                        fund: this.form.fund,
-                        remaining_fund: this.form.remaining_fund,
-                        username: this.form.username,
-                        email: this.form.email,
-                        password: "password",
-                        password_confirmation: "password",
-                        is_admin: this.form.is_admin,
-                        is_superadmin: this.form.is_superadmin,
-                        can_login: this.form.can_login,
-                        type: this.form.type,
-                        job_id: this.form.job == null ? null : this.form.job.id,
-                    })
+                UserDataService.updateProfile(this.form.id, {
+                    code: this.form.code,
+                    first_name: this.form.first_name,
+                    middle_name: this.form.middle_name,
+                    last_name: this.form.last_name,
+                    suffix: this.form.suffix,
+                    gender: this.form.gender,
+                    birthdate: this.form.birthdate,
+                    mobile_number: this.form.mobile_number,
+                    telephone_number: this.form.telephone_number,
+                    address: this.form.address,
+                    fund: this.form.fund,
+                    remaining_fund: this.form.remaining_fund,
+                    username: this.form.username,
+                    email: this.form.email,
+                    password: "password",
+                    password_confirmation: "password",
+                    is_admin: this.form.is_admin,
+                    is_superadmin: this.form.is_superadmin,
+                    can_login: this.form.can_login,
+                    type: this.form.type,
+                    job_id: this.form.job == null ? null : this.form.job.id
+                })
                     .then(response => {
                         this.$dialog.message.success(
                             "User account updated successfully.",
@@ -586,12 +586,11 @@ export default {
         },
         onUpdatePassword() {
             if (this.$refs.form_password.validate()) {
-                axios
-                    .put("/api/users/update_password/" + this.form.id, {
-                        old_password: this.old_password,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation
-                    })
+                UserDataService.updatePassword(this.form.id, {
+                    old_password: this.old_password,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation
+                })
                     .then(response => {
                         this.$dialog.message.success(
                             "User account password has been updated.",

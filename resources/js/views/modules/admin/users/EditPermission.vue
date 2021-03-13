@@ -93,6 +93,9 @@
 </template>
 
 <script>
+import UserDataService from "../../../../services/UserDataService";
+import PermissionDataService from "../../../../services/PermissionDataService";
+
 export default {
     data() {
         return {
@@ -121,9 +124,8 @@ export default {
             this.loadPermissions().then(data => {
                 this.permissions = data;
                 this.form.permissions = [];
-                
-                axios
-                    .get("/api/users/" + this.$route.params.id)
+
+                UserDataService.show(this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
                         this.form.is_admin = data.is_admin;
@@ -142,8 +144,11 @@ export default {
         },
         loadPermissions() {
             return new Promise((resolve, reject) => {
-                axios
-                    .get(`/api/data/permissions?role=${this.form.role}`)
+                PermissionDataService.get({
+                    params: {
+                        role: this.form.role
+                    }
+                })
                     .then(response => {
                         resolve(response.data);
                     })
@@ -162,16 +167,11 @@ export default {
             if (this.$refs.form.validate()) {
                 this.loader = true;
 
-                axios
-                    .put(
-                        "/api/users/update_permissions/" +
-                            this.$route.params.id,
-                        {
-                            is_admin: is_administrator,
-                            can_login: this.form.can_login,
-                            permissions: this.form.permissions
-                        }
-                    )
+                UserDataService.updatePermissions(this.$route.params.id, {
+                    is_admin: is_administrator,
+                    can_login: this.form.can_login,
+                    permissions: this.form.permissions
+                })
                     .then(response => {
                         this.mixin_successDialog(
                             response.data.status,

@@ -50,6 +50,14 @@ class UserDataService {
         return axios.put(`/api/users/update_settings/${id}`, data);
     }
 
+    updatePermissions(id, data) {
+        return axios.put(`/api/users/update_permissions/${id}`, data);
+    }
+
+    updateProfile(id, data) {
+        return axios.put(`/api/users/update_profile/${id}`, data);
+    }
+
     export() {
         return axios.get("/api/users/export");
     }

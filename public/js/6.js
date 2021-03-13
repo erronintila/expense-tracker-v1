@@ -606,7 +606,11 @@ __webpack_require__.r(__webpack_exports__);
     loadPermissions: function loadPermissions() {
       var _this = this;
 
-      axios.get("/api/data/permissions?role=".concat(this.form.role)).then(function (response) {
+      _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_2__["default"].get({
+        params: {
+          role: this.form.role
+        }
+      }).then(function (response) {
         _this.collections.permissions = response.data;
         _this.form.permissions = response.data;
       })["catch"](function (error) {
@@ -1606,6 +1610,11 @@ var PermissionDataService = /*#__PURE__*/function () {
     value: function getAll(data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/permissions", data);
     }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/permissions", data);
+    }
   }]);
 
   return PermissionDataService;
@@ -1699,6 +1708,16 @@ var UserDataService = /*#__PURE__*/function () {
     key: "updateSettings",
     value: function updateSettings(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
+    }
+  }, {
+    key: "updatePermissions",
+    value: function updatePermissions(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_permissions/".concat(id), data);
+    }
+  }, {
+    key: "updateProfile",
+    value: function updateProfile(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
     }
   }, {
     key: "export",

@@ -389,6 +389,8 @@ import moment from "moment";
 import numeral from "numeral";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     data() {
@@ -1146,10 +1148,14 @@ export default {
         },
         loadExpenses() {
             return new Promise((resolve, reject) => {
-                axios
-                    .get(
-                        `/api/data/expenses?expense_report_id=${this.router_params_id}&only=true&sortBy=date&sortType=asc`
-                    )
+                ExpenseDataService.get({
+                    params: {
+                        expense_report_id: this.router_params_id,
+                        only: true,
+                        sortBy: "date",
+                        sortType: "asc"
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         resolve({ items });
@@ -1163,8 +1169,7 @@ export default {
         getData() {
             this.formDataLoaded = false;
             return new Promise((resolve, reject) => {
-                axios
-                    .get(`/api/expense_reports/${this.router_params_id}`)
+                ExpenseReportDataService.show(this.router_params_id)
                     .then(response => {
                         let data = response.data.data;
 
@@ -1228,18 +1233,17 @@ export default {
                 let range = [this.form.from, this.form.to];
                 let expense_report_id = this.router_params_id;
 
-                axios
-                    .get("/api/expenses", {
-                        params: {
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            expense_report_id: expense_report_id,
-                            sortBy: "date",
-                            sortType: "asc"
-                        }
-                    })
+                ExpenseDataService.getAll({
+                    params: {
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        expense_report_id: expense_report_id,
+                        sortBy: "date",
+                        sortType: "asc"
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;

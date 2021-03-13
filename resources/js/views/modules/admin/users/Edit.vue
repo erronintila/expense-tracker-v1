@@ -43,6 +43,7 @@
 <script>
 import Form from "./Form";
 import UserDataService from "../../../../services/UserDataService";
+import JobDataService from "../../../../services/JobDataService";
 
 export default {
     components: {
@@ -110,8 +111,7 @@ export default {
             });
         },
         getInitialJob() {
-            axios
-                .get(`/api/jobs/${this.form.job.id}`)
+            JobDataService.show(this.form.job.id)
                 .then(response => {
                     this.form.job = response.data.data;
                 })

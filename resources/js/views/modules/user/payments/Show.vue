@@ -345,6 +345,8 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import PaymentDataService from "../../../../services/PaymentDataService";
 
 export default {
     data() {
@@ -361,7 +363,7 @@ export default {
                     .endOf("week")
                     .format("YYYY-MM-DD")
             ],
-            user: this.$store == null ? {id: 0} : this.$store.getters.user,
+            user: this.$store == null ? { id: 0 } : this.$store.getters.user,
             code: "",
             reference_no: "",
             voucher_no: "",
@@ -403,7 +405,8 @@ export default {
                 code: "",
                 date: "",
                 description: "",
-                user: this.$store == null ? {id: 0} : this.$store.getters.user,
+                user:
+                    this.$store == null ? { id: 0 } : this.$store.getters.user,
                 expense_reports: [],
                 notes: "",
                 reference_no: "",
@@ -426,8 +429,7 @@ export default {
     },
     methods: {
         getData() {
-            axios
-                .get(`/api/payments/${this.$route.params.id}`)
+            PaymentDataService.show(this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
 
@@ -498,20 +500,19 @@ export default {
                 let range = this.date_range;
                 let payment_id = this.$route.params.id;
 
-                axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            user_id: user_id,
-                            payment_id: payment_id,
-                            // start_date: range[0],
-                            // end_date: range[1] ? range[1] : range[0],
-                            admin_page: false
-                        }
-                    })
+                ExpenseReportDataService.getAll({
+                    params: {
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        user_id: user_id,
+                        payment_id: payment_id,
+                        // start_date: range[0],
+                        // end_date: range[1] ? range[1] : range[0],
+                        admin_page: false
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -525,37 +526,6 @@ export default {
                         this.loading = false;
                         reject();
                     });
-            });
-        },
-        cancelPayment() {
-            this.$confirm(`Do you want to cancel this payment?`).then(res => {
-                if (res) {
-                    this.loader = true;
-
-                    axios({
-                        method: "delete",
-                        url: `/api/payments/${this.$route.params.id}`,
-                        data: {
-                            ids: [this.$route.params.id]
-                        }
-                    })
-                        .then(response => {
-                            this.$dialog.message.success(
-                                response.data.message,
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-
-                            this.$router.push({
-                                name: "user.payments.index"
-                            });
-                        })
-                        .catch(error => {
-                            this.mixin_showErrors(error);
-                        });
-                }
             });
         }
     },
@@ -605,6 +575,6 @@ export default {
     deactivated() {
         this.form.expense_reports = [];
         Object.assign(this.$data.form, this.$options.data());
-    },
+    }
 };
 </script>

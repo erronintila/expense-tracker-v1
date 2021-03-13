@@ -5,6 +5,10 @@ class PermissionDataService {
     getAll(data) {
         return axios.get("/api/permissions", data);
     }
+
+    get(data) {
+        return axios.get("/api/data/permissions", data);
+    }
 }
 
 export default new PermissionDataService();

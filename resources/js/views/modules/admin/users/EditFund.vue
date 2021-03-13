@@ -45,11 +45,7 @@
                                         <td
                                             class="headline green--text text--darken-4 text-right"
                                         >
-                                            {{
-                                                mixin_formatNumber(
-                                                    user.fund
-                                                )
-                                            }}
+                                            {{ mixin_formatNumber(user.fund) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -135,6 +131,8 @@
 </template>
 
 <script>
+import UserDataService from "../../../../services/UserDataService";
+
 export default {
     data() {
         return {
@@ -158,9 +156,8 @@ export default {
         };
     },
     methods: {
-        loadusers() {
-            axios
-                .get("/api/users/" + this.$route.params.id)
+        loadUser() {
+            UserDataService.show(this.$route.params.id)
                 .then(response => {
                     this.user = response.data.data;
                 })
@@ -181,14 +178,10 @@ export default {
                 this.$confirm("Do you want to update revolving fund?").then(
                     res => {
                         if (res) {
-                            axios
-                                .put(
-                                    `/api/users/update_fund/${this.$route.params.id}`,
-                                    {
-                                        fund: this.new_fund,
-                                        remaining_fund: this.new_remaining_fund
-                                    }
-                                )
+                            UserDataService.updateFund(this.$route.params.id, {
+                                fund: this.new_fund,
+                                remaining_fund: this.new_remaining_fund
+                            })
                                 .then(response => {
                                     this.$dialog.message.success(
                                         "Revolving Fund updated.",
@@ -208,35 +201,6 @@ export default {
                         }
                     }
                 );
-                // let add_amount =
-                //     this.adjustment_type == "Add Amount" ? this.amount : 0;
-                // let subtract_amount =
-                //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
-
-                // axios
-                //     .put("/api/users", {
-                //         user: this.user.id,
-                //         reference: this.reference,
-                //         code: this.code,
-                //         description: this.description,
-                //         remarks: this.remarks,
-                //         // amount: this.amount,
-                //         add_amount: add_amount,
-                //         subtract_amount: subtract_amount,
-                //         type: this.type
-                //     })
-                //     .then(response => {
-                //         this.mixin_successDialog(
-                //             "Success",
-                //             "Adjustment created successfully."
-                //         );
-
-                //         this.$router.push({ name: "admin.adjustments.index" });
-                //     })
-                //     .catch(error => {
-                //          this.mixin_showErrors(error);
-                //         this.errors = error.response.data.errors;
-                //     });
             }
         }
     },
@@ -270,11 +234,11 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-        this.loadusers();
+        this.loadUser();
     },
     activated() {
         this.$store.dispatch("AUTH_USER");
-        this.loadusers();
+        this.loadUser();
     }
 };
 </script>

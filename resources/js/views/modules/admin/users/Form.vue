@@ -403,8 +403,11 @@ export default {
             this.$emit("on-save", this.form);
         },
         loadPermissions() {
-            axios
-                .get(`/api/data/permissions?role=${this.form.role}`)
+            PermissionDataService.get({
+                params: {
+                    role: this.form.role
+                }
+            })
                 .then(response => {
                     this.collections.permissions = response.data;
                     this.form.permissions = response.data;
