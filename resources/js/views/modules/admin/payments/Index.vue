@@ -326,6 +326,7 @@ import moment from "moment";
 import numeral from "numeral";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import PaymentDataService from "../../../../services/PaymentDataService";
 
 export default {
     components: { DateRangePicker, UserDialogSelector },
@@ -417,20 +418,19 @@ export default {
                 let range = this.date_range;
                 let user_id = this.user ? this.user.id : null;
 
-                axios
-                    .get("/api/payments", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            user_id: user_id
-                        }
-                    })
+                PaymentDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        user_id: user_id
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;

@@ -360,6 +360,8 @@
 import moment from "moment";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import PaymentDataService from "../../../../services/PaymentDataService";
 
 export default {
     components: {
@@ -496,22 +498,21 @@ export default {
                 let user_id = this.form.user ? this.form.user.id : null;
                 let range = this.date_range;
 
-                axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            user_id: user_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            admin_page: true,
-                            create_payment: true
-                        }
-                    })
+                ExpenseReportDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        user_id: user_id,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        admin_page: true,
+                        create_payment: true
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -525,25 +526,6 @@ export default {
                     });
             });
         },
-        // loadExpenseReports() {
-        //     let start_date = this.date_range[0];
-        //     let end_date = this.date_range[1];
-        //     axios
-        //         .get("/api/data/expense_reports", {
-        //             params: {
-        //                 create_payment: true,
-        //                 start_date: start_date,
-        //                 end_date: end_date,
-        //                 user_id: this.form.user.id
-        //             }
-        //         })
-        //         .then(response => {
-        //             this.items = response.data.data;
-        //         })
-        //         .catch(error => {
-        //              this.mixin_showErrors(error);
-        //         });
-        // },
         onSave() {
             this.$refs.form.validate();
 
@@ -560,24 +542,23 @@ export default {
             if (this.$refs.form.validate()) {
                 this.loader = true;
 
-                axios
-                    .post("/api/payments", {
-                        code: this.form.code,
-                        reference_no: this.form.reference_no,
-                        voucher_no: this.form.voucher_no,
-                        description: this.form.description,
-                        date: this.form.date,
-                        cheque_no: this.form.cheque_no,
-                        cheque_date: this.form.cheque_date,
-                        amount: this.total,
-                        payee: this.form.payee,
-                        payee_address: this.form.payee_address,
-                        payee_phone: this.form.payee_phone,
-                        remarks: this.form.remarks,
-                        notes: this.form.notes,
-                        expense_reports: this.selected,
-                        user_id: this.form.user ? this.form.user.id : null
-                    })
+                PaymentDataService.store({
+                    code: this.form.code,
+                    reference_no: this.form.reference_no,
+                    voucher_no: this.form.voucher_no,
+                    description: this.form.description,
+                    date: this.form.date,
+                    cheque_no: this.form.cheque_no,
+                    cheque_date: this.form.cheque_date,
+                    amount: this.total,
+                    payee: this.form.payee,
+                    payee_address: this.form.payee_address,
+                    payee_phone: this.form.payee_phone,
+                    remarks: this.form.remarks,
+                    notes: this.form.notes,
+                    expense_reports: this.selected,
+                    user_id: this.form.user ? this.form.user.id : null
+                })
                     .then(response => {
                         this.onRefresh();
 
@@ -630,6 +611,6 @@ export default {
                 this.selected.reduce((total, item) => total + item.total, 0)
             );
         }
-    },
+    }
 };
 </script>

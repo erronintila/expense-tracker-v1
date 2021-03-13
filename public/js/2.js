@@ -9,6 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/VendorDataService */ "./resources/js/services/VendorDataService.js");
 //
 //
 //
@@ -176,6 +177,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: {
   //     openDialog: {
@@ -229,7 +231,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.form.validate();
 
       if (this.$refs.form.validate()) {
-        axios.post("/api/vendors", {
+        _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].store({
           code: this.form.code,
           name: this.form.name,
           email: this.form.email,

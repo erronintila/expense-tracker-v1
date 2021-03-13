@@ -422,6 +422,8 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import PaymentDataService from "../../../../services/PaymentDataService";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
 
 export default {
     data() {
@@ -503,8 +505,7 @@ export default {
     },
     methods: {
         getData() {
-            axios
-                .get(`/api/payments/${this.$route.params.id}`)
+            PaymentDataService.show(this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
 
@@ -574,20 +575,19 @@ export default {
                 let range = this.date_range;
                 let payment_id = this.$route.params.id;
 
-                axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            user_id: user_id,
-                            payment_id: payment_id,
-                            // start_date: range[0],
-                            // end_date: range[1] ? range[1] : range[0],
-                            admin_page: true
-                        }
-                    })
+                ExpenseReportDataService.getAll({
+                    params: {
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        user_id: user_id,
+                        payment_id: payment_id,
+                        // start_date: range[0],
+                        // end_date: range[1] ? range[1] : range[0],
+                        admin_page: true
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
@@ -606,10 +606,8 @@ export default {
                 if (res) {
                     this.loader = true;
 
-                    axios({
-                        method: "delete",
-                        url: `/api/payments/${this.$route.params.id}`,
-                        data: {
+                    PaymentDataService.delete(this.$route.params.id, {
+                        params: {
                             ids: [this.$route.params.id]
                         }
                     })

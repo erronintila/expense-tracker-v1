@@ -354,6 +354,7 @@
 
 <script>
 import numeral from "numeral";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     data() {
@@ -447,8 +448,7 @@ export default {
     },
     methods: {
         getData() {
-            axios
-                .get("/api/expenses/" + this.$route.params.id)
+            ExpenseDataService.show(this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
 

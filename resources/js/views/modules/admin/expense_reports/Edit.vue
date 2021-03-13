@@ -142,20 +142,17 @@ export default {
         },
         loadExpenses(reportData) {
             return new Promise((resolve, reject) => {
-                axios
-                    .get("/api/data/expenses", {
-                        params: {
-                            update_report: true,
-                            user_id: reportData.user
-                                ? reportData.user.id
-                                : null,
-                            start_date: reportData.from,
-                            end_date: moment()
-                                .endOf()
-                                .format("YYYY-MM-DD"),
-                            expense_report_id: this.$route.params.id
-                        }
-                    })
+                ExpenseReportDataService.get({
+                    params: {
+                        update_report: true,
+                        user_id: reportData.user ? reportData.user.id : null,
+                        start_date: reportData.from,
+                        end_date: moment()
+                            .endOf()
+                            .format("YYYY-MM-DD"),
+                        expense_report_id: this.$route.params.id
+                    }
+                })
                     .then(response => {
                         this.loader = false;
                         resolve(response.data.data);

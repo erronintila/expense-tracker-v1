@@ -160,7 +160,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/expenses", {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].get({
           params: {
             update_report: true,
             user_id: reportData.user ? reportData.user.id : null,
