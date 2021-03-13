@@ -123,14 +123,12 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.filters.search.trim().toLowerCase();
+                let search = this.filters.search.trim().toLowerCase();
                 let params = {
                     search: search,
                     sortBy: sortBy[0],
@@ -169,7 +167,7 @@ export default {
                         reject();
                     })
                     .finally(() => {
-                        _this.loading = false;
+                        this.loading = false;
                     });
             });
         },

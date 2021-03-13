@@ -32,7 +32,7 @@ export default {
         UserSelector,
         VendorSelector
     },
-    data: function() {
+    data() {
         return {
             misc: {},
             collections: {
@@ -138,15 +138,14 @@ export default {
         getSubType(e) {
             // this.form.vendor = e;
         },
-        onRefresh: function() {
+        onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
-        onSave: function() {
+        onSave() {
             console.log("user", this.form.user);
             console.log("vendor", this.form.vendor);
             return;
 
-            let _this = this;
             let data = this.form;
             // data.date = "2021-02-01";
             // data.expense_type_id = 2;
@@ -159,21 +158,21 @@ export default {
 
             if (this.isValid) {
                 ExpenseDataService.store(data)
-                    .then(function(response) {
-                        _this.mixin_showSuccess(response);
+                    .then(response => {
+                        this.mixin_showSuccess(response);
                     })
-                    .catch(function(error) {
-                        _this.mixin_showErrors(error);
-                        _this.errors = error.response.data.errors;
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
             }
         }
     },
     computed: {
-        minDate: function() {},
-        maxDate: function() {},
-        isValid: function() {
-            // let _this = this;
+        minDate() {},
+        maxDate() {},
+        isValid() {
+            // let this = this;
             let errorTitle = "";
             let errorMessage = "";
 
@@ -183,11 +182,11 @@ export default {
 
             return true;
         },
-        amount_to_replensh: function() {},
-        amount_to_reimburse: function() {},
-        total_amount: function() {}
+        amount_to_replensh() {},
+        amount_to_reimburse() {},
+        total_amount() {}
     },
-    mounted: function() {
+    mounted() {
         console.log("create component loaded");
     }
 };

@@ -39,16 +39,14 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
-
             axios
-                .get("/api/data/departments?only=true", _this.parameters)
+                .get("/api/data/departments?only=true", this.parameters)
                 .then(response => {
-                    _this.items = response.data.data;
+                    this.items = response.data.data;
 
-                    if (_this.showAll) {
-                        _this.items.unshift(_this.defaultValue);
-                        _this.data = _this.defaultValue;
+                    if (this.showAll) {
+                        this.items.unshift(this.defaultValue);
+                        this.data = this.defaultValue;
                     }
                 })
                 .catch(error => {

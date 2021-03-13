@@ -447,106 +447,104 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
-
             // this.loadUsers().then(
             axios
-                .get("/api/expenses/" + _this.$route.params.id)
+                .get("/api/expenses/" + this.$route.params.id)
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.form.code = data.code;
-                    _this.form.description = data.description;
+                    this.form.code = data.code;
+                    this.form.description = data.description;
 
-                    _this.form.receipt_number = data.receipt_number;
-                    _this.form.date = data.date;
-                    _this.form.remarks = data.remarks;
-                    _this.form.notes = data.notes;
-                    _this.form.is_active = data.is_active;
-                    _this.form.user = data.user;
-                    _this.form.vendor =
+                    this.form.receipt_number = data.receipt_number;
+                    this.form.date = data.date;
+                    this.form.remarks = data.remarks;
+                    this.form.notes = data.notes;
+                    this.form.is_active = data.is_active;
+                    this.form.user = data.user;
+                    this.form.vendor =
                         data.vendor == null
                             ? { id: null, name: "", is_vat_inclusive: true }
                             : data.vendor;
 
-                    _this.form.expense_type = data.expense_type;
-                    // _this.form.sub_type = data.sub_type_id;
+                    this.form.expense_type = data.expense_type;
+                    // this.form.sub_type = data.sub_type_id;
 
-                    // _this.expense_types = data.user.expense_types;
-                    // _this.sub_types = data.expense_type.sub_types;
+                    // this.expense_types = data.user.expense_types;
+                    // this.sub_types = data.expense_type.sub_types;
 
-                    _this.form.is_tax_inclusive = data.is_tax_inclusive;
-                    _this.form.tax_name = data.tax_name;
-                    _this.form.tax_rate = data.tax_rate;
-                    _this.form.tax_amount = data.tax_amount;
+                    this.form.is_tax_inclusive = data.is_tax_inclusive;
+                    this.form.tax_name = data.tax_name;
+                    this.form.tax_rate = data.tax_rate;
+                    this.form.tax_amount = data.tax_amount;
 
-                    _this.form.status = data.status;
-                    _this.form.is_late_encoded = data.is_late_encoded;
+                    this.form.status = data.status;
+                    this.form.is_late_encoded = data.is_late_encoded;
 
                     if (data.details !== null) {
-                        _this.itemize = true;
-                        _this.items = data.details;
+                        this.itemize = true;
+                        this.items = data.details;
                     } else {
-                        // _this.itemize = false;
-                        // _this.items = [];
-                        _this.form.amount = data.amount;
+                        // this.itemize = false;
+                        // this.items = [];
+                        this.form.amount = data.amount;
                     }
 
-                    // _this.sub_types.unshift({
+                    // this.sub_types.unshift({
                     //     id: null,
                     //     name: "None",
                     //     limit: null
                     // });
-                    _this.form.sub_type =
+                    this.form.sub_type =
                         data.sub_type == null
                             ? { id: null, name: "None", limit: null }
                             : data.sub_type;
 
                     if (data.revolving_fund > 0) {
-                        _this.paid_through_fund = true;
-                        _this.form.revolving_fund = data.revolving_fund;
+                        this.paid_through_fund = true;
+                        this.form.revolving_fund = data.revolving_fund;
                     } else {
-                        _this.paid_through_fund = false;
-                        _this.form.revolving_fund = 0;
+                        this.paid_through_fund = false;
+                        this.form.revolving_fund = 0;
                     }
 
-                    _this.form.reimbursable_amount = data.reimbursable_amount;
+                    this.form.reimbursable_amount = data.reimbursable_amount;
 
-                    _this.form.user.remaining_fund +=
+                    this.form.user.remaining_fund +=
                         data.amount - data.reimbursable_amount;
 
-                    _this.form.expense_report = data.expense_report;
+                    this.form.expense_report = data.expense_report;
 
-                    _this.form.created_at = data.created_at;
-                    _this.form.updated_at = data.updated_at;
-                    _this.form.deleted_at = data.deleted_at;
-                    _this.form.submitted_at = data.expense_report
+                    this.form.created_at = data.created_at;
+                    this.form.updated_at = data.updated_at;
+                    this.form.deleted_at = data.deleted_at;
+                    this.form.submitted_at = data.expense_report
                         ? data.expense_report.submitted_at
                         : null;
-                    _this.form.approved_at = data.expense_report
+                    this.form.approved_at = data.expense_report
                         ? data.expense_report.approved_at
                         : null;
-                    _this.form.rejected_at = data.expense_report
+                    this.form.rejected_at = data.expense_report
                         ? data.expense_report.rejected_at
                         : null;
-                    _this.form.cancelled_at = data.expense_report
+                    this.form.cancelled_at = data.expense_report
                         ? data.expense_report.cancelled_at
                         : null;
 
-                    _this.form.logs = data.logs;
+                    this.form.logs = data.logs;
 
-                    _this.loader = false;
+                    this.loader = false;
                 })
                 .catch(error => {
                     console.log(error);
                     console.log(error.response);
 
-                    _this.mixin_errorDialog(
+                    this.mixin_errorDialog(
                         `Error ${error.response.status}`,
                         error.response.statusText
                     );
 
-                    _this.loader = false;
+                    this.loader = false;
                 });
             // );
         }
