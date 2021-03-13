@@ -115,12 +115,12 @@ __webpack_require__.r(__webpack_exports__);
     onLogin: function onLogin() {
       var _this = this;
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
-      if (_this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         this.$store.dispatch("AUTH_LOGIN", {
-          username: _this.form.username,
-          password: _this.form.password
+          username: this.form.username,
+          password: this.form.password
         }).then(function (response) {
           _this.form = {
             username: "",

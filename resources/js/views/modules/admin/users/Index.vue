@@ -167,19 +167,6 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <!-- <DepartmentData
-                                    ref="departmentData"
-                                    :showAll="true"
-                                    @changeData="changeDepartment"
-                                ></DepartmentData> -->
-                                <!-- <DepartmentDropdownSelector
-                                    ref="departmentDropdownSelector"
-                                    :selectedDepartment="department"
-                                    :showAll="true"
-                                    @onChange="onChangeDepartment"
-                                >
-                                </DepartmentDropdownSelector> -->
-
                                 <DepartmentDropdownSelector
                                     v-model="department"
                                     ref="departmentDropdownSelector"
@@ -215,27 +202,7 @@
                     </template>
                     <v-card>
                         <v-list>
-                            <!-- <v-list-item>
-                                <JobData
-                                    ref="jobData"
-                                    :showAll="true"
-                                    :department_id="
-                                        department ? department.id : null
-                                    "
-                                    :selectedJob="job"
-                                    @changeData="changeJob" 
-                                ></JobData>
-                            </v-list-item> -->
                             <v-list-item>
-                                <!-- <JobDropdownSelector
-                                    ref="jobDropdownSelector"
-                                    :selectedJob="job"
-                                    :selectedDepartment="department"
-                                    :showAll="true"
-                                    @onChange="onChangeJob"
-                                    @onReset="onResetJob"
-                                ></JobDropdownSelector> -->
-
                                 <JobDropdownSelector
                                     v-model="job"
                                     ref="jobDropdownSelector"
@@ -467,17 +434,13 @@
 <script>
 import UserDataService from "../../../../services/UserDataService";
 import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
-import DepartmentData from "../../../../components/selector/dropdown/Departments";
 import JobDropdownSelector from "../../../../components/selector/dropdown/JobDropdownSelector";
-import JobData from "../../../../components/selector/dropdown/Jobs";
 
 export default {
     props: {},
     components: {
         DepartmentDropdownSelector,
         JobDropdownSelector,
-        DepartmentData,
-        JobData
     },
     data() {
         return {
@@ -613,8 +576,6 @@ export default {
 
             // this.department = null;
             // this.job = null;
-            // this.$refs.departmentData.resetData();
-            // this.$refs.jobData.resetData();
         },
         onEditFund() {
             if (this.selected.length == 0) {

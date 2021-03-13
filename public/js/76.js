@@ -478,10 +478,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getData: function getData() {
-      var _this = this; // this.loadUsers().then(
+      var _this = this;
 
-
-      axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+      // this.loadUsers().then(
+      axios.get("/api/expenses/" + this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.description = data.description;
@@ -496,9 +496,9 @@ __webpack_require__.r(__webpack_exports__);
           name: "",
           is_vat_inclusive: true
         } : data.vendor;
-        _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
-        // _this.expense_types = data.user.expense_types;
-        // _this.sub_types = data.expense_type.sub_types;
+        _this.form.expense_type = data.expense_type; // this.form.sub_type = data.sub_type_id;
+        // this.expense_types = data.user.expense_types;
+        // this.sub_types = data.expense_type.sub_types;
 
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
         _this.form.tax_name = data.tax_name;
@@ -511,10 +511,10 @@ __webpack_require__.r(__webpack_exports__);
           _this.itemize = true;
           _this.items = data.details;
         } else {
-          // _this.itemize = false;
-          // _this.items = [];
+          // this.itemize = false;
+          // this.items = [];
           _this.form.amount = data.amount;
-        } // _this.sub_types.unshift({
+        } // this.sub_types.unshift({
         //     id: null,
         //     name: "None",
         //     limit: null

@@ -505,11 +505,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     getData: function getData() {
-      var _this2 = this;
-
       var _this = this;
 
-      axios.get("/api/payments/".concat(_this.$route.params.id)).then(function (response) {
+      axios.get("/api/payments/".concat(this.$route.params.id)).then(function (response) {
         var data = response.data.data;
         _this.code = data.code;
         _this.reference_no = data.reference_no;
@@ -525,8 +523,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.remarks = data.remarks;
         _this.notes = data.notes;
         _this.items = data.expense_reports;
-        _this.user = "".concat(data.last_name, ", ").concat(data.first_name, " ").concat(data.middle_name); // _this.selected.splice(0, 0, ...data.expenses);
-        // _this.loadExpenses(data.user.id);
+        _this.user = "".concat(data.last_name, ", ").concat(data.first_name, " ").concat(data.middle_name); // this.selected.splice(0, 0, ...data.expenses);
+        // this.loadExpenses(data.user.id);
 
         _this.form.amount = data.amount;
         _this.form.cheque_date = data.cheque_date;
@@ -534,7 +532,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.code = data.code;
         _this.form.date = data.date;
         _this.form.description = data.description;
-        _this.form.user = data.user; // _this.form.expense_reports = data.expense_reports;
+        _this.form.user = data.user; // this.form.expense_reports = data.expense_reports;
 
         _this.form.notes = data.notes;
         _this.form.reference_no = data.reference_no;
@@ -551,9 +549,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.cancelled = data.cancelled;
         _this.form.logs = data.logs;
 
-        _this2.getDataFromApi().then(function (data) {
-          _this2.items = data.items;
-          _this2.totalItems = data.total;
+        _this.getDataFromApi().then(function (data) {
+          _this.items = data.items;
+          _this.totalItems = data.total;
         });
 
         _this.loader = false;
@@ -567,20 +565,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     getDataFromApi: function getDataFromApi() {
-      var _this3 = this;
+      var _this2 = this;
 
-      var _this = this;
-
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this3$options = _this3.options,
-            sortBy = _this3$options.sortBy,
-            sortDesc = _this3$options.sortDesc,
-            page = _this3$options.page,
-            itemsPerPage = _this3$options.itemsPerPage;
-        var user_id = _this.form.user.id;
-        var range = _this.date_range;
-        var payment_id = _this3.$route.params.id;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
+        var user_id = _this2.form.user.id;
+        var range = _this2.date_range;
+        var payment_id = _this2.$route.params.id;
         axios.get("/api/expense_reports", {
           params: {
             sortBy: sortBy[0],
@@ -596,7 +592,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
+          _this2.loading = false;
           resolve({
             items: items,
             total: total
@@ -605,38 +601,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(error);
           console.log(error.response);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
 
-          _this.loading = false;
+          _this2.loading = false;
         });
       });
     },
     cancelPayment: function cancelPayment() {
-      var _this = this;
+      var _this3 = this;
 
       this.$confirm("Do you want to cancel this payment?").then(function (res) {
         if (res) {
-          _this.loader = true;
+          _this3.loader = true;
           axios({
             method: "delete",
-            url: "/api/payments/".concat(_this.$route.params.id),
+            url: "/api/payments/".concat(_this3.$route.params.id),
             data: {
-              ids: [_this.$route.params.id]
+              ids: [_this3.$route.params.id]
             }
           }).then(function (response) {
-            _this.$dialog.message.success(response.data.message, {
+            _this3.$dialog.message.success(response.data.message, {
               position: "top-right",
               timeout: 2000
             });
 
-            _this.$router.push({
+            _this3.$router.push({
               name: "user.payments.index"
             });
           })["catch"](function (error) {
             console.log(error);
             console.log(error.response);
 
-            _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
           });
         }
       });

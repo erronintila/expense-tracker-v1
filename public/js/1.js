@@ -141,17 +141,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
-
       var _this = this;
 
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
+        var _this$options = _this.options,
+            sortBy = _this$options.sortBy,
+            sortDesc = _this$options.sortDesc,
+            page = _this$options.page,
+            itemsPerPage = _this$options.itemsPerPage;
 
         var search = _this.filters.search.trim().toLowerCase();
 
@@ -164,10 +162,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         var data = {};
 
-        if (_this2.usersParameters) {
-          if (_this2.usersParameters.params) {
+        if (_this.usersParameters) {
+          if (_this.usersParameters.params) {
             data = {
-              params: _objectSpread(_objectSpread({}, params), _this2.usersParameters.params)
+              params: _objectSpread(_objectSpread({}, params), _this.usersParameters.params)
             };
           } else {
             data = {
@@ -228,21 +226,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this2 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.collections.items = data.data;
-          _this3.meta = data.meta;
+          _this2.collections.items = data.data;
+          _this2.meta = data.meta;
         });
       },
       deep: true
     },
     dialog: function dialog() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.getDataFromApi().then(function (data) {
-        _this4.collections.items = data.data;
-        _this4.meta = data.meta;
+        _this3.collections.items = data.data;
+        _this3.meta = data.meta;
       });
     }
   },
@@ -266,11 +264,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    var _this5 = this;
+    var _this4 = this;
 
     this.getDataFromApi().then(function (data) {
-      _this5.collections.items = data.data;
-      _this5.meta = data.meta;
+      _this4.collections.items = data.data;
+      _this4.meta = data.meta;
     });
   }
 });

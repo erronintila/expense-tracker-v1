@@ -226,22 +226,22 @@ __webpack_require__.r(__webpack_exports__);
     onCreateVendor: function onCreateVendor() {
       var _this = this;
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
-      if (_this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         axios.post("/api/vendors", {
-          code: _this.form.code,
-          name: _this.form.name,
-          email: _this.form.email,
-          tin: _this.form.tin == "N/A" ? null : _this.form.tin,
-          contact_person: _this.form.contact_person,
-          mobile_number: _this.form.mobile_number,
-          telephone_number: _this.form.telephone_number,
-          remarks: _this.form.remarks,
-          website: _this.form.website,
-          is_vat_inclusive: _this.form.is_vat_inclusive,
-          address: _this.form.address,
-          expense_types: _this.selected_expense_types
+          code: this.form.code,
+          name: this.form.name,
+          email: this.form.email,
+          tin: this.form.tin == "N/A" ? null : this.form.tin,
+          contact_person: this.form.contact_person,
+          mobile_number: this.form.mobile_number,
+          telephone_number: this.form.telephone_number,
+          remarks: this.form.remarks,
+          website: this.form.website,
+          is_vat_inclusive: this.form.is_vat_inclusive,
+          address: this.form.address,
+          expense_types: this.selected_expense_types
         }).then(function (response) {
           _this.$dialog.message.success("Vendor created successfully.", {
             position: "top-right",
@@ -425,17 +425,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
-      var _this2 = this;
-
       var _this = this;
 
-      _this.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this2$options = _this2.options,
-            sortBy = _this2$options.sortBy,
-            sortDesc = _this2$options.sortDesc,
-            page = _this2$options.page,
-            itemsPerPage = _this2$options.itemsPerPage;
+        var _this$options = _this.options,
+            sortBy = _this$options.sortBy,
+            sortDesc = _this$options.sortDesc,
+            page = _this$options.page,
+            itemsPerPage = _this$options.itemsPerPage;
 
         var search = _this.filters.search.trim().toLowerCase();
 
@@ -448,10 +446,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         var data = {};
 
-        if (_this2.vendorsParameters) {
-          if (_this2.vendorsParameters.params) {
+        if (_this.vendorsParameters) {
+          if (_this.vendorsParameters.params) {
             data = {
-              params: _objectSpread(_objectSpread({}, params), _this2.vendorsParameters.params)
+              params: _objectSpread(_objectSpread({}, params), _this.vendorsParameters.params)
             };
           } else {
             data = {
@@ -508,21 +506,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this3 = this;
+        var _this2 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.collections.items = data.data;
-          _this3.meta = data.meta;
+          _this2.collections.items = data.data;
+          _this2.meta = data.meta;
         });
       },
       deep: true
     },
     dialog: function dialog() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.getDataFromApi().then(function (data) {
-        _this4.collections.items = data.data;
-        _this4.meta = data.meta;
+        _this3.collections.items = data.data;
+        _this3.meta = data.meta;
       });
     }
   },
@@ -546,11 +544,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    var _this5 = this;
+    var _this4 = this;
 
     this.getDataFromApi().then(function (data) {
-      _this5.collections.items = data.data;
-      _this5.meta = data.meta;
+      _this4.collections.items = data.data;
+      _this4.meta = data.meta;
     });
   }
 });

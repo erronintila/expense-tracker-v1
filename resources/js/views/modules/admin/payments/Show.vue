@@ -422,12 +422,8 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
 
 export default {
-    components: {
-        DateRangePicker
-    },
     data() {
         return {
             loading: true,
