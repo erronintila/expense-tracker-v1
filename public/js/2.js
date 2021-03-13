@@ -252,10 +252,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.openDialog = false;
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.mixin_showErrors(error);
 
           _this.errors = error.response.data.errors;
         });
@@ -466,8 +463,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           resolve(response.data);
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
+          _this.mixin_showErrors(error);
+
           reject();
         })["finally"](function () {
           _this.loading = false;
@@ -1256,7 +1253,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
-      console.log(this.form);
       var expense_type_limit = this.form.expense_type ? this.form.expense_type.limit : null;
       var sub_type_limit = this.form.sub_type ? this.form.sub_type.limit : null;
       var expense_limit = sub_type_limit ? sub_type_limit : expense_type_limit;

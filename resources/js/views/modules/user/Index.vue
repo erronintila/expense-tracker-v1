@@ -355,7 +355,6 @@ export default {
                     }?action=${"read"}&type=${"single"}`
                 )
                 .then(response => {
-                    console.log(response);
                     this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                     window.location.replace(
@@ -364,8 +363,7 @@ export default {
                     // this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         toProfile() {

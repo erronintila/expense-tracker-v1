@@ -1169,14 +1169,7 @@ export default {
                     })
                     .catch(error => {
                         reject();
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
                     });
             });
         },
@@ -1238,14 +1231,7 @@ export default {
                     this.loader = false;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
+                    this.mixin_showErrors(error);
                     this.loader = false;
                 });
         },
@@ -1254,9 +1240,6 @@ export default {
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-                console.log(this.options);
-
                 let range = [this.form.from, this.form.to];
                 let expense_report_id = this.router_params_id;
 
@@ -1281,14 +1264,7 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        this.mixin_showErrors(error);
                         this.loading = false;
                     });
             });
@@ -1354,6 +1330,6 @@ export default {
     deactivated() {
         this.form.expenses = [];
         Object.assign(this.$data.form, this.$options.data());
-    },
+    }
 };
 </script>

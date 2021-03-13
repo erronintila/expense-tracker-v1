@@ -664,7 +664,6 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
-            console.log(this.form);
             let expense_type_limit = this.form.expense_type
                 ? this.form.expense_type.limit
                 : null;

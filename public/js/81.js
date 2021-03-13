@@ -551,10 +551,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this.loader = false;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
 
         _this.loader = false;
       });
@@ -593,10 +590,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this2.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_showErrors(error);
 
           _this2.loading = false;
         });
@@ -624,10 +618,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               name: "user.payments.index"
             });
           })["catch"](function (error) {
-            console.log(error);
-            console.log(error.response);
-
-            _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+            _this3.mixin_showErrors(error);
           });
         }
       });

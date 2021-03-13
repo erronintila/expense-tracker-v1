@@ -604,13 +604,7 @@ export default {
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_expense_types_expenses(start, end, user) {
@@ -651,13 +645,7 @@ export default {
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    // this.mixin_errorDialog(
-                    //     `Error ${error.response.status}`,
-                    //     error.response.statusText
-                    // );
+                    this.mixin_showErrors(error);
                 });
         },
         load_users_expenses(start, end, user) {
@@ -698,13 +686,7 @@ export default {
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_expenses_summary(start, end, time_unit, user) {
@@ -767,13 +749,7 @@ export default {
                     );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    // this.mixin_errorDialog(
-                    //     `Error ${error.response.status}`,
-                    //     error.response.statusText
-                    // );
+                    this.mixin_showErrors(error);
                 });
         },
         load_bar_chart() {
@@ -1058,14 +1034,7 @@ export default {
                     );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
+                    this.mixin_showErrors(error);
                     this.loader = true;
                 });
         }

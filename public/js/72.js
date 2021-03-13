@@ -1012,10 +1012,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         })["catch"](function (error) {
           reject();
-          console.log(error);
-          console.log(error.response);
 
-          _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_showErrors(error);
         });
       });
     },
@@ -1068,10 +1066,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this4.loader = false;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this4.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this4.mixin_showErrors(error);
 
         _this4.loader = false;
       });
@@ -1086,7 +1081,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortDesc = _this5$options.sortDesc,
             page = _this5$options.page,
             itemsPerPage = _this5$options.itemsPerPage;
-        console.log(_this5.options);
         var range = [_this5.form.from, _this5.form.to];
         var expense_report_id = _this5.router_params_id;
         axios.get("/api/expenses", {
@@ -1108,10 +1102,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             total: total
           });
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this5.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this5.mixin_showErrors(error);
 
           _this5.loading = false;
         });

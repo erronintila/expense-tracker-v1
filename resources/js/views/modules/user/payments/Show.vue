@@ -484,14 +484,7 @@ export default {
                     this.loader = false;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
+                    this.mixin_showErrors(error);
                     this.loader = false;
                 });
         },
@@ -528,14 +521,7 @@ export default {
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        this.mixin_showErrors(error);
                         this.loading = false;
                     });
             });
@@ -566,13 +552,7 @@ export default {
                             });
                         })
                         .catch(error => {
-                            console.log(error);
-                            console.log(error.response);
-
-                            this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                            this.mixin_showErrors(error);
                         });
                 }
             });

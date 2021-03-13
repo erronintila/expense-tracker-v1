@@ -135,10 +135,9 @@ __webpack_require__.r(__webpack_exports__);
             }
           });
         })["catch"](function (error) {
-          console.log(error.response);
-          _this.errors = error.response.data.errors;
+          _this.mixin_showErrors(error);
 
-          _this.mixin_errorDialog(error.response.status, error.response.statusText);
+          _this.errors = error.response.data.errors;
         });
       }
     }

@@ -60,6 +60,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getDataFromApi: function getDataFromApi() {
+      var _this = this;
+
       return new Promise(function (resolve, reject) {
         _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
           params: {
@@ -68,7 +70,8 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           resolve(response.data);
         })["catch"](function (error) {
-          console.log(error);
+          _this.mixin_showErrors(error);
+
           reject();
         });
       });
@@ -92,20 +95,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this.departments = data.data;
-
-      if (_this.showAll) {
-        _this.departments.unshift({
-          id: null,
-          name: "All Departments"
-        });
-      }
-    });
-  },
-  activated: function activated() {
     var _this2 = this;
 
     this.getDataFromApi().then(function (data) {
@@ -113,6 +102,20 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_this2.showAll) {
         _this2.departments.unshift({
+          id: null,
+          name: "All Departments"
+        });
+      }
+    });
+  },
+  activated: function activated() {
+    var _this3 = this;
+
+    this.getDataFromApi().then(function (data) {
+      _this3.departments = data.data;
+
+      if (_this3.showAll) {
+        _this3.departments.unshift({
           id: null,
           name: "All Departments"
         });
@@ -206,7 +209,8 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           resolve(response.data);
         })["catch"](function (error) {
-          console.log(error);
+          _this.mixin_showErrors(error);
+
           reject();
         });
       });

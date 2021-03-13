@@ -125,13 +125,8 @@ export default {
                         });
                     })
                     .catch(error => {
-                        console.log(error.response);
-
+                        this.mixin_showErrors(error);
                         this.errors = error.response.data.errors;
-                        this.mixin_errorDialog(
-                            error.response.status,
-                            error.response.statusText
-                        );
                     });
             }
         }

@@ -127,7 +127,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/jobs/".concat(this.form.job.id)).then(function (response) {
         _this2.form.job = response.data.data;
       })["catch"](function (error) {
-        console.log(error);
+        _this2.mixin_showErrors(error);
+
         reject();
       });
     },

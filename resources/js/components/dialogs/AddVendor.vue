@@ -241,21 +241,12 @@ export default {
                             }
                         );
                         this.$emit("createdVendor");
-
                         this.openDialog = false;
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        this.mixin_showErrors(error);
                         this.errors = error.response.data.errors;
                     });
-
                 return;
             }
         }

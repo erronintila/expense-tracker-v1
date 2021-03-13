@@ -605,10 +605,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
@@ -643,11 +640,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response); // this.mixin_errorDialog(
-        //     `Error ${error.response.status}`,
-        //     error.response.statusText
-        // );
+        _this2.mixin_showErrors(error);
       });
     },
     load_users_expenses: function load_users_expenses(start, end, user) {
@@ -682,10 +675,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this3.mixin_showErrors(error);
       });
     },
     load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
@@ -741,11 +731,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this4.updateLineChartValues(_this4.lineChart_labels, _this4.lineChart_data);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response); // this.mixin_errorDialog(
-        //     `Error ${error.response.status}`,
-        //     error.response.statusText
-        // );
+        _this4.mixin_showErrors(error);
       });
     },
     load_bar_chart: function load_bar_chart() {
@@ -974,10 +960,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this6.load_expenses_summary(_this6.date_range[0], _this6.date_range[1], _this6.groupBy, _this6.user.id);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this6.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this6.mixin_showErrors(error);
 
         _this6.loader = true;
       });

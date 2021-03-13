@@ -371,14 +371,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.put("/api/notifications/".concat(item.id, "?action=", "read", "&type=", "single")).then(function (response) {
-        console.log(response);
-
         _this.$store.dispatch("AUTH_NOTIFICATIONS");
 
         window.location.replace("/".concat(item.data.data.model, "/").concat(item.data.data.id)); // this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this.mixin_showErrors(error);
       });
     },
     toProfile: function toProfile() {

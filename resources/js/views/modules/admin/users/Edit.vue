@@ -117,7 +117,7 @@ export default {
                     this.form.job = response.data.data;
                 })
                 .catch(error => {
-                    console.log(error);
+                    this.mixin_showErrors(error);
                     reject();
                 });
         },

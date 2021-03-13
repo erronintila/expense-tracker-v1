@@ -588,10 +588,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this2.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_showErrors(error);
 
           _this2.errors = error.response.data.errors;
         });
@@ -617,10 +614,7 @@ __webpack_require__.r(__webpack_exports__);
           _this3.password = "";
           _this3.password_confirmation = "";
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this3.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {

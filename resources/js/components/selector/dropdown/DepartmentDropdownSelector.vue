@@ -56,7 +56,7 @@ export default {
                         resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
+                        this.mixin_showErrors(error);
                         reject();
                     });
             });
