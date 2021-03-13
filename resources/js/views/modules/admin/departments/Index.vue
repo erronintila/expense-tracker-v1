@@ -249,7 +249,8 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         reject();
-                    }).finally(this.loading = false);
+                    })
+                    .finally(this.loading = false);
             });
         },
         onRefresh() {

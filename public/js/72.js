@@ -1011,9 +1011,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             items: items
           });
         })["catch"](function (error) {
-          reject();
-
           _this3.mixin_showErrors(error);
+
+          reject();
         });
       });
     },

@@ -1168,8 +1168,8 @@ export default {
                         resolve({ items });
                     })
                     .catch(error => {
-                        reject();
                         this.mixin_showErrors(error);
+                        reject();
                     });
             });
         },
