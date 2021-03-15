@@ -503,11 +503,13 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -554,7 +556,6 @@ export default {
                         );
                         this.$store.dispatch("AUTH_NOTIFICATIONS");
                         this.$router.push({ name: "admin.payments.index" });
-                        this.formDataLoaded = true;
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
@@ -581,18 +582,25 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         },
         selected() {
             this.totalAmount = this.mixin_formatNumber(
                 this.selected.reduce((total, item) => total + item.total, 0)
             );
+        },
+        "form.user": function() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
         }
     }
 };

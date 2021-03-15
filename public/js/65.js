@@ -241,11 +241,13 @@ __webpack_require__.r(__webpack_exports__);
           _this.form.reimbursable_amount = data.reimbursable_amount;
           _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
           _this.loading = false;
+          _this.formDataLoaded = true;
           resolve();
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
           _this.loading = false;
+          _this.formDataLoaded = true;
           reject();
         });
       });
@@ -295,10 +297,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getData().then(this.formDataLoaded = true);
+    this.getData();
   },
   activated: function activated() {
-    this.getData().then(this.formDataLoaded = true);
+    this.getData();
   }
 });
 

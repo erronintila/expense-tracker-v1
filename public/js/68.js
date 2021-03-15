@@ -119,53 +119,53 @@ var render = function() {
   return _c(
     "div",
     [
-      !_vm.formDataLoaded
-        ? _c("loader-component")
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0" },
+      !_vm.formDataLoaded ? _c("loader-component") : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-card",
+        { staticClass: "elevation-0  pt-0" },
+        [
+          _c(
+            "v-card-title",
+            { staticClass: "pt-0" },
             [
               _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "title success--text" }, [
-                    _vm._v("New Employee")
-                  ])
-                ],
+                "v-btn",
+                {
+                  staticClass: "mr-3",
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.go(-1)
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-container",
-                [
-                  _c("Form", {
-                    attrs: { errors: _vm.errors },
-                    on: { "on-save": _vm.onSave }
-                  })
-                ],
-                1
-              )
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("h4", { staticClass: "title success--text" }, [
+                _vm._v("New Employee")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _c("Form", {
+                attrs: { errors: _vm.errors },
+                on: { "on-save": _vm.onSave }
+              })
             ],
             1
           )
+        ],
+        1
+      )
     ],
     1
   )

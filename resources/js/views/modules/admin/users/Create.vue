@@ -1,7 +1,7 @@
 <template>
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
-        <v-card v-else class="elevation-0">
+        <v-card class="elevation-0  pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -51,8 +51,7 @@ export default {
     methods: {
         onSave(value) {
             let fund = 0;
-            let is_administrator =
-                value.role == "Administrator" ? true : false;
+            let is_administrator = value.role == "Administrator" ? true : false;
 
             if (value.has_fund) {
                 fund = value.fund == "" ? 0 : value.fund;

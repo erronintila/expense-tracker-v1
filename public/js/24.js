@@ -540,6 +540,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var items = response.data.data;
           var total = response.data.meta.total;
           _this3.loading = false;
+          _this3.formDataLoaded = true;
           resolve({
             items: items,
             total: total
@@ -548,6 +549,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this3.mixin_showErrors(error);
 
           _this3.loading = false;
+          _this3.formDataLoaded = true;
           reject();
         });
       });
@@ -595,8 +597,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.$router.push({
             name: "admin.payments.index"
           });
-
-          _this4.formDataLoaded = true;
         })["catch"](function (error) {
           _this4.mixin_showErrors(error);
 
@@ -621,6 +621,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     params: {
+      immediate: true,
+      deep: true,
       handler: function handler() {
         var _this5 = this;
 
@@ -628,13 +630,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this5.items = data.items;
           _this5.totalItems = data.total;
         });
-      },
-      deep: true
+      }
     },
     selected: function selected() {
       this.totalAmount = this.mixin_formatNumber(this.selected.reduce(function (total, item) {
         return total + item.total;
       }, 0));
+    },
+    "form.user": function formUser() {
+      var _this6 = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this6.items = data.items;
+        _this6.totalItems = data.total;
+      });
     }
   }
 });

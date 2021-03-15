@@ -219,11 +219,13 @@ export default {
                         this.form.user.remaining_fund +=
                             data.amount - data.reimbursable_amount;
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve();
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -274,10 +276,10 @@ export default {
         }
     },
     created() {
-        this.getData().then((this.formDataLoaded = true));
+        this.getData();
     },
     activated() {
-        this.getData().then((this.formDataLoaded = true));
+        this.getData();
     }
 };
 </script>
