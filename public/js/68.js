@@ -29,20 +29,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      loader: false,
+      formDataLoaded: true,
       errors: {
         code: [],
         first_name: [],
@@ -84,6 +70,7 @@ __webpack_require__.r(__webpack_exports__);
         fund = value.fund == "" ? 0 : value.fund;
       }
 
+      this.formDataLoaded = false;
       value.fund = fund;
       value.remaining_fund = fund;
       value.password = "password";
@@ -95,7 +82,7 @@ __webpack_require__.r(__webpack_exports__);
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(value).then(function (response) {
         _this.mixin_successDialog(response.data.status, response.data.message);
 
-        _this.loader = false;
+        _this.formDataLoaded = true;
         window.location.replace("/admin/users");
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
@@ -106,7 +93,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
 
-        _this.loader = false;
+        _this.formDataLoaded = true;
       });
     }
   }
@@ -132,52 +119,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0" },

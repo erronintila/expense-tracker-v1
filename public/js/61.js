@@ -87,6 +87,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -244,183 +245,192 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Edit Expense Report")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Expense Report")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-container",
-            [
-              _vm.formDataLoaded
-                ? _c("Form", {
-                    attrs: {
-                      expenseReportForm: _vm.form,
-                      expenseReportErrors: _vm.errors,
-                      expenseReportRules: _vm.rules,
-                      expense_report_id: _vm.expense_report_id
-                    },
-                    on: { "on-save": _vm.onSave },
-                    scopedSlots: _vm._u(
-                      [
-                        {
-                          key: "userSelector",
-                          fn: function() {
-                            return [
-                              _c(
-                                "v-row",
-                                [
+              _c(
+                "v-container",
+                [
+                  _vm.formDataLoaded
+                    ? _c("Form", {
+                        attrs: {
+                          expenseReportForm: _vm.form,
+                          expenseReportErrors: _vm.errors,
+                          expenseReportRules: _vm.rules,
+                          expense_report_id: _vm.expense_report_id
+                        },
+                        on: { "on-save": _vm.onSave },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "userSelector",
+                              fn: function() {
+                                return [
                                   _c(
-                                    "v-col",
+                                    "v-row",
                                     [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          value: _vm.form.user
-                                            ? _vm.form.user.full_name
-                                            : "No Employee",
-                                          "error-messages": _vm.errors.user_id,
-                                          label: "Employee",
-                                          readonly: ""
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            _vm.errors.user_id = []
-                                          }
-                                        },
-                                        scopedSlots: _vm._u(
-                                          [
-                                            {
-                                              key: "append",
-                                              fn: function() {
-                                                return [
-                                                  _c("UserDialogSelector", {
-                                                    ref: "userDialogSelector",
-                                                    attrs: {
-                                                      selectedUser:
-                                                        _vm.form.user,
-                                                      usersParameters:
-                                                        _vm.usersParameters
-                                                    },
-                                                    on: {
-                                                      selectUser:
-                                                        _vm.selectUser,
-                                                      onReset: _vm.resetUser
-                                                    },
-                                                    scopedSlots: _vm._u(
-                                                      [
-                                                        {
-                                                          key: "openDialog",
-                                                          fn: function(ref) {
-                                                            var bind = ref.bind
-                                                            var on = ref.on
-                                                            return [
-                                                              _c(
-                                                                "v-btn",
-                                                                _vm._g(
-                                                                  _vm._b(
-                                                                    {
-                                                                      attrs: {
-                                                                        fab: "",
-                                                                        color:
-                                                                          "primary",
-                                                                        text:
-                                                                          "",
-                                                                        "x-small":
-                                                                          ""
-                                                                      }
-                                                                    },
-                                                                    "v-btn",
-                                                                    bind,
-                                                                    false
-                                                                  ),
-                                                                  on
-                                                                ),
-                                                                [
+                                      _c(
+                                        "v-col",
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              value: _vm.form.user
+                                                ? _vm.form.user.full_name
+                                                : "No Employee",
+                                              "error-messages":
+                                                _vm.errors.user_id,
+                                              label: "Employee",
+                                              readonly: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.user_id = []
+                                              }
+                                            },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "append",
+                                                  fn: function() {
+                                                    return [
+                                                      _c("UserDialogSelector", {
+                                                        ref:
+                                                          "userDialogSelector",
+                                                        attrs: {
+                                                          selectedUser:
+                                                            _vm.form.user,
+                                                          usersParameters:
+                                                            _vm.usersParameters
+                                                        },
+                                                        on: {
+                                                          selectUser:
+                                                            _vm.selectUser,
+                                                          onReset: _vm.resetUser
+                                                        },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "openDialog",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var bind =
+                                                                  ref.bind
+                                                                var on = ref.on
+                                                                return [
                                                                   _c(
-                                                                    "v-icon",
-                                                                    {
-                                                                      attrs: {
-                                                                        dark: ""
-                                                                      }
-                                                                    },
+                                                                    "v-btn",
+                                                                    _vm._g(
+                                                                      _vm._b(
+                                                                        {
+                                                                          attrs: {
+                                                                            fab:
+                                                                              "",
+                                                                            color:
+                                                                              "primary",
+                                                                            text:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        "v-btn",
+                                                                        bind,
+                                                                        false
+                                                                      ),
+                                                                      on
+                                                                    ),
                                                                     [
-                                                                      _vm._v(
-                                                                        "mdi-magnify"
+                                                                      _c(
+                                                                        "v-icon",
+                                                                        {
+                                                                          attrs: {
+                                                                            dark:
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _vm._v(
+                                                                            "mdi-magnify"
+                                                                          )
+                                                                        ]
                                                                       )
-                                                                    ]
+                                                                    ],
+                                                                    1
                                                                   )
-                                                                ],
-                                                                1
-                                                              )
-                                                            ]
-                                                          }
-                                                        }
-                                                      ],
-                                                      null,
-                                                      false,
-                                                      2729772431
-                                                    )
-                                                  })
-                                                ]
-                                              },
-                                              proxy: true
-                                            }
-                                          ],
-                                          null,
-                                          false,
-                                          4251958511
-                                        )
-                                      })
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          false,
+                                                          2729772431
+                                                        )
+                                                      })
+                                                    ]
+                                                  },
+                                                  proxy: true
+                                                }
+                                              ],
+                                              null,
+                                              false,
+                                              4251958511
+                                            )
+                                          })
+                                        ],
+                                        1
+                                      )
                                     ],
                                     1
                                   )
-                                ],
-                                1
-                              )
-                            ]
-                          },
-                          proxy: true
-                        }
-                      ],
-                      null,
-                      false,
-                      2473804440
-                    )
-                  })
-                : _vm._e()
+                                ]
+                              },
+                              proxy: true
+                            }
+                          ],
+                          null,
+                          false,
+                          2473804440
+                        )
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

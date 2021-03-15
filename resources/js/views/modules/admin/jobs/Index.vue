@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Job Designations</h4>
 
@@ -249,6 +250,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             collections: {
                 selected: [],
@@ -314,11 +316,13 @@ export default {
                 JobDataService.getAll(data)
                     .then(response => {
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -414,13 +418,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.collections.items = data.data;
                     this.meta = data.meta;
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

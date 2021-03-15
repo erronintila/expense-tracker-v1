@@ -205,9 +205,17 @@
                         <router-view></router-view>
                     </keep-alive> -->
                     <keep-alive>
-                        <router-view v-if="$route.meta.keepAlive"></router-view>
+                        <transition name="fade" mode="out-in">
+                            <router-view
+                                v-if="$route.meta.keepAlive"
+                            ></router-view>
+                        </transition>
                     </keep-alive>
-                    <router-view v-if="!$route.meta.keepAlive"></router-view>
+                    <transition name="fade" mode="out-in">
+                        <router-view
+                            v-if="!$route.meta.keepAlive"
+                        ></router-view>
+                    </transition>
                 </v-col>
             </v-row>
             <!-- </v-container> -->
@@ -511,3 +519,21 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+#app {
+    overflow: hidden;
+    width: 100vw;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+    /* transform: translateX(2em); */
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.3s ease;
+}
+</style>

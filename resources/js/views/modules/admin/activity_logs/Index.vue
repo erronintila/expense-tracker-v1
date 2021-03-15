@@ -298,13 +298,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.collections.activityLogs = data.data;
                     this.meta = data.meta;
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

@@ -94,20 +94,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -123,7 +109,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       formDataLoaded: false,
-      loader: true,
       usersParameters: {
         params: {
           with_expense_types: true
@@ -279,8 +264,6 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave(value) {
       var _this2 = this;
 
-      this.loader = true;
-
       if (value.vendor) {
         if (!value.vendor.is_vat_inclusive) {
           value.tax_rate = 0;
@@ -339,52 +322,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0 pt-0" },

@@ -142,11 +142,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       valid: false,
+      formDataLoaded: false,
       adjustment_type: "Add Amount",
       user: {
         id: null,
@@ -176,8 +178,11 @@ __webpack_require__.r(__webpack_exports__);
 
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {
         _this.user = response.data.data;
+        _this.formDataLoaded = true;
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
+
+        _this.formDataLoaded = true;
       });
     },
     onSave: function onSave() {
@@ -254,275 +259,282 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Edit Revolving Fund")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Revolving Fund")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
-            [
               _c(
-                "v-container",
+                "v-form",
+                {
+                  ref: "form",
+                  model: {
+                    value: _vm.valid,
+                    callback: function($$v) {
+                      _vm.valid = $$v
+                    },
+                    expression: "valid"
+                  }
+                },
                 [
                   _c(
-                    "v-row",
+                    "v-container",
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-row",
                         [
-                          _c("v-select", {
-                            attrs: {
-                              label: "Adjustment Type",
-                              items: ["Add Amount", "Subtract Amount"]
-                            },
-                            model: {
-                              value: _vm.adjustment_type,
-                              callback: function($$v) {
-                                _vm.adjustment_type = $$v
-                              },
-                              expression: "adjustment_type"
-                            }
-                          })
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  label: "Adjustment Type",
+                                  items: ["Add Amount", "Subtract Amount"]
+                                },
+                                model: {
+                                  value: _vm.adjustment_type,
+                                  callback: function($$v) {
+                                    _vm.adjustment_type = $$v
+                                  },
+                                  expression: "adjustment_type"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  rules: _vm.mixin_validation.minNumberValue(1),
+                                  label: "Amount",
+                                  type: "number"
+                                },
+                                model: {
+                                  value: _vm.amount,
+                                  callback: function($$v) {
+                                    _vm.amount = $$v
+                                  },
+                                  expression: "amount"
+                                }
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
+                        "v-row",
                         [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.minNumberValue(1),
-                              label: "Amount",
-                              type: "number"
-                            },
-                            model: {
-                              value: _vm.amount,
-                              callback: function($$v) {
-                                _vm.amount = $$v
-                              },
-                              expression: "amount"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c("v-col", { attrs: { cols: "12", md: "6" } }, [
-                        _vm._v(
-                          "\n                        Current Balance\n                        "
-                        ),
-                        _c("table", { staticClass: "ml-4" }, [
-                          _c("tbody", [
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Revolving Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "headline green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.user.fund)
-                                      ) +
-                                      "\n                                    "
+                          _c("v-col", { attrs: { cols: "12", md: "6" } }, [
+                            _vm._v(
+                              "\n                        Current Balance\n                        "
+                            ),
+                            _c("table", { staticClass: "ml-4" }, [
+                              _c("tbody", [
+                                _c("tr", [
+                                  _c("td", { staticClass: "headline" }, [
+                                    _vm._v(
+                                      "\n                                        Revolving Fund\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "headline green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.user.fund
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Remaining Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  staticClass:
-                                    "headline green--text text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.user.remaining_fund
-                                        )
-                                      ) +
-                                      "\n                                    "
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("td", { staticClass: "headline" }, [
+                                    _vm._v(
+                                      "\n                                        Remaining Fund\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "headline green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.user.remaining_fund
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
+                                ])
+                              ])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "6" } }, [
+                            _vm._v(
+                              "\n                        New Balance\n                        "
+                            ),
+                            _c("table", { staticClass: "ml-4" }, [
+                              _c("tbody", [
+                                _c("tr", [
+                                  _c("td", { staticClass: "headline" }, [
+                                    _vm._v(
+                                      "\n                                        Revolving Fund\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      class:
+                                        "headline " +
+                                        (_vm.new_fund < 0
+                                          ? "red--text"
+                                          : "green--text") +
+                                        " text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(_vm.new_fund)
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("td", { staticClass: "headline" }, [
+                                    _vm._v(
+                                      "\n                                        Remaining Fund\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      class:
+                                        "headline " +
+                                        (_vm.new_remaining_fund < 0
+                                          ? "red--text"
+                                          : "green--text") +
+                                        " text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.new_remaining_fund
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
                             ])
                           ])
-                        ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("small", { staticClass: "text--secondary" }, [
+                        _vm._v(
+                          "\n                    * indicates required field\n                "
+                        )
                       ]),
                       _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "6" } }, [
-                        _vm._v(
-                          "\n                        New Balance\n                        "
-                        ),
-                        _c("table", { staticClass: "ml-4" }, [
-                          _c("tbody", [
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Revolving Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  class:
-                                    "headline " +
-                                    (_vm.new_fund < 0
-                                      ? "red--text"
-                                      : "green--text") +
-                                    " text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(_vm.new_fund)
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("tr", [
-                              _c("td", { staticClass: "headline" }, [
-                                _vm._v(
-                                  "\n                                        Remaining Fund\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(":")]),
-                              _vm._v(" "),
-                              _c(
-                                "td",
-                                {
-                                  class:
-                                    "headline " +
-                                    (_vm.new_remaining_fund < 0
-                                      ? "red--text"
-                                      : "green--text") +
-                                    " text--darken-4 text-right"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(
-                                        _vm.mixin_formatNumber(
-                                          _vm.new_remaining_fund
-                                        )
-                                      ) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        ])
-                      ])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("small", { staticClass: "text--secondary" }, [
-                    _vm._v(
-                      "\n                    * indicates required field\n                "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("v-spacer"),
-                      _vm._v(" "),
                       _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green", dark: "" },
-                          on: { click: _vm.onSave }
-                        },
-                        [_vm._v("Save")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        { attrs: { to: { name: "admin.users.index" } } },
+                        "v-card-actions",
                         [
-                          _vm._v(
-                            "\n                        Cancel\n                    "
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "green", dark: "" },
+                              on: { click: _vm.onSave }
+                            },
+                            [_vm._v("Save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            { attrs: { to: { name: "admin.users.index" } } },
+                            [
+                              _vm._v(
+                                "\n                        Cancel\n                    "
+                              )
+                            ]
                           )
-                        ]
+                        ],
+                        1
                       )
                     ],
                     1
@@ -533,9 +545,6 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Notifications</h4>
                 <v-spacer></v-spacer>
@@ -286,6 +287,7 @@ export default {
     components: { DateRangePicker },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Date", value: "created_at" },
@@ -368,11 +370,13 @@ export default {
                 NotificationDataService.getAll(data)
                     .then(response => {
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -465,13 +469,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.data;
                     this.meta = data.meta;
                 });
-            },
-            deep: true
+            }
         },
         items() {
             this.totalAmount = this.mixin_formatNumber(

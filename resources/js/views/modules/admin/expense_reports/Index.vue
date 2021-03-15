@@ -1250,7 +1250,10 @@ export default {
             }
 
             if (item.status.status == "Paid/Reimbursed") {
-                this.mixin_errorDialog("Error", "Paid/reimbursed expense report can't be edited");
+                this.mixin_errorDialog(
+                    "Error",
+                    "Paid/reimbursed expense report can't be edited"
+                );
                 return;
             }
 
@@ -1265,7 +1268,10 @@ export default {
                     .map(item => item.status.status)
                     .includes("Cancelled")
             ) {
-                this.mixin_errorDialog("Error", "Report has already been cancelled");
+                this.mixin_errorDialog(
+                    "Error",
+                    "Report has already been cancelled"
+                );
                 return;
             }
 
@@ -1274,7 +1280,10 @@ export default {
                     .map(item => item.status.status)
                     .includes("Paid/Reimbursed")
             ) {
-                this.mixin_errorDialog("Error", "Paid/reimbursed expense reports can't be cancelled");
+                this.mixin_errorDialog(
+                    "Error",
+                    "Paid/reimbursed expense reports can't be cancelled"
+                );
                 return;
             }
 
@@ -1759,14 +1768,15 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                     this.formDataLoaded = true;
                 });
-            },
-            deep: true
+            }
         },
         items() {
             this.totalAmount = this.mixin_formatNumber(

@@ -26,6 +26,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -34,6 +37,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: true,
       errors: {
         name: []
       }
@@ -172,47 +176,55 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-card",
-    { staticClass: "elevation-0 pt-0" },
+    "div",
     [
-      _c(
-        "v-card-title",
-        { staticClass: "pt-0" },
-        [
-          _c(
-            "v-btn",
-            {
-              staticClass: "mr-3",
-              attrs: { icon: "" },
-              on: {
-                click: function($event) {
-                  return _vm.$router.go(-1)
-                }
-              }
-            },
-            [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("New Department")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: { errors: _vm.errors },
+                    on: { "on-save": _vm.onSave }
+                  })
+                ],
+                1
+              )
+            ],
             1
-          ),
-          _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c("h4", { staticClass: "title green--text" }, [
-            _vm._v("New Department")
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-container",
-        [
-          _c("Form", {
-            attrs: { errors: _vm.errors },
-            on: { "on-save": _vm.onSave }
-          })
-        ],
-        1
-      )
+          )
     ],
     1
   )

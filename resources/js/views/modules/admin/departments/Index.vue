@@ -1,32 +1,34 @@
 <template>
-    <v-card class="elevation-0 pt-0">
-        <v-card-title class="pt-0">
-            <h4 class="title green--text">Departments</h4>
+    <div>
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
+            <v-card-title class="pt-0">
+                <h4 class="title green--text">Departments</h4>
 
-            <v-spacer></v-spacer>
+                <v-spacer></v-spacer>
 
-            <v-tooltip bottom>
-                <template
-                    v-slot:activator="{ on, attrs }"
-                    v-if="mixin_can('add departments')"
-                >
-                    <v-btn
-                        class="elevation-3 mr-2"
-                        color="green"
-                        :to="{ name: 'admin.departments.create' }"
-                        dark
-                        fab
-                        x-small
-                        v-bind="attrs"
-                        v-on="on"
+                <v-tooltip bottom>
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add departments')"
                     >
-                        <v-icon dark>mdi-plus</v-icon>
-                    </v-btn>
-                </template>
-                <span>Add New</span>
-            </v-tooltip>
+                        <v-btn
+                            class="elevation-3 mr-2"
+                            color="green"
+                            :to="{ name: 'admin.departments.create' }"
+                            dark
+                            fab
+                            x-small
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon dark>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Add New</span>
+                </v-tooltip>
 
-            <!-- <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                 <template v-slot:activator="{ on: menu, attrs }">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on: tooltip }">
@@ -66,128 +68,134 @@
                     </v-list-item>
                 </v-list>
             </v-menu> -->
-        </v-card-title>
+            </v-card-title>
 
-        <v-row class="ml-4">
-            <v-chip
-                color="green"
-                dark
-                v-if="selected.length > 0"
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="selected = []"
-                close-icon="mdi-close"
-            >
-                {{ selected.length }} Selected
-            </v-chip>
-            <v-menu
-                transition="scale-transition"
-                :close-on-content-click="false"
-                :nudge-width="200"
-                offset-y
-                right
-                bottom
-            >
-                <template v-slot:activator="{ on: menu, attrs }">
-                    <v-chip class="mr-2 mb-2" small v-bind="attrs" v-on="menu">
-                        {{ status }}
-                    </v-chip>
-                </template>
-                <v-card>
-                    <v-list>
-                        <v-list-item>
-                            <v-select
-                                v-model="status"
-                                :items="statuses"
-                                label="Status"
-                            ></v-select>
-                        </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-menu>
+            <v-row class="ml-4">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
+                </v-chip>
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip
+                            class="mr-2 mb-2"
+                            small
+                            v-bind="attrs"
+                            v-on="menu"
+                        >
+                            {{ status }}
+                        </v-chip>
+                    </template>
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
 
-            <v-chip
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="onRefresh"
-                close-icon="mdi-refresh"
-            >
-                Refresh
-            </v-chip>
+                <v-chip
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
+                    Refresh
+                </v-chip>
 
-            <v-chip
-                v-show="selected.length > 0 && status == 'Archived'"
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="onRestore"
-                close-icon="mdi-history"
-                color="green"
-            >
-                Restore
-            </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                >
+                    Restore
+                </v-chip>
 
-            <v-chip
-                v-show="selected.length > 0 && status == 'Active'"
-                close
-                class="mr-2 mb-2"
-                small
-                @click:close="onDelete"
-                close-icon="mdi-trash-can-outline"
-                color="red"
-            >
-                Archive
-            </v-chip>
-        </v-row>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                >
+                    Archive
+                </v-chip>
+            </v-row>
 
-        <v-card-subtitle>
-            <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field>
-        </v-card-subtitle>
+            <v-card-subtitle>
+                <v-text-field
+                    v-model="search"
+                    append-icon="mdi-magnify"
+                    label="Search"
+                    single-line
+                    hide-details
+                ></v-text-field>
+            </v-card-subtitle>
 
-        <v-card-text>
-            <v-data-table
-                v-model="selected"
-                show-select
-                item-key="id"
-                class="elevation-0"
-                :headers="headers"
-                :items="items"
-                :loading="loading"
-                :options.sync="options"
-                :server-items-length="totalItems"
-                :footer-props="{
-                    itemsPerPageOptions: [10, 20, 50, 100],
-                    showFirstLastPage: true,
-                    firstIcon: 'mdi-page-first',
-                    lastIcon: 'mdi-page-last',
-                    prevIcon: 'mdi-chevron-left',
-                    nextIcon: 'mdi-chevron-right'
-                }"
-            >
-                <template v-slot:[`item.actions`]="{ item }">
-                    <!-- <v-icon small class="mr-2" @click="onShow(item)">
+            <v-card-text>
+                <v-data-table
+                    v-model="selected"
+                    show-select
+                    item-key="id"
+                    class="elevation-0"
+                    :headers="headers"
+                    :items="items"
+                    :loading="loading"
+                    :options.sync="options"
+                    :server-items-length="totalItems"
+                    :footer-props="{
+                        itemsPerPageOptions: [10, 20, 50, 100],
+                        showFirstLastPage: true,
+                        firstIcon: 'mdi-page-first',
+                        lastIcon: 'mdi-page-last',
+                        prevIcon: 'mdi-chevron-left',
+                        nextIcon: 'mdi-chevron-right'
+                    }"
+                >
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <!-- <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon> -->
-                    <v-icon
-                        small
-                        class="mr-2"
-                        @click="onEdit(item)"
-                        v-if="mixin_can('edit departments')"
-                    >
-                        mdi-pencil
-                    </v-icon>
-                </template>
-            </v-data-table>
-        </v-card-text>
-    </v-card>
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="mixin_can('edit departments')"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                    </template>
+                </v-data-table>
+            </v-card-text>
+        </v-card>
+    </div>
 </template>
 
 <script>
@@ -196,6 +204,7 @@ import DepartmentDataService from "../../../../services/DepartmentDataService";
 export default {
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Name", value: "name" },
@@ -240,11 +249,13 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -337,13 +348,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

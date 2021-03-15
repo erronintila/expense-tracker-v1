@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 p-0 m-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 p-0 m-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Employees</h4>
 
@@ -440,10 +441,11 @@ export default {
     props: {},
     components: {
         DepartmentDropdownSelector,
-        JobDropdownSelector,
+        JobDropdownSelector
     },
     data() {
         return {
+            formDataLoaded: false,
             expanded: [],
             loading: true,
 
@@ -559,11 +561,13 @@ export default {
                 UserDataService.getAll(data)
                     .then(response => {
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -693,6 +697,8 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.data;
@@ -709,8 +715,7 @@ export default {
                         )
                     );
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

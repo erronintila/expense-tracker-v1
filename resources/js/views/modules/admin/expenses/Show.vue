@@ -1,20 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
@@ -359,7 +345,7 @@ import ExpenseDataService from "../../../../services/ExpenseDataService";
 export default {
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             panel: [0, 1],
             itemize: false,
             // paid_through_fund: false,
@@ -529,15 +515,12 @@ export default {
                     this.form.cancelled_at = data.expense_report
                         ? data.expense_report.cancelled_at
                         : null;
-
                     this.form.logs = data.logs;
-
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
         }
     },

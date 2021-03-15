@@ -35,7 +35,7 @@ export default {
     },
     data() {
         return {
-            formDataLoaded: false,
+            formDataLoaded: true,
             usersParameters: {
                 params: {
                     with_expense_types: true,

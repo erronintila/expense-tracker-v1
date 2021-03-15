@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Vendors</h4>
 
@@ -249,6 +250,7 @@ export default {
     props: {},
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Name", value: "name" },
@@ -299,11 +301,13 @@ export default {
                         let items = response.data.data;
                         let total = response.data.meta.total;
                         this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
@@ -398,13 +402,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

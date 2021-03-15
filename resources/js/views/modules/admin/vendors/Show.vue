@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -208,6 +209,7 @@ import VendorDataService from "../../../../services/VendorDataService";
 export default {
     data() {
         return {
+            formDataLoaded: false,
             panel: 0,
             code: "",
             name: "",
@@ -239,9 +241,12 @@ export default {
                     this.website = data.website;
                     this.is_vat_inclusive = data.is_vat_inclusive;
                     this.address = data.address;
+
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
                 });
         },
         editData() {

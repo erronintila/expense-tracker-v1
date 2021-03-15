@@ -308,6 +308,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     params: {
+      immediate: true,
+      deep: true,
       handler: function handler() {
         var _this2 = this;
 
@@ -315,8 +317,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this2.collections.activityLogs = data.data;
           _this2.meta = data.meta;
         });
-      },
-      deep: true
+      }
     }
   },
   computed: {

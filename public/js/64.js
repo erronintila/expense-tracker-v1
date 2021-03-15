@@ -88,21 +88,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -114,7 +99,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      loader: false,
+      formDataLoaded: true,
       usersParameters: {
         params: {
           with_expense_types: true,
@@ -216,8 +201,6 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave(value) {
       var _this = this;
 
-      this.loader = true;
-
       if (value.vendor) {
         if (!value.vendor.is_vat_inclusive) {
           value.tax_rate = 0;
@@ -237,11 +220,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.$router.go(-1);
 
         _this.loading = false;
+        _this.formDataLoaded = true;
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
 
         _this.errors = error.response.data.errors;
-        _this.loader = false;
+        _this.formDataLoaded = true;
       });
     }
   }
@@ -267,52 +251,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0 pt-0" },

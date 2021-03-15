@@ -28,6 +28,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -36,6 +41,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       form: {
         code: "",
         name: "",
@@ -85,8 +91,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.selected_expense_types = data.expense_types ? data.expense_types.map(function (item) {
           return item.id;
         }) : null;
+        _this.formDataLoaded = true;
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
+
+        _this.formDataLoaded = true;
       });
     },
     onSave: function onSave(value) {
@@ -138,51 +147,53 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Edit Vendor")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Vendor")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-container",
-            [
-              _c("Form", {
-                attrs: { vendorForm: _vm.form, errors: _vm.errors },
-                on: { "on-save": _vm.onSave }
-              })
+              _c(
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: { vendorForm: _vm.form, errors: _vm.errors },
+                    on: { "on-save": _vm.onSave }
+                  })
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

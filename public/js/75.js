@@ -48,7 +48,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      formDataLoaded: false,
+      formDataLoaded: true,
       usersParameters: {
         params: {
           with_expense_types: true,

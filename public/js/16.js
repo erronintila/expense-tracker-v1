@@ -384,6 +384,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -392,6 +393,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       loading: true,
       collections: {
         selected: [],
@@ -467,11 +469,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           _this.loading = false;
+          _this.formDataLoaded = true;
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
           _this.loading = false;
+          _this.formDataLoaded = true;
           reject();
         });
       });
@@ -561,6 +565,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     params: {
+      immediate: true,
+      deep: true,
       handler: function handler() {
         var _this4 = this;
 
@@ -568,8 +574,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.collections.items = data.data;
           _this4.meta = data.meta;
         });
-      },
-      deep: true
+      }
     }
   },
   computed: {
@@ -657,431 +662,438 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Job Designations")
-              ]),
-              _vm._v(" "),
-              _c("v-spacer"),
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Job Designations")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-tooltip",
+                    {
+                      attrs: { bottom: "" },
+                      scopedSlots: _vm._u(
+                        [
+                          _vm.mixin_can("add jobs")
+                            ? {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var on = ref.on
+                                  var attrs = ref.attrs
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          {
+                                            staticClass: "elevation-3 mr-2",
+                                            attrs: {
+                                              color: "green",
+                                              to: { name: "admin.jobs.create" },
+                                              dark: "",
+                                              fab: "",
+                                              "x-small": ""
+                                            }
+                                          },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-plus")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                }
+                              }
+                            : null
+                        ],
+                        null,
+                        true
+                      )
+                    },
+                    [_vm._v(" "), _c("span", [_vm._v("Add New")])]
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
               _c(
-                "v-tooltip",
-                {
-                  attrs: { bottom: "" },
-                  scopedSlots: _vm._u(
-                    [
-                      _vm.mixin_can("add jobs")
-                        ? {
-                            key: "activator",
-                            fn: function(ref) {
-                              var on = ref.on
-                              var attrs = ref.attrs
-                              return [
-                                _c(
-                                  "v-btn",
-                                  _vm._g(
-                                    _vm._b(
-                                      {
-                                        staticClass: "elevation-3 mr-2",
-                                        attrs: {
-                                          color: "green",
-                                          to: { name: "admin.jobs.create" },
-                                          dark: "",
-                                          fab: "",
-                                          "x-small": ""
-                                        }
-                                      },
-                                      "v-btn",
-                                      attrs,
-                                      false
-                                    ),
-                                    on
-                                  ),
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-plus")
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
+                "v-row",
+                { staticClass: "ml-4" },
+                [
+                  _vm.collections.selected.length > 0
+                    ? _c(
+                        "v-chip",
+                        {
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            color: "green",
+                            dark: "",
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-close"
+                          },
+                          on: {
+                            "click:close": function($event) {
+                              _vm.collections.selected = []
                             }
                           }
-                        : null
+                        },
+                        [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(_vm.collections.selected.length) +
+                              " Selected\n            "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "v-menu",
+                    {
+                      attrs: {
+                        transition: "scale-transition",
+                        "close-on-content-click": false,
+                        "nudge-width": 200,
+                        "offset-y": "",
+                        right: "",
+                        bottom: ""
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var menu = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _vm.filters.status != null
+                                ? _c(
+                                    "v-chip",
+                                    _vm._g(
+                                      _vm._b(
+                                        {
+                                          staticClass: "mr-2 mb-2",
+                                          attrs: { small: "" }
+                                        },
+                                        "v-chip",
+                                        attrs,
+                                        false
+                                      ),
+                                      menu
+                                    ),
+                                    [
+                                      _vm._v(
+                                        "\n                        " +
+                                          _vm._s(_vm.filters.status) +
+                                          "\n                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          }
+                        }
+                      ])
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-card",
+                        [
+                          _c(
+                            "v-list",
+                            [
+                              _c(
+                                "v-list-item",
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.filters.statuses,
+                                      label: "Status"
+                                    },
+                                    model: {
+                                      value: _vm.filters.status,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.filters, "status", $$v)
+                                      },
+                                      expression: "filters.status"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
                     ],
-                    null,
-                    true
-                  )
-                },
-                [_vm._v(" "), _c("span", [_vm._v("Add New")])]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-row",
-            { staticClass: "ml-4" },
-            [
-              _vm.collections.selected.length > 0
-                ? _c(
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-menu",
+                    {
+                      attrs: {
+                        transition: "scale-transition",
+                        "close-on-content-click": false,
+                        "nudge-width": 200,
+                        "offset-y": "",
+                        right: "",
+                        bottom: ""
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var menu = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _vm.filters.department != null
+                                ? _c(
+                                    "v-chip",
+                                    _vm._g(
+                                      _vm._b(
+                                        {
+                                          staticClass: "mr-2 mb-2",
+                                          attrs: { small: "" }
+                                        },
+                                        "v-chip",
+                                        attrs,
+                                        false
+                                      ),
+                                      menu
+                                    ),
+                                    [
+                                      _vm._v(
+                                        "\n                        " +
+                                          _vm._s(_vm.filters.department.name) +
+                                          "\n                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          }
+                        }
+                      ])
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-card",
+                        [
+                          _c(
+                            "v-list",
+                            [
+                              _c(
+                                "v-list-item",
+                                [
+                                  _c("DepartmentDropdownSelector", {
+                                    ref: "departmentDropdownSelector",
+                                    attrs: {
+                                      selectedDepartment:
+                                        _vm.filters.department,
+                                      showAll: true
+                                    },
+                                    on: { onChange: _vm.onChangeDepartment }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
                     "v-chip",
                     {
                       staticClass: "mr-2 mb-2",
                       attrs: {
-                        color: "green",
-                        dark: "",
                         close: "",
                         small: "",
-                        "close-icon": "mdi-close"
+                        "close-icon": "mdi-refresh"
                       },
-                      on: {
-                        "click:close": function($event) {
-                          _vm.collections.selected = []
+                      on: { "click:close": _vm.onRefresh }
+                    },
+                    [_vm._v("\n                Refresh\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.collections.selected.length > 0 &&
+                            _vm.filters.status == "Archived",
+                          expression:
+                            "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Archived'\n                "
                         }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-history",
+                        color: "green"
+                      },
+                      on: { "click:close": _vm.onRestore }
+                    },
+                    [_vm._v("\n                Restore\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.collections.selected.length > 0 &&
+                            _vm.filters.status == "Active",
+                          expression:
+                            "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Active'\n                "
+                        }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-trash-can-outline",
+                        color: "red"
+                      },
+                      on: { "click:close": _vm.onDelete }
+                    },
+                    [_vm._v("\n                Archive\n            ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-subtitle",
+                [
+                  _c("v-text-field", {
+                    attrs: {
+                      "append-icon": "mdi-magnify",
+                      label: "Search",
+                      "single-line": "",
+                      "hide-details": ""
+                    },
+                    model: {
+                      value: _vm.filters.search,
+                      callback: function($$v) {
+                        _vm.$set(_vm.filters, "search", $$v)
+                      },
+                      expression: "filters.search"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c("v-data-table", {
+                    staticClass: "elevation-0",
+                    attrs: {
+                      headers: _vm.collections.headers,
+                      items: _vm.collections.items,
+                      loading: _vm.loading,
+                      options: _vm.options,
+                      "server-items-length": _vm.meta.total,
+                      "footer-props": {
+                        itemsPerPageOptions: [10, 20, 50, 100],
+                        showFirstLastPage: true,
+                        firstIcon: "mdi-page-first",
+                        lastIcon: "mdi-page-last",
+                        prevIcon: "mdi-chevron-left",
+                        nextIcon: "mdi-chevron-right"
+                      },
+                      "show-select": "",
+                      "item-key": "id"
+                    },
+                    on: {
+                      "update:options": function($event) {
+                        _vm.options = $event
                       }
                     },
-                    [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(_vm.collections.selected.length) +
-                          " Selected\n            "
-                      )
-                    ]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  attrs: {
-                    transition: "scale-transition",
-                    "close-on-content-click": false,
-                    "nudge-width": 200,
-                    "offset-y": "",
-                    right: "",
-                    bottom: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var menu = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _vm.filters.status != null
-                            ? _c(
-                                "v-chip",
-                                _vm._g(
-                                  _vm._b(
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "item.actions",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm.mixin_can("edit jobs")
+                                ? _c(
+                                    "v-icon",
                                     {
-                                      staticClass: "mr-2 mb-2",
-                                      attrs: { small: "" }
+                                      staticClass: "mr-2",
+                                      attrs: { small: "" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.onEdit(item)
+                                        }
+                                      }
                                     },
-                                    "v-chip",
-                                    attrs,
-                                    false
-                                  ),
-                                  menu
-                                ),
-                                [
-                                  _vm._v(
-                                    "\n                        " +
-                                      _vm._s(_vm.filters.status) +
-                                      "\n                    "
+                                    [
+                                      _vm._v(
+                                        "\n                        mdi-pencil\n                    "
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
-                            : _vm._e()
-                        ]
-                      }
+                                : _vm._e()
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      true
+                    ),
+                    model: {
+                      value: _vm.collections.selected,
+                      callback: function($$v) {
+                        _vm.$set(_vm.collections, "selected", $$v)
+                      },
+                      expression: "collections.selected"
                     }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    [
-                      _c(
-                        "v-list",
-                        [
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("v-select", {
-                                attrs: {
-                                  items: _vm.filters.statuses,
-                                  label: "Status"
-                                },
-                                model: {
-                                  value: _vm.filters.status,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.filters, "status", $$v)
-                                  },
-                                  expression: "filters.status"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
+                  })
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                {
-                  attrs: {
-                    transition: "scale-transition",
-                    "close-on-content-click": false,
-                    "nudge-width": 200,
-                    "offset-y": "",
-                    right: "",
-                    bottom: ""
-                  },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var menu = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _vm.filters.department != null
-                            ? _c(
-                                "v-chip",
-                                _vm._g(
-                                  _vm._b(
-                                    {
-                                      staticClass: "mr-2 mb-2",
-                                      attrs: { small: "" }
-                                    },
-                                    "v-chip",
-                                    attrs,
-                                    false
-                                  ),
-                                  menu
-                                ),
-                                [
-                                  _vm._v(
-                                    "\n                        " +
-                                      _vm._s(_vm.filters.department.name) +
-                                      "\n                    "
-                                  )
-                                ]
-                              )
-                            : _vm._e()
-                        ]
-                      }
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-card",
-                    [
-                      _c(
-                        "v-list",
-                        [
-                          _c(
-                            "v-list-item",
-                            [
-                              _c("DepartmentDropdownSelector", {
-                                ref: "departmentDropdownSelector",
-                                attrs: {
-                                  selectedDepartment: _vm.filters.department,
-                                  showAll: true
-                                },
-                                on: { onChange: _vm.onChangeDepartment }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-chip",
-                {
-                  staticClass: "mr-2 mb-2",
-                  attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
-                  on: { "click:close": _vm.onRefresh }
-                },
-                [_vm._v("\n                Refresh\n            ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-chip",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value:
-                        _vm.collections.selected.length > 0 &&
-                        _vm.filters.status == "Archived",
-                      expression:
-                        "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Archived'\n                "
-                    }
-                  ],
-                  staticClass: "mr-2 mb-2",
-                  attrs: {
-                    close: "",
-                    small: "",
-                    "close-icon": "mdi-history",
-                    color: "green"
-                  },
-                  on: { "click:close": _vm.onRestore }
-                },
-                [_vm._v("\n                Restore\n            ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-chip",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value:
-                        _vm.collections.selected.length > 0 &&
-                        _vm.filters.status == "Active",
-                      expression:
-                        "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Active'\n                "
-                    }
-                  ],
-                  staticClass: "mr-2 mb-2",
-                  attrs: {
-                    close: "",
-                    small: "",
-                    "close-icon": "mdi-trash-can-outline",
-                    color: "red"
-                  },
-                  on: { "click:close": _vm.onDelete }
-                },
-                [_vm._v("\n                Archive\n            ")]
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-subtitle",
-            [
-              _c("v-text-field", {
-                attrs: {
-                  "append-icon": "mdi-magnify",
-                  label: "Search",
-                  "single-line": "",
-                  "hide-details": ""
-                },
-                model: {
-                  value: _vm.filters.search,
-                  callback: function($$v) {
-                    _vm.$set(_vm.filters, "search", $$v)
-                  },
-                  expression: "filters.search"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
-              _c("v-data-table", {
-                staticClass: "elevation-0",
-                attrs: {
-                  headers: _vm.collections.headers,
-                  items: _vm.collections.items,
-                  loading: _vm.loading,
-                  options: _vm.options,
-                  "server-items-length": _vm.meta.total,
-                  "footer-props": {
-                    itemsPerPageOptions: [10, 20, 50, 100],
-                    showFirstLastPage: true,
-                    firstIcon: "mdi-page-first",
-                    lastIcon: "mdi-page-last",
-                    prevIcon: "mdi-chevron-left",
-                    nextIcon: "mdi-chevron-right"
-                  },
-                  "show-select": "",
-                  "item-key": "id"
-                },
-                on: {
-                  "update:options": function($event) {
-                    _vm.options = $event
-                  }
-                },
-                scopedSlots: _vm._u(
-                  [
-                    {
-                      key: "item.actions",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm.mixin_can("edit jobs")
-                            ? _c(
-                                "v-icon",
-                                {
-                                  staticClass: "mr-2",
-                                  attrs: { small: "" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.onEdit(item)
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                        mdi-pencil\n                    "
-                                  )
-                                ]
-                              )
-                            : _vm._e()
-                        ]
-                      }
-                    }
-                  ],
-                  null,
-                  true
-                ),
-                model: {
-                  value: _vm.collections.selected,
-                  callback: function($$v) {
-                    _vm.$set(_vm.collections, "selected", $$v)
-                  },
-                  expression: "collections.selected"
-                }
-              })
-            ],
-            1
           )
-        ],
-        1
-      )
     ],
     1
   )
