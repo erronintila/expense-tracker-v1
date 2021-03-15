@@ -38,12 +38,12 @@ export default {
     created() {
         setTimeout(() => {
             this.show = true;
-        }, 700);
+        }, 300);
     },
     activated() {
         setTimeout(() => {
             this.show = true;
-        }, 700);
+        }, 300);
     },
 };
 </script>
