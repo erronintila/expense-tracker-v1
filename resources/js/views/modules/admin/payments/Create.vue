@@ -562,12 +562,9 @@ export default {
                     .then(response => {
                         this.onRefresh();
 
-                        this.$dialog.message.success(
-                            "Payment created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
                         this.$store.dispatch("AUTH_NOTIFICATIONS");
                         this.$router.push({ name: "admin.payments.index" });

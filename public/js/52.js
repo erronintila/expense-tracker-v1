@@ -201,10 +201,7 @@ __webpack_require__.r(__webpack_exports__);
           })
         };
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateSettings(this.user.id, data).then(function (response) {
-          _this2.$dialog.message.success("User settings updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this2.mixin_successDialog(response.data.status, response.data.message);
 
           _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {

@@ -569,12 +569,9 @@ export default {
                     job_id: this.form.job == null ? null : this.form.job.id
                 })
                     .then(response => {
-                        this.$dialog.message.success(
-                            "User account updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
                         this.$store.dispatch("AUTH_USER");
                     })
@@ -592,14 +589,7 @@ export default {
                     password_confirmation: this.password_confirmation
                 })
                     .then(response => {
-                        this.$dialog.message.success(
-                            "User account password has been updated.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
+                        this.mixin_successDialog(response.data.status, response.data.message);
                         // this.$store.dispatch("AUTH_USER");
 
                         this.dialogPassword = false;

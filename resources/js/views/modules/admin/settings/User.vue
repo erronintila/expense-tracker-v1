@@ -181,14 +181,7 @@ export default {
 
                 UserDataService.updateSettings(this.user.id, data)
                     .then(response => {
-                        this.$dialog.message.success(
-                            "User settings updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
+                        this.mixin_successDialog(response.data.status, response.data.message);
                         this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {

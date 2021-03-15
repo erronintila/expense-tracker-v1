@@ -1191,26 +1191,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onEdit: function onEdit(item) {
       if (item.status.status == "Approved") {
-        this.$dialog.message.error("Report has been approved", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "Report has been approved");
         return;
       }
 
       if (item.status.status == "Cancelled") {
-        this.$dialog.message.error("Report has been cancelled", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "Report has been cancelled");
         return;
       }
 
       if (item.status.status == "Paid/Reimbursed") {
-        this.$dialog.message.error("Paid/reimbursed expense report can't be edited", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "Paid/reimbursed expense report can't be edited");
         return;
       }
 
@@ -1227,28 +1218,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.selected.map(function (item) {
         return item.status.status;
       }).includes("Cancelled")) {
-        this.$dialog.message.error("Report has already been cancelled", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "Report has already been cancelled");
         return;
       }
 
       if (this.selected.map(function (item) {
         return item.status.status;
       }).includes("Paid/Reimbursed")) {
-        this.$dialog.message.error("Paid/reimbursed expense reports can't be cancelled", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "Paid/reimbursed expense reports can't be cancelled");
         return;
       }
 
       if (this.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 

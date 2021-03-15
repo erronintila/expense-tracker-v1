@@ -688,10 +688,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               ids: [_this3.$route.params.id]
             }
           }).then(function (response) {
-            _this3.$dialog.message.success(response.data.message, {
-              position: "top-right",
-              timeout: 2000
-            });
+            _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.$router.push({
               name: "admin.payments.index"

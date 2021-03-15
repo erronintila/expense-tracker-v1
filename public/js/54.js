@@ -306,16 +306,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getDataFromApi: function getDataFromApi() {
       var _this = this;
 
-      var self = this;
-      self.loading = true;
+      this.loading = true;
       return new Promise(function (resolve, reject) {
         var _this$options = _this.options,
             sortBy = _this$options.sortBy,
             sortDesc = _this$options.sortDesc,
             page = _this$options.page,
             itemsPerPage = _this$options.itemsPerPage;
-        var search = self.search.trim().toLowerCase();
-        var status = self.status;
+
+        var search = _this.search.trim().toLowerCase();
+
+        var status = _this.status;
         var data = {
           params: {
             search: search,
@@ -363,13 +364,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var self = this;
+      var _this2 = this;
 
-      if (self.selected.length == 0) {
-        this.$dialog.message.error("No item(s) selected", {
-          position: "top-right",
-          timeout: 2000
-        });
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
@@ -377,35 +375,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (res) {
           var data = {
             params: {
-              ids: self.selected.map(function (item) {
+              ids: _this2.selected.map(function (item) {
                 return item.id;
               })
             }
           };
-          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](self.selected[0].id, data).then(function (response) {
-            self.mixin_successDialog(response.data.status, response.data.message); // self.$dialog.message.success(
-            //     "Item(s) moved to archive.",
-            //     {
-            //         position: "top-right",
-            //         timeout: 2000
-            //     }
-            // );
+          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this2.selected[0].id, data).then(function (response) {
+            _this2.mixin_successDialog(response.data.status, response.data.message);
 
-            self.getDataFromApi().then(function (data) {
-              self.items = data.items;
-              self.totalItems = data.total;
+            _this2.getDataFromApi().then(function (data) {
+              _this2.items = data.items;
+              _this2.totalItems = data.total;
             });
-            self.selected = [];
+
+            _this2.selected = [];
           })["catch"](function (error) {
-            this.mixin_showErrors(error);
+            _this2.mixin_showErrors(error);
           });
         }
       });
     },
     onRestore: function onRestore() {
-      var self = this;
+      var _this3 = this;
 
-      if (self.selected.length == 0) {
+      if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
@@ -413,19 +406,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
           var data = {
-            ids: self.selected.map(function (item) {
+            ids: _this3.selected.map(function (item) {
               return item.id;
             })
           };
-          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(self.selected[0].id, data).then(function (response) {
-            self.mixin_successDialog(response.data.status, response.data.message);
-            self.getDataFromApi().then(function (data) {
-              self.items = data.items;
-              self.totalItems = data.total;
+          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this3.selected[0].id, data).then(function (response) {
+            _this3.mixin_successDialog(response.data.status, response.data.message);
+
+            _this3.getDataFromApi().then(function (data) {
+              _this3.items = data.items;
+              _this3.totalItems = data.total;
             });
-            self.selected = [];
+
+            _this3.selected = [];
           })["catch"](function (error) {
-            this.mixin_showErrors(error);
+            _this3.mixin_showErrors(error);
           });
         }
       });
@@ -434,11 +429,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     params: {
       handler: function handler() {
-        var _this2 = this;
+        var _this4 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this2.items = data.items;
-          _this2.totalItems = data.total;
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
         });
       },
       deep: true
@@ -455,12 +450,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
-    var _this3 = this;
+    var _this5 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this3.items = data.items;
-      _this3.totalItems = data.total;
+      _this5.items = data.items;
+      _this5.totalItems = data.total;
     });
   }
 });

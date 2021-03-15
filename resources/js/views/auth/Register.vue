@@ -176,14 +176,7 @@ export default {
                         password_confirmation: this.password_confirmation
                     })
                     .then(response => {
-                        this.$dialog.message.success(
-                            "Registered successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
+                        thids.mixin_successDialog(response.data.status, response.data.message);
                         this.$router.push({ name: "login" });
                     })
                     .catch(error => {

@@ -612,14 +612,7 @@ export default {
                         }
                     })
                         .then(response => {
-                            this.$dialog.message.success(
-                                response.data.message,
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
-                            );
-
+                            this.mixin_successDialog(response.data.status, response.data.message);
                             this.$router.push({
                                 name: "admin.payments.index"
                             });

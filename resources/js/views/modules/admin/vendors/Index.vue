@@ -276,15 +276,13 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let self = this;
-
-            self.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = self.search.trim().toLowerCase();
-                let status = self.status;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
                 let data = {
                     params: {
                         search: search,
@@ -327,13 +325,8 @@ export default {
             });
         },
         onDelete() {
-            let self = this;
-
-            if (self.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -341,44 +334,34 @@ export default {
                 if (res) {
                     let data = {
                         params: {
-                            ids: self.selected.map(item => {
+                            ids: this.selected.map(item => {
                                 return item.id;
                             })
                         }
                     };
 
-                    VendorDataService.delete(self.selected[0].id, data)
-                        .then(function(response) {
-                            self.mixin_successDialog(
+                    VendorDataService.delete(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
 
-                            // self.$dialog.message.success(
-                            //     "Item(s) moved to archive.",
-                            //     {
-                            //         position: "top-right",
-                            //         timeout: 2000
-                            //     }
-                            // );
-
-                            self.getDataFromApi().then(data => {
-                                self.items = data.items;
-                                self.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            self.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
+                        .catch(error => {
                             this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let self = this;
-
-            if (self.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
 
                 return;
@@ -387,26 +370,26 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     let data = {
-                        ids: self.selected.map(item => {
+                        ids: this.selected.map(item => {
                             return item.id;
                         })
                     };
 
-                    VendorDataService.restore(self.selected[0].id, data)
-                        .then(function(response) {
-                            self.mixin_successDialog(
+                    VendorDataService.restore(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
 
-                            self.getDataFromApi().then(data => {
-                                self.items = data.items;
-                                self.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            self.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
+                        .catch(error => {
                             this.mixin_showErrors(error);
                         });
                 }

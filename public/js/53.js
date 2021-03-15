@@ -195,10 +195,7 @@ __webpack_require__.r(__webpack_exports__);
               fund: _this2.new_fund,
               remaining_fund: _this2.new_remaining_fund
             }).then(function (response) {
-              _this2.$dialog.message.success("Revolving Fund updated.", {
-                position: "top-right",
-                timeout: 2000
-              });
+              _this2.mixin_successDialog(response.data.status, response.data.message);
 
               _this2.$store.dispatch("AUTH_USER");
 

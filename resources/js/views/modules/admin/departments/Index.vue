@@ -90,12 +90,7 @@
                 bottom
             >
                 <template v-slot:activator="{ on: menu, attrs }">
-                    <v-chip
-                        class="mr-2 mb-2"
-                        small
-                        v-bind="attrs"
-                        v-on="menu"
-                    >
+                    <v-chip class="mr-2 mb-2" small v-bind="attrs" v-on="menu">
                         {{ status }}
                     </v-chip>
                 </template>
@@ -123,28 +118,28 @@
             </v-chip>
 
             <v-chip
-                    v-show="selected.length > 0 && status == 'Archived'"
-                    close
-                    class="mr-2 mb-2"
-                    small
-                    @click:close="onRestore"
-                    close-icon="mdi-history"
-                    color="green"
-                >
-                    Restore
-                </v-chip>
+                v-show="selected.length > 0 && status == 'Archived'"
+                close
+                class="mr-2 mb-2"
+                small
+                @click:close="onRestore"
+                close-icon="mdi-history"
+                color="green"
+            >
+                Restore
+            </v-chip>
 
-                <v-chip
-                    v-show="selected.length > 0 && status == 'Active'"
-                    close
-                    class="mr-2 mb-2"
-                    small
-                    @click:close="onDelete"
-                    close-icon="mdi-trash-can-outline"
-                    color="red"
-                >
-                    Archive
-                </v-chip>
+            <v-chip
+                v-show="selected.length > 0 && status == 'Active'"
+                close
+                class="mr-2 mb-2"
+                small
+                @click:close="onDelete"
+                close-icon="mdi-trash-can-outline"
+                color="red"
+            >
+                Archive
+            </v-chip>
         </v-row>
 
         <v-card-subtitle>
@@ -272,10 +267,7 @@ export default {
         },
         onDelete() {
             if (this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -310,10 +302,7 @@ export default {
         },
         onRestore() {
             if (this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 

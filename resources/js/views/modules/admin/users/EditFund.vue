@@ -183,16 +183,8 @@ export default {
                                 remaining_fund: this.new_remaining_fund
                             })
                                 .then(response => {
-                                    this.$dialog.message.success(
-                                        "Revolving Fund updated.",
-                                        {
-                                            position: "top-right",
-                                            timeout: 2000
-                                        }
-                                    );
-
+                                    this.mixin_successDialog(response.data.status, response.data.message);
                                     this.$store.dispatch("AUTH_USER");
-
                                     this.$router.push("/admin/users");
                                 })
                                 .catch(error => {

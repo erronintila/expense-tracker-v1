@@ -602,10 +602,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           _this4.onRefresh();
 
-          _this4.$dialog.message.success("Payment created successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this4.mixin_successDialog(response.data.status, response.data.message);
 
           _this4.$store.dispatch("AUTH_NOTIFICATIONS");
 

@@ -283,10 +283,7 @@ export default {
         },
         onDelete() {
             if (this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -321,10 +318,7 @@ export default {
         },
         onRestore() {
             if (this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 

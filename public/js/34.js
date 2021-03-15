@@ -584,10 +584,7 @@ __webpack_require__.r(__webpack_exports__);
           type: this.form.type,
           job_id: this.form.job == null ? null : this.form.job.id
         }).then(function (response) {
-          _this2.$dialog.message.success("User account updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this2.mixin_successDialog(response.data.status, response.data.message);
 
           _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
@@ -606,10 +603,7 @@ __webpack_require__.r(__webpack_exports__);
           password: this.password,
           password_confirmation: this.password_confirmation
         }).then(function (response) {
-          _this3.$dialog.message.success("User account password has been updated.", {
-            position: "top-right",
-            timeout: 2000
-          }); // this.$store.dispatch("AUTH_USER");
+          _this3.mixin_successDialog(response.data.status, response.data.message); // this.$store.dispatch("AUTH_USER");
 
 
           _this3.dialogPassword = false;
