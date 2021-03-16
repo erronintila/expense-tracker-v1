@@ -33,8 +33,12 @@ class UserController extends Controller
         // $this->middleware(['permission:view all users'], ['only' => ['index']]);
         $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
+        $this->middleware(['permission:edit users fund'], ['only' => ['update_fund']]);
+        $this->middleware(['permission:reset user passwords'], ['only' => ['reset_password']]);
+        $this->middleware(['permission:edit permissions'], ['only' => ['update_permissions']]);
+        $this->middleware(['permission:set activation'], ['only' => ['update_activation']]);
     }
 
     /**
@@ -49,7 +53,7 @@ class UserController extends Controller
                 abort(403);
             }
         }
-        // abort(422);
+        
         $search = request("search") ?? "";
         $sortBy = request("sortBy") ?? "last_name";
         $sortType = request("sortType") ?? "asc";
@@ -185,6 +189,7 @@ class UserController extends Controller
         $user->username = request("username");
         $user->email    = request("email");
         $user->password = Hash::make(request("password"));
+        $user->is_active = request("is_active");
         $user->is_admin = request("is_admin");
         $user->is_superadmin = request("is_superadmin");
         $user->can_login = request("can_login");
@@ -242,10 +247,6 @@ class UserController extends Controller
         $validated = $request->validated(); // check validation
         $message = "User updated successfully"; // return message
 
-        if (!app("auth")->user()->hasPermissionTo('edit users')) {
-            abort(403);
-        }
-
         $user = User::withTrashed()->findOrFail($id);
 
         $user->code = request("code") ?? $user->code;
@@ -265,6 +266,7 @@ class UserController extends Controller
         $user->password = $user->password;
         $user->fund = $user->fund;
         $user->remaining_fund = $user->remaining_fund;
+        $user->is_active = request("is_active");
         $user->is_admin = request("is_admin");
         $user->is_superadmin = request("is_superadmin");
         $user->job_id = request("job_id");
@@ -356,10 +358,6 @@ class UserController extends Controller
 
     public function update_fund(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('edit users fund')) {
-            abort(403);
-        }
-
         $message = "User fund updated successfully";
 
         $user = User::withTrashed()->findOrFail($id);
@@ -378,10 +376,6 @@ class UserController extends Controller
 
     public function reset_password(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('reset user passwords')) {
-            abort(403);
-        }
-
         $message = "User password resetted successfully";
 
         if (request()->has("ids")) {
@@ -486,10 +480,6 @@ class UserController extends Controller
      */
     public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('edit permissions')) {
-            abort(403);
-        }
-
         $user = User::findOrFail($id);
         $user->can_login = request("can_login");
         $user->is_admin = request("is_admin");
@@ -508,10 +498,6 @@ class UserController extends Controller
 
     public function update_activation(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('set activation')) {
-            abort(403);
-        }
-
         $activation = request("is_active") ? "activated" : "deactivated";
         $message = "User {$activation} successfully";
 
@@ -619,10 +605,6 @@ class UserController extends Controller
             }])
             ->where("is_superadmin", false)
             ->orderBy("last_name");
-
-        if (request()->has("no_user") && request()->has("user_id")) {
-            // $user->where("user_id", null)->orwhere("user_id", request("")user_id);
-        }
 
         if (request()->has("update_settings")) {
             $user = User::with(['job' => function ($query) {
