@@ -27,6 +27,16 @@ class User extends Authenticatable
         LARAVEL MODEL CONFIGURATION
     ============================================================================================================================================ */
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($user) {
+            if ($user->expenses()->count() > 0) {
+                abort(422, "Some records can't be deleted.");
+            }
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *

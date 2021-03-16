@@ -44,7 +44,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if(!request("isSelection") || !request()->has("isSelection")) {
+        if (!request("isSelection") || !request()->has("isSelection")) {
             if (!app("auth")->user()->hasPermissionTo('view all users')) {
                 abort(403);
             }
@@ -62,8 +62,8 @@ class UserController extends Controller
             }]);
         }]);
 
-        if(request()->has("with_expense_types")) {
-            $users = $users->with(['expense_types' => function($query) {
+        if (request()->has("with_expense_types")) {
+            $users = $users->with(['expense_types' => function ($query) {
                 $query->withTrashed();
                 $query->with(['sub_types' => function ($query) {
                     $query->withTrashed();
@@ -108,10 +108,20 @@ class UserController extends Controller
                 case 'Unverified':
                     $users = $users->where('email_verified_at', null);
                     break;
+                case 'Inactive':
+                    $users = $users->where('is_active', 0);
+                    break;
+                case 'Active':
+                    $users = $users->where('is_active', 1);
+                    break;
                 default:
                     $users = $users;
                     break;
             }
+        }
+
+        if (request()->has("is_active")) {
+            $users = $users->where('is_active', (request("is_active") || strtolower(request("is_active")) == 'true') ?? 1);
         }
 
         if (request()->has('department_id')) {
@@ -494,6 +504,37 @@ class UserController extends Controller
         }
 
         return $this->successResponse(null, "User permissions updated successfully.", 200);
+    }
+
+    public function update_activation(Request $request, $id)
+    {
+        if (!app("auth")->user()->hasPermissionTo('set activation')) {
+            abort(403);
+        }
+
+        $activation = request("is_active") ? "activated" : "deactivated";
+        $message = "User {$activation} successfully";
+
+        if (request()->has("ids")) {
+            foreach (request("ids") as $id) {
+                $user = User::withTrashed()->findOrFail($id);
+                $user->disableLogging();
+                $user->is_active = request("is_active");
+                $user->save();
+            }
+        } else {
+            $user = User::withTrashed()->findOrFail($id);
+            $user->disableLogging();
+            $user->is_active = request("is_active");
+            $user->save();
+        }
+
+        activity('user')
+            ->performedOn($user)
+            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
+            ->log("{$activation} user");
+
+        return $this->successResponse(null, $message, 200);
     }
     
     /**

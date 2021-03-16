@@ -66,7 +66,8 @@ export default {
                         department_id: this.department
                             ? this.department.id
                             : null,
-                        itemsPerPage: 200
+                        itemsPerPage: 200,
+                        isSelection: true,
                     }
                 })
                     .then(response => {

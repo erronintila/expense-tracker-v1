@@ -54,6 +54,7 @@ __webpack_require__.r(__webpack_exports__);
         username: [],
         role: [],
         can_login: [],
+        is_active: [],
         has_fund: [],
         fund: []
       }

@@ -1215,20 +1215,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onDelete: function onDelete() {
       var _this6 = this;
 
-      if (this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Cancelled")) {
-        this.mixin_errorDialog("Error", "Report has already been cancelled");
-        return;
-      }
-
-      if (this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Paid/Reimbursed")) {
-        this.mixin_errorDialog("Error", "Paid/reimbursed expense reports can't be cancelled");
-        return;
-      }
-
+      // if (
+      //     this.selected
+      //         .map(item => item.status.status)
+      //         .includes("Cancelled")
+      // ) {
+      //     this.mixin_errorDialog(
+      //         "Error",
+      //         "Report has already been cancelled"
+      //     );
+      //     return;
+      // }
+      // if (
+      //     this.selected
+      //         .map(item => item.status.status)
+      //         .includes("Paid/Reimbursed")
+      // ) {
+      //     this.mixin_errorDialog(
+      //         "Error",
+      //         "Paid/reimbursed expense reports can't be cancelled"
+      //     );
+      //     return;
+      // }
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;

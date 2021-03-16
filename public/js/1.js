@@ -159,7 +159,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           sortType: sortDesc[0] ? "desc" : "asc",
           page: page,
           itemsPerPage: itemsPerPage,
-          isSelection: true
+          isSelection: true,
+          is_active: true
         };
         var data = {};
 
@@ -656,6 +657,11 @@ var UserDataService = /*#__PURE__*/function () {
     key: "updateProfile",
     value: function updateProfile(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
     }
   }, {
     key: "export",

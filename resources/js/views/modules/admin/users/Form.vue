@@ -235,11 +235,20 @@
                         </v-col>
                         <v-col cols="12" md="4" v-if="!isEdit">
                             <v-checkbox
+                                v-model="form.is_active"
+                                label="Active Account"
+                                :error-messages="errors.is_active"
+                            ></v-checkbox>
+                        </v-col>
+
+                        <v-col cols="12" md="4" v-if="!isEdit">
+                            <v-checkbox
                                 v-model="form.can_login"
                                 label="Allow Login"
                                 :error-messages="errors.can_login"
                             ></v-checkbox>
                         </v-col>
+                        
                         <v-col cols="12" md="4" v-if="!isEdit">
                             <v-radio-group v-model="form.role" row label="Role">
                                 <v-radio
@@ -252,6 +261,7 @@
                                 ></v-radio>
                             </v-radio-group>
                         </v-col>
+                        
                     </v-row>
 
                     <v-row v-if="!isEdit">
@@ -311,6 +321,7 @@ export default {
                     is_admin: false,
                     is_superadmin: false,
                     can_login: true,
+                    is_active: true,
                     type: "employee",
                     job: null,
                     permissions: [],
@@ -337,6 +348,7 @@ export default {
                     username: [],
                     role: [],
                     can_login: [],
+                    is_active: [],
                     has_fund: [],
                     fund: []
                 };
@@ -384,6 +396,7 @@ export default {
                 is_admin: false,
                 is_superadmin: false,
                 can_login: true,
+                is_active: true,
                 type: "employee",
                 job: null,
                 permissions: [],

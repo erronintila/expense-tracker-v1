@@ -361,21 +361,21 @@ class ExpenseReportController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // check if deleted/cancelled
-        $deleted = ExpenseReport::whereIn("id", request("ids"))
-            ->where("deleted_at", "<>", null)->count();
+        // // check if deleted/cancelled
+        // $deleted = ExpenseReport::whereIn("id", request("ids"))
+        //     ->where("deleted_at", "<>", null)->count();
 
-        if ($deleted > 0) {
-            return $this->errorResponse("Expense Report has already been cancelled", 422);
-        }
+        // if ($deleted > 0) {
+        //     return $this->errorResponse("Expense Report has already been cancelled", 422);
+        // }
 
-        //check if has payment
-        $paid = ExpenseReport::whereIn("id", request("ids"))
-            ->whereHas("payments")->count();
+        // //check if has payment
+        // $paid = ExpenseReport::whereIn("id", request("ids"))
+        //     ->whereHas("payments")->count();
 
-        if ($paid > 0) {
-            return $this->errorResponse("Expense Report has payment records", 422);
-        }
+        // if ($paid > 0) {
+        //     return $this->errorResponse("Expense Report has payment records", 422);
+        // }
 
         if (request()->has("ids")) {
             foreach (request("ids") as $id) {

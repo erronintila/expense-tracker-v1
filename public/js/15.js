@@ -65,7 +65,8 @@ __webpack_require__.r(__webpack_exports__);
       return new Promise(function (resolve, reject) {
         _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
           params: {
-            itemsPerPage: 200
+            itemsPerPage: 200,
+            isSelection: true
           }
         }).then(function (response) {
           resolve(response.data);
@@ -204,7 +205,8 @@ __webpack_require__.r(__webpack_exports__);
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
           params: {
             department_id: _this.department ? _this.department.id : null,
-            itemsPerPage: 200
+            itemsPerPage: 200,
+            isSelection: true
           }
         }).then(function (response) {
           resolve(response.data);

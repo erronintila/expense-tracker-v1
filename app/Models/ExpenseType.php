@@ -5,7 +5,6 @@ namespace App\Models;
 use App\User;
 use App\Models\Vendor;
 use App\Models\Expense;
-use App\Models\SubType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
@@ -69,7 +68,7 @@ class ExpenseType extends Model
         static::deleting(function ($expenseType) {
             if ($expenseType->expenses()->count() > 0) {
 
-                abort(422, "Item has active child records");
+                abort(422, "Some records can't be deleted.");
             }
         });
     }

@@ -142,12 +142,12 @@ class VendorController extends Controller
 
         // check if multiple records
         if (request()->has("ids")) {
-            $vendor = Vendor::whereIn('id', request('ids'))->delete();
+            // $vendor = Vendor::whereIn('id', request('ids'))->delete();
 
-            // foreach (request('ids') as $id) {
-            //     $vendor = Vendor::findOrFail($id);
-            //     $vendor->delete();
-            // }
+            foreach (request('ids') as $id) {
+                $vendor = Vendor::findOrFail($id);
+                $vendor->delete();
+            }
 
             $message = "Vendor(s) deleted successfully";
         } else {

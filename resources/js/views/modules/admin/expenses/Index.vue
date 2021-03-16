@@ -718,19 +718,19 @@ export default {
 
             // this.mixin_check_if_error(
             //     arr.includes(false),
-            //     "Expense(s) can't be cancelled bitch"
+            //     "Expense(s) can't be cancelled"
             // );
 
-            if (arr.includes(false)) {
-                this.mixin_errorDialog(
-                    "Error",
-                    "Expense(s) can't be cancelled"
-                );
-                return;
-            }
+            // if (arr.includes(false)) {
+            //     this.mixin_errorDialog(
+            //         "Error",
+            //         "Expense(s) can't be cancelled"
+            //     );
+            //     return;
+            // }
 
             this.$confirm("Do you want to cancel expense(s)?").then(res => {
-                if (res) {
+                if (res) {  
                     ExpenseDataService.delete(this.selected[0].id, {
                         params: {
                             ids: this.selected.map(item => {

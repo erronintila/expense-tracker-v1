@@ -29,6 +29,16 @@ class Expense extends Model
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($expense) {
+            if ($expense->expense_report()->count() > 0) {
+                abort(422, "Some records can't be deleted.");
+            }
+        });
+    }
+
     protected $dates = ['deleted_at'];
 
     /**

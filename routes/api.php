@@ -152,6 +152,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/update_password/{id}', 'API\v1\UserController@update_password');
     Route::put('/users/update_profile/{id}', 'API\v1\UserController@update_profile');
     Route::put('/users/update_permissions/{id}', 'API\v1\UserController@update_permissions');
+    Route::put('/users/update_activation/{id}', 'API\v1\UserController@update_activation');
 
     Route::get('/permissions', function (Request $request) {
         return $request->user->getAllPermissions();

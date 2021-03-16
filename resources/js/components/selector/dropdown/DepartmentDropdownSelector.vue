@@ -49,7 +49,8 @@ export default {
             return new Promise((resolve, reject) => {
                 DepartmentDataService.getAll({
                     params: {
-                        itemsPerPage: 200
+                        itemsPerPage: 200,
+                        isSelection: true,
                     }
                 })
                     .then(response => {

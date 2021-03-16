@@ -43,6 +43,7 @@ export default {
                 username: [],
                 role: [],
                 can_login: [],
+                is_active: [],
                 has_fund: [],
                 fund: []
             }

@@ -4,9 +4,7 @@
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Departments</h4>
-
                 <v-spacer></v-spacer>
-
                 <v-tooltip bottom>
                     <template
                         v-slot:activator="{ on, attrs }"
@@ -27,47 +25,6 @@
                     </template>
                     <span>Add New</span>
                 </v-tooltip>
-
-                <!-- <v-menu offset-y transition="scale-transition" left>
-                <template v-slot:activator="{ on: menu, attrs }">
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on: tooltip }">
-                            <v-btn
-                                class="elevation-3"
-                                color="green"
-                                dark
-                                fab
-                                x-small
-                                v-bind="attrs"
-                                v-on="{ ...tooltip, ...menu }"
-                            >
-                                <v-icon dark>mdi-view-grid-plus-outline</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>More Options</span>
-                    </v-tooltip>
-                </template>
-
-                <v-list>
-                    <v-list-item @click="onRestore">
-                        <v-list-item-icon>
-                            <v-icon>mdi-history</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-subtitle>
-                            Restore
-                        </v-list-item-subtitle>
-                    </v-list-item>
-
-                    <v-list-item @click="onDelete">
-                        <v-list-item-icon>
-                            <v-icon>mdi-trash-can-outline</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-subtitle>
-                            Move to archive
-                        </v-list-item-subtitle>
-                    </v-list-item>
-                </v-list>
-            </v-menu> -->
             </v-card-title>
 
             <v-row class="ml-4">

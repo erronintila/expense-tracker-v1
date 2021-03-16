@@ -78,7 +78,8 @@ __webpack_require__.r(__webpack_exports__);
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
           params: {
             department_id: _this.department ? _this.department.id : null,
-            itemsPerPage: 200
+            itemsPerPage: 200,
+            isSelection: true
           }
         }).then(function (response) {
           resolve(response.data);
@@ -478,6 +479,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -509,6 +520,7 @@ __webpack_require__.r(__webpack_exports__);
           is_admin: false,
           is_superadmin: false,
           can_login: true,
+          is_active: true,
           type: "employee",
           job: null,
           permissions: [],
@@ -535,6 +547,7 @@ __webpack_require__.r(__webpack_exports__);
           username: [],
           role: [],
           can_login: [],
+          is_active: [],
           has_fund: [],
           fund: []
         };
@@ -584,6 +597,7 @@ __webpack_require__.r(__webpack_exports__);
         is_admin: false,
         is_superadmin: false,
         can_login: true,
+        is_active: true,
         type: "employee",
         job: null,
         permissions: [],
@@ -1300,6 +1314,29 @@ var render = function() {
                             [
                               _c("v-checkbox", {
                                 attrs: {
+                                  label: "Active Account",
+                                  "error-messages": _vm.errors.is_active
+                                },
+                                model: {
+                                  value: _vm.form.is_active,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "is_active", $$v)
+                                  },
+                                  expression: "form.is_active"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.isEdit
+                        ? _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: {
                                   label: "Allow Login",
                                   "error-messages": _vm.errors.can_login
                                 },
@@ -1718,6 +1755,11 @@ var UserDataService = /*#__PURE__*/function () {
     key: "updateProfile",
     value: function updateProfile(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
     }
   }, {
     key: "export",

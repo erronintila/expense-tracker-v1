@@ -135,7 +135,8 @@ export default {
                     sortType: sortDesc[0] ? "desc" : "asc",
                     page: page,
                     itemsPerPage: itemsPerPage,
-                    isSelection: true
+                    isSelection: true,
+                    is_active: true,
                 };
 
                 let data = {};

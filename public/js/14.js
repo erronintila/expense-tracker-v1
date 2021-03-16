@@ -65,7 +65,8 @@ __webpack_require__.r(__webpack_exports__);
       return new Promise(function (resolve, reject) {
         _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
           params: {
-            itemsPerPage: 200
+            itemsPerPage: 200,
+            isSelection: true
           }
         }).then(function (response) {
           resolve(response.data);
@@ -204,7 +205,8 @@ __webpack_require__.r(__webpack_exports__);
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
           params: {
             department_id: _this.department ? _this.department.id : null,
-            itemsPerPage: 200
+            itemsPerPage: 200,
+            isSelection: true
           }
         }).then(function (response) {
           resolve(response.data);
@@ -763,6 +765,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -805,7 +831,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       total_fund: 0,
       total_remaining_fund: 0,
       status: "Active",
-      statuses: ["Active", "Archived"],
+      statuses: ["Active", "Inactive", "Archived"],
       selected: [],
       search: "",
       collections: {
@@ -833,7 +859,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }],
         selected: [],
         selectedUsers: [],
-        statuses: ["Active", "Archived"],
+        statuses: ["Active", "Inactive", "Archived"],
         items: [],
         users: []
       },
@@ -1041,6 +1067,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
+    onSetActivation: function onSetActivation(is_active) {
+      var _this5 = this;
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to ".concat(is_active ? 'activate' : 'deactivate', " account(s)?")).then(function (res) {
+        if (res) {
+          var data = {
+            is_active: is_active,
+            ids: _this5.selected.map(function (item) {
+              return item.id;
+            })
+          };
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(_this5.selected[0].id, data).then(function (response) {
+            _this5.mixin_successDialog(response.data.status, response.data.message);
+
+            _this5.getDataFromApi().then(function (data) {
+              _this5.items = data.data;
+              _this5.meta = data.meta;
+            });
+
+            _this5.selected = [];
+          })["catch"](function (error) {
+            _this5.mixin_showErrors(error);
+          });
+        }
+      });
+    },
     onExport: function onExport() {
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["export"]();
     }
@@ -1050,15 +1107,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this5 = this;
+        var _this6 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this5.items = data.data;
-          _this5.meta = data.meta;
-          _this5.total_fund = _this5.mixin_formatNumber(data.data.reduce(function (total, item) {
+          _this6.items = data.data;
+          _this6.meta = data.meta;
+          _this6.total_fund = _this6.mixin_formatNumber(data.data.reduce(function (total, item) {
             return total + item.fund;
           }, 0));
-          _this5.total_remaining_fund = _this5.mixin_formatNumber(data.data.reduce(function (total, item) {
+          _this6.total_remaining_fund = _this6.mixin_formatNumber(data.data.reduce(function (total, item) {
             return total + item.remaining_fund;
           }, 0));
         });
@@ -1079,13 +1136,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
-    var _this6 = this;
+    var _this7 = this;
 
     this.$store.dispatch("AUTH_USER");
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this6.items = data.data;
-      _this6.meta = data.meta;
+      _this7.items = data.data;
+      _this7.meta = data.meta;
     });
   }
 });
@@ -1687,22 +1744,26 @@ var render = function() {
                               rawName: "v-show",
                               value:
                                 _vm.selected.length > 0 &&
-                                _vm.status == "Archived",
+                                _vm.status == "Inactive",
                               expression:
-                                "selected.length > 0 && status == 'Archived'"
+                                "selected.length > 0 && status == 'Inactive'"
                             }
                           ],
                           staticClass: "mr-2 mb-2",
                           attrs: {
                             close: "",
                             small: "",
-                            "close-icon": "mdi-history",
+                            "close-icon": "mdi-check",
                             color: "green",
                             dark: ""
                           },
-                          on: { "click:close": _vm.onDelete }
+                          on: {
+                            "click:close": function($event) {
+                              return _vm.onSetActivation(true)
+                            }
+                          }
                         },
-                        [_vm._v("\n                Restore\n            ")]
+                        [_vm._v("\n                Activate\n            ")]
                       ),
                       _vm._v(" "),
                       _c(
@@ -1723,11 +1784,69 @@ var render = function() {
                           attrs: {
                             close: "",
                             small: "",
+                            "close-icon": "mdi-lock",
+                            color: "red",
+                            dark: ""
+                          },
+                          on: {
+                            "click:close": function($event) {
+                              return _vm.onSetActivation(false)
+                            }
+                          }
+                        },
+                        [_vm._v("\n                Deactivate\n            ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Archived",
+                              expression:
+                                "selected.length > 0 && status == 'Archived'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-history",
+                            color: "green",
+                            dark: ""
+                          },
+                          on: { "click:close": _vm.onRestore }
+                        },
+                        [_vm._v("\n                Restore\n            ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Inactive",
+                              expression:
+                                "selected.length > 0 && status == 'Inactive'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
                             "close-icon": "mdi-trash-can-outline",
                             color: "red",
                             dark: ""
                           },
-                          on: { "click:close": _vm.onRefresh }
+                          on: { "click:close": _vm.onDelete }
                         },
                         [_vm._v("\n                Archive\n            ")]
                       )
@@ -2448,6 +2567,11 @@ var UserDataService = /*#__PURE__*/function () {
     key: "updateProfile",
     value: function updateProfile(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
     }
   }, {
     key: "export",

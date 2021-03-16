@@ -30,6 +30,16 @@ class ExpenseReport extends Model
     | LARAVEL MODEL CONFIGURATION
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($expense_report) {
+            if ($expense_report->payments()->count() > 0) {
+                abort(422, "Some records can't be cancelled.");
+            }
+        });
+    }
     
     /**
      * The attributes that should be mutated to dates.

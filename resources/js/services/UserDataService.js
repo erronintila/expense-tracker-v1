@@ -58,6 +58,10 @@ class UserDataService {
         return axios.put(`/api/users/update_profile/${id}`, data);
     }
 
+    updateActivation(id, data) {
+        return axios.put(`/api/users/update_activation/${id}`, data);
+    }
+
     export() {
         return axios.get("/api/users/export");
     }
