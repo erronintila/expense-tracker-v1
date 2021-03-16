@@ -910,7 +910,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             status: status,
             department_id: department_id,
             job_id: job_id,
-            is_superadmin: false
+            is_superadmin: false,
+            isSelection: true
           }
         };
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {

@@ -19,7 +19,7 @@ class VendorController extends Controller
     public function __construct()
     {
         // apply permissions
-        $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
+        // $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
         $this->middleware(['permission:view vendors'], ['only' => ['show']]);
         $this->middleware(['permission:add vendors'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
@@ -34,6 +34,12 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
+        if(!request("isSelection") || !request()->has("isSelection")) {
+            if (!app("auth")->user()->hasPermissionTo('view all vendors')) {
+                abort(403);
+            }
+        }
+
         $search = request('search') ?? "";
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";

@@ -632,6 +632,9 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+    },
+    lastUpdated: function lastUpdated() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
     }
   },
   created: function created() {
@@ -700,7 +703,7 @@ var render = function() {
               _c("v-card-subtitle", [
                 _vm._v(
                   "\n            Last updated: " +
-                    _vm._s(_vm.form.updated_at) +
+                    _vm._s(_vm.lastUpdated) +
                     "\n        "
                 )
               ]),

@@ -805,61 +805,15 @@ export default {
             if (this.mixin_can("add expenses beyond encoding period")) {
                 return null;
             }
-
             let settings = this.$store.getters.settings;
-            // let settings = [];
-            let submissionMinDate = moment().endOf("day");
             let encodingMinDate = moment()
-                .subtract(settings.expense_encoding_period - 1, "days")
+                .subtract((settings.expense_encoding_period ?? 1) - 1, "days")
                 .format("YYYY-MM-DD");
-
-            switch (settings.submission_period) {
-                case "Weekly":
-                    submissionMinDate = moment()
-                        .startOf("week")
-                        .format("YYYY-MM-DD");
-                    break;
-                case "Monthly":
-                    submissionMinDate = moment()
-                        .startOf("month")
-                        .format("YYYY-MM-DD");
-                    break;
-                default:
-                    submissionMinDate = moment()
-                        .startOf("day")
-                        .format("YYYY-MM-DD");
-                    break;
-            }
-
-            return moment(encodingMinDate).isSameOrAfter(submissionMinDate)
-                ? encodingMinDate
-                : submissionMinDate;
+            return encodingMinDate;
         },
         maxDate() {
-            let settings = this.$store.getters.settings ?? null;
-            // let settings = [];
             let today = moment().format("YYYY-MM-DD");
-            let maxDate = moment().endOf("day");
-
-            switch (settings.submission_period) {
-                case "Weekly":
-                    maxDate = moment()
-                        .endOf("week")
-                        .format("YYYY-MM-DD");
-                    break;
-                case "Monthly":
-                    maxDate = moment()
-                        .endOf("month")
-                        .format("YYYY-MM-DD");
-                    break;
-                default:
-                    maxDate = moment()
-                        .endOf("day")
-                        .format("YYYY-MM-DD");
-                    break;
-            }
-
-            return moment(today).isSameOrBefore(maxDate) ? today : maxDate;
+            return today;
         },
         amount_to_replenish() {
             let remaining_fund = this.mixin_convertToNumber(

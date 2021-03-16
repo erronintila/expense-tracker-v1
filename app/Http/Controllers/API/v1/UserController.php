@@ -30,7 +30,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['permission:view all users'], ['only' => ['index']]);
+        // $this->middleware(['permission:view all users'], ['only' => ['index']]);
         $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
         // $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
@@ -44,6 +44,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        if(!request("isSelection") || !request()->has("isSelection")) {
+            if (!app("auth")->user()->hasPermissionTo('view all users')) {
+                abort(403);
+            }
+        }
         // abort(422);
         $search = request("search") ?? "";
         $sortBy = request("sortBy") ?? "last_name";

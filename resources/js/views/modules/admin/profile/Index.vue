@@ -7,7 +7,7 @@
                 <v-spacer></v-spacer>
             </v-card-title>
             <v-card-subtitle>
-                Last updated: {{ form.updated_at }}
+                Last updated: {{ lastUpdated }}
             </v-card-subtitle>
 
             <v-card-text>
@@ -620,6 +620,9 @@ export default {
     computed: {
         maxDate() {
             return moment().format("YYYY-MM-DD");
+        },
+        lastUpdated() {
+            return moment(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
         }
     },
     created() {

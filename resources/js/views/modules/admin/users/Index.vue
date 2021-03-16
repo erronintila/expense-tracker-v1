@@ -554,7 +554,8 @@ export default {
                         status: status,
                         department_id: department_id,
                         job_id: job_id,
-                        is_superadmin: false
+                        is_superadmin: false,
+                        isSelection: true
                     }
                 };
 

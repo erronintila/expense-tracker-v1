@@ -441,7 +441,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           sortBy: sortBy[0],
           sortType: sortDesc[0] ? "desc" : "asc",
           page: page,
-          itemsPerPage: itemsPerPage
+          itemsPerPage: itemsPerPage,
+          isSelection: true
         };
         var data = {};
 
@@ -1364,54 +1365,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     minDate: function minDate() {
+      var _settings$expense_enc;
+
       if (this.mixin_can("add expenses beyond encoding period")) {
         return null;
       }
 
-      var settings = this.$store.getters.settings; // let settings = [];
-
-      var submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
-      var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(settings.expense_encoding_period - 1, "days").format("YYYY-MM-DD");
-
-      switch (settings.submission_period) {
-        case "Weekly":
-          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD");
-          break;
-
-        case "Monthly":
-          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD");
-          break;
-
-        default:
-          submissionMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("day").format("YYYY-MM-DD");
-          break;
-      }
-
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(encodingMinDate).isSameOrAfter(submissionMinDate) ? encodingMinDate : submissionMinDate;
+      var settings = this.$store.getters.settings;
+      var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(((_settings$expense_enc = settings.expense_encoding_period) !== null && _settings$expense_enc !== void 0 ? _settings$expense_enc : 1) - 1, "days").format("YYYY-MM-DD");
+      return encodingMinDate;
     },
     maxDate: function maxDate() {
-      var _this$$store$getters$;
-
-      var settings = (_this$$store$getters$ = this.$store.getters.settings) !== null && _this$$store$getters$ !== void 0 ? _this$$store$getters$ : null; // let settings = [];
-
       var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
-      var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day");
-
-      switch (settings.submission_period) {
-        case "Weekly":
-          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
-          break;
-
-        case "Monthly":
-          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
-          break;
-
-        default:
-          maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
-          break;
-      }
-
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+      return today;
     },
     amount_to_replenish: function amount_to_replenish() {
       var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
