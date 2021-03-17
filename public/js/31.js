@@ -1096,6 +1096,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Approved")) {
+        this.mixin_errorDialog("Error", "Approved expense reports can't be cancelled");
+        return;
+      }
+
+      if (this.selected.map(function (item) {
+        return item.status.status;
+      }).includes("Rejected")) {
+        this.mixin_errorDialog("Error", "Rejected expense reports can't be cancelled");
+        return;
+      }
+
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;

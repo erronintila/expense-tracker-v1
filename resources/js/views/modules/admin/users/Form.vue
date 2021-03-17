@@ -215,7 +215,7 @@
                     </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    <small v-if="!isEdit" class="text--secondary" >
+                    <small v-if="!isEdit" class="text--secondary">
                         Default Password: "password"
                     </small>
                     <v-row>
@@ -248,7 +248,7 @@
                                 :error-messages="errors.can_login"
                             ></v-checkbox>
                         </v-col>
-                        
+
                         <v-col cols="12" md="4" v-if="!isEdit">
                             <v-radio-group v-model="form.role" row label="Role">
                                 <v-radio
@@ -261,7 +261,6 @@
                                 ></v-radio>
                             </v-radio-group>
                         </v-col>
-                        
                     </v-row>
 
                     <v-row v-if="!isEdit">

@@ -70,7 +70,8 @@ __webpack_require__.r(__webpack_exports__);
         is_admin: false,
         is_superadmin: false,
         type: "employee",
-        job: null
+        job: null,
+        is_active: true
       },
       errors: {
         code: [],
@@ -88,7 +89,8 @@ __webpack_require__.r(__webpack_exports__);
         username: [],
         role: [],
         has_fund: [],
-        fund: []
+        fund: [],
+        is_active: []
       }
     };
   },
@@ -100,6 +102,7 @@ __webpack_require__.r(__webpack_exports__);
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(_this.$route.params.id).then(function (response) {
           _this.loader = false;
           _this.formDataLoaded = true;
+          console.log(response.data);
           resolve(response.data);
         })["catch"](function (error) {
           _this.mixin_showErrors(error);

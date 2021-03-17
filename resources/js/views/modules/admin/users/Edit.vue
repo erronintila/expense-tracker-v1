@@ -58,7 +58,8 @@ export default {
                 is_admin: false,
                 is_superadmin: false,
                 type: "employee",
-                job: null
+                job: null,
+                is_active: true
             },
             errors: {
                 code: [],
@@ -76,7 +77,8 @@ export default {
                 username: [],
                 role: [],
                 has_fund: [],
-                fund: []
+                fund: [],
+                is_active: []
             }
         };
     },
@@ -87,6 +89,7 @@ export default {
                     .then(response => {
                         this.loader = false;
                         this.formDataLoaded = true;
+                        console.log(response.data);
                         resolve(response.data);
                     })
                     .catch(error => {

@@ -43,6 +43,7 @@ class UserResource extends JsonResource
             "is_admin" => $this->is_admin,
             "is_superadmin" => $this->is_superadmin,
             "can_login" => $this->can_login,
+            "is_active" => $this->is_active,
 
             // -------------------------------------------------------------------
             // Additional Fields

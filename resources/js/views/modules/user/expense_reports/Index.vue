@@ -1174,6 +1174,30 @@ export default {
                 return;
             }
 
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
+                this.mixin_errorDialog(
+                    "Error",
+                    "Approved expense reports can't be cancelled"
+                );
+                return;
+            }
+
+            if (
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Rejected")
+            ) {
+                this.mixin_errorDialog(
+                    "Error",
+                    "Rejected expense reports can't be cancelled"
+                );
+                return;
+            }
+
             if (this.selected.length == 0) {
                 this.mixin_errorDialog(
                     "Error",
