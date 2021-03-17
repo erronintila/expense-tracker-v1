@@ -4,8 +4,8 @@
             Basic Details
         </div>
         <p class="text--disabled">
-            Note: Due of encoding of expenses :
-            {{ $store.getters.settings.submission_period }}
+            Note: Due of encoding of expenses : Within 
+            {{ $store.getters.settings.expense_encoding_period }} day/s
         </p>
 
         <v-row>
@@ -805,7 +805,6 @@ export default {
             if (this.mixin_can("add expenses beyond encoding period")) {
                 return null;
             }
-            console.log(this.$store.getters.settings.expense_encoding_period);
             let settings = this.$store.getters.settings;
             let encodingMinDate = moment()
                 .subtract((settings.expense_encoding_period ?? 1) - 1, "days")
