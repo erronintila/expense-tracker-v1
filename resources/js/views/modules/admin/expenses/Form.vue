@@ -4,7 +4,7 @@
             Basic Details
         </div>
         <p class="text--disabled">
-            Note: Due of encoding of expenses : Within 
+            Note: Due of encoding of expenses : Within
             {{ $store.getters.settings.expense_encoding_period }} day/s
         </p>
 
@@ -125,11 +125,13 @@
                 <div>
                     <p class="text--disabled">
                         Remaining Fund:
-                        <v-btn color="green" dark small outlined>{{
-                            mixin_formatNumber(
-                                form.user ? form.user.remaining_fund : 0
-                            )
-                        }}</v-btn>
+                        <v-btn color="green" dark small outlined>
+                            {{
+                                mixin_formatNumber(
+                                    form.user ? form.user.remaining_fund : 0
+                                )
+                            }}
+                        </v-btn>
                     </p>
                 </div>
             </v-col>

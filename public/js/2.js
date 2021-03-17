@@ -1039,6 +1039,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -2243,7 +2245,7 @@ var render = function() {
       _vm._v(" "),
       _c("p", { staticClass: "text--disabled" }, [
         _vm._v(
-          "\n        Note: Due of encoding of expenses : Within \n        " +
+          "\n        Note: Due of encoding of expenses : Within\n        " +
             _vm._s(_vm.$store.getters.settings.expense_encoding_period) +
             " day/s\n    "
         )
@@ -2523,11 +2525,13 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        _vm._s(
-                          _vm.mixin_formatNumber(
-                            _vm.form.user ? _vm.form.user.remaining_fund : 0
-                          )
-                        )
+                        "\n                        " +
+                          _vm._s(
+                            _vm.mixin_formatNumber(
+                              _vm.form.user ? _vm.form.user.remaining_fund : 0
+                            )
+                          ) +
+                          "\n                    "
                       )
                     ]
                   )
