@@ -6,7 +6,7 @@
         <v-row>
             <v-col cols="12" md="9">
                 <v-text-field
-                    v-model="vendorForm.name"
+                    v-model="form.name"
                     :counter="150"
                     :error-messages="errors.name"
                     :rules="[
@@ -20,10 +20,10 @@
 
             <v-col cols="12" md="3">
                 <v-radio-group
-                    v-model="vendorForm.is_vat_inclusive"
+                    v-model="form.is_vat_inclusive"
                     @change="
                         no_tin = false;
-                        vendorForm.tin = '';
+                        form.tin = '';
                     "
                     row
                 >
@@ -35,7 +35,7 @@
         <v-row>
             <v-col cols="9" md="9">
                 <v-text-field
-                    v-model="vendorForm.tin"
+                    v-model="form.tin"
                     :rules="mixin_validation.required"
                     :error-messages="errors.tin"
                     :counter="100"
@@ -51,25 +51,25 @@
                 <v-checkbox
                     v-model="no_tin"
                     label="N/A"
-                    :readonly="vendorForm.is_vat_inclusive"
+                    :readonly="form.is_vat_inclusive"
                 ></v-checkbox>
             </v-col>
         </v-row>
         <v-text-field
-            v-model="vendorForm.email"
+            v-model="form.email"
             :rules="[]"
             :error-messages="errors.email"
             label="Email Address"
         ></v-text-field>
         <v-text-field
-            v-model="vendorForm.contact_person"
+            v-model="form.contact_person"
             :rules="[]"
             :error-messages="errors.contact_person"
             :counter="100"
             label="Contact Person"
         ></v-text-field>
         <v-text-field
-            v-model="vendorForm.mobile_number"
+            v-model="form.mobile_number"
             :rules="[]"
             :counter="30"
             :error-messages="errors.mobile_number"
@@ -78,7 +78,7 @@
             type="number"
         ></v-text-field>
         <v-text-field
-            v-model="vendorForm.telephone_number"
+            v-model="form.telephone_number"
             :rules="[]"
             :counter="30"
             :error-messages="errors.telephone_number"
@@ -87,7 +87,7 @@
             type="number"
         ></v-text-field>
         <v-text-field
-            v-model="vendorForm.website"
+            v-model="form.website"
             :counter="100"
             :rules="[]"
             :error-messages="errors.website"
@@ -95,7 +95,7 @@
             label="Website"
         ></v-text-field>
         <v-textarea
-            v-model="vendorForm.address"
+            v-model="form.address"
             :error-messages="errors.address"
             :rules="mixin_validation.required"
             @input="errors.address = []"
@@ -116,7 +116,7 @@
 <script>
 export default {
     props: {
-        form: {
+        vendorForm: {
             type: Object,
             default: () => {
                 return {
@@ -130,7 +130,8 @@ export default {
                     remarks: "",
                     website: "",
                     is_vat_inclusive: true,
-                    address: ""
+                    address: "",
+                    is_active: true
                 };
             }
         },
@@ -148,7 +149,8 @@ export default {
                     remarks: [],
                     website: [],
                     is_vat_inclusive: [],
-                    address: []
+                    address: [],
+                    is_active: []
                 };
             }
         },
@@ -169,7 +171,20 @@ export default {
         return {
             no_tin: false,
             valid: false,
-            row: null
+            row: null,
+            form: {
+                code: "",
+                name: "",
+                email: "",
+                tin: "",
+                contact_person: "",
+                mobile_number: "",
+                telephone_number: "",
+                remarks: "",
+                website: "",
+                is_vat_inclusive: true,
+                address: ""
+            }
         };
     },
     methods: {
@@ -177,31 +192,28 @@ export default {
             if (!this.$refs.form.validate()) {
                 return;
             }
-            this.$emit("onSave", this.vendorForm);
-        },
-    },
-    computed: {
-        vendorForm: {
-            get() {
-                return this.form;
-            },
-            set(value) {
-                return value;
-            }
+            this.$emit("on-save", this.form);
         }
     },
     watch: {
-        "vendorForm.is_vat_inclusive": function() {
-            if (this.vendorForm.is_vat_inclusive) {
+        vendorForm: {
+            immediate: true,
+            deep: true,
+            handler(newValue, oldValue) {
+                this.form = newValue;
+            }
+        },
+        "form.is_vat_inclusive": function() {
+            if (this.form.is_vat_inclusive) {
                 this.no_tin = false;
                 return;
             }
         },
         no_tin() {
-            this.vendorForm.tin = this.no_tin ? "N/A" : "";
+            this.form.tin = this.no_tin ? "N/A" : "";
         },
-        "vendorForm.tin" : function() {
-            if(this.vendorForm.tin == "N/A" || this.vendorForm.tin == null) {
+        "form.tin": function() {
+            if (this.form.tin == "N/A" || this.form.tin == null) {
                 this.no_tin = true;
             }
         }

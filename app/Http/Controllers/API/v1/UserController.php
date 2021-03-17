@@ -30,11 +30,15 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['permission:view all users'], ['only' => ['index']]);
+        // $this->middleware(['permission:view all users'], ['only' => ['index']]);
         $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
+        $this->middleware(['permission:edit users fund'], ['only' => ['update_fund']]);
+        $this->middleware(['permission:reset user passwords'], ['only' => ['reset_password']]);
+        $this->middleware(['permission:edit permissions'], ['only' => ['update_permissions']]);
+        $this->middleware(['permission:set user activation'], ['only' => ['update_activation']]);
     }
 
     /**
@@ -44,7 +48,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // abort(422);
+        if (!request("isSelection") || !request()->has("isSelection")) {
+            if (!app("auth")->user()->hasPermissionTo('view all users')) {
+                abort(403);
+            }
+        }
+        
         $search = request("search") ?? "";
         $sortBy = request("sortBy") ?? "last_name";
         $sortType = request("sortType") ?? "asc";
@@ -57,9 +66,12 @@ class UserController extends Controller
             }]);
         }]);
 
-        if(request()->has("with_expense_types")) {
-            $users = $users->with(['expense_types' => function($query) {
+        if (request()->has("with_expense_types")) {
+            $users = $users->with(['expense_types' => function ($query) {
                 $query->withTrashed();
+                $query->with(['sub_types' => function ($query) {
+                    $query->withTrashed();
+                }]);
             }]);
         }
 
@@ -100,16 +112,25 @@ class UserController extends Controller
                 case 'Unverified':
                     $users = $users->where('email_verified_at', null);
                     break;
+                case 'Inactive':
+                    $users = $users->where('is_active', 0);
+                    break;
+                case 'Active':
+                    $users = $users->where('is_active', 1);
+                    break;
                 default:
                     $users = $users;
                     break;
             }
         }
 
+        if (request()->has("is_active")) {
+            $users = $users->where('is_active', (request("is_active") || strtolower(request("is_active")) == 'true') ?? 1);
+        }
+
         if (request()->has('department_id')) {
             if (request("department_id") > 0) {
                 $jobs = Job::where('department_id', request("department_id"));
-
                 $users = $users->whereIn('job_id', $jobs->pluck('id'));
             }
         }
@@ -168,6 +189,7 @@ class UserController extends Controller
         $user->username = request("username");
         $user->email    = request("email");
         $user->password = Hash::make(request("password"));
+        $user->is_active = request("is_active");
         $user->is_admin = request("is_admin");
         $user->is_superadmin = request("is_superadmin");
         $user->can_login = request("can_login");
@@ -225,10 +247,6 @@ class UserController extends Controller
         $validated = $request->validated(); // check validation
         $message = "User updated successfully"; // return message
 
-        if (!app("auth")->user()->hasPermissionTo('edit users')) {
-            abort(403);
-        }
-
         $user = User::withTrashed()->findOrFail($id);
 
         $user->code = request("code") ?? $user->code;
@@ -248,6 +266,7 @@ class UserController extends Controller
         $user->password = $user->password;
         $user->fund = $user->fund;
         $user->remaining_fund = $user->remaining_fund;
+        $user->is_active = request("is_active");
         $user->is_admin = request("is_admin");
         $user->is_superadmin = request("is_superadmin");
         $user->job_id = request("job_id");
@@ -339,10 +358,6 @@ class UserController extends Controller
 
     public function update_fund(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('edit users fund')) {
-            abort(403);
-        }
-
         $message = "User fund updated successfully";
 
         $user = User::withTrashed()->findOrFail($id);
@@ -361,10 +376,6 @@ class UserController extends Controller
 
     public function reset_password(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('reset user passwords')) {
-            abort(403);
-        }
-
         $message = "User password resetted successfully";
 
         if (request()->has("ids")) {
@@ -469,10 +480,6 @@ class UserController extends Controller
      */
     public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('edit permissions')) {
-            abort(403);
-        }
-
         $user = User::findOrFail($id);
         $user->can_login = request("can_login");
         $user->is_admin = request("is_admin");
@@ -487,6 +494,37 @@ class UserController extends Controller
         }
 
         return $this->successResponse(null, "User permissions updated successfully.", 200);
+    }
+
+    public function update_activation(Request $request, $id)
+    {
+        $activation = request("is_active") ? "activated" : "deactivated";
+        $message = "User {$activation} successfully";
+
+        if (request()->has("ids")) {
+            foreach (request("ids") as $id) {
+                $user = User::withTrashed()->findOrFail($id);
+                $user->disableLogging();
+                $user->is_active = request("is_active");
+                $user->save();
+
+                activity('user')
+                ->performedOn($user)
+                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
+                ->log("{$activation} user");
+            }
+        } else {
+            $user = User::withTrashed()->findOrFail($id);
+            $user->disableLogging();
+            $user->is_active = request("is_active");
+            $user->save();
+
+            activity('user')
+            ->performedOn($user)
+            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
+            ->log("{$activation} user");
+        }
+        return $this->successResponse(null, $message, 200);
     }
     
     /**
@@ -571,10 +609,6 @@ class UserController extends Controller
             }])
             ->where("is_superadmin", false)
             ->orderBy("last_name");
-
-        if (request()->has("no_user") && request()->has("user_id")) {
-            // $user->where("user_id", null)->orwhere("user_id", request("")user_id);
-        }
 
         if (request()->has("update_settings")) {
             $user = User::with(['job' => function ($query) {

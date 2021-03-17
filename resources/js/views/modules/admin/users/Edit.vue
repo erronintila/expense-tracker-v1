@@ -1,22 +1,7 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -29,10 +14,11 @@
 
             <v-container>
                 <Form
+                    v-if="formDataLoaded"
                     :isEdit="true"
                     :errors="errors"
-                    @onSave="onSave"
-                    :form="form"
+                    :userForm="form"
+                    @on-save="onSave"
                 ></Form>
             </v-container>
         </v-card>
@@ -42,6 +28,7 @@
 <script>
 import Form from "./Form";
 import UserDataService from "../../../../services/UserDataService";
+import JobDataService from "../../../../services/JobDataService";
 
 export default {
     components: {
@@ -49,6 +36,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             loader: true,
             form: {
                 code: null,
@@ -70,7 +58,8 @@ export default {
                 is_admin: false,
                 is_superadmin: false,
                 type: "employee",
-                job: null
+                job: null,
+                is_active: true
             },
             errors: {
                 code: [],
@@ -88,23 +77,37 @@ export default {
                 username: [],
                 role: [],
                 has_fund: [],
-                fund: []
+                fund: [],
+                is_active: []
             }
         };
     },
     methods: {
         getData() {
-            UserDataService.show(this.$route.params.id)
+            return new Promise((resolve, reject) => {
+                UserDataService.show(this.$route.params.id)
+                    .then(response => {
+                        this.loader = false;
+                        this.formDataLoaded = true;
+                        console.log(response.data);
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.loader = false;
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
+        },
+        getInitialJob() {
+            JobDataService.show(this.form.job.id)
                 .then(response => {
-                    let data = response.data.data;
-                    this.form = data;
-                    this.form.job = data.job;
+                    this.form.job = response.data.data;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                })
-                .finally(() => {
-                    this.loader = false;
+                    reject();
                 });
         },
         onSave(value) {
@@ -121,6 +124,7 @@ export default {
                         response.data.status,
                         response.data.message
                     );
+                    this.loader = false;
                     window.location.replace("/admin/users");
                 })
                 .catch(error => {
@@ -130,17 +134,23 @@ export default {
                             this.errors = error.response.data.errors;
                         }
                     }
-                })
-                .finally(() => {
                     this.loader = false;
                 });
         }
     },
     created() {
-        this.getData();
+        this.getData().then(data => {
+            this.form = data.data;
+            this.formDataLoaded = true;
+            this.getInitialJob();
+        });
     },
     activated() {
-        this.getData();
+        this.getData().then(data => {
+            this.form = data.data;
+            this.formDataLoaded = true;
+            this.getInitialJob();
+        });
     }
 };
 </script>

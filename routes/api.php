@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/expenses', 'API\v1\ExpenseController@getExpenses');
     Route::put('/expenses/restore/{id}', 'API\v1\ExpenseController@restore');
+    Route::get('/summary/expenses', 'API\v1\ExpenseController@getExpenseSummary');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -111,6 +112,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/vendors', 'API\v1\VendorController@getVendors');
     Route::put('/vendors/restore/{id}', 'API\v1\VendorController@restore');
+    Route::put('/vendors/update_activation/{id}', 'API\v1\VendorController@update_activation');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -124,6 +126,18 @@ Route::middleware('auth:sanctum')->group(function () {
         $user = User::with(['job' => function ($query) {
             $query->withTrashed();
             $query->with(['department' => function ($query) {
+                $query->withTrashed();
+            }]);
+            // $query->with(['expense_types' => function ($query) {
+            //     $query->withTrashed();
+            //     $query->with(['sub_types' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }]);
+        }])
+        ->with(['expense_types' => function ($query) {
+            $query->withTrashed();
+            $query->with(['sub_types' => function ($query) {
                 $query->withTrashed();
             }]);
         }])
@@ -140,6 +154,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/update_password/{id}', 'API\v1\UserController@update_password');
     Route::put('/users/update_profile/{id}', 'API\v1\UserController@update_profile');
     Route::put('/users/update_permissions/{id}', 'API\v1\UserController@update_permissions');
+    Route::put('/users/update_activation/{id}', 'API\v1\UserController@update_activation');
 
     Route::get('/permissions', function (Request $request) {
         return $request->user->getAllPermissions();

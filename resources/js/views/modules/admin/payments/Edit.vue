@@ -15,26 +15,19 @@
 </template>
 
 <script>
+import PaymentDataService from "../../../../services/PaymentDataService";
+import UserDataService from "../../../../services/UserDataService";
+
 export default {
     data() {
         return {};
     },
     methods: {
         loadItem() {
-            let _this = this;
-
-            axios
-                .get(`/api/users/${_this.$route.params.id}`)
-                .then(function(response) {
-                })
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+            UserDataService.show(this.$route.params.id)
+                .then(response => {})
+                .catch(error => {
+                    this.mixin_showErrors(error);
                 });
         }
     },

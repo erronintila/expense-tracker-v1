@@ -1,20 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
@@ -93,10 +79,13 @@
 </template>
 
 <script>
+import UserDataService from "../../../../services/UserDataService";
+import PermissionDataService from "../../../../services/PermissionDataService";
+
 export default {
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             panel: [0, 1],
             valid: false,
             menu: false,
@@ -112,109 +101,80 @@ export default {
             },
             errors: {
                 role: [],
-                can_login: [],
+                can_login: []
             }
         };
     },
     methods: {
         getData() {
-            let _this = this;
+            this.loadPermissions().then(data => {
+                this.permissions = data;
+                this.form.permissions = [];
 
-            this.loadPermissions().then(
-                axios
-                    .get("/api/users/" + _this.$route.params.id)
+                UserDataService.show(this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
-
-                        console.log(data);
-                        _this.form.is_admin = data.is_admin;
-                        _this.form.can_login = data.can_login;
-                        _this.form.permissions = data.permissions;
-                        _this.form.old_permissions = data.permissions;
-                        _this.form.role = data.role[0];
-                        _this.form.old_role = data.role[0];
-
-                        _this.loader = false;
+                        this.form.is_admin = data.is_admin;
+                        this.form.can_login = data.can_login;
+                        this.form.permissions = data.permissions;
+                        this.form.old_permissions = data.permissions;
+                        this.form.role = data.role[0];
+                        this.form.old_role = data.role[0];
+                        this.formDataLoaded = true;
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loader = false;
-                    })
-            );
+                        this.mixin_showErrors(error);
+                        this.loformDataLoadedder = true;
+                    });
+            });
         },
         loadPermissions() {
-            let _this = this;
-
             return new Promise((resolve, reject) => {
-                axios
-                    .get(`/api/data/permissions?role=${_this.form.role}`)
+                PermissionDataService.get({
+                    params: {
+                        role: this.form.role
+                    }
+                })
                     .then(response => {
-                        console.log(response);
-                        _this.permissions = response.data;
-                        _this.form.permissions = [];
-                        resolve();
+                        resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
+                        this.mixin_showErrors(error);
                         reject();
                     });
             });
         },
         onSave() {
-            let _this = this;
-
             let is_administrator =
                 this.form.role == "Administrator" ? true : false;
 
-            _this.$refs.form.validate();
+            this.$refs.form.validate();
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.formDataLoaded = false;
 
-                axios
-                    .put("/api/users/update_permissions/" + _this.$route.params.id, {
-                        is_admin: is_administrator,
-                        can_login: _this.form.can_login,
-                        permissions: _this.form.permissions,
-                    })
-                    .then(function(response) {
-                        _this.mixin_successDialog(
+                UserDataService.updatePermissions(this.$route.params.id, {
+                    is_admin: is_administrator,
+                    can_login: this.form.can_login,
+                    permissions: this.form.permissions
+                })
+                    .then(response => {
+                        this.mixin_successDialog(
                             response.data.status,
                             response.data.message
                         );
-
+                        this.formDataLoaded = true;
                         window.location.replace("/admin/users");
                     })
-                    .catch(function(error) {
-                        _this.loader = false;
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                    .catch(error => {
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.errors = error.response.data.errors;
+                                this.errors = error.response.data.errors;
                             }
                         }
+                        this.formDataLoaded = true;
                     });
 
                 return;
@@ -223,7 +183,9 @@ export default {
     },
     watch: {
         "form.role": function() {
-            this.loadPermissions().then(() => {
+            this.loadPermissions().then(data => {
+                this.permissions = data;
+                this.form.permissions = [];
                 if (this.form.old_role == this.form.role) {
                     this.form.permissions = this.form.old_permissions;
                 }

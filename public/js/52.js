@@ -112,6 +112,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -121,6 +122,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       panel: [0],
       valid: false,
       usersParameters: {
@@ -162,57 +164,52 @@ __webpack_require__.r(__webpack_exports__);
       this.user = null;
     },
     loadExpenseTypes: function loadExpenseTypes() {
-      var _this = this; // axios
-      // .get("/api/data/expense_types?only=true")
+      var _this = this;
 
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll({
+          params: {
+            itemsPerPage: 100
+          }
+        }).then(function (response) {
+          _this.all_expense_types = response.data.data;
+          _this.formDataLoaded = true;
+          resolve();
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
 
-      _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll({
-        params: {
-          itemsPerPage: 100
-        }
-      }).then(function (response) {
-        _this.all_expense_types = response.data.data;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.formDataLoaded = true;
+          reject();
+        });
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this2 = this;
 
-      if (_this.user == null) {
-        _this.mixin_errorDialog("Error", "No user selected");
-
+      if (this.user == null) {
+        this.mixin_errorDialog("Error", "No user selected");
         return;
       }
 
-      _this.$refs.form.validate();
+      this.$refs.form.validate();
 
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
+      if (this.$refs.form.validate()) {
+        this.loader = true;
         var data = {
-          expense_types: _this.allowed_expense_types.map(function (item) {
+          expense_types: this.allowed_expense_types.map(function (item) {
             return item.id;
           })
         };
-        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateSettings(_this.user.id, data).then(function (response) {
-          _this.$dialog.message.success("User settings updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateSettings(this.user.id, data).then(function (response) {
+          _this2.mixin_successDialog(response.data.status, response.data.message);
 
-          _this.$store.dispatch("AUTH_USER");
+          _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {
-              _this.errors = error.response.data.errors;
+              _this2.errors = error.response.data.errors;
             }
           }
         });
@@ -278,101 +275,106 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title success--text" }, [
+                    _vm._v("User Settings")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title success--text" }, [
-                _vm._v("User Settings")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card",
-            { staticClass: "mb-4" },
-            [
               _c(
-                "v-card-text",
+                "v-card",
+                { staticClass: "mb-4" },
                 [
                   _c(
-                    "v-row",
+                    "v-card-text",
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "6" } },
+                        "v-row",
                         [
-                          _c("UserDialogSelector", {
-                            ref: "userDialogSelector",
-                            attrs: {
-                              selectedUser: _vm.user,
-                              usersParameters: _vm.usersParameters
-                            },
-                            on: {
-                              selectUser: _vm.onChangeUser,
-                              onReset: _vm.onResetUser
-                            },
-                            scopedSlots: _vm._u([
-                              {
-                                key: "openDialog",
-                                fn: function(ref) {
-                                  var bind = ref.bind
-                                  var on = ref.on
-                                  var computedSelectedUser =
-                                    ref.computedSelectedUser
-                                  return [
-                                    _c(
-                                      "v-btn",
-                                      _vm._g(
-                                        _vm._b({}, "v-btn", bind, false),
-                                        on
-                                      ),
-                                      [
-                                        _vm._v(
-                                          "\n                                    " +
-                                            _vm._s(
-                                              computedSelectedUser
-                                                ? computedSelectedUser.name
-                                                : "Select User"
-                                            ) +
-                                            "\n                                "
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("UserDialogSelector", {
+                                ref: "userDialogSelector",
+                                attrs: {
+                                  selectedUser: _vm.user,
+                                  usersParameters: _vm.usersParameters
+                                },
+                                on: {
+                                  selectUser: _vm.onChangeUser,
+                                  onReset: _vm.onResetUser
+                                },
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "openDialog",
+                                    fn: function(ref) {
+                                      var bind = ref.bind
+                                      var on = ref.on
+                                      var computedSelectedUser =
+                                        ref.computedSelectedUser
+                                      return [
+                                        _c(
+                                          "v-btn",
+                                          _vm._g(
+                                            _vm._b({}, "v-btn", bind, false),
+                                            on
+                                          ),
+                                          [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(
+                                                  computedSelectedUser
+                                                    ? computedSelectedUser.name
+                                                    : "Select User"
+                                                ) +
+                                                "\n                                "
+                                            )
+                                          ]
                                         )
                                       ]
-                                    )
-                                  ]
+                                    }
+                                  }
+                                ]),
+                                model: {
+                                  value: _vm.user,
+                                  callback: function($$v) {
+                                    _vm.user = $$v
+                                  },
+                                  expression: "user"
                                 }
-                              }
-                            ]),
-                            model: {
-                              value: _vm.user,
-                              callback: function($$v) {
-                                _vm.user = $$v
-                              },
-                              expression: "user"
-                            }
-                          })
+                              })
+                            ],
+                            1
+                          )
                         ],
                         1
                       )
@@ -381,143 +383,145 @@ var render = function() {
                   )
                 ],
                 1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              model: {
-                value: _vm.valid,
-                callback: function($$v) {
-                  _vm.valid = $$v
-                },
-                expression: "valid"
-              }
-            },
-            [
+              ),
+              _vm._v(" "),
               _c(
-                "v-expansion-panels",
+                "v-form",
                 {
-                  attrs: { multiple: "" },
+                  ref: "form",
                   model: {
-                    value: _vm.panel,
+                    value: _vm.valid,
                     callback: function($$v) {
-                      _vm.panel = $$v
+                      _vm.valid = $$v
                     },
-                    expression: "panel"
+                    expression: "valid"
                   }
                 },
                 [
                   _c(
-                    "v-expansion-panel",
+                    "v-expansion-panels",
+                    {
+                      attrs: { multiple: "" },
+                      model: {
+                        value: _vm.panel,
+                        callback: function($$v) {
+                          _vm.panel = $$v
+                        },
+                        expression: "panel"
+                      }
+                    },
                     [
-                      _c("v-expansion-panel-header", [
-                        _c("div", { staticClass: "green--text" }, [
-                          _vm._v(
-                            "\n                            Expense Types\n                        "
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
                       _c(
-                        "v-expansion-panel-content",
+                        "v-expansion-panel",
                         [
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
-                                [
-                                  _c("v-select", {
-                                    attrs: {
-                                      items: _vm.all_expense_types,
-                                      "item-text": "name",
-                                      "item-value": "id",
-                                      "return-object": "",
-                                      label: "Allowed Expense Types",
-                                      multiple: ""
-                                    },
-                                    scopedSlots: _vm._u([
-                                      {
-                                        key: "selection",
-                                        fn: function(ref) {
-                                          var item = ref.item
-                                          var index = ref.index
-                                          return [
-                                            index === 0
-                                              ? _c(
-                                                  "v-chip",
-                                                  { attrs: { small: "" } },
-                                                  [
-                                                    _c("span", [
-                                                      _vm._v(_vm._s(item.name))
-                                                    ])
-                                                  ]
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            index === 1
-                                              ? _c(
-                                                  "span",
-                                                  {
-                                                    staticClass:
-                                                      "grey--text caption"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "(+" +
-                                                        _vm._s(
-                                                          _vm
-                                                            .allowed_expense_types
-                                                            .length - 1
-                                                        ) +
-                                                        "\n                                            others)"
-                                                    )
-                                                  ]
-                                                )
-                                              : _vm._e()
-                                          ]
-                                        }
-                                      }
-                                    ]),
-                                    model: {
-                                      value: _vm.allowed_expense_types,
-                                      callback: function($$v) {
-                                        _vm.allowed_expense_types = $$v
-                                      },
-                                      expression: "allowed_expense_types"
-                                    }
-                                  })
-                                ],
-                                1
+                          _c("v-expansion-panel-header", [
+                            _c("div", { staticClass: "green--text" }, [
+                              _vm._v(
+                                "\n                            Expense Types\n                        "
                               )
-                            ],
-                            1
-                          ),
+                            ])
+                          ]),
                           _vm._v(" "),
                           _c(
-                            "v-row",
+                            "v-expansion-panel-content",
                             [
                               _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "4" } },
+                                "v-row",
                                 [
                                   _c(
-                                    "v-btn",
-                                    {
-                                      attrs: { color: "green", dark: "" },
-                                      on: { click: _vm.onSave }
-                                    },
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
                                     [
-                                      _vm._v(
-                                        "\n                                    Save Changes\n                                "
+                                      _c("v-select", {
+                                        attrs: {
+                                          items: _vm.all_expense_types,
+                                          "item-text": "name",
+                                          "item-value": "id",
+                                          "return-object": "",
+                                          label: "Allowed Expense Types",
+                                          multiple: ""
+                                        },
+                                        scopedSlots: _vm._u([
+                                          {
+                                            key: "selection",
+                                            fn: function(ref) {
+                                              var item = ref.item
+                                              var index = ref.index
+                                              return [
+                                                index === 0
+                                                  ? _c(
+                                                      "v-chip",
+                                                      { attrs: { small: "" } },
+                                                      [
+                                                        _c("span", [
+                                                          _vm._v(
+                                                            _vm._s(item.name)
+                                                          )
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                index === 1
+                                                  ? _c(
+                                                      "span",
+                                                      {
+                                                        staticClass:
+                                                          "grey--text caption"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "(+" +
+                                                            _vm._s(
+                                                              _vm
+                                                                .allowed_expense_types
+                                                                .length - 1
+                                                            ) +
+                                                            "\n                                            others)"
+                                                        )
+                                                      ]
+                                                    )
+                                                  : _vm._e()
+                                              ]
+                                            }
+                                          }
+                                        ]),
+                                        model: {
+                                          value: _vm.allowed_expense_types,
+                                          callback: function($$v) {
+                                            _vm.allowed_expense_types = $$v
+                                          },
+                                          expression: "allowed_expense_types"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "green", dark: "" },
+                                          on: { click: _vm.onSave }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Save Changes\n                                "
+                                          )
+                                        ]
                                       )
-                                    ]
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -537,9 +541,6 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

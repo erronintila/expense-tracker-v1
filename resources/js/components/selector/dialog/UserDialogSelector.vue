@@ -28,7 +28,7 @@
                         @change="selectUser"
                     >
                         <template v-for="(item, index) in collections.items">
-                            <v-list-item :key="item.id" :value="item">
+                            <v-list-item :key="index" :value="item">
                                 <template>
                                     <v-list-item-content>
                                         <v-list-item-title
@@ -46,11 +46,7 @@
                                     </v-list-item-content>
                                 </template>
                             </v-list-item>
-
-                            <v-divider
-                                v-if="index < collections.items.length - 1"
-                                :key="index"
-                            ></v-divider>
+                            <!-- <v-divider v-if="index < collections.items.length - 1" :key="index"></v-divider> -->
                         </template>
                     </v-list-item-group>
                 </v-list>
@@ -127,48 +123,58 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.filters.search.trim().toLowerCase();
+                let search = this.filters.search.trim().toLowerCase();
                 let params = {
                     search: search,
                     sortBy: sortBy[0],
                     sortType: sortDesc[0] ? "desc" : "asc",
                     page: page,
-                    itemsPerPage: itemsPerPage
+                    itemsPerPage: itemsPerPage,
+                    isSelection: true,
+                    is_active: true,
                 };
 
                 let data = {};
 
-                if(this.usersParameters) {
-                    if(this.usersParameters.params) {
-                        data = { params: { ...params, ...this.usersParameters.params }}
+                if (this.usersParameters) {
+                    if (this.usersParameters.params) {
+                        data = {
+                            params: {
+                                ...params,
+                                ...this.usersParameters.params
+                            }
+                        };
                     } else {
-                        data = { params: { ...params }}
+                        data = {
+                            params: {
+                                ...params
+                            }
+                        };
                     }
                 } else {
-                    data = { params: { ...params }}
+                    data = {
+                        params: {
+                            ...params
+                        }
+                    };
                 }
 
                 // data = { ...params };
 
                 UserDataService.getAll(data)
                     .then(response => {
+                        this.loading = false;
                         resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
+                        this.mixin_showErrors(error);
+                        this.loading = false;
                         reject();
-                    })
-                    .finally(() => {
-                        _this.loading = false;
                     });
             });
         },
@@ -215,6 +221,12 @@ export default {
                 });
             },
             deep: true
+        },
+        dialog() {
+            this.getDataFromApi().then(data => {
+                this.collections.items = data.data;
+                this.meta = data.meta;
+            });
         }
     },
     computed: {

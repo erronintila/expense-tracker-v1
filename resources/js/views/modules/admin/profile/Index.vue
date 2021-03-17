@@ -1,28 +1,13 @@
 <template>
     <div>
-        <v-container v-if="form.id == ''" style="height: 400px">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Profile</h4>
                 <v-spacer></v-spacer>
             </v-card-title>
             <v-card-subtitle>
-                Last updated: {{ form.updated_at }}
+                Last updated: {{ lastUpdated }}
             </v-card-subtitle>
 
             <v-card-text>
@@ -447,10 +432,12 @@
 
 <script>
 import moment from "moment";
+import UserDataService from "../../../../services/UserDataService";
 
 export default {
     data() {
         return {
+            formDataLoaded: false,
             showOldPassword: false,
             showNewPassword: false,
             showRetypePassword: false,
@@ -556,97 +543,66 @@ export default {
     },
     methods: {
         onSave() {
-            let _this = this;
-
-            // _this.$refs.form.validate();
-
-            if (_this.$refs.form.validate()) {
-                axios
-                    .put("/api/users/update_profile/" + _this.form.id, {
-                        code: _this.form.code,
-                        first_name: _this.form.first_name,
-                        middle_name: _this.form.middle_name,
-                        last_name: _this.form.last_name,
-                        suffix: _this.form.suffix,
-                        gender: _this.form.gender,
-                        birthdate: _this.form.birthdate,
-                        mobile_number: _this.form.mobile_number,
-                        telephone_number: _this.form.telephone_number,
-                        address: _this.form.address,
-                        fund: _this.form.fund,
-                        remaining_fund: _this.form.remaining_fund,
-                        username: _this.form.username,
-                        email: _this.form.email,
-                        password: "password",
-                        password_confirmation: "password",
-                        is_admin: _this.form.is_admin,
-                        is_superadmin: _this.form.is_superadmin,
-                        can_login: _this.form.can_login,
-                        type: _this.form.type,
-                        job_id: _this.form.job == null ? null : _this.form.job.id,
-                    })
+            this.$refs.form.validate();
+            if (this.$refs.form.validate()) {
+                UserDataService.updateProfile(this.form.id, {
+                    code: this.form.code,
+                    first_name: this.form.first_name,
+                    middle_name: this.form.middle_name,
+                    last_name: this.form.last_name,
+                    suffix: this.form.suffix,
+                    gender: this.form.gender,
+                    birthdate: this.form.birthdate,
+                    mobile_number: this.form.mobile_number,
+                    telephone_number: this.form.telephone_number,
+                    address: this.form.address,
+                    fund: this.form.fund,
+                    remaining_fund: this.form.remaining_fund,
+                    username: this.form.username,
+                    email: this.form.email,
+                    password: "password",
+                    password_confirmation: "password",
+                    is_admin: this.form.is_admin,
+                    is_superadmin: this.form.is_superadmin,
+                    can_login: this.form.can_login,
+                    type: this.form.type,
+                    job_id: this.form.job == null ? null : this.form.job.id
+                })
                     .then(response => {
-                        _this.$dialog.message.success(
-                            "User account updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
-
-                        _this.$store.dispatch("AUTH_USER");
+                        this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.errors = error.response.data.errors;
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
             }
         },
         onUpdatePassword() {
-            let _this = this;
-
-            if (_this.$refs.form_password.validate()) {
-                axios
-                    .put("/api/users/update_password/" + _this.form.id, {
-                        old_password: _this.old_password,
-                        password: _this.password,
-                        password_confirmation: _this.password_confirmation
-                    })
+            if (this.$refs.form_password.validate()) {
+                UserDataService.updatePassword(this.form.id, {
+                    old_password: this.old_password,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation
+                })
                     .then(response => {
-                        _this.$dialog.message.success(
-                            "User account password has been updated.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
+                        this.mixin_successDialog(response.data.status, response.data.message);
+                        // this.$store.dispatch("AUTH_USER");
 
-                        // _this.$store.dispatch("AUTH_USER");
-
-                        _this.dialogPassword = false;
-                        _this.old_password = "";
-                        _this.password = "";
-                        _this.password_confirmation = "";
+                        this.dialogPassword = false;
+                        this.old_password = "";
+                        this.password = "";
+                        this.password_confirmation = "";
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.password_errors =
+                                this.password_errors =
                                     error.response.data.errors;
                             }
                         }
@@ -664,20 +620,23 @@ export default {
     computed: {
         maxDate() {
             return moment().format("YYYY-MM-DD");
+        },
+        lastUpdated() {
+            return moment(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
         }
     },
     created() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.form = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.form = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.formDataLoaded = true;
         });
     },
     activated() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.form = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.form = response;
+            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.formDataLoaded = true;
         });
     }
 };

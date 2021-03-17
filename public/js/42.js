@@ -11,7 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
 /* harmony import */ var _services_ActivityLogDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/ActivityLogDataService */ "./resources/js/services/ActivityLogDataService.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -153,18 +153,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"],
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"],
     UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
       loading: true,
+      formDataLoaded: false,
       collections: {
         activityLogs: [],
         selectedActivityLogs: [],
@@ -265,13 +275,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         };
         _services_ActivityLogDataService__WEBPACK_IMPORTED_MODULE_3__["default"].getAll(data).then(function (response) {
+          _this.formDataLoaded = true;
           resolve(response.data);
         })["catch"](function (error) {
-          reject();
-
           _this.mixin_showErrors(error);
-        })["finally"](function () {
-          _this.loading = false;
+
+          _this.formDataLoaded = true;
+          reject();
         });
       });
     },
@@ -298,6 +308,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     params: {
+      immediate: true,
+      deep: true,
       handler: function handler() {
         var _this2 = this;
 
@@ -305,8 +317,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this2.collections.activityLogs = data.data;
           _this2.meta = data.meta;
         });
-      },
-      deep: true
+      }
     }
   },
   computed: {
@@ -364,281 +375,340 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-card",
-    { staticClass: "elevation-0 pt-0" },
+    "div",
     [
-      _c(
-        "v-card-title",
-        { staticClass: "pt-0" },
-        [
-          _c("h4", { staticClass: "title green--text" }, [
-            _vm._v("Activity Logs")
-          ]),
-          _vm._v(" "),
-          _c("v-spacer")
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-card-subtitle",
-        [
-          _c("DateRangePicker", {
-            attrs: {
-              buttonType: true,
-              buttonText: true,
-              buttonColor: "grey",
-              buttonClass: "ml-0 pl-0",
-              preset: _vm.filters.preset,
-              presets: _vm.filters.presets,
-              value: _vm.filters.date_range
-            },
-            on: { updateDates: _vm.updateDates }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        { staticClass: "ml-4" },
-        [
-          _c("UserDialogSelector", {
-            ref: "userDialogSelector",
-            attrs: { selectedUser: _vm.filters.selectedUser },
-            on: { selectUser: _vm.selectUser, onReset: _vm.resetUser },
-            scopedSlots: _vm._u([
-              {
-                key: "openDialog",
-                fn: function(ref) {
-                  var bind = ref.bind
-                  var on = ref.on
-                  var computedSelectedUser = ref.computedSelectedUser
-                  return [
-                    _c(
-                      "v-chip",
-                      _vm._g(
-                        _vm._b(
-                          { staticClass: "mr-2 mb-2", attrs: { small: "" } },
-                          "v-chip",
-                          bind,
-                          false
-                        ),
-                        on
-                      ),
-                      [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(
-                              computedSelectedUser
-                                ? computedSelectedUser.name
-                                : "All Employees"
-                            ) +
-                            "\n                "
-                        )
-                      ]
-                    )
-                  ]
-                }
-              }
-            ])
-          }),
-          _vm._v(" "),
-          _vm.collections.selectedActivityLogs.length > 0
-            ? _c(
-                "v-chip",
-                {
-                  staticClass: "mr-2 mb-2",
-                  attrs: {
-                    color: "green",
-                    dark: "",
-                    close: "",
-                    small: "",
-                    "close-icon": "mdi-close"
-                  },
-                  on: {
-                    "click:close": function($event) {
-                      _vm.collections.selectedActivityLogs = []
-                    }
-                  }
-                },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
                 [
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(_vm.collections.selectedActivityLogs.length) +
-                      " Selected\n        "
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Activity Logs")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer")
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-subtitle",
+                [
+                  _c("DateRangePicker", {
+                    ref: "dateRangePicker",
+                    attrs: { dateRange: _vm.filters.date_range },
+                    on: { "on-change": _vm.updateDates },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "openDialog",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          var dateRangeText = ref.dateRangeText
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-0 pl-0",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(dateRangeText) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                { staticClass: "ml-4" },
+                [
+                  _vm.collections.selectedActivityLogs.length > 0
+                    ? _c(
+                        "v-chip",
+                        {
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            color: "green",
+                            dark: "",
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-close"
+                          },
+                          on: {
+                            "click:close": function($event) {
+                              _vm.collections.selectedActivityLogs = []
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(
+                                _vm.collections.selectedActivityLogs.length
+                              ) +
+                              " Selected\n            "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("UserDialogSelector", {
+                    ref: "userDialogSelector",
+                    attrs: { selectedUser: _vm.filters.selectedUser },
+                    on: { selectUser: _vm.selectUser, onReset: _vm.resetUser },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "openDialog",
+                        fn: function(ref) {
+                          var bind = ref.bind
+                          var on = ref.on
+                          var computedSelectedUser = ref.computedSelectedUser
+                          return [
+                            _c(
+                              "v-chip",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "mr-2 mb-2",
+                                    attrs: { small: "" }
+                                  },
+                                  "v-chip",
+                                  bind,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(
+                                      computedSelectedUser
+                                        ? computedSelectedUser.name
+                                        : "All Employees"
+                                    ) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-refresh"
+                      },
+                      on: { "click:close": _vm.onReset }
+                    },
+                    [_vm._v("\n                Refresh\n            ")]
                   )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "v-chip",
-            {
-              staticClass: "mr-2 mb-2",
-              attrs: { close: "", small: "", "close-icon": "mdi-refresh" },
-              on: { "click:close": _vm.onReset }
-            },
-            [_vm._v("\n            Refresh\n        ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-card-text",
-        [
-          _c("v-data-table", {
-            staticClass: "elevation-0",
-            attrs: {
-              "show-select": "",
-              "item-key": "id",
-              "single-expand": "",
-              "show-expand": "",
-              headers: _vm.collections.headers,
-              items: _vm.collections.activityLogs,
-              loading: _vm.loading,
-              options: _vm.options,
-              "server-items-length": _vm.meta.total,
-              "footer-props": {
-                itemsPerPageOptions: [10, 20, 50, 100],
-                showFirstLastPage: true,
-                firstIcon: "mdi-page-first",
-                lastIcon: "mdi-page-last",
-                prevIcon: "mdi-chevron-left",
-                nextIcon: "mdi-chevron-right"
-              }
-            },
-            on: {
-              "update:options": function($event) {
-                _vm.options = $event
-              }
-            },
-            scopedSlots: _vm._u(
-              [
-                {
-                  key: "item.actions",
-                  fn: function(ref) {
-                    var item = ref.item
-                    return [
-                      _vm.hasLink(item)
-                        ? _c(
-                            "v-icon",
-                            {
-                              key: item.id,
-                              staticClass: "mr-2",
-                              attrs: { small: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.$router.push(
-                                    _vm.hasLink(item)
-                                      ? "/admin/" + item.properties.custom.link
-                                      : null
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c("v-data-table", {
+                    staticClass: "elevation-0",
+                    attrs: {
+                      "show-select": "",
+                      "item-key": "id",
+                      "single-expand": "",
+                      "show-expand": "",
+                      headers: _vm.collections.headers,
+                      items: _vm.collections.activityLogs,
+                      loading: !_vm.formDataLoaded,
+                      options: _vm.options,
+                      "server-items-length": _vm.meta.total,
+                      "footer-props": {
+                        itemsPerPageOptions: [10, 20, 50, 100],
+                        showFirstLastPage: true,
+                        firstIcon: "mdi-page-first",
+                        lastIcon: "mdi-page-last",
+                        prevIcon: "mdi-chevron-left",
+                        nextIcon: "mdi-chevron-right"
+                      }
+                    },
+                    on: {
+                      "update:options": function($event) {
+                        _vm.options = $event
+                      }
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "item.actions",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm.hasLink(item)
+                                ? _c(
+                                    "v-icon",
+                                    {
+                                      key: item.id,
+                                      staticClass: "mr-2",
+                                      attrs: { small: "" },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.$router.push(
+                                            _vm.hasLink(item)
+                                              ? "/admin/" +
+                                                  item.properties.custom.link
+                                              : null
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                        mdi-open-in-new\n                    "
+                                      )
+                                    ]
                                   )
-                                }
-                              }
-                            },
-                            [
+                                : _vm._e()
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.user",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
                               _vm._v(
-                                "\n                    mdi-open-in-new\n                "
+                                "\n                    " +
+                                  _vm._s(
+                                    item.user == null
+                                      ? "Default"
+                                      : item.user.name
+                                  ) +
+                                  "\n                "
                               )
                             ]
-                          )
-                        : _vm._e()
-                    ]
-                  }
-                },
-                {
-                  key: "item.user",
-                  fn: function(ref) {
-                    var item = ref.item
-                    return [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(
-                            item.user == null ? "Default" : item.user.name
-                          ) +
-                          "\n            "
-                      )
-                    ]
-                  }
-                },
-                {
-                  key: "expanded-item",
-                  fn: function(ref) {
-                    var headers = ref.headers
-                    var item = ref.item
-                    return [
-                      _c(
-                        "td",
-                        { attrs: { colspan: headers.length } },
-                        [
-                          _c(
-                            "v-container",
-                            { key: item.id },
-                            _vm._l(item.properties, function(items, key) {
-                              return _c("table", { key: items.id }, [
-                                key == "attributes"
-                                  ? _c(
-                                      "div",
-                                      [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass:
-                                              "green--text text-capitalize"
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                    " +
-                                                _vm._s(key) +
-                                                "\n                                "
+                          }
+                        },
+                        {
+                          key: "expanded-item",
+                          fn: function(ref) {
+                            var headers = ref.headers
+                            var item = ref.item
+                            return [
+                              _c(
+                                "td",
+                                { attrs: { colspan: headers.length } },
+                                [
+                                  _c(
+                                    "v-container",
+                                    { key: item.id },
+                                    _vm._l(item.properties, function(
+                                      items,
+                                      key
+                                    ) {
+                                      return _c("table", { key: items.id }, [
+                                        key == "attributes"
+                                          ? _c(
+                                              "div",
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "green--text text-capitalize"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                        " +
+                                                        _vm._s(key) +
+                                                        "\n                                    "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _vm._l(items, function(
+                                                  item,
+                                                  key
+                                                ) {
+                                                  return _c(
+                                                    "tr",
+                                                    { key: key },
+                                                    [
+                                                      _c("td", [
+                                                        _c("strong", [
+                                                          _vm._v(_vm._s(key))
+                                                        ])
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("td", [_vm._v(":")]),
+                                                      _vm._v(" "),
+                                                      _c("td", [
+                                                        _vm._v(_vm._s(item))
+                                                      ])
+                                                    ]
+                                                  )
+                                                })
+                                              ],
+                                              2
                                             )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _vm._l(items, function(item, key) {
-                                          return _c("tr", { key: key }, [
-                                            _c("td", [
-                                              _c("strong", [
-                                                _vm._v(_vm._s(key))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("td", [_vm._v(":")]),
-                                            _vm._v(" "),
-                                            _c("td", [_vm._v(_vm._s(item))])
-                                          ])
-                                        })
-                                      ],
-                                      2
-                                    )
-                                  : _vm._e()
-                              ])
-                            }),
-                            0
-                          )
-                        ],
-                        1
-                      )
-                    ]
-                  }
-                }
-              ],
-              null,
-              true
-            ),
-            model: {
-              value: _vm.collections.selectedActivityLogs,
-              callback: function($$v) {
-                _vm.$set(_vm.collections, "selectedActivityLogs", $$v)
-              },
-              expression: "collections.selectedActivityLogs"
-            }
-          })
-        ],
-        1
-      )
+                                          : _vm._e()
+                                      ])
+                                    }),
+                                    0
+                                  )
+                                ],
+                                1
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      true
+                    ),
+                    model: {
+                      value: _vm.collections.selectedActivityLogs,
+                      callback: function($$v) {
+                        _vm.$set(_vm.collections, "selectedActivityLogs", $$v)
+                      },
+                      expression: "collections.selectedActivityLogs"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
     ],
     1
   )

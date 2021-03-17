@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 p-0 m-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 p-0 m-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Employees</h4>
 
@@ -27,7 +28,7 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -50,18 +51,6 @@
                     </template>
 
                     <v-list>
-                        <!-- <v-list-item
-                            @click="onExport"
-                            href="/api/users/export"
-                        >
-                            <v-list-item-icon>
-                                <v-icon>mdi-lock-reset</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Export to Excel
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
                         <v-list-item @click="onPasswordReset">
                             <v-list-item-icon>
                                 <v-icon>mdi-lock-reset</v-icon>
@@ -107,7 +96,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-row class="ml-4">
@@ -171,17 +160,23 @@
                             v-on="menu"
                             small
                         >
-                            {{ department.name }}
+                            {{
+                                department ? department.name : "All Departments"
+                            }}
                         </v-chip>
                     </template>
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <DepartmentData
-                                    ref="departmentData"
+                                <DepartmentDropdownSelector
+                                    v-model="department"
+                                    ref="departmentDropdownSelector"
                                     :showAll="true"
-                                    @changeData="changeDepartment"
-                                ></DepartmentData>
+                                    :selectedDepartment="department"
+                                    @onReset="onResetDepartment"
+                                    @onChange="onChangeDepartment"
+                                >
+                                </DepartmentDropdownSelector>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -209,13 +204,16 @@
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <JobData
-                                    ref="jobData"
+                                <JobDropdownSelector
+                                    v-model="job"
+                                    ref="jobDropdownSelector"
                                     :showAll="true"
-                                    :department_id="department.id"
                                     :selectedJob="job"
-                                    @changeData="changeJob"
-                                ></JobData>
+                                    :selectedDepartment="department"
+                                    @onReset="onResetJob"
+                                    @onChange="onChangeJob"
+                                >
+                                </JobDropdownSelector>
                             </v-list-item>
                         </v-list>
                     </v-card>
@@ -229,6 +227,89 @@
                     close-icon="mdi-refresh"
                 >
                     Refresh
+                </v-chip>
+            </v-row>
+
+            <v-row class="ml-4" v-if="selected.length > 0">
+                <v-chip
+                    v-show="selected.length == 1 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onPasswordReset"
+                    close-icon="mdi-lock"
+                >
+                    Reset Password
+                </v-chip>
+                <v-chip
+                    v-show="selected.length == 1 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onEditFund"
+                    close-icon="mdi-credit-card-refund"
+                >
+                    Edit Revolving Fund
+                </v-chip>
+                <v-chip
+                    v-show="selected.length == 1 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onEditPermissions"
+                    close-icon="mdi-account-cog-outline"
+                    color="orange"
+                    dark
+                >
+                    Edit Permissions
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(true)"
+                    close-icon="mdi-check"
+                    color="green"
+                    dark
+                >
+                    Activate
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(false)"
+                    close-icon="mdi-lock"
+                    color="red"
+                    dark
+                >
+                    Deactivate
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                    dark
+                >
+                    Restore
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                    dark
+                >
+                    Archive
                 </v-chip>
             </v-row>
 
@@ -251,7 +332,7 @@
                     :items="items"
                     :loading="loading"
                     :options.sync="options"
-                    :server-items-length="totalItems"
+                    :server-items-length="meta.total"
                     :footer-props="{
                         itemsPerPageOptions: [10, 20, 50, 100],
                         showFirstLastPage: true,
@@ -376,19 +457,22 @@
 </template>
 
 <script>
-import DepartmentData from "../../../../components/selector/dropdown/Departments";
-import JobData from "../../../../components/selector/dropdown/Jobs";
+import UserDataService from "../../../../services/UserDataService";
+import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
+import JobDropdownSelector from "../../../../components/selector/dropdown/JobDropdownSelector";
 
 export default {
     props: {},
     components: {
-        DepartmentData,
-        JobData
+        DepartmentDropdownSelector,
+        JobDropdownSelector
     },
     data() {
         return {
+            formDataLoaded: false,
             expanded: [],
             loading: true,
+
             headers: [
                 { text: "Name", value: "full_name" },
                 { text: "Job Designation", value: "job", sortable: false },
@@ -402,92 +486,123 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            department: { id: null, name: "All Departments" },
-            // departments: [],
-            job: { id: null, name: "All Job Designations" },
-            jobs: [],
+            department: null,
+            job: null,
+
             total_fund: 0,
             total_remaining_fund: 0,
+
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: ["Active", "Inactive", "Archived"],
             selected: [],
             search: "",
-            totalItems: 0,
+
+            collections: {
+                headers: [
+                    { text: "Name", value: "full_name" },
+                    { text: "Job Designation", value: "job", sortable: false },
+                    {
+                        text: "Department",
+                        value: "department",
+                        sortable: false
+                    },
+                    { text: "Revolving Fund", value: "revolving_fund" },
+                    { text: "Actions", value: "actions", sortable: false },
+                    { text: "", value: "data-table-expand" }
+                ],
+                selected: [],
+                selectedUsers: [],
+                statuses: ["Active", "Inactive", "Archived"],
+                items: [],
+                users: []
+            },
+            filters: {
+                department: { id: null, name: "All Departments" },
+                job: { id: null, name: "All Job Designations" },
+                search: "",
+                status: "Active"
+            },
             options: {
                 sortBy: ["last_name"],
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
+            },
+            meta: {
+                current_page: 0,
+                from: 0,
+                last_page: 0,
+                path: "",
+                per_page: 10,
+                to: 0,
+                total: 0
             }
         };
     },
     methods: {
         changeStatus() {},
-        changeDepartment(e) {
+        onChangeDepartment(e) {
             this.department = e;
-            this.job = { id: null, name: "All Job Designations" };
-            this.$refs.jobData.resetData(this.department.id);
+        },
+        onResetDepartment() {
+            this.department = null;
+            this.job = null;
+        },
+        onChangeJob(e) {
+            this.job = e;
+        },
+        onResetJob() {
+            this.job = null;
         },
         changeJob(e) {
             this.job = e;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
+                let search = this.search.trim().toLowerCase();
                 let department_id =
-                    _this.department == null ? null : _this.department.id;
-                let job_id = _this.job == null ? null : _this.job.id;
-                let status = _this.status;
+                    this.department == null ? null : this.department.id;
+                let job_id = this.job == null ? null : this.job.id;
+                let status = this.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        department_id: department_id,
+                        job_id: job_id,
+                        is_superadmin: false
+                    }
+                };
 
-                axios
-                    .get("/api/users", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            department_id: department_id,
-                            job_id: job_id,
-                            is_superadmin: false
-                        }
-                    })
+                UserDataService.getAll(data)
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
-
-                        _this.loading = false;
-
-                        resolve({ items, total });
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
-
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         reject();
                     });
             });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-            
-            this.job = null;
-            this.$refs.departmentData.resetData();
-            this.$refs.jobData.resetData();
+            this.onResetDepartment();
+            this.onResetJob();
+
+            // this.department = null;
+            // this.job = null;
         },
         onEditFund() {
             if (this.selected.length == 0) {
@@ -506,173 +621,161 @@ export default {
             );
         },
         onPasswordReset() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
-
                 return;
             }
 
             this.$confirm("Do you want to reset password?").then(res => {
                 if (res) {
-                    axios
-                        .put(
-                            `/api/users/reset_password/${_this.selected[0].id}`,
-                            {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                                // action: "password_reset"
-                            }
-                        )
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    let data = {
+                        ids: this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+                    UserDataService.resetPassword(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.data;
+                                this.meta = data.meta;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onDelete() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
-
                 return;
             }
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/users/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    let data = {
+                        params: {
+                            ids: this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    };
+                    UserDataService.delete(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.data;
+                                this.meta = data.meta;
                             });
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            let statusText = error.response.data
-                                ? error.response.data.message
-                                    ? error.response.data.message
-                                    : ""
-                                : error.response.statusText;
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
-
-            if (_this.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
-
                 return;
             }
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/users/restore/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            })
-                            // action: "restore"
+                    let data = {
+                        ids: this.selected.map(item => {
+                            return item.id;
                         })
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    };
+                    UserDataService.restore(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.data;
+                                this.meta = data.meta;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
+                        .catch(error => {
+                            this.mixin_showErrors(error);
+                        });
+                }
+            });
+        },
+        onSetActivation(is_active) {
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+                return;
+            }
 
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
+            this.$confirm(
+                `Do you want to ${
+                    is_active ? "activate" : "deactivate"
+                } account(s)?`
+            ).then(res => {
+                if (res) {
+                    let data = {
+                        is_active: is_active,
+                        ids: this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+                    UserDataService.updateActivation(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
+                            this.getDataFromApi().then(data => {
+                                this.items = data.data;
+                                this.meta = data.meta;
+                            });
+                            this.selected = [];
+                        })
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onExport() {
-            // this.$store.dispatch("AUTH_USER");
-            axios.get("/api/users/export");
+            UserDataService.export();
         }
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
+                    this.items = data.data;
+                    this.meta = data.meta;
 
                     this.total_fund = this.mixin_formatNumber(
-                        data.items.reduce((total, item) => total + item.fund, 0)
+                        data.data.reduce((total, item) => total + item.fund, 0)
                     );
 
                     this.total_remaining_fund = this.mixin_formatNumber(
-                        data.items.reduce(
+                        data.data.reduce(
                             (total, item) => total + item.remaining_fund,
                             0
                         )
                     );
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {
@@ -694,8 +797,8 @@ export default {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
+            this.items = data.data;
+            this.meta = data.meta;
         });
     }
 };

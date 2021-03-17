@@ -1,22 +1,7 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-        <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -107,11 +92,7 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn
-                                        text
-                                        color="green"
-                                        @click="editUser"
-                                    >
+                                    <v-btn text color="green" @click="editUser">
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -342,11 +323,12 @@
 import moment from "moment";
 import randomcolor from "randomcolor";
 import numeral from "numeral";
+import UserDataService from "../../../../services/UserDataService";
 
 export default {
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             start_date: moment()
                 .startOf("month")
                 .format("ll"),
@@ -384,57 +366,43 @@ export default {
     },
     methods: {
         validateFund() {
-            let _this = this;
-
             axios
                 .get(`/api/data/validateFund?id=${this.id}`)
                 .then(response => {
-                    _this.getData();
+                    this.getData();
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         getData() {
-            let _this = this;
-
-            axios
-                .get(`/api/users/${_this.$route.params.id}`)
-                .then(function(response) {
+            UserDataService.show(this.$route.params.id)
+                .then(response => {
                     let data = response.data.data;
 
-                    _this.id = data.id;
-                    _this.full_name = data.full_name;
-                    _this.first_name = data.first_name;
-                    _this.middle_name = data.middle_name;
-                    _this.last_name = data.last_name;
-                    _this.suffix = data.suffix;
-                    _this.gender = data.gender;
-                    _this.birthdate = data.birthdate;
-                    _this.mobile_number = data.mobile_number;
-                    _this.telephone_number = data.telephone_number;
-                    _this.email = data.email;
-                    _this.address = data.address;
-                    _this.fund = data.fund;
-                    _this.remaining_fund = data.remaining_fund;
-                    _this.job = data.job.name;
-                    _this.department = data.job.department.name;
-                    _this.permissions = data.permissions;
-                    _this.user = data;
-
-                    _this.loader = false;
+                    this.id = data.id;
+                    this.full_name = data.full_name;
+                    this.first_name = data.first_name;
+                    this.middle_name = data.middle_name;
+                    this.last_name = data.last_name;
+                    this.suffix = data.suffix;
+                    this.gender = data.gender;
+                    this.birthdate = data.birthdate;
+                    this.mobile_number = data.mobile_number;
+                    this.telephone_number = data.telephone_number;
+                    this.email = data.email;
+                    this.address = data.address;
+                    this.fund = data.fund;
+                    this.remaining_fund = data.remaining_fund;
+                    this.job = data.job.name;
+                    this.department = data.job.department.name;
+                    this.permissions = data.permissions;
+                    this.user = data;
+                    this.formDataLoaded = true;
                 })
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    // _this.mixin_errorDialog(
-                    //     `Error ${error.response.status}`,
-                    //     error.response.statusText
-                    // );
-
-                    _this.loader = false;
+                .catch(error => {
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
                 });
         },
         editUser() {
@@ -444,7 +412,6 @@ export default {
             });
         },
         getExpenseStats() {
-            let _this = this;
             let start_date = moment()
                 .startOf("month")
                 .format("YYYY-MM-DD");
@@ -458,21 +425,15 @@ export default {
                     `/api/data/expense_stats?start_date=${start_date}&end_date=${end_date}&user_id=${user_id}`
                 )
                 .then(response => {
-                    _this.total_expenses = response.data.summary.total;
-                    _this.total_replenishments =
+                    this.total_expenses = response.data.summary.total;
+                    this.total_replenishments =
                         response.data.summary.replenishments;
-                    _this.total_reimbursements =
+                    this.total_reimbursements =
                         response.data.summary.reimbursements;
-                    _this.total_pending_reports = response.data.summary.pending;
+                    this.total_pending_reports = response.data.summary.pending;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    // _this.mixin_errorDialog(
-                    //     `Error ${error.response.status}`,
-                    //     error.response.statusText
-                    // );
+                    this.mixin_showErrors(error);
                 });
         }
     },

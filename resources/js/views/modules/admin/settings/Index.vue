@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Settings</h4>
                 <v-spacer></v-spacer>
@@ -412,6 +413,7 @@ import SettingDataService from "../../../../services/SettingDataService";
 export default {
     data() {
         return {
+            formDataLoaded: false,
             validExpenses: false,
             validExpenseReports: false,
             validTaxes: false,
@@ -471,59 +473,50 @@ export default {
         };
     },
     methods: {
-        onLoad: function() {
-            let _this = this;
-            SettingDataService.getAll()
-                .then(response => {
-                    _this.file_input = null;
-                    _this.settings = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        error.response.status,
-                        error.response.statusText
-                    );
-                });
+        onLoad() {
+            return new Promise((resolve, reject) => {
+                SettingDataService.getAll()
+                    .then(response => {
+                        this.file_input = null;
+                        this.settings = response.data;
+                        this.formDataLoaded = true;
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
         },
-        onSave: function() {
-            let _this = this;
-
-            _this.$refs.formExpenses.validate();
-            _this.$refs.formExpenseReports.validate();
-            _this.$refs.formTaxes.validate();
+        onSave() {
+            this.$refs.formExpenses.validate();
+            this.$refs.formExpenseReports.validate();
+            this.$refs.formTaxes.validate();
 
             if (
-                _this.$refs.formExpenses.validate() &&
-                _this.$refs.formExpenseReports.validate() &&
-                _this.$refs.formTaxes.validate()
+                this.$refs.formExpenses.validate() &&
+                this.$refs.formExpenseReports.validate() &&
+                this.$refs.formTaxes.validate()
             ) {
                 let data = {
-                    settings: _this.settings
+                    settings: this.settings
                 };
 
                 SettingDataService.store(data)
                     .then(response => {
-                        _this.mixin_successDialog(
+                        this.mixin_successDialog(
                             "Success",
                             "Saved settings successfully"
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
-                        _this.$store.dispatch("AUTH_SETTINGS");
+                        this.$store.dispatch("AUTH_USER");
+                        this.$store.dispatch("AUTH_SETTINGS");
 
                         window.location.replace("/admin/settings");
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            error.response.status,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
                     });
             }
         }
@@ -623,8 +616,8 @@ export default {
                     this.settings.expense_report.print_format.background.image =
                         reader.result;
                 };
-                reader.onerror = function(error) {
-                    console.log("Error: ", error);
+                reader.onerror = error => {
+                    this.mixin_showErrors(error);
                 };
             } else {
                 this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;

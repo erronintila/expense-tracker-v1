@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -9,7 +10,11 @@
                 <h4 class="title green--text">Edit Vendor</h4>
             </v-card-title>
             <v-container>
-                <Form :form="form" :errors="errors" @onSave="onSave"></Form>
+                <Form
+                    :vendorForm="form"
+                    :errors="errors"
+                    @on-save="onSave"
+                ></Form>
             </v-container>
         </v-card>
     </div>
@@ -25,6 +30,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             form: {
                 code: "",
                 name: "",
@@ -36,7 +42,8 @@ export default {
                 remarks: "",
                 website: "",
                 is_vat_inclusive: false,
-                address: ""
+                address: "",
+                is_active: true
             },
             errors: {
                 code: [],
@@ -49,7 +56,8 @@ export default {
                 remarks: [],
                 website: [],
                 is_vat_inclusive: [],
-                address: []
+                address: [],
+                is_active: []
             }
         };
     },
@@ -73,9 +81,12 @@ export default {
                     this.selected_expense_types = data.expense_types
                         ? data.expense_types.map(item => item.id)
                         : null;
+
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
                 });
         },
         onSave(value) {

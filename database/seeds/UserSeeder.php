@@ -93,6 +93,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'edit users fund', 'category' => $model]);
                 Permission::create(['name' => 'restore users', 'category' => $model]);
                 Permission::create(['name' => 'edit permissions', 'category' => $model]);
+                Permission::create(['name' => 'set user activation', 'category' => $model]);
             }
 
             if ($model == "expenses") {
@@ -122,6 +123,7 @@ class UserSeeder extends Seeder
 
             if ($model == "vendors") {
                 Permission::create(['name' => 'restore vendors', 'category' => $model]);
+                Permission::create(['name' => 'set vendor activation', 'category' => $model]);
             }
         }
 

@@ -28,6 +28,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -36,6 +41,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       form: {
         name: "",
         limit: null,
@@ -55,7 +61,10 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.name = response.data.data.name;
         _this.form.limit = response.data.data.limit;
         _this.form.sub_types = response.data.data.sub_types;
+        _this.formDataLoaded = true;
       })["catch"](function (error) {
+        _this.formDataLoaded = true;
+
         _this.mixin_showErrors(error);
       });
     },
@@ -107,51 +116,53 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Edit Expense Type")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Edit Expense Type")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-container",
-            [
-              _c("Form", {
-                attrs: { errors: _vm.errors, form: _vm.form },
-                on: { onSave: _vm.onSave }
-              })
+              _c(
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: { errors: _vm.errors, expenseTypeForm: _vm.form },
+                    on: { "on-save": _vm.onSave }
+                  })
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

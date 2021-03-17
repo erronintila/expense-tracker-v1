@@ -45,7 +45,7 @@ $factory->define(User::class, function (Faker $faker) {
         // 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         // 'remember_token' => Str::random(10),
 
-        'code' => null,
+        'code' => $faker->lastName . rand(1, 1000000),
         'first_name' => $faker->firstName($gender),
         'middle_name' => $faker->lastName,
         'last_name' => $faker->lastName,
@@ -58,7 +58,7 @@ $factory->define(User::class, function (Faker $faker) {
         'fund' => 0,
         'remaining_fund' => 0,
         'username' => $faker->unique()->username . rand(1, 1000000),
-        'email' => $faker->unique()->safeEmail,
+        'email' => $faker->unique()->safeEmail . rand(1, 1000000),
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'is_admin' => true,
         'is_superadmin' => false,

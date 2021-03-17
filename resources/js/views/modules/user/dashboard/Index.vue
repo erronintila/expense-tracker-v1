@@ -1,54 +1,28 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Dashboard</h4>
-                <v-spacer></v-spacer>
-                <v-menu
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
             </v-card-title>
             <v-card-subtitle>
-                {{ formattedDateRange }}
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template
+                        v-slot:openDialog="{
+                            on,
+                            attrs,
+                            dateRangeText
+                        }"
+                    >
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
+                        </v-btn>
+                    </template>
+                </DateRangePicker>
             </v-card-subtitle>
 
             <v-row>
@@ -477,7 +451,7 @@
 import moment from "moment";
 import randomcolor from "randomcolor";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import DoughnutChart from "../../../../components/chart/DoughnutChart";
 import HorizontalBarChart from "../../../../components/chart/HorizontalBarChart";
 import LineChart from "../../../../components/chart/LineChart";
@@ -493,7 +467,7 @@ export default {
     },
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             total: {
                 awaiting_for_reimbursement_reports: 0,
                 expenses_by_date: 0,
@@ -592,8 +566,6 @@ export default {
     },
     methods: {
         load_department_expenses(start, end, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/departments_expenses_summary", {
                     params: {
@@ -604,13 +576,13 @@ export default {
                     }
                 })
                 .then(response => {
-                    _this.expenses_by_category = response.data;
+                    this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
 
                     let data = response.data.map(item => item.value);
 
-                    let backgroundColors = _this.getBackgroundColors(
+                    let backgroundColors = this.getBackgroundColors(
                         data.length
                     );
 
@@ -631,18 +603,10 @@ export default {
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_expense_types_expenses(start, end, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/expense_types_expenses_summary", {
                     params: {
@@ -653,13 +617,13 @@ export default {
                     }
                 })
                 .then(response => {
-                    _this.expenses_by_category = response.data;
+                    this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
 
                     let data = response.data.map(item => item.value);
 
-                    let backgroundColors = _this.getBackgroundColors(
+                    let backgroundColors = this.getBackgroundColors(
                         data.length
                     );
 
@@ -680,18 +644,10 @@ export default {
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    // _this.mixin_errorDialog(
-                    //     `Error ${error.response.status}`,
-                    //     error.response.statusText
-                    // );
+                    this.mixin_showErrors(error);
                 });
         },
         load_users_expenses(start, end, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/users_expenses_summary", {
                     params: {
@@ -702,13 +658,13 @@ export default {
                     }
                 })
                 .then(response => {
-                    _this.expenses_by_category = response.data;
+                    this.expenses_by_category = response.data;
 
                     let labels = response.data.map(item => item.text);
 
                     let data = response.data.map(item => item.value);
 
-                    let backgroundColors = _this.getBackgroundColors(
+                    let backgroundColors = this.getBackgroundColors(
                         data.length
                     );
 
@@ -729,18 +685,10 @@ export default {
                     this.updateBarChartValues(labels, data, backgroundColors);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         load_expenses_summary(start, end, time_unit, user) {
-            let _this = this;
-
             axios
                 .get("/api/data/expenses_summary", {
                     params: {
@@ -752,14 +700,14 @@ export default {
                     }
                 })
                 .then(response => {
-                    switch (_this.groupBy) {
+                    switch (this.groupBy) {
                         case "day":
-                            _this.lineChart_labels = response.data.map(
+                            this.lineChart_labels = response.data.map(
                                 item => item.text
                             );
                             break;
                         case "week":
-                            _this.lineChart_labels = response.data.map(
+                            this.lineChart_labels = response.data.map(
                                 item =>
                                     `${moment(item.text).format(
                                         "YYYY-MM"
@@ -769,12 +717,12 @@ export default {
                             );
                             break;
                         case "month":
-                            _this.lineChart_labels = response.data.map(item =>
+                            this.lineChart_labels = response.data.map(item =>
                                 moment(item.text).format("MMM YYYY")
                             );
                             break;
                         case "quarter":
-                            _this.lineChart_labels = response.data.map(
+                            this.lineChart_labels = response.data.map(
                                 item =>
                                     `${moment(item.text).format(
                                         "YYYY"
@@ -782,7 +730,7 @@ export default {
                             );
                             break;
                         case "year":
-                            _this.lineChart_labels = response.data.map(item =>
+                            this.lineChart_labels = response.data.map(item =>
                                 moment(item.text).format("YYYY")
                             );
                             break;
@@ -790,23 +738,15 @@ export default {
                             break;
                     }
 
-                    _this.lineChart_data = response.data.map(
-                        item => item.value
-                    );
+                    this.lineChart_data = response.data.map(item => item.value);
 
-                    _this.updateLineChartValues(
-                        _this.lineChart_labels,
-                        _this.lineChart_data
+                    this.updateLineChartValues(
+                        this.lineChart_labels,
+                        this.lineChart_data
                     );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    // _this.mixin_errorDialog(
-                    //     `Error ${error.response.status}`,
-                    //     error.response.statusText
-                    // );
+                    this.mixin_showErrors(error);
                 });
         },
         load_bar_chart() {
@@ -1067,17 +1007,15 @@ export default {
             );
         },
         getExpenseStats(start, end, emp) {
-            let _this = this;
-
             axios
                 .get(
                     `/api/data/expense_stats?start_date=${start}&end_date=${end}&user_id=${emp}`
                 )
                 .then(response => {
-                    _this.total = response.data.total;
-                    _this.count = response.data.count;
+                    this.total = response.data.total;
+                    this.count = response.data.count;
 
-                    _this.loader = false;
+                    this.formDataLoaded = true;
 
                     this.load_expense_types_expenses(
                         this.date_range[0],
@@ -1093,15 +1031,8 @@ export default {
                     );
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
-                    _this.loader = true;
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
                 });
         }
     },

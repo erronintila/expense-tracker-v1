@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -109,6 +110,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             panel: [0],
             valid: false,
             usersParameters: {
@@ -135,7 +137,7 @@ export default {
             pivot_sub_types: null,
 
             collections: {},
-            filters: {},
+            filters: {}
         };
     },
     methods: {
@@ -146,69 +148,48 @@ export default {
             this.user = null;
         },
         loadExpenseTypes() {
-            let _this = this;
-
-            // axios
-            // .get("/api/data/expense_types?only=true")
-
-            ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
-                .then(response => {
-                    _this.all_expense_types = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+            return new Promise((resolve, reject) => {
+                ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
+                    .then(response => {
+                        this.all_expense_types = response.data.data;
+                        this.formDataLoaded = true;
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
         },
         onSave() {
-            let _this = this;
-
-            if (_this.user == null) {
-                _this.mixin_errorDialog("Error", "No user selected");
+            if (this.user == null) {
+                this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
 
-            _this.$refs.form.validate();
+            this.$refs.form.validate();
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.loader = true;
 
                 let data = {
-                    expense_types: _this.allowed_expense_types.map(
+                    expense_types: this.allowed_expense_types.map(
                         item => item.id
                     )
                 };
 
-                UserDataService.updateSettings(_this.user.id, data)
-                    .then(function(response) {
-                        _this.$dialog.message.success(
-                            "User settings updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
-                        _this.$store.dispatch("AUTH_USER");
-
+                UserDataService.updateSettings(this.user.id, data)
+                    .then(response => {
+                        this.mixin_successDialog(response.data.status, response.data.message);
+                        this.$store.dispatch("AUTH_USER");
                     })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                    .catch(error => {
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.errors = error.response.data.errors;
+                                this.errors = error.response.data.errors;
                             }
                         }
                     });
@@ -240,7 +221,7 @@ export default {
     },
     computed: {
         expense_type_limit: {
-            get: function() {
+            get() {
                 let limit =
                     this.expense_type.pivot == null
                         ? null
@@ -248,7 +229,7 @@ export default {
 
                 return limit;
             },
-            set: function(newValue) {
+            set(newValue) {
                 return newValue;
             }
         }

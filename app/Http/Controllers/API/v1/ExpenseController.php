@@ -10,15 +10,15 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Expense\ExpenseStoreRequest as ExpenseExpenseStoreRequest;
-use App\Http\Requests\Expense\ExpenseUpdateRequest as ExpenseExpenseUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ExpenseResource;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\ExpenseStoreRequest;
-use App\Http\Requests\ExpenseUpdateRequest;
+use App\Http\Requests\Expense\ExpenseStoreRequest;
+use App\Http\Requests\Expense\ExpenseUpdateRequest;
 use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class ExpenseController extends Controller
 {
@@ -224,7 +224,7 @@ class ExpenseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ExpenseExpenseStoreRequest $request)
+    public function store(ExpenseStoreRequest $request)
     {
         $validated = $request->validated();
         $message = "Expense created successfully";
@@ -308,7 +308,7 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ExpenseExpenseUpdateRequest $request, $id)
+    public function update(ExpenseUpdateRequest $request, $id)
     {
         $validated = $request->validated();
         $message = "Expense updated successfully";
@@ -591,12 +591,17 @@ class ExpenseController extends Controller
                     $q->where("expense_report_id", request("expense_report_id"));
                     // $q->orWhere("expense_report_id", null);
                 })
-                ->where(function ($q) use ($request) {
-                    $q->whereBetween("date", [request("start_date"), request("end_date")]);
-                    // $q->orWhere("expense_report_id", request("")expense_report_id);
-                })
-                ->where("user_id", request("user_id"))
-                ->get();
+                ->where("user_id", request("user_id"));
+
+            if (request()->has('start_date') && request()->has('end_date')) {
+                $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
+            }
+            // ->where(function ($q) use ($request) {
+            //     $q->whereBetween("date", [request("start_date"), request("end_date")]);
+            //     // $q->orWhere("expense_report_id", request("")expense_report_id);
+            // })
+                
+            $expenses = $expenses->get();
 
             return response()->json([
                 "data" => ExpenseResource::collection($expenses),
@@ -615,6 +620,24 @@ class ExpenseController extends Controller
         return response()->json([
             "data" => ExpenseResource::collection($expenses->get()),
             "total" => $expenses->sum("amount")
+        ]);
+    }
+
+    public function getExpenseSummary()
+    {
+        $expenses = DB::table('expenses')
+            ->select(DB::raw("sum(amount) as total_amount, count(id) as total_count"))
+            ->where("deleted_at", null)
+            ->where("expense_report_id", null);
+
+        if (request()->has("user_id")) {
+            $expenses = $expenses->where("user_id", request("user_id"));
+        }
+
+        $expenses = $expenses->first();
+
+        return response()->json([
+            "expenses" => $expenses,
         ]);
     }
 }

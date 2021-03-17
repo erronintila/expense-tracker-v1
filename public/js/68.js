@@ -29,20 +29,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51,7 +37,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      loader: false,
+      formDataLoaded: true,
       errors: {
         code: [],
         first_name: [],
@@ -68,6 +54,7 @@ __webpack_require__.r(__webpack_exports__);
         username: [],
         role: [],
         can_login: [],
+        is_active: [],
         has_fund: [],
         fund: []
       }
@@ -84,6 +71,7 @@ __webpack_require__.r(__webpack_exports__);
         fund = value.fund == "" ? 0 : value.fund;
       }
 
+      this.formDataLoaded = false;
       value.fund = fund;
       value.remaining_fund = fund;
       value.password = "password";
@@ -95,6 +83,7 @@ __webpack_require__.r(__webpack_exports__);
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(value).then(function (response) {
         _this.mixin_successDialog(response.data.status, response.data.message);
 
+        _this.formDataLoaded = true;
         window.location.replace("/admin/users");
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
@@ -104,8 +93,8 @@ __webpack_require__.r(__webpack_exports__);
             _this.errors = error.response.data.errors;
           }
         }
-      })["finally"](function () {
-        _this.loader = false;
+
+        _this.formDataLoaded = true;
       });
     }
   }
@@ -131,97 +120,53 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
+      !_vm.formDataLoaded ? _c("loader-component") : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "v-card",
+        { staticClass: "elevation-0  pt-0" },
+        [
+          _c(
+            "v-card-title",
+            { staticClass: "pt-0" },
             [
               _c(
-                "v-row",
+                "v-btn",
                 {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
+                  staticClass: "mr-3",
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.go(-1)
+                    }
+                  }
                 },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0" },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "title success--text" }, [
-                    _vm._v("New Employee")
-                  ])
-                ],
+                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-container",
-                [
-                  _c("Form", {
-                    attrs: { errors: _vm.errors },
-                    on: { onSave: _vm.onSave }
-                  })
-                ],
-                1
-              )
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("h4", { staticClass: "title success--text" }, [
+                _vm._v("New Employee")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-container",
+            [
+              _c("Form", {
+                attrs: { errors: _vm.errors },
+                on: { "on-save": _vm.onSave }
+              })
             ],
             1
           )
+        ],
+        1
+      )
     ],
     1
   )

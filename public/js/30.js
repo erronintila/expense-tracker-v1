@@ -215,10 +215,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      formDataLoaded: false,
       panel: 0,
       code: "",
       name: "",
@@ -237,7 +239,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(_this.$route.params.id).then(function (response) {
+      _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {
         var data = response.data.data;
         _this.code = data.code;
         _this.name = data.name;
@@ -250,11 +252,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.website = data.website;
         _this.is_vat_inclusive = data.is_vat_inclusive;
         _this.address = data.address;
+        _this.formDataLoaded = true;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this.mixin_showErrors(error);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.formDataLoaded = true;
       });
     },
     editData: function editData() {
@@ -297,151 +299,186 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Vendor Details")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("Vendor Details")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card-text",
-            [
               _c(
-                "v-row",
+                "v-card-text",
                 [
                   _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "6" } },
+                    "v-row",
                     [
-                      _c("v-hover", {
-                        scopedSlots: _vm._u([
-                          {
-                            key: "default",
-                            fn: function(ref) {
-                              var hover = ref.hover
-                              return [
-                                _c(
-                                  "v-card",
-                                  {
-                                    staticClass: "mx-auto mt-3",
-                                    attrs: {
-                                      outlined: "",
-                                      elevation: hover ? 5 : 2
-                                    }
-                                  },
-                                  [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "6" } },
+                        [
+                          _c("v-hover", {
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function(ref) {
+                                  var hover = ref.hover
+                                  return [
                                     _c(
-                                      "v-card-text",
+                                      "v-card",
+                                      {
+                                        staticClass: "mx-auto mt-3",
+                                        attrs: {
+                                          outlined: "",
+                                          elevation: hover ? 5 : 2
+                                        }
+                                      },
                                       [
                                         _c(
-                                          "v-row",
+                                          "v-card-text",
                                           [
                                             _c(
-                                              "v-col",
-                                              {
-                                                attrs: { cols: "12", sm: "5" }
-                                              },
+                                              "v-row",
                                               [
                                                 _c(
-                                                  "v-avatar",
+                                                  "v-col",
                                                   {
-                                                    staticClass: "profile",
                                                     attrs: {
-                                                      color: "grey",
-                                                      size: "200"
+                                                      cols: "12",
+                                                      sm: "5"
                                                     }
                                                   },
                                                   [
-                                                    _c("v-img", {
-                                                      attrs: {
-                                                        src: __webpack_require__(/*! ../../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
-                                                      }
-                                                    })
+                                                    _c(
+                                                      "v-avatar",
+                                                      {
+                                                        staticClass: "profile",
+                                                        attrs: {
+                                                          color: "grey",
+                                                          size: "200"
+                                                        }
+                                                      },
+                                                      [
+                                                        _c("v-img", {
+                                                          attrs: {
+                                                            src: __webpack_require__(/*! ../../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
                                                   ],
                                                   1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  {
+                                                    attrs: {
+                                                      cols: "12",
+                                                      sm: "7"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("div", [
+                                                      _vm._v(
+                                                        "TIN : " +
+                                                          _vm._s(_vm.tin)
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "h3",
+                                                      {
+                                                        staticClass:
+                                                          "display-1 green--text"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                            " +
+                                                            _vm._s(_vm.name) +
+                                                            "\n                                        "
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("p", [
+                                                      _vm._v(_vm._s(_vm.email))
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "div",
+                                                      {
+                                                        staticClass:
+                                                          "text--primary"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                            Contact Person:\n                                            " +
+                                                            _vm._s(
+                                                              _vm.contact_person
+                                                            )
+                                                        ),
+                                                        _c("br"),
+                                                        _vm._v(
+                                                          "\n                                            " +
+                                                            _vm._s(
+                                                              _vm.mobile_number
+                                                            ) +
+                                                            "\n                                        "
+                                                        )
+                                                      ]
+                                                    )
+                                                  ]
                                                 )
                                               ],
                                               1
-                                            ),
-                                            _vm._v(" "),
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-card-actions",
+                                          [
                                             _c(
-                                              "v-col",
+                                              "v-btn",
                                               {
-                                                attrs: { cols: "12", sm: "7" }
+                                                attrs: {
+                                                  text: "",
+                                                  color: "green"
+                                                },
+                                                on: { click: _vm.editData }
                                               },
                                               [
-                                                _c("div", [
-                                                  _vm._v(
-                                                    "TIN : " + _vm._s(_vm.tin)
-                                                  )
-                                                ]),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "h3",
-                                                  {
-                                                    staticClass:
-                                                      "display-1 green--text"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                            " +
-                                                        _vm._s(_vm.name) +
-                                                        "\n                                        "
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("p", [
-                                                  _vm._v(_vm._s(_vm.email))
-                                                ]),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "div",
-                                                  {
-                                                    staticClass: "text--primary"
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                            Contact Person:\n                                            " +
-                                                        _vm._s(
-                                                          _vm.contact_person
-                                                        )
-                                                    ),
-                                                    _c("br"),
-                                                    _vm._v(
-                                                      "\n                                            " +
-                                                        _vm._s(
-                                                          _vm.mobile_number
-                                                        ) +
-                                                        "\n                                        "
-                                                    )
-                                                  ]
+                                                _vm._v(
+                                                  "\n                                    Edit Info\n                                "
                                                 )
                                               ]
                                             )
@@ -450,201 +487,184 @@ var render = function() {
                                         )
                                       ],
                                       1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-card-actions",
-                                      [
-                                        _c(
-                                          "v-btn",
-                                          {
-                                            attrs: { text: "", color: "green" },
-                                            on: { click: _vm.editData }
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                    Edit Info\n                                "
-                                            )
-                                          ]
-                                        )
-                                      ],
-                                      1
                                     )
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
+                                  ]
+                                }
+                              }
+                            ])
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "6" } },
+                        [_c("v-row")],
+                        1
+                      )
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-col",
-                    { attrs: { cols: "12", md: "6" } },
-                    [_c("v-row")],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-row",
-                [
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "12" } },
+                    "v-row",
                     [
-                      _c("v-hover", {
-                        scopedSlots: _vm._u([
-                          {
-                            key: "default",
-                            fn: function(ref) {
-                              var hover = ref.hover
-                              return [
-                                _c(
-                                  "v-card",
-                                  {
-                                    attrs: {
-                                      outlined: "",
-                                      elevation: hover ? 5 : 2
-                                    }
-                                  },
-                                  [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12" } },
+                        [
+                          _c("v-hover", {
+                            scopedSlots: _vm._u([
+                              {
+                                key: "default",
+                                fn: function(ref) {
+                                  var hover = ref.hover
+                                  return [
                                     _c(
-                                      "v-expansion-panels",
+                                      "v-card",
                                       {
-                                        attrs: { hover: "" },
-                                        model: {
-                                          value: _vm.panel,
-                                          callback: function($$v) {
-                                            _vm.panel = $$v
-                                          },
-                                          expression: "panel"
+                                        attrs: {
+                                          outlined: "",
+                                          elevation: hover ? 5 : 2
                                         }
                                       },
                                       [
                                         _c(
-                                          "v-expansion-panel",
+                                          "v-expansion-panels",
+                                          {
+                                            attrs: { hover: "" },
+                                            model: {
+                                              value: _vm.panel,
+                                              callback: function($$v) {
+                                                _vm.panel = $$v
+                                              },
+                                              expression: "panel"
+                                            }
+                                          },
                                           [
-                                            _c("v-expansion-panel-header", [
-                                              _vm._v(
-                                                "\n                                        Other Details\n                                    "
-                                              )
-                                            ]),
-                                            _vm._v(" "),
                                             _c(
-                                              "v-expansion-panel-content",
+                                              "v-expansion-panel",
                                               [
-                                                _c("v-simple-table", {
-                                                  scopedSlots: _vm._u(
-                                                    [
-                                                      {
-                                                        key: "default",
-                                                        fn: function() {
-                                                          return [
-                                                            _c("tbody", [
-                                                              _c("tr", [
-                                                                _c("td", [
-                                                                  _vm._v("Code")
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    _vm._s(
-                                                                      _vm.code
-                                                                    )
-                                                                  )
-                                                                ])
-                                                              ]),
-                                                              _vm._v(" "),
-                                                              _c("tr", [
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "\n                                                            Telephone Number\n                                                        "
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "\n                                                            " +
-                                                                      _vm._s(
-                                                                        _vm.telephone_number
-                                                                      ) +
-                                                                      "\n                                                        "
-                                                                  )
-                                                                ])
-                                                              ]),
-                                                              _vm._v(" "),
-                                                              _c("tr", [
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "Website"
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "\n                                                            " +
-                                                                      _vm._s(
-                                                                        _vm.website
-                                                                      ) +
-                                                                      "\n                                                        "
-                                                                  )
-                                                                ])
-                                                              ]),
-                                                              _vm._v(" "),
-                                                              _c("tr", [
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "\n                                                            VAT Inclusive\n                                                        "
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "\n                                                            " +
-                                                                      _vm._s(
-                                                                        _vm.is_vat_inclusive
-                                                                          ? "Yes"
-                                                                          : "No"
-                                                                      ) +
-                                                                      "\n                                                        "
-                                                                  )
-                                                                ])
-                                                              ]),
-                                                              _vm._v(" "),
-                                                              _c("tr", [
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "Address"
-                                                                  )
-                                                                ]),
-                                                                _vm._v(" "),
-                                                                _c("td", [
-                                                                  _vm._v(
-                                                                    "\n                                                            " +
-                                                                      _vm._s(
-                                                                        _vm.address
-                                                                      ) +
-                                                                      "\n                                                        "
-                                                                  )
-                                                                ])
-                                                              ])
-                                                            ])
-                                                          ]
-                                                        },
-                                                        proxy: true
-                                                      }
-                                                    ],
-                                                    null,
-                                                    true
+                                                _c("v-expansion-panel-header", [
+                                                  _vm._v(
+                                                    "\n                                        Other Details\n                                    "
                                                   )
-                                                })
+                                                ]),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-expansion-panel-content",
+                                                  [
+                                                    _c("v-simple-table", {
+                                                      scopedSlots: _vm._u(
+                                                        [
+                                                          {
+                                                            key: "default",
+                                                            fn: function() {
+                                                              return [
+                                                                _c("tbody", [
+                                                                  _c("tr", [
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "Code"
+                                                                      )
+                                                                    ]),
+                                                                    _vm._v(" "),
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          _vm.code
+                                                                        )
+                                                                      )
+                                                                    ])
+                                                                  ]),
+                                                                  _vm._v(" "),
+                                                                  _c("tr", [
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "\n                                                            Telephone Number\n                                                        "
+                                                                      )
+                                                                    ]),
+                                                                    _vm._v(" "),
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "\n                                                            " +
+                                                                          _vm._s(
+                                                                            _vm.telephone_number
+                                                                          ) +
+                                                                          "\n                                                        "
+                                                                      )
+                                                                    ])
+                                                                  ]),
+                                                                  _vm._v(" "),
+                                                                  _c("tr", [
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "Website"
+                                                                      )
+                                                                    ]),
+                                                                    _vm._v(" "),
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "\n                                                            " +
+                                                                          _vm._s(
+                                                                            _vm.website
+                                                                          ) +
+                                                                          "\n                                                        "
+                                                                      )
+                                                                    ])
+                                                                  ]),
+                                                                  _vm._v(" "),
+                                                                  _c("tr", [
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "\n                                                            VAT Inclusive\n                                                        "
+                                                                      )
+                                                                    ]),
+                                                                    _vm._v(" "),
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "\n                                                            " +
+                                                                          _vm._s(
+                                                                            _vm.is_vat_inclusive
+                                                                              ? "Yes"
+                                                                              : "No"
+                                                                          ) +
+                                                                          "\n                                                        "
+                                                                      )
+                                                                    ])
+                                                                  ]),
+                                                                  _vm._v(" "),
+                                                                  _c("tr", [
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "Address"
+                                                                      )
+                                                                    ]),
+                                                                    _vm._v(" "),
+                                                                    _c("td", [
+                                                                      _vm._v(
+                                                                        "\n                                                            " +
+                                                                          _vm._s(
+                                                                            _vm.address
+                                                                          ) +
+                                                                          "\n                                                        "
+                                                                      )
+                                                                    ])
+                                                                  ])
+                                                                ])
+                                                              ]
+                                                            },
+                                                            proxy: true
+                                                          }
+                                                        ],
+                                                        null,
+                                                        true
+                                                      )
+                                                    })
+                                                  ],
+                                                  1
+                                                )
                                               ],
                                               1
                                             )
@@ -654,14 +674,14 @@ var render = function() {
                                       ],
                                       1
                                     )
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
+                                  ]
+                                }
+                              }
+                            ])
+                          })
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
@@ -671,9 +691,6 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )
@@ -755,6 +772,11 @@ var VendorDataService = /*#__PURE__*/function () {
     key: "restore",
     value: function restore(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/restore/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/update_activation/".concat(id), data);
     }
   }]);
 

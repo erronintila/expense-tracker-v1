@@ -29,6 +29,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -37,6 +44,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      formDataLoaded: false,
       form: {
         name: ""
       },
@@ -50,8 +58,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {
+        _this.formDataLoaded = true;
         _this.form.name = response.data.data.name;
       })["catch"](function (error) {
+        _this.formDataLoaded = true;
+
         _this.mixin_showErrors(error);
       });
     },
@@ -123,7 +134,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    form: {
+    departmentForm: {
       type: Object,
       "default": function _default() {
         return {
@@ -150,7 +161,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      valid: false
+      valid: false,
+      form: {
+        name: ""
+      }
     };
   },
   methods: {
@@ -159,16 +173,14 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.$emit("onSave", this.departmentForm);
+      this.$emit("on-save", this.form);
     }
   },
-  computed: {
+  watch: {
     departmentForm: {
-      get: function get() {
-        return this.form;
-      },
-      set: function set(value) {
-        return value;
+      immediate: true,
+      handler: function handler(newValue, oldValue) {
+        this.form = newValue;
       }
     }
   }
@@ -192,47 +204,55 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-card",
-    { staticClass: "elevation-0 pt-0" },
+    "div",
     [
-      _c(
-        "v-card-title",
-        { staticClass: "pt-0" },
-        [
-          _c(
-            "v-btn",
-            {
-              staticClass: "mr-3",
-              attrs: { icon: "" },
-              on: {
-                click: function($event) {
-                  return _vm.$router.go(-1)
-                }
-              }
-            },
-            [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Edit Department")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: { departmentForm: _vm.form, errors: _vm.errors },
+                    on: { "on-save": _vm.onSave }
+                  })
+                ],
+                1
+              )
+            ],
             1
-          ),
-          _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c("h4", { staticClass: "title green--text" }, [
-            _vm._v("Edit Department")
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-container",
-        [
-          _c("Form", {
-            attrs: { form: _vm.form, errors: _vm.errors },
-            on: { onSave: _vm.onSave }
-          })
-        ],
-        1
-      )
+          )
     ],
     1
   )
@@ -294,11 +314,11 @@ var render = function() {
                   }
                 },
                 model: {
-                  value: _vm.departmentForm.name,
+                  value: _vm.form.name,
                   callback: function($$v) {
-                    _vm.$set(_vm.departmentForm, "name", $$v)
+                    _vm.$set(_vm.form, "name", $$v)
                   },
-                  expression: "departmentForm.name"
+                  expression: "form.name"
                 }
               })
             ],

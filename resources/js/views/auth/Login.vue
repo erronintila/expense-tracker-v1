@@ -102,24 +102,22 @@ export default {
     },
     methods: {
         onLogin() {
-            let _this = this;
+            this.$refs.form.validate();
 
-            _this.$refs.form.validate();
-
-            if (_this.$refs.form.validate()) {
+            if (this.$refs.form.validate()) {
                 this.$store
                     .dispatch("AUTH_LOGIN", {
-                        username: _this.form.username,
-                        password: _this.form.password
+                        username: this.form.username,
+                        password: this.form.password
                     })
                     .then(response => {
-                        _this.form = {
+                        this.form = {
                             username: "",
                             password: ""
                         };
 
-                        _this.$store.dispatch("AUTH_USER").then(response => {
-                            if (_this.$store.getters.admin) {
+                        this.$store.dispatch("AUTH_USER").then(response => {
+                            if (this.$store.getters.admin) {
                                 window.location.replace("/admin");
                             } else {
                                 window.location.replace("/");
@@ -127,13 +125,8 @@ export default {
                         });
                     })
                     .catch(error => {
-                        console.log(error.response);
-
-                        _this.errors = error.response.data.errors;
-                        _this.mixin_errorDialog(
-                            error.response.status,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
             }
         }

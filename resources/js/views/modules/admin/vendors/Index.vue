@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Vendors</h4>
 
@@ -27,7 +28,7 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -68,7 +69,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-row class="ml-4">
@@ -125,6 +126,67 @@
                     close-icon="mdi-refresh"
                 >
                     Refresh
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation()"
+                    close-icon="mdi-history"
+                    color="green"
+                >
+                    Activate
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(true)"
+                    close-icon="mdi-check"
+                    color="green"
+                    dark
+                >
+                    Activate
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(false)"
+                    close-icon="mdi-lock"
+                    color="red"
+                    dark
+                >
+                    Deactivate
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                >
+                    Restore
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                >
+                    Archive
                 </v-chip>
             </v-row>
 
@@ -225,6 +287,7 @@ export default {
     props: {},
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Name", value: "name" },
@@ -238,7 +301,7 @@ export default {
             ],
             items: [],
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: ["Active", "Inactive", "Archived"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -252,15 +315,13 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let self = this;
-
-            self.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = self.search.trim().toLowerCase();
-                let status = self.status;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
                 let data = {
                     params: {
                         search: search,
@@ -276,21 +337,15 @@ export default {
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        self.loading = false;
-
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        self.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
-
-                        self.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
@@ -311,13 +366,8 @@ export default {
             });
         },
         onDelete() {
-            let self = this;
-
-            if (self.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -325,50 +375,34 @@ export default {
                 if (res) {
                     let data = {
                         params: {
-                            ids: self.selected.map(item => {
+                            ids: this.selected.map(item => {
                                 return item.id;
                             })
                         }
                     };
 
-                    VendorDataService.delete(self.selected[0].id, data)
-                        .then(function(response) {
-                            self.mixin_successDialog(
+                    VendorDataService.delete(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
 
-                            // self.$dialog.message.success(
-                            //     "Item(s) moved to archive.",
-                            //     {
-                            //         position: "top-right",
-                            //         timeout: 2000
-                            //     }
-                            // );
-
-                            self.getDataFromApi().then(data => {
-                                self.items = data.items;
-                                self.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            self.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            self.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let self = this;
-
-            if (self.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
 
                 return;
@@ -377,47 +411,74 @@ export default {
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     let data = {
-                        ids: self.selected.map(item => {
+                        ids: this.selected.map(item => {
                             return item.id;
                         })
                     };
 
-                    VendorDataService.restore(self.selected[0].id, data)
-                        .then(function(response) {
-                            self.mixin_successDialog(
+                    VendorDataService.restore(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
 
-                            self.getDataFromApi().then(data => {
-                                self.items = data.items;
-                                self.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            self.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            self.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
-        }
+        },
+        onSetActivation(is_active) {
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+                return;
+            }
+
+            this.$confirm(`Do you want to ${is_active ? 'activate' : 'deactivate'} account(s)?`).then(res => {
+                if (res) {
+                    let data = {
+                        is_active: is_active,
+                        ids: this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+                    VendorDataService.updateActivation(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
+                            });
+                            this.selected = [];
+                        })
+                        .catch(error => {
+                            this.mixin_showErrors(error);
+                        });
+                }
+            });
+        },
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

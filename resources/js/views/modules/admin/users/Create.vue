@@ -1,21 +1,7 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-card v-else class="elevation-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card class="elevation-0  pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -24,7 +10,7 @@
                 <h4 class="title success--text">New Employee</h4>
             </v-card-title>
             <v-container>
-                <Form :errors="errors" @onSave="onSave"></Form>
+                <Form :errors="errors" @on-save="onSave"></Form>
             </v-container>
         </v-card>
     </div>
@@ -40,7 +26,7 @@ export default {
     },
     data() {
         return {
-            loader: false,
+            formDataLoaded: true,
             errors: {
                 code: [],
                 first_name: [],
@@ -57,6 +43,7 @@ export default {
                 username: [],
                 role: [],
                 can_login: [],
+                is_active: [],
                 has_fund: [],
                 fund: []
             }
@@ -65,12 +52,13 @@ export default {
     methods: {
         onSave(value) {
             let fund = 0;
-            let is_administrator =
-                value.role == "Administrator" ? true : false;
+            let is_administrator = value.role == "Administrator" ? true : false;
 
             if (value.has_fund) {
                 fund = value.fund == "" ? 0 : value.fund;
             }
+
+            this.formDataLoaded = false;
 
             value.fund = fund;
             value.remaining_fund = fund;
@@ -87,6 +75,7 @@ export default {
                         response.data.status,
                         response.data.message
                     );
+                    this.formDataLoaded = true;
                     window.location.replace("/admin/users");
                 })
                 .catch(error => {
@@ -96,9 +85,7 @@ export default {
                             this.errors = error.response.data.errors;
                         }
                     }
-                })
-                .finally(() => {
-                    this.loader = false;
+                    this.formDataLoaded = true;
                 });
         }
     }

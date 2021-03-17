@@ -166,6 +166,8 @@
 </template>
 
 <script>
+import VendorDataService from "../../services/VendorDataService";
+
 export default {
     // props: {
     //     openDialog: {
@@ -214,50 +216,38 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onCreateVendor() {
-            let _this = this;
+            this.$refs.form.validate();
 
-            _this.$refs.form.validate();
-
-            if (_this.$refs.form.validate()) {
-                axios
-                    .post("/api/vendors", {
-                        code: _this.form.code,
-                        name: _this.form.name,
-                        email: _this.form.email,
-                        tin: _this.form.tin == "N/A" ? null : _this.form.tin,
-                        contact_person: _this.form.contact_person,
-                        mobile_number: _this.form.mobile_number,
-                        telephone_number: _this.form.telephone_number,
-                        remarks: _this.form.remarks,
-                        website: _this.form.website,
-                        is_vat_inclusive: _this.form.is_vat_inclusive,
-                        address: _this.form.address,
-                        expense_types: _this.selected_expense_types
-                    })
-                    .then(function(response) {
-                        _this.$dialog.message.success(
+            if (this.$refs.form.validate()) {
+                VendorDataService.store({
+                    code: this.form.code,
+                    name: this.form.name,
+                    email: this.form.email,
+                    tin: this.form.tin == "N/A" ? null : this.form.tin,
+                    contact_person: this.form.contact_person,
+                    mobile_number: this.form.mobile_number,
+                    telephone_number: this.form.telephone_number,
+                    remarks: this.form.remarks,
+                    website: this.form.website,
+                    is_vat_inclusive: this.form.is_vat_inclusive,
+                    address: this.form.address,
+                    expense_types: this.selected_expense_types
+                })
+                    .then(response => {
+                        this.$dialog.message.success(
                             "Vendor created successfully.",
                             {
                                 position: "top-right",
                                 timeout: 2000
                             }
                         );
-                        _this.$emit("createdVendor");
-
-                        _this.openDialog = false;
+                        this.$emit("createdVendor");
+                        this.openDialog = false;
                     })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.errors = error.response.data.errors;
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
-
                 return;
             }
         }

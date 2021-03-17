@@ -29,6 +29,22 @@ class ExpenseReportDataService {
     restore(id, data) {
         return axios.put(`/api/expense_reports/restore/${id}`, data);
     }
+
+    submit(id, data) {
+        return axios.put(`/api/expense_reports/submit/${id}`, data);
+    }
+
+    approve(id, data) {
+        return axios.put(`/api/expense_reports/approve/${id}`, data);
+    }
+
+    reject(id, data) {
+        return axios.put(`/api/expense_reports/reject/${id}`, data);
+    }
+
+    duplicate(id, data) {
+        return axios.put(`/api/expense_reports/duplicate/${id}`, data);
+    }
 }
 
 export default new ExpenseReportDataService();

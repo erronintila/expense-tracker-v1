@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expenses</h4>
 
@@ -26,62 +27,52 @@
                     </template>
                     <span>Add New</span>
                 </v-tooltip>
+            </v-card-title>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
+            <v-card-subtitle>
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
                         </v-btn>
                     </template>
-                    <span>Refresh</span>
-                </v-tooltip>
+                </DateRangePicker>
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
+                </v-chip>
 
                 <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-y
-                    left
+                    right
                     bottom
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
+                        <v-chip class="mr-2" small v-bind="attrs" v-on="menu">
+                            {{ status }}
+                        </v-chip>
                     </template>
 
                     <v-card>
                         <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
                             <v-list-item>
                                 <v-select
                                     v-model="status"
@@ -89,6 +80,26 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip class="mr-2" small v-bind="attrs" v-on="menu">
+                            {{ expense_type.name }}
+                        </v-chip>
+                    </template>
+
+                    <v-card>
+                        <v-list>
                             <v-list-item>
                                 <v-select
                                     v-model="expense_type"
@@ -103,83 +114,43 @@
                     </v-card>
                 </v-menu>
 
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onRestore">
-                            <v-list-item-icon>
-                                <v-icon>mdi-restore</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Restore
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                        <!-- <v-list-item>
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Expense Report
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item @click="$router.push('/expenses/create/bulk')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Bulk Expense(s)
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Expense(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-            </v-card-title>
-
-            <v-card-subtitle>
-                {{ formattedDateRange }}
-            </v-card-subtitle>
-
-            <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
-                </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip v-if="expense_type!=null" class="mr-2" small>
-                    {{ expense_type.name }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
+                </v-chip>
+                <v-chip
+                    v-show="
+                        selected.length > 0 && status == 'Cancelled Expenses'
+                    "
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                    dark
+                >
+                    Restore
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        selected.length > 0 && status !== 'Cancelled Expenses'
+                    "
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                    dark
+                >
+                    Cancel Expense(s)
                 </v-chip>
             </v-row>
 
@@ -319,7 +290,6 @@
                                         <td>:</td>
                                         <td>{{ item.is_late_encoded }}</td>
                                     </tr>
-                                    
                                     <tr v-if="item.remarks">
                                         <td><strong>Remarks</strong></td>
                                         <td>:</td>
@@ -342,13 +312,6 @@
                             )
                         }}
                     </template>
-                    <!-- <template v-slot:[`item.expense_report`]="{ item }">
-                        {{
-                            item.expense_report == null
-                                ? "None"
-                                : item.expense_report.code
-                        }}
-                    </template> -->
                     <template v-slot:[`item.status.status`]="{ item }">
                         <v-chip :color="item.status.color" dark small>{{
                             item.status.status
@@ -412,7 +375,6 @@
                             </h4>
                             <h4 class="grey--text">
                                 Due of encoding expenses :
-                                <!-- {{ $store.getters.settings.submission_period }} -->
                                 {{ maxDate }}
                             </h4>
                         </div>
@@ -420,14 +382,15 @@
                 </v-row>
             </v-card-text>
         </v-card>
-
     </div>
 </template>
 
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     components: {
@@ -435,6 +398,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             date_range: [
                 moment()
@@ -467,6 +431,11 @@ export default {
                     value: "expense_type.name",
                     sortable: false
                 },
+                // {
+                //     text: "Employee",
+                //     value: "user.full_name",
+                //     sortable: false
+                // },
                 { text: "Amount", value: "amount" },
                 {
                     text: "To replenish",
@@ -480,7 +449,7 @@ export default {
             ],
             items: [],
             user: this.$store.getters.user.id,
-            expense_type: {id: 0, name: 'All Expense Types'},
+            expense_type: { id: 0, name: "All Expense Types" },
             expense_types: [],
             status: "All Expenses",
             statuses: [
@@ -512,103 +481,66 @@ export default {
             this.date_range = e;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.user;
-                let expense_type_id = _this.expense_type.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.user;
+                let expense_type_id = this.expense_type.id;
+                let range = this.date_range;
 
-                axios
-                    .get("/api/expenses", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            user_id: user_id,
-                            expense_type_id: expense_type_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                        }
-                    })
+                ExpenseDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        user_id: user_id,
+                        expense_type_id: expense_type_id,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0]
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users?only=true")
-                .then(response => {
-                    _this.users = response.data.data;
-                    _this.users.unshift({
-                        id: 0,
-                        full_name: "All Employees"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
         loadExpenseTypes() {
-            let _this = this;
-
-            axios
-                .get("/api/data/expense_types?only=true")
+            ExpenseTypeDataService.get({
+                params: {
+                    only: true
+                }
+            })
                 .then(response => {
-                    _this.expense_types = response.data.data;
-                    _this.expense_types.unshift({
+                    this.expense_types = response.data.data;
+                    this.expense_types.unshift({
                         id: 0,
                         name: "All Expense Types"
                     });
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "All Expenses";
-            // this.loadUsers();
             this.loadExpenseTypes();
             this.selected = [];
         },
@@ -621,33 +553,24 @@ export default {
         onEdit(item) {
             if (item.expense_report) {
                 if (item.expense_report.approved_at) {
-                    this.$dialog.message.error(
-                        "Expense with an approved report can't be edited",
-                        {
-                            position: "top-right",
-                            timeout: 2000
-                        }
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Expense with an approved report can't be edited"
                     );
                     return;
                 }
 
                 if (item.expense_report.deleted_at) {
-                    this.$dialog.message.error(
-                        "Expense with a deleted report can't be edited",
-                        {
-                            position: "top-right",
-                            timeout: 2000
-                        }
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Expense with a deleted report can't be edited"
                     );
                     return;
                 }
             }
 
             if (this.status == "Cancelled") {
-                this.$dialog.message.error("Expense has been deleted.", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "Expense has been deleted.");
                 return;
             }
 
@@ -657,19 +580,15 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
             let arr = this.selected.map(item => item.expense_report === null);
 
             // this.mixin_is_empty(
-            //     _this.selected.length,
+            //     this.selected.length,
             //     "No item(s) selected bitch"
             // );
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -679,108 +598,85 @@ export default {
             // );
 
             if (arr.includes(false)) {
-                this.$dialog.message.error("Expense(s) can't be cancelled", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog(
+                    "Error",
+                    "Expense(s) can't be cancelled"
+                );
                 return;
             }
 
             this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/expenses/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Cancelled successfully.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                    ExpenseDataService.delete(this.selected[0].id, {
+                        params: {
+                            ids: this.selected.map(item => {
+                                return item.id;
+                            })
+                        }
+                    })
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
             let arr = this.selected.map(item => item.expense_report === null);
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+                return;
+            }
+
+            if (!this.mixin_can("restore expenses")) {
+                this.mixin_errorDialog("Error", "Not allowed");
                 return;
             }
 
             if (arr.includes(false)) {
-                this.$dialog.message.error(
-                    "Expense(s) with report(s) can't be restored",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
+                this.mixin_errorDialog(
+                    "Error",
+                    "Expense(s) with report(s) can't be restored"
                 );
                 return;
             }
 
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/expenses/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                            action: "restore"
+                    ExpenseDataService.restore(this.selected[0].id, {
+                        ids: this.selected.map(item => {
+                            return item.id;
                         })
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
-                            });
-
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
-
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
+                    })
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
+
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
+                            });
+
+                            // this.$store.dispatch("AUTH_USER");
+
+                            this.selected = [];
+                        })
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -809,13 +705,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         },
         items() {
             this.totalAmount = this.mixin_formatNumber(
@@ -877,28 +774,20 @@ export default {
             let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
             let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
 
-            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
                 return start_date;
             }
 
-            if(JSON.stringify(end_date) == null) {
+            if (JSON.stringify(end_date) == null) {
                 return start_date;
             }
 
             return `${start_date} ~ ${end_date}`;
         }
     },
-    mounted() {
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
-        });
-    },
     created() {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        // this.loadUsers();
-        // this.loadUsers();
         this.loadExpenseTypes();
     },
     activated() {

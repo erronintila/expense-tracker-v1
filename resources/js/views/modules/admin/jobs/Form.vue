@@ -4,7 +4,7 @@
             <v-col class="d-flex" cols="12" sm="6">
                 <DepartmentDropdownSelector
                     ref="departmentDropdownSelector"
-                    :selectedDepartment="jobForm.department"
+                    :selectedDepartment="form.department"
                     :rules="mixin_validation.required"
                     :errors="errors.department_id"
                     @onChange="onChangeDepartment"
@@ -13,7 +13,7 @@
             </v-col>
             <v-col cols="12" md="6">
                 <v-text-field
-                    v-model="jobForm.name"
+                    v-model="form.name"
                     :rules="[
                         ...mixin_validation.required,
                         ...mixin_validation.minLength(100)
@@ -35,11 +35,11 @@
     </v-form>
 </template>
 <script>
-import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
+import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 
 export default {
     props: {
-        form: {
+        jobForm: {
             type: Object,
             default: () => {
                 return {
@@ -63,27 +63,30 @@ export default {
     },
     data() {
         return {
-            valid: false
+            valid: false,
+            form: {
+                name: null,
+                department: null
+            }
         };
     },
     methods: {
         onChangeDepartment(value) {
-            this.jobForm.department = value;
+            this.form.department = value;
         },
         onSave() {
             if (!this.$refs.form.validate()) {
                 return;
             }
-            this.$emit("onSave", this.jobForm);
+            this.$emit("on-save", this.form);
         }
     },
-    computed: {
+    watch: {
         jobForm: {
-            get() {
-                return this.form;
-            },
-            set(value) {
-                return this.value;
+            deep: true,
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.form = newValue;
             }
         }
     }

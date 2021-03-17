@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Job Designations</h4>
 
@@ -27,7 +28,7 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -68,7 +69,7 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-row class="ml-4">
@@ -161,6 +162,38 @@
                 >
                     Refresh
                 </v-chip>
+
+                <v-chip
+                    v-show="
+                        collections.selected.length > 0 &&
+                            filters.status == 'Archived'
+                    "
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                    dark
+                >
+                    Restore
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        collections.selected.length > 0 &&
+                            filters.status == 'Active'
+                    "
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                    dark
+                >
+                    Archive
+                </v-chip>
             </v-row>
 
             <v-card-subtitle>
@@ -211,7 +244,7 @@
 
 <script>
 import JobDataService from "../../../../services/JobDataService";
-import DepartmentDropdownSelector from "../../../../components/selector/DepartmentDropdownSelector";
+import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 
 export default {
     components: {
@@ -219,6 +252,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             collections: {
                 selected: [],
@@ -261,15 +295,14 @@ export default {
             this.filters.department = value;
         },
         getDataFromApi() {
-            let _this = this;
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.filters.search.trim().toLowerCase();
-                let department_id = _this.filters.department.id;
-                let status = _this.filters.status;
+                let search = this.filters.search.trim().toLowerCase();
+                let department_id = this.filters.department.id;
+                let status = this.filters.status;
                 let data = {
                     params: {
                         search: search,
@@ -284,13 +317,15 @@ export default {
 
                 JobDataService.getAll(data)
                     .then(response => {
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve(response.data);
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                    })
-                    .finally(() => {
-                        _this.loading = false;
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
@@ -312,13 +347,8 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
-
-            if (_this.collections.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.collections.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -326,76 +356,62 @@ export default {
                 if (res) {
                     let data = {
                         params: {
-                            ids: _this.collections.selected.map(item => {
+                            ids: this.collections.selected.map(item => {
                                 return item.id;
                             })
                         }
                     };
 
-                    JobDataService.delete(
-                        _this.collections.selected[0].id,
-                        data
-                    )
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                    JobDataService.delete(this.collections.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-                            _this.getDataFromApi().then(data => {
-                                _this.collections.items = data.data;
-                                _this.meta = data.meta;
+                            this.getDataFromApi().then(data => {
+                                this.collections.items = data.data;
+                                this.meta = data.meta;
                             });
 
-                            _this.collections.selected = [];
+                            this.collections.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
-
-            if (_this.collections.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.collections.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
                     let data = {
-                        ids: _this.collections.selected.map(item => {
+                        ids: this.collections.selected.map(item => {
                             return item.id;
                         })
                     };
 
                     JobDataService.restore(
-                        _this.collections.selected[0].id,
+                        this.collections.selected[0].id,
                         data
                     )
-                        .then(function(response) {
-                            _this.mixin_successDialog(
+                        .then(response => {
+                            this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
                             );
-                            _this.getDataFromApi().then(data => {
-                                _this.collections.items = data.data;
-                                _this.meta = data.meta;
+                            this.getDataFromApi().then(data => {
+                                this.collections.items = data.data;
+                                this.meta = data.meta;
                             });
 
-                            _this.collections.selected = [];
+                            this.collections.selected = [];
                         })
-                        .catch(function(error) {
+                        .catch(error => {
                             this.mixin_showErrors(error);
                         });
                 }
@@ -404,13 +420,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.collections.items = data.data;
                     this.meta = data.meta;
                 });
-            },
-            deep: true
+            }
         }
     },
     computed: {

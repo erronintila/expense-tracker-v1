@@ -150,9 +150,7 @@ class ExpenseReportController extends Controller
 
         if (request()->has("start_date") && request()->has("end_date")) {
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
-
             $end_date = Carbon::parse(request("end_date"))->endOfDay();
-
             $expense_reports = $expense_reports->whereBetween("created_at", [$start_date, $end_date]);
         }
 
@@ -164,7 +162,6 @@ class ExpenseReportController extends Controller
 
         if (request()->has("create_payment")) {
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
-
             $end_date = Carbon::parse(request("end_date"))->endOfDay();
 
             $expense_reports = ExpenseReport::with(['user' => function ($query) {
@@ -895,9 +892,7 @@ class ExpenseReportController extends Controller
 
         if (request()->has("start_date") && request()->has("end_date")) {
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
-
             $end_date = Carbon::parse(request("end_date"))->endOfDay();
-
             $expense_reports = $expense_reports->whereBetween("created_at", [$start_date, $end_date]);
         }
 

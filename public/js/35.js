@@ -11,6 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
 //
 //
 //
@@ -443,27 +444,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    var _this2 = this;
+    var _this = this;
 
     return {
+      formDataLoaded: false,
       showOldPassword: false,
       showNewPassword: false,
       showRetypePassword: false,
@@ -523,7 +511,7 @@ __webpack_require__.r(__webpack_exports__);
         password_confirmation: [function (v) {
           return !!v || "Retype password is required";
         }, function (v) {
-          return _this2.password === _this2.password_confirmation || "Passwords do not match";
+          return _this.password === _this.password_confirmation || "Passwords do not match";
         }]
       },
       password_errors: {
@@ -568,77 +556,66 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     onSave: function onSave() {
-      var _this = this; // _this.$refs.form.validate();
+      var _this2 = this;
 
+      this.$refs.form.validate();
 
-      if (_this.$refs.form.validate()) {
-        axios.put("/api/users/update_profile/" + _this.form.id, {
-          code: _this.form.code,
-          first_name: _this.form.first_name,
-          middle_name: _this.form.middle_name,
-          last_name: _this.form.last_name,
-          suffix: _this.form.suffix,
-          gender: _this.form.gender,
-          birthdate: _this.form.birthdate,
-          mobile_number: _this.form.mobile_number,
-          telephone_number: _this.form.telephone_number,
-          address: _this.form.address,
-          fund: _this.form.fund,
-          remaining_fund: _this.form.remaining_fund,
-          username: _this.form.username,
-          email: _this.form.email,
+      if (this.$refs.form.validate()) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].updateProfile(this.form.id, {
+          code: this.form.code,
+          first_name: this.form.first_name,
+          middle_name: this.form.middle_name,
+          last_name: this.form.last_name,
+          suffix: this.form.suffix,
+          gender: this.form.gender,
+          birthdate: this.form.birthdate,
+          mobile_number: this.form.mobile_number,
+          telephone_number: this.form.telephone_number,
+          address: this.form.address,
+          fund: this.form.fund,
+          remaining_fund: this.form.remaining_fund,
+          username: this.form.username,
+          email: this.form.email,
           password: "password",
           password_confirmation: "password",
-          is_admin: _this.form.is_admin,
-          is_superadmin: _this.form.is_superadmin,
-          can_login: _this.form.can_login,
-          type: _this.form.type,
-          job_id: _this.form.job == null ? null : _this.form.job.id
+          is_admin: this.form.is_admin,
+          is_superadmin: this.form.is_superadmin,
+          can_login: this.form.can_login,
+          type: this.form.type,
+          job_id: this.form.job == null ? null : this.form.job.id
         }).then(function (response) {
-          _this.$dialog.message.success("User account updated successfully.", {
-            position: "top-right",
-            timeout: 2000
-          });
+          _this2.mixin_successDialog(response.data.status, response.data.message);
 
-          _this.$store.dispatch("AUTH_USER");
+          _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
+          _this2.mixin_showErrors(error);
 
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-          _this.errors = error.response.data.errors;
+          _this2.errors = error.response.data.errors;
         });
       }
     },
     onUpdatePassword: function onUpdatePassword() {
-      var _this = this;
+      var _this3 = this;
 
-      if (_this.$refs.form_password.validate()) {
-        axios.put("/api/users/update_password/" + _this.form.id, {
-          old_password: _this.old_password,
-          password: _this.password,
-          password_confirmation: _this.password_confirmation
+      if (this.$refs.form_password.validate()) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].updatePassword(this.form.id, {
+          old_password: this.old_password,
+          password: this.password,
+          password_confirmation: this.password_confirmation
         }).then(function (response) {
-          _this.$dialog.message.success("User account password has been updated.", {
-            position: "top-right",
-            timeout: 2000
-          }); // _this.$store.dispatch("AUTH_USER");
+          _this3.mixin_successDialog(response.data.status, response.data.message); // this.$store.dispatch("AUTH_USER");
 
 
-          _this.dialogPassword = false;
-          _this.old_password = "";
-          _this.password = "";
-          _this.password_confirmation = "";
+          _this3.dialogPassword = false;
+          _this3.old_password = "";
+          _this3.password = "";
+          _this3.password_confirmation = "";
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {
-              _this.password_errors = error.response.data.errors;
+              _this3.password_errors = error.response.data.errors;
             }
           }
         });
@@ -655,24 +632,31 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+    },
+    lastUpdated: function lastUpdated() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
     }
   },
   created: function created() {
-    var _this = this;
+    var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.form = response;
+      _this4.form = response;
 
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this4.$store.dispatch("AUTH_NOTIFICATIONS");
+
+      _this4.formDataLoaded = true;
     });
   },
   activated: function activated() {
-    var _this = this;
+    var _this5 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this.form = response;
+      _this5.form = response;
 
-      _this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this5.$store.dispatch("AUTH_NOTIFICATIONS");
+
+      _this5.formDataLoaded = true;
     });
   }
 });
@@ -697,52 +681,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.form.id == ""
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0 pt-0" },
@@ -763,7 +703,7 @@ var render = function() {
               _c("v-card-subtitle", [
                 _vm._v(
                   "\n            Last updated: " +
-                    _vm._s(_vm.form.updated_at) +
+                    _vm._s(_vm.lastUpdated) +
                     "\n        "
                 )
               ]),
@@ -1805,6 +1745,120 @@ render._withStripped = true
 /***/ (function(module, exports) {
 
 module.exports = "/images/user.png?5405d77c51fb46a0cbf26cb96fe4da4d";
+
+/***/ }),
+
+/***/ "./resources/js/services/UserDataService.js":
+/*!**************************************************!*\
+  !*** ./resources/js/services/UserDataService.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var UserDataService = /*#__PURE__*/function () {
+  function UserDataService() {
+    _classCallCheck(this, UserDataService);
+  }
+
+  _createClass(UserDataService, [{
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/users", data);
+    }
+  }, {
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/users", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/restore/".concat(id), data);
+    }
+  }, {
+    key: "updatePassword",
+    value: function updatePassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_password/".concat(id), data);
+    }
+  }, {
+    key: "resetPassword",
+    value: function resetPassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/reset_password/".concat(id), data);
+    }
+  }, {
+    key: "verifyEmail",
+    value: function verifyEmail(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/verify_email/".concat(id), data);
+    }
+  }, {
+    key: "updateFund",
+    value: function updateFund(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_fund/".concat(id), data);
+    }
+  }, {
+    key: "updateSettings",
+    value: function updateSettings(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
+    }
+  }, {
+    key: "updatePermissions",
+    value: function updatePermissions(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_permissions/".concat(id), data);
+    }
+  }, {
+    key: "updateProfile",
+    value: function updateProfile(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
+    }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
+    }
+  }]);
+
+  return UserDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new UserDataService());
 
 /***/ }),
 

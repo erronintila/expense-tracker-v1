@@ -25,6 +25,16 @@ class Vendor extends Model
     | LARAVEL MODEL CONFIGURATION
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($vendor) {
+            if ($vendor->expenses()->count() > 0) {
+                abort(422, "Some records can't be deleted.");
+            }
+        });
+    }
     
     /**
      * The attributes that are not mass assignable.

@@ -17,7 +17,7 @@ class DepartmentController extends Controller
     public function __construct()
     {
         // apply permissions
-        $this->middleware(['permission:view all departments'], ['only' => ['index']]);
+        // $this->middleware(['permission:view all departments'], ['only' => ['index']]);
         $this->middleware(['permission:view departments'], ['only' => ['show']]);
         $this->middleware(['permission:add departments'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit departments'], ['only' => ['edit', 'update']]);
@@ -31,6 +31,12 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
+        if(!request("isSelection") || !request()->has("isSelection")) {
+            if (!app("auth")->user()->hasPermissionTo('view all departments')) {
+                abort(403);
+            }
+        }
+
         $search = request('search') ?? "";
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";

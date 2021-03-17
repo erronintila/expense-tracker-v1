@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -9,7 +10,7 @@
                 <h4 class="title green--text">Edit Job Designation</h4>
             </v-card-title>
             <v-container>
-                <Form :errors="errors" :form="form" @onSave="onSave"></Form>
+                <Form :errors="errors" :jobForm="form" @on-save="onSave"></Form>
             </v-container>
         </v-card>
     </div>
@@ -25,6 +26,7 @@ export default {
     },
     data() {
         return {
+            formDataLoaded: false,
             form: {
                 name: "",
                 department: null
@@ -42,15 +44,16 @@ export default {
                     let data = response.data.data;
                     this.form.name = data.name;
                     this.form.department = data.department;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-
                     if (error.response) {
                         if (error.response.data) {
-                            _this.errors = error.response.data.errors;
+                            this.errors = error.response.data.errors;
                         }
                     }
+                    this.formDataLoaded = true;
                 });
         },
         onSave(value) {

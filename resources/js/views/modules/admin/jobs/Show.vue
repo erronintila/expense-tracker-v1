@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -19,22 +20,19 @@ import JobDataService from "../../../../services/JobDataService";
 
 export default {
     data() {
-        return {};
+        return {
+            formDataLoaded: false
+        };
     },
     methods: {
         loadItem() {
-            let _this = this;
-
-            JobDataService.show(_this.$route.params.id)
-                .then(function(response) {})
+            JobDataService.show(this.$route.params.id)
+                .then(function(response) {
+                    this.formDataLoaded = true;
+                })
                 .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
                 });
         }
     },

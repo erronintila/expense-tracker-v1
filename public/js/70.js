@@ -28,6 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -38,6 +39,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     return {
+      formDataLoaded: true,
       rules: {
         tin: [function (v) {
           return _this.is_vat_inclusive == true || "This field is required.";
@@ -54,7 +56,8 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         website: [],
         is_vat_inclusive: [],
-        address: []
+        address: [],
+        is_active: []
       }
     };
   },
@@ -62,8 +65,11 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave(value) {
       var _this2 = this;
 
+      this.formDataLoaded = false;
       value.tin = value.tin == "N/A" ? null : value.tin, _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].store(value).then(function (response) {
         _this2.mixin_successDialog(response.data.status, response.data.message);
+
+        _this2.formDataLoaded = true;
 
         _this2.$router.push({
           name: "admin.vendors.index"
@@ -76,6 +82,8 @@ __webpack_require__.r(__webpack_exports__);
             _this2.errors = error.response.data.errors;
           }
         }
+
+        _this2.formDataLoaded = true;
       });
     }
   }
@@ -101,51 +109,53 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-card",
-        { staticClass: "elevation-0 pt-0" },
-        [
-          _c(
-            "v-card-title",
-            { staticClass: "pt-0" },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-btn",
-                {
-                  staticClass: "mr-3",
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("New Vendor")
+                  ])
+                ],
                 1
               ),
               _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("h4", { staticClass: "title green--text" }, [
-                _vm._v("New Vendor")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-container",
-            [
-              _c("Form", {
-                attrs: { errors: _vm.errors },
-                on: { onSave: _vm.onSave }
-              })
+              _c(
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: { errors: _vm.errors },
+                    on: { "on-save": _vm.onSave }
+                  })
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )

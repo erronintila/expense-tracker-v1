@@ -51,17 +51,15 @@ class Job extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
-
-    //     static::deleting(function ($job) {
-    //         if ($job->users()->count() > 0) {
-
-    //             abort(422, "Item has child records");
-    //         }
-    //     });
-    // }
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($job) {
+            if ($job->users()->count() > 0) {
+                abort(422, "Some records can't be deleted.");
+            }
+        });
+    }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

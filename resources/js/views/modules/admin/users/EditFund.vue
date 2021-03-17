@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -45,11 +46,7 @@
                                         <td
                                             class="headline green--text text--darken-4 text-right"
                                         >
-                                            {{
-                                                mixin_formatNumber(
-                                                    user.fund
-                                                )
-                                            }}
+                                            {{ mixin_formatNumber(user.fund) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -135,10 +132,13 @@
 </template>
 
 <script>
+import UserDataService from "../../../../services/UserDataService";
+
 export default {
     data() {
         return {
             valid: false,
+            formDataLoaded: false,
             adjustment_type: "Add Amount",
             user: { id: null, fullname: "", fund: 0, remaining_fund: 0 },
             reference: "",
@@ -158,27 +158,18 @@ export default {
         };
     },
     methods: {
-        loadusers() {
-            let _this = this;
-
-            axios
-                .get("/api/users/" + this.$route.params.id)
+        loadUser() {
+            UserDataService.show(this.$route.params.id)
                 .then(response => {
-                    _this.user = response.data.data;
+                    this.user = response.data.data;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
                 });
         },
         onSave() {
-            let _this = this;
-
             if (this.new_fund < 0 || this.new_remaining_fund < 0) {
                 this.mixin_errorDialog(
                     "Error",
@@ -187,79 +178,25 @@ export default {
                 return;
             }
 
-            if (_this.$refs.form.validate()) {
+            if (this.$refs.form.validate()) {
                 this.$confirm("Do you want to update revolving fund?").then(
                     res => {
                         if (res) {
-                            axios
-                                .put(
-                                    `/api/users/update_fund/${_this.$route.params.id}`,
-                                    {
-                                        fund: _this.new_fund,
-                                        remaining_fund: _this.new_remaining_fund
-                                    }
-                                )
-                                .then(function(response) {
-                                    _this.$dialog.message.success(
-                                        "Revolving Fund updated.",
-                                        {
-                                            position: "top-right",
-                                            timeout: 2000
-                                        }
-                                    );
-
-                                    _this.$store.dispatch("AUTH_USER");
-
-                                    _this.$router.push("/admin/users");
+                            UserDataService.updateFund(this.$route.params.id, {
+                                fund: this.new_fund,
+                                remaining_fund: this.new_remaining_fund
+                            })
+                                .then(response => {
+                                    this.mixin_successDialog(response.data.status, response.data.message);
+                                    this.$store.dispatch("AUTH_USER");
+                                    this.$router.push("/admin/users");
                                 })
-                                .catch(function(error) {
-                                    console.log(error);
-                                    console.log(error.response);
-
-                                    _this.mixin_errorDialog(
-                                        `Error ${error.response.status}`,
-                                        error.response.statusText
-                                    );
+                                .catch(error => {
+                                    this.mixin_showErrors(error);
                                 });
                         }
                     }
                 );
-                // let add_amount =
-                //     this.adjustment_type == "Add Amount" ? this.amount : 0;
-                // let subtract_amount =
-                //     this.adjustment_type == "Subtract Amount" ? this.amount : 0;
-
-                // axios
-                //     .put("/api/users", {
-                //         user: _this.user.id,
-                //         reference: _this.reference,
-                //         code: _this.code,
-                //         description: _this.description,
-                //         remarks: _this.remarks,
-                //         // amount: _this.amount,
-                //         add_amount: add_amount,
-                //         subtract_amount: subtract_amount,
-                //         type: _this.type
-                //     })
-                //     .then(function(response) {
-                //         _this.mixin_successDialog(
-                //             "Success",
-                //             "Adjustment created successfully."
-                //         );
-
-                //         _this.$router.push({ name: "admin.adjustments.index" });
-                //     })
-                //     .catch(function(error) {
-                //         console.log(error);
-                //         console.log(error.response);
-
-                //         _this.errors = error.response.data.errors;
-
-                //         _this.mixin_errorDialog(
-                //             `Error ${error.response.status}`,
-                //             error.response.statusText
-                //         );
-                //     });
             }
         }
     },
@@ -293,11 +230,11 @@ export default {
     },
     created() {
         this.$store.dispatch("AUTH_USER");
-        this.loadusers();
+        this.loadUser();
     },
     activated() {
         this.$store.dispatch("AUTH_USER");
-        this.loadusers();
+        this.loadUser();
     }
 };
 </script>

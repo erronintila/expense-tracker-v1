@@ -17,7 +17,7 @@ class JobController extends Controller
     public function __construct()
     {
         // apply permissions
-        $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
+        // $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
         $this->middleware(['permission:view jobs'], ['only' => ['show']]);
         $this->middleware(['permission:add jobs'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit jobs'], ['only' => ['edit', 'update']]);
@@ -31,6 +31,12 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
+        if(!request("isSelection") || !request()->has("isSelection")) {
+            if (!app("auth")->user()->hasPermissionTo('view all jobs')) {
+                abort(403);
+            }
+        }
+
         $search = request('search') ?? "";
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";
