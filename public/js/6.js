@@ -1267,11 +1267,13 @@ var render = function() {
               _c(
                 "v-expansion-panel-content",
                 [
-                  _c("small", { staticClass: "text--secondary" }, [
-                    _vm._v(
-                      '\n                    Default Password: "password"\n                '
-                    )
-                  ]),
+                  !_vm.isEdit
+                    ? _c("small", { staticClass: "text--secondary" }, [
+                        _vm._v(
+                          '\n                    Default Password: "password"\n                '
+                        )
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "v-row",

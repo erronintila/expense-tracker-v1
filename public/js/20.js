@@ -974,11 +974,11 @@ var render = function() {
                     "v-col",
                     [
                       _c(
-                        "keep-alive",
+                        "transition",
+                        { attrs: { name: "fade", mode: "out-in" } },
                         [
                           _c(
-                            "transition",
-                            { attrs: { name: "fade", mode: "out-in" } },
+                            "keep-alive",
                             [
                               _vm.$route.meta.keepAlive
                                 ? _c("router-view")

@@ -215,7 +215,7 @@
                     </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    <small class="text--secondary">
+                    <small v-if="!isEdit" class="text--secondary" >
                         Default Password: "password"
                     </small>
                     <v-row>

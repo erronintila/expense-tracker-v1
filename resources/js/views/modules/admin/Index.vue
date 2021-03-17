@@ -204,13 +204,15 @@
                     <!-- <keep-alive>
                         <router-view></router-view>
                     </keep-alive> -->
-                    <keep-alive>
-                        <transition name="fade" mode="out-in">
+
+                    <transition name="fade" mode="out-in">
+                        <keep-alive>
                             <router-view
                                 v-if="$route.meta.keepAlive"
                             ></router-view>
-                        </transition>
-                    </keep-alive>
+                        </keep-alive>
+                    </transition>
+
                     <transition name="fade" mode="out-in">
                         <router-view
                             v-if="!$route.meta.keepAlive"
