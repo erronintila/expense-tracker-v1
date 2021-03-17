@@ -221,6 +221,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
@@ -655,7 +657,8 @@ var render = function() {
                         close: "",
                         small: "",
                         "close-icon": "mdi-history",
-                        color: "green"
+                        color: "green",
+                        dark: ""
                       },
                       on: { "click:close": _vm.onRestore }
                     },
@@ -680,7 +683,8 @@ var render = function() {
                         close: "",
                         small: "",
                         "close-icon": "mdi-trash-can-outline",
-                        color: "red"
+                        color: "red",
+                        dark: ""
                       },
                       on: { "click:close": _vm.onDelete }
                     },

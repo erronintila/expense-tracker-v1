@@ -147,6 +147,7 @@
                     @click:close="onSubmit"
                     close-icon="mdi-send"
                     color="blue"
+                    dark
                 >
                     Submit
                 </v-chip>
@@ -158,6 +159,7 @@
                     @click:close="onDelete"
                     close-icon="mdi-close"
                     color="red"
+                    dark
                 >
                     Cancel
                 </v-chip>

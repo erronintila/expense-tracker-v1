@@ -1372,6 +1372,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return null;
       }
 
+      console.log(this.$store.getters.settings.expense_encoding_period);
       var settings = this.$store.getters.settings;
       var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(((_settings$expense_enc = settings.expense_encoding_period) !== null && _settings$expense_enc !== void 0 ? _settings$expense_enc : 1) - 1, "days").format("YYYY-MM-DD");
       return encodingMinDate;

@@ -600,6 +600,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2328,7 +2332,8 @@ var render = function() {
                                 close: "",
                                 small: "",
                                 "close-icon": "mdi-send",
-                                color: "blue"
+                                color: "blue",
+                                dark: ""
                               },
                               on: { "click:close": _vm.onSubmit }
                             },
@@ -2345,7 +2350,8 @@ var render = function() {
                                 close: "",
                                 small: "",
                                 "close-icon": "mdi-check",
-                                color: "green"
+                                color: "green",
+                                dark: ""
                               },
                               on: { "click:close": _vm.onApprove }
                             },
@@ -2362,7 +2368,8 @@ var render = function() {
                                 close: "",
                                 small: "",
                                 "close-icon": "mdi-cancel",
-                                color: "red"
+                                color: "red",
+                                dark: ""
                               },
                               on: { "click:close": _vm.onReject }
                             },
@@ -2379,7 +2386,8 @@ var render = function() {
                                 close: "",
                                 small: "",
                                 "close-icon": "mdi-close",
-                                color: "red"
+                                color: "red",
+                                dark: ""
                               },
                               on: { "click:close": _vm.onDelete }
                             },

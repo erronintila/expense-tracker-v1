@@ -133,6 +133,7 @@
                     @click:close="onRestore"
                     close-icon="mdi-history"
                     color="green"
+                    dark
                 >
                     Restore
                 </v-chip>
@@ -147,6 +148,7 @@
                     @click:close="onDelete"
                     close-icon="mdi-trash-can-outline"
                     color="red"
+                    dark
                 >
                     Cancel Expense(s)
                 </v-chip>
