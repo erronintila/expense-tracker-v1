@@ -549,10 +549,31 @@ export default {
             return true;
         },
         amount_to_replenish() {
+            // let remaining_fund = this.mixin_convertToNumber(
+            //     this.form.user.remaining_fund
+            // );
+            // let amount = this.mixin_convertToNumber(this.form.amount);
+
+            // if (remaining_fund >= amount) {
+            //     return amount;
+            // }
+
+            // return amount - Math.abs(remaining_fund - amount);
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.user.remaining_fund
+                this.form.user ? this.form.user.remaining_fund : 0
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
+            let reimbursable = this.mixin_convertToNumber(
+                this.form.reimbursable_amount
+            );
+            let amt_to_replenish =
+                amount < reimbursable ? 0 : amount - reimbursable;
+
+            if (this.mixin_can("set reimbursable amount")) {
+                return amount - reimbursable > remaining_fund
+                    ? 0
+                    : amt_to_replenish;
+            }
 
             if (remaining_fund >= amount) {
                 return amount;
@@ -561,10 +582,32 @@ export default {
             return amount - Math.abs(remaining_fund - amount);
         },
         amount_to_reimburse() {
+            // let remaining_fund = this.mixin_convertToNumber(
+            //     this.form.user.remaining_fund
+            // );
+            // let amount = this.mixin_convertToNumber(this.form.amount);
+
+            // if (remaining_fund < amount) {
+            //     let to_replenish = Math.abs(remaining_fund - amount);
+
+            //     this.form.reimbursable_amount = to_replenish;
+
+            //     return to_replenish;
+            // }
+
+            // return 0;
+
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.user.remaining_fund
+                this.form.user ? this.form.user.remaining_fund : 0
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
+            let reimbursable = this.mixin_convertToNumber(
+                this.form.reimbursable_amount
+            );
+
+            if (this.mixin_can("set reimbursable amount")) {
+                return reimbursable > amount ? 0 : reimbursable;
+            }
 
             if (remaining_fund < amount) {
                 let to_replenish = Math.abs(remaining_fund - amount);
@@ -573,6 +616,8 @@ export default {
 
                 return to_replenish;
             }
+
+            this.form.reimbursable_amount = 0;
 
             return 0;
         },

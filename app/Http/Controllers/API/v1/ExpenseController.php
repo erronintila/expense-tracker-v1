@@ -17,6 +17,8 @@ use App\Http\Requests\Expense\ExpenseStoreRequest;
 use App\Http\Requests\Expense\ExpenseUpdateRequest;
 use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class ExpenseController extends Controller
 {
@@ -591,15 +593,15 @@ class ExpenseController extends Controller
                 })
                 ->where("user_id", request("user_id"));
 
-                if (request()->has('start_date') && request()->has('end_date')) {
-                    $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
-                }
-                // ->where(function ($q) use ($request) {
-                //     $q->whereBetween("date", [request("start_date"), request("end_date")]);
-                //     // $q->orWhere("expense_report_id", request("")expense_report_id);
-                // })
+            if (request()->has('start_date') && request()->has('end_date')) {
+                $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
+            }
+            // ->where(function ($q) use ($request) {
+            //     $q->whereBetween("date", [request("start_date"), request("end_date")]);
+            //     // $q->orWhere("expense_report_id", request("")expense_report_id);
+            // })
                 
-                $expenses = $expenses->get();
+            $expenses = $expenses->get();
 
             return response()->json([
                 "data" => ExpenseResource::collection($expenses),
@@ -618,6 +620,24 @@ class ExpenseController extends Controller
         return response()->json([
             "data" => ExpenseResource::collection($expenses->get()),
             "total" => $expenses->sum("amount")
+        ]);
+    }
+
+    public function getExpenseSummary()
+    {
+        $expenses = DB::table('expenses')
+            ->select(DB::raw("sum(amount) as total_amount, count(id) as total_count"))
+            ->where("deleted_at", null)
+            ->where("expense_report_id", null);
+
+        if (request()->has("user_id")) {
+            $expenses = $expenses->where("user_id", request("user_id"));
+        }
+
+        $expenses = $expenses->first();
+
+        return response()->json([
+            "expenses" => $expenses,
         ]);
     }
 }

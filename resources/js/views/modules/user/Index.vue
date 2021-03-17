@@ -370,12 +370,50 @@ export default {
             // Added () => {} on router, used to prevent NavigationDuplicated error
             this.$router.push({ name: "user.profile.index" }, () => {});
         },
-        onLogout() {
-            this.$confirm("Do you want to log out?").then(res => {
-                if (res) {
-                    this.$router.push({ name: "logout" });
-                }
+        checkExpenseSummary() {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get(
+                        `/api/summary/expenses?user_id=${this.$store.getters.user.id}`
+                    )
+                    .then(response => {
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        reject();
+                    });
             });
+        },
+        onLogout() {
+            this.checkExpenseSummary()
+                .then(data => {
+                    if (
+                        data.expenses ? data.expenses.total_count : 0 ?? 0 > 0
+                    ) {
+                        this.$confirm(
+                            "WARNING: There are still UNREPORTED EXPENSES, do you want to log out?"
+                        ).then(res => {
+                            if (res) {
+                                this.$router.push({ name: "logout" });
+                            }
+                        });
+                        return;
+                    }
+
+                    this.$confirm("Do you want to log out?").then(res => {
+                        if (res) {
+                            this.$router.push({ name: "logout" });
+                        }
+                    });
+                })
+                .catch(() => {
+                    this.$confirm("Do you want to log out?").then(res => {
+                        if (res) {
+                            this.$router.push({ name: "logout" });
+                        }
+                    });
+                });
         }
     },
     created() {
@@ -399,13 +437,14 @@ export default {
     width: 100vw;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
     opacity: 0;
     /* transform: translateX(2em); */
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: all .3s ease;
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.3s ease;
 }
 </style>
-

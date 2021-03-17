@@ -384,34 +384,71 @@ __webpack_require__.r(__webpack_exports__);
         name: "user.profile.index"
       }, function () {});
     },
-    onLogout: function onLogout() {
+    checkExpenseSummary: function checkExpenseSummary() {
       var _this2 = this;
 
-      this.$confirm("Do you want to log out?").then(function (res) {
-        if (res) {
-          _this2.$router.push({
-            name: "logout"
+      return new Promise(function (resolve, reject) {
+        axios.get("/api/summary/expenses?user_id=".concat(_this2.$store.getters.user.id)).then(function (response) {
+          resolve(response.data);
+        })["catch"](function (error) {
+          _this2.mixin_showErrors(error);
+
+          reject();
+        });
+      });
+    },
+    onLogout: function onLogout() {
+      var _this3 = this;
+
+      this.checkExpenseSummary().then(function (data) {
+        var _;
+
+        if (data.expenses ? data.expenses.total_count : (_ = 0) !== null && _ !== void 0 ? _ : 0 > 0) {
+          _this3.$confirm("WARNING: There are still UNREPORTED EXPENSES, do you want to log out?").then(function (res) {
+            if (res) {
+              _this3.$router.push({
+                name: "logout"
+              });
+            }
           });
+
+          return;
         }
+
+        _this3.$confirm("Do you want to log out?").then(function (res) {
+          if (res) {
+            _this3.$router.push({
+              name: "logout"
+            });
+          }
+        });
+      })["catch"](function () {
+        _this3.$confirm("Do you want to log out?").then(function (res) {
+          if (res) {
+            _this3.$router.push({
+              name: "logout"
+            });
+          }
+        });
       });
     }
   },
   created: function created() {
-    var _this3 = this;
-
-    this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this3.user = response;
-
-      _this3.$store.dispatch("AUTH_NOTIFICATIONS");
-    });
-  },
-  activated: function activated() {
     var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this4.user = response;
 
       _this4.$store.dispatch("AUTH_NOTIFICATIONS");
+    });
+  },
+  activated: function activated() {
+    var _this5 = this;
+
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this5.user = response;
+
+      _this5.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   }
 });
@@ -430,7 +467,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n#app[data-v-ff37d596] {\r\n    overflow: hidden;\r\n    width: 100vw;\n}\n.fade-enter[data-v-ff37d596], .fade-leave-to[data-v-ff37d596] {\r\n    opacity: 0;\r\n    /* transform: translateX(2em); */\n}\n.fade-enter-active[data-v-ff37d596], .fade-leave-active[data-v-ff37d596] {\r\n    transition: all .3s ease;\n}\r\n", ""]);
+exports.push([module.i, "\n#app[data-v-ff37d596] {\r\n    overflow: hidden;\r\n    width: 100vw;\n}\n.fade-enter[data-v-ff37d596],\r\n.fade-leave-to[data-v-ff37d596] {\r\n    opacity: 0;\r\n    /* transform: translateX(2em); */\n}\n.fade-enter-active[data-v-ff37d596],\r\n.fade-leave-active[data-v-ff37d596] {\r\n    transition: all 0.3s ease;\n}\r\n", ""]);
 
 // exports
 

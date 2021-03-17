@@ -555,8 +555,22 @@ __webpack_require__.r(__webpack_exports__);
       return true;
     },
     amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
+      // let remaining_fund = this.mixin_convertToNumber(
+      //     this.form.user.remaining_fund
+      // );
+      // let amount = this.mixin_convertToNumber(this.form.amount);
+      // if (remaining_fund >= amount) {
+      //     return amount;
+      // }
+      // return amount - Math.abs(remaining_fund - amount);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+      var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
+      }
 
       if (remaining_fund >= amount) {
         return amount;
@@ -565,8 +579,23 @@ __webpack_require__.r(__webpack_exports__);
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
+      // let remaining_fund = this.mixin_convertToNumber(
+      //     this.form.user.remaining_fund
+      // );
+      // let amount = this.mixin_convertToNumber(this.form.amount);
+      // if (remaining_fund < amount) {
+      //     let to_replenish = Math.abs(remaining_fund - amount);
+      //     this.form.reimbursable_amount = to_replenish;
+      //     return to_replenish;
+      // }
+      // return 0;
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return reimbursable > amount ? 0 : reimbursable;
+      }
 
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
@@ -574,6 +603,7 @@ __webpack_require__.r(__webpack_exports__);
         return to_replenish;
       }
 
+      this.form.reimbursable_amount = 0;
       return 0;
     },
     expense_amount: function expense_amount() {
