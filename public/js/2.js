@@ -442,7 +442,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           sortType: sortDesc[0] ? "desc" : "asc",
           page: page,
           itemsPerPage: itemsPerPage,
-          isSelection: true
+          isSelection: true,
+          is_active: true
         };
         var data = {};
 
@@ -3571,6 +3572,11 @@ var VendorDataService = /*#__PURE__*/function () {
     key: "restore",
     value: function restore(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/restore/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/update_activation/".concat(id), data);
     }
   }]);
 

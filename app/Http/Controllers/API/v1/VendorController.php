@@ -25,6 +25,7 @@ class VendorController extends Controller
         $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete vendors'], ['only' => ['destroy']]);
         $this->middleware(['permission:restore vendors'], ['only' => ['restore']]);
+        $this->middleware(['permission:set vendor activation'], ['only' => ['update_activation']]);
     }
 
     /**
@@ -34,7 +35,7 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        if(!request("isSelection") || !request()->has("isSelection")) {
+        if (!request("isSelection") || !request()->has("isSelection")) {
             if (!app("auth")->user()->hasPermissionTo('view all vendors')) {
                 abort(403);
             }
@@ -51,10 +52,20 @@ class VendorController extends Controller
                 case 'Archived':
                     $vendors = $vendors->onlyTrashed();
                     break;
+                case 'Inactive':
+                    $vendors = $vendors->where('is_active', 0);
+                    break;
+                case 'Active':
+                    $vendors = $vendors->where('is_active', 1);
+                    break;
                 default:
                     $vendors = $vendors;
                     break;
             }
+        }
+
+        if (request()->has("is_active")) {
+            $vendors = $vendors->where('is_active', (request("is_active") || strtolower(request("is_active")) == 'true') ?? 1);
         }
 
         $vendors = $vendors->where(function ($query) use ($search) {
@@ -79,7 +90,7 @@ class VendorController extends Controller
     public function store(VendorStoreRequest $request)
     {
         $validated = $request->validated();
-        $message = "Vendor created successfully"; 
+        $message = "Vendor created successfully";
 
         $vendor = new Vendor();
         $vendor->create($validated);
@@ -178,14 +189,14 @@ class VendorController extends Controller
 
         // check if multiple records
         if (request()->has("ids")) {
-            $vendor = Vendor::withTrashed()
-                ->whereIn('id', request('ids'))
-                ->restore();
+            // $vendor = Vendor::withTrashed()
+            //     ->whereIn('id', request('ids'))
+            //     ->restore();
 
-            // foreach (request('ids') as $id) {
-            //     $vendor = Vendor::withTrashed()->findOrFail($id);
-            //     $vendor->restore();
-            // }
+            foreach (request('ids') as $id) {
+                $vendor = Vendor::withTrashed()->findOrFail($id);
+                $vendor->restore();
+            }
 
             $message = "Vendor(s) restored successfully";
         } else {
@@ -194,6 +205,37 @@ class VendorController extends Controller
         }
 
         return $this->successResponse(null, $message, 201);
+    }
+
+    public function update_activation(Request $request, $id)
+    {
+        $activation = request("is_active") ? "activated" : "deactivated";
+        $message = "Vendor {$activation} successfully";
+
+        if (request()->has("ids")) {
+            foreach (request("ids") as $id) {
+                $vendor = Vendor::withTrashed()->findOrFail($id);
+                $vendor->disableLogging();
+                $vendor->is_active = request("is_active");
+                $vendor->save();
+
+                activity('vendor')
+                    ->performedOn($vendor)
+                    ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
+                    ->log("{$activation} vendor");
+            }
+        } else {
+            $vendor = Vendor::withTrashed()->findOrFail($id);
+            $vendor->disableLogging();
+            $vendor->is_active = request("is_active");
+            $vendor->save();
+
+            activity('vendor')
+                ->performedOn($vendor)
+                ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
+                ->log("{$activation} vendor");
+        }
+        return $this->successResponse(null, $message, 200);
     }
 
     /**

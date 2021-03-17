@@ -936,8 +936,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             status: status,
             department_id: department_id,
             job_id: job_id,
-            is_superadmin: false,
-            isSelection: true
+            is_superadmin: false
           }
         };
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
@@ -1075,7 +1074,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$confirm("Do you want to ".concat(is_active ? 'activate' : 'deactivate', " account(s)?")).then(function (res) {
+      this.$confirm("Do you want to ".concat(is_active ? "activate" : "deactivate", " account(s)?")).then(function (res) {
         if (res) {
           var data = {
             is_active: is_active,

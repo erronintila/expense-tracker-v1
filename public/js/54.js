@@ -261,6 +261,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
@@ -292,7 +329,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       status: "Active",
-      statuses: ["Active", "Archived"],
+      statuses: ["Active", "Inactive", "Archived"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -428,6 +465,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    onSetActivation: function onSetActivation(is_active) {
+      var _this4 = this;
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to ".concat(is_active ? 'activate' : 'deactivate', " account(s)?")).then(function (res) {
+        if (res) {
+          var data = {
+            is_active: is_active,
+            ids: _this4.selected.map(function (item) {
+              return item.id;
+            })
+          };
+          _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(_this4.selected[0].id, data).then(function (response) {
+            _this4.mixin_successDialog(response.data.status, response.data.message);
+
+            _this4.getDataFromApi().then(function (data) {
+              _this4.items = data.items;
+              _this4.totalItems = data.total;
+            });
+
+            _this4.selected = [];
+          })["catch"](function (error) {
+            _this4.mixin_showErrors(error);
+          });
+        }
+      });
     }
   },
   watch: {
@@ -435,11 +503,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this4 = this;
+        var _this5 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this4.items = data.items;
-          _this4.totalItems = data.total;
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
         });
       }
     }
@@ -455,12 +523,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
-    var _this5 = this;
+    var _this6 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this5.items = data.items;
-      _this5.totalItems = data.total;
+      _this6.items = data.items;
+      _this6.totalItems = data.total;
     });
   }
 });
@@ -708,9 +776,43 @@ var render = function() {
                         "close-icon": "mdi-history",
                         color: "green"
                       },
-                      on: { "click:close": _vm.onRestore }
+                      on: {
+                        "click:close": function($event) {
+                          return _vm.onSetActivation()
+                        }
+                      }
                     },
-                    [_vm._v("\n                Restore\n            ")]
+                    [_vm._v("\n                Activate\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.selected.length > 0 && _vm.status == "Inactive",
+                          expression:
+                            "selected.length > 0 && status == 'Inactive'"
+                        }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-check",
+                        color: "green",
+                        dark: ""
+                      },
+                      on: {
+                        "click:close": function($event) {
+                          return _vm.onSetActivation(true)
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Activate\n            ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -724,6 +826,61 @@ var render = function() {
                             _vm.selected.length > 0 && _vm.status == "Active",
                           expression:
                             "selected.length > 0 && status == 'Active'"
+                        }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-lock",
+                        color: "red",
+                        dark: ""
+                      },
+                      on: {
+                        "click:close": function($event) {
+                          return _vm.onSetActivation(false)
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Deactivate\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.selected.length > 0 && _vm.status == "Archived",
+                          expression:
+                            "selected.length > 0 && status == 'Archived'"
+                        }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-history",
+                        color: "green"
+                      },
+                      on: { "click:close": _vm.onRestore }
+                    },
+                    [_vm._v("\n                Restore\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.selected.length > 0 && _vm.status == "Inactive",
+                          expression:
+                            "selected.length > 0 && status == 'Inactive'"
                         }
                       ],
                       staticClass: "mr-2 mb-2",
@@ -1028,6 +1185,11 @@ var VendorDataService = /*#__PURE__*/function () {
     key: "restore",
     value: function restore(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/restore/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/update_activation/".concat(id), data);
     }
   }]);
 

@@ -130,7 +130,8 @@ export default {
                     remarks: "",
                     website: "",
                     is_vat_inclusive: true,
-                    address: ""
+                    address: "",
+                    is_active: true
                 };
             }
         },
@@ -148,7 +149,8 @@ export default {
                     remarks: [],
                     website: [],
                     is_vat_inclusive: [],
-                    address: []
+                    address: [],
+                    is_active: []
                 };
             }
         },

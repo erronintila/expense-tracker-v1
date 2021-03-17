@@ -35,6 +35,7 @@ class VendorStoreRequest extends FormRequest
             'remarks' => ['nullable'],
             'is_vat_inclusive' => ['required'],
             'address' => ['required'],
+            'is_active' => ['required']
         ];
     }
 

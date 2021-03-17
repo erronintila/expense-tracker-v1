@@ -30,7 +30,8 @@ class VendorShowResource extends JsonResource
             "remarks" => $this->remarks,
             "is_vat_inclusive" => $this->is_vat_inclusive,
             "address" => $this->address,
-
+            "is_active" => $this->is_active,
+            
             // -------------------------------------------------------------------
             // Transaction Logs
             // -------------------------------------------------------------------

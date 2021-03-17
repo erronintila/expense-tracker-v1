@@ -578,8 +578,7 @@ export default {
                         status: status,
                         department_id: department_id,
                         job_id: job_id,
-                        is_superadmin: false,
-                        isSelection: true
+                        is_superadmin: false
                     }
                 };
 
@@ -722,7 +721,11 @@ export default {
                 return;
             }
 
-            this.$confirm(`Do you want to ${is_active ? 'activate' : 'deactivate'} account(s)?`).then(res => {
+            this.$confirm(
+                `Do you want to ${
+                    is_active ? "activate" : "deactivate"
+                } account(s)?`
+            ).then(res => {
                 if (res) {
                     let data = {
                         is_active: is_active,

@@ -56,7 +56,8 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         website: [],
         is_vat_inclusive: [],
-        address: []
+        address: [],
+        is_active: []
       }
     };
   },

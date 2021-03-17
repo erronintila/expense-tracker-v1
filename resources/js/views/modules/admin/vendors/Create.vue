@@ -45,7 +45,8 @@ export default {
                 remarks: [],
                 website: [],
                 is_vat_inclusive: [],
-                address: []
+                address: [],
+                is_active: []
             }
         };
     },

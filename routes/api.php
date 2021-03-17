@@ -111,6 +111,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/vendors', 'API\v1\VendorController@getVendors');
     Route::put('/vendors/restore/{id}', 'API\v1\VendorController@restore');
+    Route::put('/vendors/update_activation/{id}', 'API\v1\VendorController@update_activation');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

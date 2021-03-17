@@ -38,7 +38,7 @@ class UserController extends Controller
         $this->middleware(['permission:edit users fund'], ['only' => ['update_fund']]);
         $this->middleware(['permission:reset user passwords'], ['only' => ['reset_password']]);
         $this->middleware(['permission:edit permissions'], ['only' => ['update_permissions']]);
-        $this->middleware(['permission:set activation'], ['only' => ['update_activation']]);
+        $this->middleware(['permission:set user activation'], ['only' => ['update_activation']]);
     }
 
     /**
@@ -507,19 +507,23 @@ class UserController extends Controller
                 $user->disableLogging();
                 $user->is_active = request("is_active");
                 $user->save();
+
+                activity('user')
+                ->performedOn($user)
+                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
+                ->log("{$activation} user");
             }
         } else {
             $user = User::withTrashed()->findOrFail($id);
             $user->disableLogging();
             $user->is_active = request("is_active");
             $user->save();
-        }
 
-        activity('user')
+            activity('user')
             ->performedOn($user)
             ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
             ->log("{$activation} user");
-
+        }
         return $this->successResponse(null, $message, 200);
     }
     

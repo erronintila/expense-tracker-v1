@@ -133,6 +133,43 @@
                     close
                     class="mr-2 mb-2"
                     small
+                    @click:close="onSetActivation()"
+                    close-icon="mdi-history"
+                    color="green"
+                >
+                    Activate
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(true)"
+                    close-icon="mdi-check"
+                    color="green"
+                    dark
+                >
+                    Activate
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(false)"
+                    close-icon="mdi-lock"
+                    color="red"
+                    dark
+                >
+                    Deactivate
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
                     @click:close="onRestore"
                     close-icon="mdi-history"
                     color="green"
@@ -141,7 +178,7 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="selected.length > 0 && status == 'Active'"
+                    v-show="selected.length > 0 && status == 'Inactive'"
                     close
                     class="mr-2 mb-2"
                     small
@@ -264,7 +301,7 @@ export default {
             ],
             items: [],
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: ["Active", "Inactive", "Archived"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -398,7 +435,39 @@ export default {
                         });
                 }
             });
-        }
+        },
+        onSetActivation(is_active) {
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+                return;
+            }
+
+            this.$confirm(`Do you want to ${is_active ? 'activate' : 'deactivate'} account(s)?`).then(res => {
+                if (res) {
+                    let data = {
+                        is_active: is_active,
+                        ids: this.selected.map(item => {
+                            return item.id;
+                        })
+                    };
+                    VendorDataService.updateActivation(this.selected[0].id, data)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
+                            });
+                            this.selected = [];
+                        })
+                        .catch(error => {
+                            this.mixin_showErrors(error);
+                        });
+                }
+            });
+        },
     },
     watch: {
         params: {
