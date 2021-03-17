@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[0],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,6 +11,9 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _admin_expense_reports_Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../admin/expense_reports/Form */ "./resources/js/views/modules/admin/expense_reports/Form.vue");
+/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
 //
 //
 //
@@ -38,209 +41,136 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// Please visit :
-// https://stackoverflow.com/questions/59404459/custom-date-picker-in-vuetify
+
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    buttonType: {
-      type: Boolean,
-      "default": false
-    },
-    buttonText: {
-      type: Boolean,
-      "default": false
-    },
-    customText: {
-      type: String,
-      "default": null
-    },
-    buttonClass: {
-      type: String,
-      "default": ""
-    },
-    buttonColor: {
-      type: String,
-      "default": "primary"
-    },
-    buttonDark: {
-      type: Boolean,
-      "default": true
-    },
-    solo: {
-      type: Boolean,
-      "default": false
-    },
-    value: {
-      type: Array,
-      "default": function _default() {
-        return [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-      }
-    },
-    preset: {
-      type: String,
-      "default": ""
-    },
-    presets: {
-      type: Array,
-      "default": function _default() {
-        return ["Today", "This Week", "This Month", "This Year"];
-      }
-    }
+  components: {
+    Form: _admin_expense_reports_Form__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      menu: false,
-      presetValue: this.preset,
-      presetsList: this.presets
+      formDataLoaded: false,
+      usersParameters: {
+        params: {
+          is_superadmin: false
+        }
+      },
+      expense_report_id: parseInt(this.$route.params.id),
+      form: {
+        code: "",
+        description: "",
+        remarks: "",
+        notes: "",
+        user: null,
+        expenses: [],
+        status: null,
+        from: "",
+        to: ""
+      },
+      errors: {
+        date_range: [],
+        code: [],
+        description: [],
+        remarks: [],
+        notes: [],
+        user_id: [],
+        expenses: []
+      },
+      rules: {}
     };
   },
   methods: {
-    // customChange() {
-    //     this.$emit("updateDates", this.value);
-    // },
-    resetDates: function resetDates() {
-      this.menu = false;
-      var value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-      this.presetValue = "";
-      this.$emit("updateDates", value);
+    getData: function getData() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].show(_this.$route.params.id).then(function (response) {
+          _this.formDataLoaded = true;
+          resolve(response.data.data);
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
+
+          _this.formDataLoaded = true;
+          reject();
+        });
+      });
     },
-    updatePreset: function updatePreset() {
-      this.menu = false;
-      var value = [];
+    loadExpenses: function loadExpenses(reportData) {
+      var _this2 = this;
 
-      switch (this.presetValue) {
-        case "Today":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].get({
+          params: {
+            update_report: true,
+            user_id: reportData.user ? reportData.user.id : null,
+            start_date: reportData.from,
+            end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf().format("YYYY-MM-DD"),
+            expense_report_id: _this2.$route.params.id
+          }
+        }).then(function (response) {
+          _this2.formDataLoaded = true;
+          resolve(response.data.data);
+        })["catch"](function (error) {
+          _this2.mixin_showErrors(error);
 
-        case "Yesterday":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
+          _this2.formDataLoaded = true;
+          reject();
+        });
+      });
+    },
+    onSave: function onSave(value) {
+      var _this3 = this;
 
-        case "Last 7 Days":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(7, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
+      this.formDataLoaded = false;
+      value.user_id = value.user ? value.user.id : null;
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].update(this.$route.params.id, value).then(function (response) {
+        _this3.mixin_successDialog(response.data.status, response.data.message);
 
-        case "Last 30 Days":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(30, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
+        _this3.$router.push({
+          name: "user.expense_reports.index"
+        });
 
-        case "This Week":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
+        _this3.formDataLoaded = true;
+      })["catch"](function (error) {
+        _this3.mixin_showErrors(error);
 
-        case "Last Week":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").endOf("week").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Month":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Month":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").endOf("month").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Quarter":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("quarter").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Quarter":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").endOf("quarter").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "This Year":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last Year":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        case "Last 5 Years":
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(5, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-
-        default:
-          value = [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")];
-          this.$emit("updateDates", value);
-          break;
-      }
+        _this3.errors = error.response.data.errors;
+        _this3.formDataLoaded = true;
+      });
     }
   },
-  computed: {
-    selected: {
-      get: function get() {
-        return this.value;
-      },
-      set: function set(value) {
-        this.$emit("updateDates", value);
-      }
-    },
-    dateRangeText: function dateRangeText() {
-      this.value.sort();
-      return this.value.join(" ~ ");
-    }
+  created: function created() {
+    var _this4 = this;
+
+    this.getData().then(function (data) {
+      _this4.loadExpenses(data).then(function (expenses) {
+        _this4.form = data;
+        _this4.form.expenses = expenses;
+        _this4.formDataLoaded = true;
+      });
+    });
+  },
+  activated: function activated() {
+    var _this5 = this;
+
+    this.getData().then(function (data) {
+      _this5.loadExpenses(data).then(function (expenses) {
+        _this5.form = data;
+        _this5.form.expenses = expenses;
+        _this5.formDataLoaded = true;
+      });
+    });
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&":
-/*!**********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0& ***!
-  \**********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -253,162 +183,62 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-menu",
-    {
-      ref: "menu",
-      staticClass: "pa-0",
-      attrs: {
-        "close-on-content-click": false,
-        transition: "scale-transition",
-        "offset-y": "",
-        "min-width": "290px",
-        "max-width": "290px"
-      },
-      scopedSlots: _vm._u([
-        {
-          key: "activator",
-          fn: function(ref) {
-            var on = ref.on
-            var attrs = ref.attrs
-            return [
-              _vm.buttonType
-                ? _c(
-                    "v-btn",
-                    _vm._g(
-                      _vm._b(
-                        {
-                          class: _vm.buttonClass,
-                          attrs: {
-                            color: _vm.buttonColor,
-                            dark: _vm.buttonDark,
-                            "offset-y": "",
-                            text: _vm.buttonText
-                          }
-                        },
-                        "v-btn",
-                        attrs,
-                        false
-                      ),
-                      on
-                    ),
-                    [
-                      _vm._v(
-                        "\n            " +
-                          _vm._s(
-                            _vm.customText == null
-                              ? _vm.dateRangeText
-                              : _vm.customText
-                          ) +
-                          "\n        "
-                      )
-                    ]
-                  )
-                : _c(
-                    "v-text-field",
-                    _vm._g(
-                      _vm._b(
-                        {
-                          attrs: {
-                            label: "Date",
-                            readonly: "",
-                            solo: _vm.solo
-                          },
-                          model: {
-                            value: _vm.dateRangeText,
-                            callback: function($$v) {
-                              _vm.dateRangeText = $$v
-                            },
-                            expression: "dateRangeText"
-                          }
-                        },
-                        "v-text-field",
-                        attrs,
-                        false
-                      ),
-                      on
-                    )
-                  )
-            ]
-          }
-        }
-      ]),
-      model: {
-        value: _vm.menu,
-        callback: function($$v) {
-          _vm.menu = $$v
-        },
-        expression: "menu"
-      }
-    },
+    "div",
     [
-      _vm._v(" "),
-      _c(
-        "v-card",
-        [
-          _c("v-select", {
-            attrs: {
-              items: _vm.presetsList,
-              label: "Presets",
-              solo: "",
-              flat: ""
-            },
-            on: { change: _vm.updatePreset },
-            model: {
-              value: _vm.presetValue,
-              callback: function($$v) {
-                _vm.presetValue = $$v
-              },
-              expression: "presetValue"
-            }
-          }),
-          _vm._v(" "),
-          _c(
-            "v-date-picker",
-            {
-              attrs: {
-                range: "",
-                "no-title": "",
-                scrollable: "",
-                color: "success"
-              },
-              model: {
-                value: _vm.selected,
-                callback: function($$v) {
-                  _vm.selected = $$v
-                },
-                expression: "selected"
-              }
-            },
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
-              _c("v-spacer"),
-              _vm._v(" "),
               _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "success" },
-                  on: { click: _vm.resetDates }
-                },
-                [_vm._v("Reset")]
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Edit Expense Report")
+                  ])
+                ],
+                1
               ),
               _vm._v(" "),
               _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "success" },
-                  on: {
-                    click: function($event) {
-                      return _vm.$refs.menu.save(_vm.selected)
-                    }
-                  }
-                },
-                [_vm._v("\n                OK\n            ")]
+                "v-container",
+                [
+                  _vm.formDataLoaded
+                    ? _c("Form", {
+                        attrs: {
+                          expenseReportForm: _vm.form,
+                          expenseReportErrors: _vm.errors,
+                          expenseReportRules: _vm.rules,
+                          expense_report_id: _vm.expense_report_id
+                        },
+                        on: { "on-save": _vm.onSave }
+                      })
+                    : _vm._e()
+                ],
+                1
               )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )
@@ -420,18 +250,167 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/daterangepicker/DateRangePicker.vue":
-/*!*********************************************************************!*\
-  !*** ./resources/js/components/daterangepicker/DateRangePicker.vue ***!
-  \*********************************************************************/
+/***/ "./resources/js/services/ExpenseDataService.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/services/ExpenseDataService.js ***!
+  \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DateRangePicker.vue?vue&type=template&id=c3ea2be0& */ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&");
-/* harmony import */ var _DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DateRangePicker.vue?vue&type=script&lang=js& */ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var ExpenseDataService = /*#__PURE__*/function () {
+  function ExpenseDataService() {
+    _classCallCheck(this, ExpenseDataService);
+  }
+
+  _createClass(ExpenseDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expenses", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expenses", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
+    }
+  }]);
+
+  return ExpenseDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseDataService());
+
+/***/ }),
+
+/***/ "./resources/js/services/ExpenseReportDataService.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/services/ExpenseReportDataService.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var ExpenseReportDataService = /*#__PURE__*/function () {
+  function ExpenseReportDataService() {
+    _classCallCheck(this, ExpenseReportDataService);
+  }
+
+  _createClass(ExpenseReportDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_reports", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_reports", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_reports/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/restore/".concat(id), data);
+    }
+  }]);
+
+  return ExpenseReportDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseReportDataService());
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/expense_reports/Form.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expense_reports/Form.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, exports) {
+
+throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\views\\modules\\admin\\expense_reports\\Form.vue'");
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/user/expense_reports/Edit.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Edit.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=6195f4ce& */ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&");
+/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -440,9 +419,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -452,38 +431,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/daterangepicker/DateRangePicker.vue"
+component.options.__file = "resources/js/views/modules/user/expense_reports/Edit.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************************!*\
-  !*** ./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************************/
+/***/ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DateRangePicker.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&":
-/*!****************************************************************************************************!*\
-  !*** ./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0& ***!
-  \****************************************************************************************************/
+/***/ "./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce& ***!
+  \*************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DateRangePicker.vue?vue&type=template&id=c3ea2be0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/daterangepicker/DateRangePicker.vue?vue&type=template&id=c3ea2be0&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=6195f4ce& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Edit.vue?vue&type=template&id=6195f4ce&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_c3ea2be0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_6195f4ce___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
