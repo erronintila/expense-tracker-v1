@@ -288,16 +288,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
@@ -764,35 +754,6 @@ var render = function() {
                           name: "show",
                           rawName: "v-show",
                           value:
-                            _vm.selected.length > 0 && _vm.status == "Archived",
-                          expression:
-                            "selected.length > 0 && status == 'Archived'"
-                        }
-                      ],
-                      staticClass: "mr-2 mb-2",
-                      attrs: {
-                        close: "",
-                        small: "",
-                        "close-icon": "mdi-history",
-                        color: "green"
-                      },
-                      on: {
-                        "click:close": function($event) {
-                          return _vm.onSetActivation()
-                        }
-                      }
-                    },
-                    [_vm._v("\n                Activate\n            ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-chip",
-                    {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value:
                             _vm.selected.length > 0 && _vm.status == "Inactive",
                           expression:
                             "selected.length > 0 && status == 'Inactive'"
@@ -863,7 +824,8 @@ var render = function() {
                         close: "",
                         small: "",
                         "close-icon": "mdi-history",
-                        color: "green"
+                        color: "green",
+                        dark: ""
                       },
                       on: { "click:close": _vm.onRestore }
                     },
@@ -888,7 +850,8 @@ var render = function() {
                         close: "",
                         small: "",
                         "close-icon": "mdi-trash-can-outline",
-                        color: "red"
+                        color: "red",
+                        dark: ""
                       },
                       on: { "click:close": _vm.onDelete }
                     },

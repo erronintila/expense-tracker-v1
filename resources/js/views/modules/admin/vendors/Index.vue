@@ -129,18 +129,6 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="selected.length > 0 && status == 'Archived'"
-                    close
-                    class="mr-2 mb-2"
-                    small
-                    @click:close="onSetActivation()"
-                    close-icon="mdi-history"
-                    color="green"
-                >
-                    Activate
-                </v-chip>
-
-                <v-chip
                     v-show="selected.length > 0 && status == 'Inactive'"
                     close
                     class="mr-2 mb-2"
@@ -173,6 +161,7 @@
                     @click:close="onRestore"
                     close-icon="mdi-history"
                     color="green"
+                    dark
                 >
                     Restore
                 </v-chip>
@@ -185,6 +174,7 @@
                     @click:close="onDelete"
                     close-icon="mdi-trash-can-outline"
                     color="red"
+                    dark
                 >
                     Archive
                 </v-chip>
