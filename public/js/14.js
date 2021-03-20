@@ -2137,9 +2137,11 @@ var render = function() {
                                   ),
                                   _c("strong", [
                                     _vm._v(
-                                      _vm._s(_vm.total_remaining_fund) +
+                                      "\n                                " +
+                                        _vm._s(_vm.total_remaining_fund) +
                                         " /\n                                " +
-                                        _vm._s(_vm.total_fund)
+                                        _vm._s(_vm.total_fund) +
+                                        "\n                            "
                                     )
                                   ])
                                 ])

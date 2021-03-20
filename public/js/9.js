@@ -286,9 +286,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (item.id && item.id > 0) {
+        var i = item;
         this.$confirm("Do you want to delete default subtype?").then(function (res) {
           if (res) {
-            axios["delete"]("/api/expense_types/".concat(item.id)).then(function (response) {
+            axios["delete"]("/api/expense_types/".concat(i.id)).then(function (response) {
               _this.loadDeletedSubTypes(_this.expenseTypeId);
 
               var index = _this.form.sub_types.indexOf(item);

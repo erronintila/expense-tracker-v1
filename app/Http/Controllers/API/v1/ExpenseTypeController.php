@@ -166,21 +166,15 @@ class ExpenseTypeController extends Controller
         if (request()->has("ids")) {
             foreach (request('ids') as $id) {
                 $expense_type = ExpenseType::withTrashed()->findOrFail($id);
-
                 $expense_type->delete();
             }
-
             $message = "Expense type(s) deleted successfully";
         } else {
             $expense_type = ExpenseType::withTrashed()->findOrFail($id);
-
-            if ($expense_type->expenses) {
-                return $this->errorResponse(null, "Record has been associated with expenses", 422);
-            }
-
+            // if ($expense_type->expenses) {
+            //     return $this->errorResponse(null, "Record has been associated with expenses", 422);
+            // }
             $expense_type->delete();
-
-            $message = "Expense type deleted successfully";
         }
 
         return $this->successResponse(null, $message, 200);

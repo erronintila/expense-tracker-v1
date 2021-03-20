@@ -276,11 +276,12 @@ export default {
         },
         removeItem(item) {
             if (item.id && item.id > 0) {
+                let i = item;
                 this.$confirm("Do you want to delete default subtype?").then(
                     res => {
                         if (res) {
                             axios
-                                .delete(`/api/expense_types/${item.id}`)
+                                .delete(`/api/expense_types/${i.id}`)
                                 .then(response => {
                                     this.loadDeletedSubTypes(this.expenseTypeId);
 

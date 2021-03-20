@@ -429,10 +429,10 @@
                         <tr class="green--text hidden-md-and-up">
                             <td class="title">
                                 Total:
-                                <strong
-                                    >{{ total_remaining_fund }} /
-                                    {{ total_fund }}</strong
-                                >
+                                <strong>
+                                    {{ total_remaining_fund }} /
+                                    {{ total_fund }}
+                                </strong>
                             </td>
                         </tr>
                         <tr class="green--text hidden-sm-and-down">
