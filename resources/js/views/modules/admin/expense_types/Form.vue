@@ -159,11 +159,15 @@
                             >
                                 <template v-slot:[`item.actions`]="{ item }">
                                     <v-btn
+                                        class="text-capitalize"
+                                        rounded
+                                        color="green"
+                                        dark
                                         small
                                         @click="onRestoreSubtype(item)"
                                     >
-                                        Restore
                                         <v-icon small>mdi-refresh</v-icon>
+                                        Restore
                                     </v-btn>
                                     <!-- <v-icon
                                         small
@@ -283,7 +287,9 @@ export default {
                             axios
                                 .delete(`/api/expense_types/${i.id}`)
                                 .then(response => {
-                                    this.loadDeletedSubTypes(this.expenseTypeId);
+                                    this.loadDeletedSubTypes(
+                                        this.expenseTypeId
+                                    );
 
                                     const index = this.form.sub_types.indexOf(
                                         item

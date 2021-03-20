@@ -192,6 +192,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     expenseTypeId: {
@@ -849,7 +853,13 @@ var render = function() {
                                           _c(
                                             "v-btn",
                                             {
-                                              attrs: { small: "" },
+                                              staticClass: "text-capitalize",
+                                              attrs: {
+                                                rounded: "",
+                                                color: "green",
+                                                dark: "",
+                                                small: ""
+                                              },
                                               on: {
                                                 click: function($event) {
                                                   return _vm.onRestoreSubtype(
@@ -859,13 +869,13 @@ var render = function() {
                                               }
                                             },
                                             [
-                                              _vm._v(
-                                                "\n                                    Restore\n                                    "
-                                              ),
                                               _c(
                                                 "v-icon",
                                                 { attrs: { small: "" } },
                                                 [_vm._v("mdi-refresh")]
+                                              ),
+                                              _vm._v(
+                                                "\n                                    Restore\n                                "
                                               )
                                             ],
                                             1
