@@ -14,7 +14,10 @@
                     @on-save="onSave"
                     :errors="errors"
                     :expenseTypeForm="form"
-                ></Form>
+                    :isEdit="true"
+                    :expenseTypeId="$route.params.id"
+                >
+                </Form>
             </v-container>
         </v-card>
     </div>
@@ -34,7 +37,7 @@ export default {
             form: {
                 name: "",
                 limit: null,
-                sub_types: []
+                sub_types: [],
             },
             errors: {
                 name: [],
@@ -44,17 +47,23 @@ export default {
     },
     methods: {
         getData() {
-            ExpenseTypeDataService.show(this.$route.params.id)
-                .then(response => {
-                    this.form.name = response.data.data.name;
-                    this.form.limit = response.data.data.limit;
-                    this.form.sub_types = response.data.data.sub_types;
-                    this.formDataLoaded = true;
-                })
-                .catch(error => {
-                    this.formDataLoaded = true;
-                    this.mixin_showErrors(error);
-                });
+            return new Promise((resolve, reject) => {
+                ExpenseTypeDataService.show(this.$route.params.id)
+                    .then(response => {
+                        this.form.name = response.data.data.name;
+                        this.form.limit = response.data.data.limit;
+                        this.form.sub_types = response.data.data.sub_types;
+                        this.formDataLoaded = true;
+
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.formDataLoaded = true;
+                        this.mixin_showErrors(error);
+
+                        reject();
+                    });
+            });
         },
         onSave(value) {
             ExpenseTypeDataService.update(this.$route.params.id, value)

@@ -131,8 +131,76 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    expenseTypeId: {
+      "default": null
+    },
+    isEdit: {
+      type: Boolean,
+      "default": false
+    },
     expenseTypeForm: {
       type: Object,
       "default": function _default() {
@@ -157,9 +225,22 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       valid: false,
+      dialog: false,
       subtype: "",
       subtype_limit: null,
       hasSubtype: false,
+      deleted_sub_types: {
+        headers: [{
+          text: "Name",
+          value: "name",
+          sortable: false
+        }, {
+          text: "Action",
+          value: "actions",
+          sortable: false
+        }],
+        items: []
+      },
       headers: [{
         text: "Name",
         value: "name"
@@ -172,6 +253,7 @@ __webpack_require__.r(__webpack_exports__);
         sortable: false
       }],
       form: {
+        id: null,
         name: "",
         limit: null,
         sub_types: []
@@ -198,18 +280,88 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.subtype = "";
       this.subtype_limit = null;
+      this.dialog = false;
     },
     removeItem: function removeItem(item) {
-      var index = this.form.sub_types.indexOf(item);
-      this.form.sub_types.splice(index, 1);
+      var _this = this;
+
+      if (item.id && item.id > 0) {
+        this.$confirm("Do you want to delete default subtype?").then(function (res) {
+          if (res) {
+            axios["delete"]("/api/expense_types/".concat(item.id)).then(function (response) {
+              _this.loadDeletedSubTypes(_this.expenseTypeId);
+
+              var index = _this.form.sub_types.indexOf(item);
+
+              _this.form.sub_types.splice(index, 1);
+            })["catch"](function (error) {
+              _this.mixin_showErrors(error);
+            });
+          }
+
+          return;
+        });
+      } else {
+        var index = this.form.sub_types.indexOf(item);
+        this.form.sub_types.splice(index, 1);
+      }
+    },
+    onRestoreSubtype: function onRestoreSubtype(item) {
+      var _this2 = this;
+
+      axios.put("/api/expense_types/restore/".concat(item.id)).then(function (response) {
+        _this2.form.sub_types.push({
+          id: item.id,
+          name: item.name,
+          limit: item.limit
+        });
+
+        _this2.loadDeletedSubTypes(_this2.expenseTypeId);
+      })["catch"](function (error) {
+        _this2.mixin_showErrors(error);
+      });
+    },
+    loadSubTypes: function loadSubTypes(id) {
+      var _this3 = this;
+
+      axios.get("/api/expense_types?expense_type_id=".concat(id), {
+        params: {
+          itemsPerPage: "false"
+        }
+      }).then(function (response) {
+        console.log("loadSubTypes", response.data); // this.form.sub_types = response.data;
+      })["catch"](function (error) {
+        _this3.mixin_showErrors(error);
+      });
+    },
+    loadDeletedSubTypes: function loadDeletedSubTypes(id) {
+      var _this4 = this;
+
+      axios.get("/api/expense_types?expense_type_id=".concat(id), {
+        params: {
+          status: "Archived",
+          itemsPerPage: "false"
+        }
+      }).then(function (response) {
+        _this4.deleted_sub_types.items = response.data.data;
+      })["catch"](function (error) {
+        _this4.mixin_showErrors(error);
+      });
     }
   },
   watch: {
     expenseTypeForm: {
       immediate: true,
+      deep: true,
       handler: function handler(newValue, oldValue) {
         this.form = newValue;
       }
+    }
+  },
+  mounted: function mounted() {
+    if (this.isEdit) {
+      this.loadDeletedSubTypes(this.expenseTypeId);
+      this.loadSubTypes(this.expenseTypeId);
     }
   }
 });
@@ -316,89 +468,161 @@ var render = function() {
           _c(
             "v-col",
             [
-              _c("div", { staticClass: "overline" }, [_vm._v("Sub Types")]),
-              _vm._v(" "),
-              _c("v-data-table", {
-                attrs: { headers: _vm.headers, items: _vm.form.sub_types },
-                scopedSlots: _vm._u(
-                  [
+              _c(
+                "div",
+                { staticClass: "overline" },
+                [
+                  _vm._v("\n                Sub Types\n                "),
+                  _c(
+                    "v-dialog",
                     {
-                      key: "top",
-                      fn: function() {
-                        return [
+                      attrs: { "max-width": "500px" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var on = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-btn",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "mb-2",
+                                      attrs: { small: "" }
+                                    },
+                                    "v-btn",
+                                    attrs,
+                                    false
+                                  ),
+                                  on
+                                ),
+                                [
+                                  _vm._v(
+                                    "\n                            Add New\n                        "
+                                  )
+                                ]
+                              )
+                            ]
+                          }
+                        }
+                      ]),
+                      model: {
+                        value: _vm.dialog,
+                        callback: function($$v) {
+                          _vm.dialog = $$v
+                        },
+                        expression: "dialog"
+                      }
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-card",
+                        [
                           _c(
-                            "v-row",
+                            "v-card-text",
                             [
                               _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "8" } },
-                                [
-                                  _c("v-text-field", {
-                                    staticClass: "mx-4",
-                                    attrs: { label: "Sub type name" },
-                                    model: {
-                                      value: _vm.subtype,
-                                      callback: function($$v) {
-                                        _vm.subtype = $$v
-                                      },
-                                      expression: "subtype"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", md: "3" } },
-                                [
-                                  _c("v-text-field", {
-                                    staticClass: "mx-4",
-                                    attrs: {
-                                      label: "Default amount limit",
-                                      type: "number"
-                                    },
-                                    model: {
-                                      value: _vm.subtype_limit,
-                                      callback: function($$v) {
-                                        _vm.subtype_limit = $$v
-                                      },
-                                      expression: "subtype_limit"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                {
-                                  staticClass: "text-right",
-                                  attrs: { cols: "12", md: "1" }
-                                },
+                                "v-row",
                                 [
                                   _c(
-                                    "v-btn",
-                                    {
-                                      staticClass: "mx-4",
-                                      on: { click: _vm.addItem }
-                                    },
+                                    "v-col",
+                                    { attrs: { cols: "12" } },
                                     [
-                                      _vm._v(
-                                        "\n                                Add\n                            "
-                                      )
-                                    ]
+                                      _c("v-text-field", {
+                                        attrs: { label: "Name" },
+                                        model: {
+                                          value: _vm.subtype,
+                                          callback: function($$v) {
+                                            _vm.subtype = $$v
+                                          },
+                                          expression: "subtype"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Limit",
+                                          type: "number"
+                                        },
+                                        model: {
+                                          value: _vm.subtype_limit,
+                                          callback: function($$v) {
+                                            _vm.subtype_limit = $$v
+                                          },
+                                          expression: "subtype_limit"
+                                        }
+                                      })
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
                               )
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-card-actions",
+                            [
+                              _c("v-spacer"),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "primary", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dialog = false
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Cancel\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "primary", text: "" },
+                                  on: { click: _vm.addItem }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Add\n                            "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
                           )
-                        ]
-                      },
-                      proxy: true
-                    },
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-data-table", {
+                attrs: { headers: _vm.headers, items: _vm.form.sub_types },
+                scopedSlots: _vm._u(
+                  [
                     {
                       key: "item.name",
                       fn: function(props) {
@@ -582,7 +806,93 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _vm.isEdit ? _c("v-divider") : _vm._e(),
+      _vm._v(" "),
+      _vm.isEdit
+        ? _c(
+            "v-row",
+            [
+              _c(
+                "v-col",
+                [
+                  _c(
+                    "v-expansion-panels",
+                    { attrs: { flat: "" } },
+                    [
+                      _c(
+                        "v-expansion-panel",
+                        [
+                          _c("v-expansion-panel-header", [
+                            _vm._v(
+                              "\n                        Deleted subtypes:\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-expansion-panel-content",
+                            [
+                              _c("v-data-table", {
+                                attrs: {
+                                  headers: _vm.deleted_sub_types.headers,
+                                  items: _vm.deleted_sub_types.items
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "item.actions",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: { small: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.onRestoreSubtype(
+                                                    item
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    Restore\n                                    "
+                                              ),
+                                              _c(
+                                                "v-icon",
+                                                { attrs: { small: "" } },
+                                                [_vm._v("mdi-refresh")]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )

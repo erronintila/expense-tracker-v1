@@ -37,8 +37,9 @@ class ExpenseTypeController extends Controller
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";
         $itemsPerPage = request('itemsPerPage') ?? 10;
+        $expense_type_id = request("expense_type_id") ?? null;
 
-        $expense_types = ExpenseType::where('expense_type_id', null)
+        $expense_types = ExpenseType::where('expense_type_id', $expense_type_id)
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -55,6 +56,11 @@ class ExpenseTypeController extends Controller
         }
 
         $expense_types = $expense_types->where('name', "like", "%" . $search . "%");
+
+        if($itemsPerPage == "false" || $itemsPerPage == false) {
+            $itemsPerPage = $expense_types->count();
+        }
+
         $expense_types = $expense_types->paginate($itemsPerPage);
 
         return ExpenseTypeOnlyResource::collection($expense_types);
@@ -199,14 +205,15 @@ class ExpenseTypeController extends Controller
 
         if (request()->has("ids")) {
             foreach (request('ids') as $id) {
-                $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-
+                // $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
+                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
                 $expense_type->restore();
             }
 
             $message = "Expense type(s) restored successfully.";
         } else {
-            $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
+            // $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
+            $expense_type = ExpenseType::withTrashed()->findOrFail($id);
             $expense_type->restore();
 
             $message = "Expense type restored successfully.";

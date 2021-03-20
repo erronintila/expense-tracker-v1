@@ -33,6 +33,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -57,15 +60,20 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {
-        _this.form.name = response.data.data.name;
-        _this.form.limit = response.data.data.limit;
-        _this.form.sub_types = response.data.data.sub_types;
-        _this.formDataLoaded = true;
-      })["catch"](function (error) {
-        _this.formDataLoaded = true;
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(_this.$route.params.id).then(function (response) {
+          _this.form.name = response.data.data.name;
+          _this.form.limit = response.data.data.limit;
+          _this.form.sub_types = response.data.data.sub_types;
+          _this.formDataLoaded = true;
+          resolve(response.data);
+        })["catch"](function (error) {
+          _this.formDataLoaded = true;
 
-        _this.mixin_showErrors(error);
+          _this.mixin_showErrors(error);
+
+          reject();
+        });
       });
     },
     onSave: function onSave(value) {
@@ -154,7 +162,12 @@ var render = function() {
                 "v-container",
                 [
                   _c("Form", {
-                    attrs: { errors: _vm.errors, expenseTypeForm: _vm.form },
+                    attrs: {
+                      errors: _vm.errors,
+                      expenseTypeForm: _vm.form,
+                      isEdit: true,
+                      expenseTypeId: _vm.$route.params.id
+                    },
                     on: { "on-save": _vm.onSave }
                   })
                 ],
