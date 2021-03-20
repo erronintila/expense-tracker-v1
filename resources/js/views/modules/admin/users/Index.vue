@@ -543,6 +543,7 @@ export default {
         changeStatus() {},
         onChangeDepartment(e) {
             this.department = e;
+            this.job = null;
         },
         onResetDepartment() {
             this.department = null;

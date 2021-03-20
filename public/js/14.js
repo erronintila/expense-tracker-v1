@@ -896,6 +896,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     changeStatus: function changeStatus() {},
     onChangeDepartment: function onChangeDepartment(e) {
       this.department = e;
+      this.job = null;
     },
     onResetDepartment: function onResetDepartment() {
       this.department = null;
