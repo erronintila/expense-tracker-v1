@@ -968,8 +968,6 @@ export default {
                     let index = this.expense_types.findIndex(item => item.id == newValue.expense_type.id ); 
                     index === -1 ? this.expense_types.push(newValue.expense_type) : null
                 }
-                
-                
             }
         },
         itemizeExpenses: {
