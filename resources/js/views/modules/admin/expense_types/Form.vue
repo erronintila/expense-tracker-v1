@@ -166,7 +166,7 @@
                                         small
                                         @click="onRestoreSubtype(item)"
                                     >
-                                        <v-icon small>mdi-refresh</v-icon>
+                                        <!-- <v-icon small>mdi-refresh</v-icon> -->
                                         Restore
                                     </v-btn>
                                     <!-- <v-icon
@@ -331,7 +331,6 @@ export default {
                     }
                 })
                 .then(response => {
-                    console.log("loadSubTypes", response.data);
                     // this.form.sub_types = response.data;
                 })
                 .catch(error => {

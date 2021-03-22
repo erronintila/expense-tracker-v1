@@ -333,8 +333,7 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           itemsPerPage: "false"
         }
-      }).then(function (response) {
-        console.log("loadSubTypes", response.data); // this.form.sub_types = response.data;
+      }).then(function (response) {// this.form.sub_types = response.data;
       })["catch"](function (error) {
         _this3.mixin_showErrors(error);
       });
@@ -869,16 +868,10 @@ var render = function() {
                                               }
                                             },
                                             [
-                                              _c(
-                                                "v-icon",
-                                                { attrs: { small: "" } },
-                                                [_vm._v("mdi-refresh")]
-                                              ),
                                               _vm._v(
                                                 "\n                                    Restore\n                                "
                                               )
-                                            ],
-                                            1
+                                            ]
                                           )
                                         ]
                                       }

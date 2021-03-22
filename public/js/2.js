@@ -1483,6 +1483,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (newValue.user) {
           this.expense_types = newValue.user.expense_types;
         }
+
+        if (newValue.expense_type) {
+          this.sub_types = newValue.expense_type ? newValue.expense_type.sub_types : null;
+          var index = this.expense_types.findIndex(function (item) {
+            return item.id == newValue.expense_type.id;
+          });
+          index === -1 ? this.expense_types.push(newValue.expense_type) : null;
+        }
       }
     },
     itemizeExpenses: {
