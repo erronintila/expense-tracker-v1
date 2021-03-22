@@ -93,7 +93,8 @@ class VendorController extends Controller
         $message = "Vendor created successfully";
 
         $vendor = new Vendor();
-        $vendor->create($validated);
+        $vendor->fill($validated);
+        $vendor->save();
 
         // store expense types associated with vendor
         if (request()->has("expense_types")) {

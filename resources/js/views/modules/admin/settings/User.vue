@@ -115,6 +115,7 @@ export default {
             valid: false,
             usersParameters: {
                 params: {
+                    is_superadmin: false,
                     with_expense_types: true
                 }
             },

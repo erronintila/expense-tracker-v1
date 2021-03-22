@@ -203,7 +203,8 @@ __webpack_require__.r(__webpack_exports__);
         remarks: "",
         website: "",
         is_vat_inclusive: true,
-        address: ""
+        address: "",
+        is_active: true
       },
       errors: {
         code: [],
@@ -216,7 +217,8 @@ __webpack_require__.r(__webpack_exports__);
         remarks: [],
         website: [],
         is_vat_inclusive: [],
-        address: []
+        address: [],
+        is_active: []
       }
     };
   },
@@ -243,7 +245,8 @@ __webpack_require__.r(__webpack_exports__);
           website: this.form.website,
           is_vat_inclusive: this.form.is_vat_inclusive,
           address: this.form.address,
-          expense_types: this.selected_expense_types
+          expense_types: this.selected_expense_types,
+          is_active: this.form.is_active
         }).then(function (response) {
           _this.$dialog.message.success("Vendor created successfully.", {
             position: "top-right",
@@ -275,7 +278,8 @@ __webpack_require__.r(__webpack_exports__);
         remarks: "",
         website: "",
         is_vat_inclusive: true,
-        address: ""
+        address: "",
+        is_active: true
       };
     }
   }

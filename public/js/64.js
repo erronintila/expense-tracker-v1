@@ -210,7 +210,7 @@ __webpack_require__.r(__webpack_exports__);
 
       value.details = value.itemize ? value.items : null;
       value.expense_type_id = value.expense_type ? value.expense_type.id : null;
-      value.sub_type = value.sub_type ? value.sub_type.id : null;
+      value.sub_type_id = value.sub_type ? value.sub_type.id : null;
       value.user_id = value.user ? value.user.id : null;
       value.vendor_id = value.vendor ? value.vendor.id : null;
       value.reimbursable_amount = value.amount_to_reimburse;

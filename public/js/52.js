@@ -127,6 +127,7 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       usersParameters: {
         params: {
+          is_superadmin: false,
           with_expense_types: true
         }
       },

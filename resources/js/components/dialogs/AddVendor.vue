@@ -193,7 +193,8 @@ export default {
                 remarks: "",
                 website: "",
                 is_vat_inclusive: true,
-                address: ""
+                address: "",
+                is_active: true
             },
             errors: {
                 code: [],
@@ -206,7 +207,8 @@ export default {
                 remarks: [],
                 website: [],
                 is_vat_inclusive: [],
-                address: []
+                address: [],
+                is_active: []
             }
         };
     },
@@ -231,7 +233,8 @@ export default {
                     website: this.form.website,
                     is_vat_inclusive: this.form.is_vat_inclusive,
                     address: this.form.address,
-                    expense_types: this.selected_expense_types
+                    expense_types: this.selected_expense_types,
+                    is_active: this.form.is_active
                 })
                     .then(response => {
                         this.$dialog.message.success(
@@ -265,7 +268,8 @@ export default {
                 remarks: "",
                 website: "",
                 is_vat_inclusive: true,
-                address: ""
+                address: "",
+                is_active: true
             };
         }
     }

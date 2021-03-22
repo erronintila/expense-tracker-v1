@@ -47,7 +47,8 @@ class VendorStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'tin.required_if' => 'The tax identification number field is required if VAT inclusive.'
+            'tin.required_if' => 'The tax identification number field is required if VAT inclusive.',
+            'is_active.required' => 'The active field is required.'
         ];
     }
 }
