@@ -15,6 +15,7 @@ use App\Notifications\PaymentNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\Payment\PaymentIndexResource;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -243,10 +244,39 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if (request()->has('ids')) {
-            foreach (request("ids") as $id) {
+        DB::transaction(function () use ($id) {
+            if (request()->has('ids')) {
+                foreach (request("ids") as $id) {
+                    $payment = Payment::findOrFail($id);
+    
+                    foreach ($payment->expense_reports as $expense_report) {
+                        if ($payment->received_at !== null) {
+                            foreach ($payment->expense_reports as $expense_report) {
+                                foreach ($expense_report->expenses as $expense) {
+                                    $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                                    $expense->user->remaining_fund -= $expense_amount;
+                                    $expense->user->save();
+                                }
+                            }
+                        }
+                        $payment->deleted_by = Auth::id();
+    
+                        log_activity(
+                            "expense_report",
+                            $expense_report,
+                            [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                            "removed expense report association with payment #{$payment->code}"
+                        );
+                    }
+                    $payment->delete();
+                    $payment->expense_reports()->sync([]);
+                }
+            } else {
                 $payment = Payment::findOrFail($id);
-
+    
                 foreach ($payment->expense_reports as $expense_report) {
                     if ($payment->received_at !== null) {
                         foreach ($payment->expense_reports as $expense_report) {
@@ -257,9 +287,8 @@ class PaymentController extends Controller
                             }
                         }
                     }
-
                     $payment->deleted_by = Auth::id();
-
+                    
                     log_activity(
                         "expense_report",
                         $expense_report,
@@ -270,43 +299,11 @@ class PaymentController extends Controller
                         "removed expense report association with payment #{$payment->code}"
                     );
                 }
-
                 $payment->delete();
-
                 $payment->expense_reports()->sync([]);
             }
-        } else {
-            $payment = Payment::findOrFail($id);
-
-            foreach ($payment->expense_reports as $expense_report) {
-                if ($payment->received_at !== null) {
-                    foreach ($payment->expense_reports as $expense_report) {
-                        foreach ($expense_report->expenses as $expense) {
-                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
-                            $expense->user->remaining_fund -= $expense_amount;
-                            $expense->user->save();
-                        }
-                    }
-                }
-
-                $payment->deleted_by = Auth::id();
-                
-                log_activity(
-                    "expense_report",
-                    $expense_report,
-                    [
-                    "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
-                    "custom" => ["link" => "expense_reports/{$expense_report->id}"]
-                ],
-                    "removed expense report association with payment #{$payment->code}"
-                );
-            }
-
-            $payment->delete();
-            
-            $payment->expense_reports()->sync([]);
-        }
-
+        });
+        
         return response(
             [
                 'message' => 'Payment Cancelled successfully'
@@ -323,46 +320,58 @@ class PaymentController extends Controller
 
     public function approve_payment(Request $request, $id)
     {
-        foreach (request("ids") as $id) {
-            $payment = Payment::findOrFail($id);
-            $payment->approved_at = now();
-            $payment->save();
-        }
+        DB::transaction(function () use ($id) {
+            foreach (request("ids") as $id) {
+                $payment = Payment::findOrFail($id);
+                $payment->approved_at = now();
+                $payment->save();
+            }
+        });
+        
         $message = "Payment(s) approved successfully";
         return $this->successResponse(null, $message, 200);
     }
 
     public function release_payment(Request $request, $id)
     {
-        foreach (request("ids") as $id) {
-            $payment = Payment::findOrFail($id);
-            $payment->released_at = now();
-            $payment->save();
-        }
+        DB::transaction(function () use ($id) {
+            foreach (request("ids") as $id) {
+                $payment = Payment::findOrFail($id);
+                $payment->released_at = now();
+                $payment->save();
+            }
+        });
+        
         $message = "Payment(s) released successfully";
         return $this->successResponse(null, $message, 200);
     }
 
     public function receive_payment(Request $request, $id)
     {
-        foreach (request("ids") as $id) {
-            $payment = Payment::findOrFail($id);
-            $payment->received_at = now();
-            $payment->save();
-        }
+        DB::transaction(function () use ($id) {
+            foreach (request("ids") as $id) {
+                $payment = Payment::findOrFail($id);
+                $payment->received_at = now();
+                $payment->save();
+            }
+        });
+        
         $message = "Payment(s) received successfully";
         return $this->successResponse(null, $message, 200);
     }
 
     public function complete_payment(Request $request, $id)
     {
-        foreach (request("ids") as $id) {
-            $payment = Payment::findOrFail($id);
-            $payment->approved_at = now();
-            $payment->released_at = now();
-            $payment->received_at = now();
-            $payment->save();
-        }
+        DB::transaction(function () use ($id) {
+            foreach (request("ids") as $id) {
+                $payment = Payment::findOrFail($id);
+                $payment->approved_at = now();
+                $payment->released_at = now();
+                $payment->received_at = now();
+                $payment->save();
+            }
+        });
+        
         $message = "Payment(s) completed successfully";
         return $this->successResponse(null, $message, 200);
     }

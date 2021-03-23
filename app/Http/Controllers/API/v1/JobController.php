@@ -9,6 +9,7 @@ use App\Http\Resources\JobResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobStoreRequest;
 use App\Http\Requests\Job\JobUpdateRequest;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -131,18 +132,17 @@ class JobController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Job designation deleted successfully"; // return message
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $job = Job::findOrFail($id);
-                $job->delete();
+        DB::transaction(function () use ($id) {
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    Job::findOrFail($id)->delete();
+                }
+            } else {
+                Job::findOrFail($id)->delete();
             }
-            $message = "Job designation(s) deleted successfully";
-        } else {
-            $job = Job::findOrFail($id);
-            $job->delete();
-            $message = "Job designation deleted successfully";
-        }
+        });
+
+        $message = "Job designation(s) deleted successfully";
         return $this->successResponse(null, $message, 200);
     }
 
@@ -159,21 +159,17 @@ class JobController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Job designation restored successfully"; // return message
-
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $job = Job::onlyTrashed()->findOrFail($id);
-                $job->restore();
+        DB::transaction(function () use ($id) {
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    Job::onlyTrashed()->findOrFail($id)->restore();
+                }
+            } else {
+                Job::onlyTrashed()->findOrFail($id)->restore();
             }
+        });
 
-            $message = "Job designation(s) restored successfully";
-        } else {
-            $job = Job::onlyTrashed()->findOrFail($id);
-            $job->restore();
-            $message = "Job designation restored successfully";
-        }
-
+        $message = "Job designation restored successfully"; // return message
         return $this->successResponse(null, $message, 201);
     }
 
