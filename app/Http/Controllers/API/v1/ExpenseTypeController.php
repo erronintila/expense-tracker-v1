@@ -11,6 +11,7 @@ use App\Http\Requests\ExpenseType\ExpenseTypeStoreRequest;
 use App\Http\Requests\ExpenseType\ExpenseTypeUpdateRequest;
 use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseTypeController extends Controller
 {
@@ -57,7 +58,7 @@ class ExpenseTypeController extends Controller
 
         $expense_types = $expense_types->where('name', "like", "%" . $search . "%");
 
-        if($itemsPerPage == "false" || $itemsPerPage == false) {
+        if ($itemsPerPage == "false" || $itemsPerPage == false) {
             $itemsPerPage = $expense_types->count();
         }
 
@@ -165,15 +166,34 @@ class ExpenseTypeController extends Controller
 
         if (request()->has("ids")) {
             foreach (request('ids') as $id) {
+                $doesExpenseExist = DB::table("expense_types")
+                    ->where("expense_types.id", $id)
+                    ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
+                    ->where("expenses.deleted_at", null)
+                    ->where("expense_types.deleted_at", null)
+                    ->count();
+
+                if ($doesExpenseExist) {
+                    abort(422, "Some records can't be deleted");
+                }
+
                 $expense_type = ExpenseType::withTrashed()->findOrFail($id);
                 $expense_type->delete();
             }
             $message = "Expense type(s) deleted successfully";
         } else {
+            $doesExpenseExist = DB::table("expense_types")
+                    ->where("expense_types.id", $id)
+                    ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
+                    ->where("expenses.deleted_at", null)
+                    ->where("expense_types.deleted_at", null)
+                    ->count();
+
+            if ($doesExpenseExist) {
+                abort(422, "Record can't be deleted");
+            }
+                
             $expense_type = ExpenseType::withTrashed()->findOrFail($id);
-            // if ($expense_type->expenses) {
-            //     return $this->errorResponse(null, "Record has been associated with expenses", 422);
-            // }
             $expense_type->delete();
         }
 
