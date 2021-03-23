@@ -158,38 +158,39 @@ class ExpenseTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Expense type deleted successfully";
-
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
+        DB::transaction(function () use ($id) {
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    $doesExpenseExist = DB::table("expense_types")
+                        ->where("expense_types.id", $id)
+                        ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
+                        ->where("expenses.deleted_at", null)
+                        ->where("expense_types.deleted_at", null)
+                        ->count();
+    
+                    if ($doesExpenseExist) {
+                        abort(422, "Some records can't be deleted");
+                    }
+                    $expense_type = ExpenseType::findOrFail($id);
+                    $expense_type->delete();
+                }
+            } else {
                 $doesExpenseExist = DB::table("expense_types")
-                    ->where("expense_types.id", $id)
-                    ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
-                    ->where("expenses.deleted_at", null)
-                    ->where("expense_types.deleted_at", null)
-                    ->count();
-
+                        ->where("expense_types.id", $id)
+                        ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
+                        ->where("expenses.deleted_at", null)
+                        ->where("expense_types.deleted_at", null)
+                        ->count();
+    
                 if ($doesExpenseExist) {
-                    abort(422, "Some records can't be deleted");
+                    abort(422, "Record can't be deleted");
                 }
                 $expense_type = ExpenseType::findOrFail($id);
                 $expense_type->delete();
             }
-            $message = "Expense type(s) deleted successfully";
-        } else {
-            $doesExpenseExist = DB::table("expense_types")
-                    ->where("expense_types.id", $id)
-                    ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
-                    ->where("expenses.deleted_at", null)
-                    ->where("expense_types.deleted_at", null)
-                    ->count();
+        });
 
-            if ($doesExpenseExist) {
-                abort(422, "Record can't be deleted");
-            }
-            $expense_type = ExpenseType::findOrFail($id);
-            $expense_type->delete();
-        }
+        $message = "Expense type(s) deleted successfully";
         return $this->successResponse(null, $message, 200);
     }
 
@@ -208,18 +209,17 @@ class ExpenseTypeController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Expense type restored successfully.";
-
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $expense_type = ExpenseType::onlyTrashed()->findOrFail($id);
-                $expense_type->restore();
+        DB::transaction(function () use ($id) {
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    ExpenseType::onlyTrashed()->findOrFail($id)->restore();
+                }
+            } else {
+                ExpenseType::onlyTrashed()->findOrFail($id)->restore();
             }
-            $message = "Expense type(s) restored successfully.";
-        } else {
-            $expense_type = ExpenseType::onlyTrashed()->findOrFail($id);
-            $expense_type->restore();
-        }
+        });
+
+        $message = "Expense type(s) restored successfully.";
         return $this->successResponse(null, $message, 201);
     }
 

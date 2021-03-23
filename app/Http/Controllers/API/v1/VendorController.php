@@ -157,10 +157,7 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Vendor(s) deleted successfully";
-
         DB::transaction(function () use ($id) {
-            // check if multiple records
             if (request()->has("ids")) {
                 foreach (request('ids') as $id) {
                     Vendor::findOrFail($id)->delete();
@@ -170,6 +167,7 @@ class VendorController extends Controller
             }
         });
 
+        $message = "Vendor(s) deleted successfully";
         return $this->successResponse(null, $message, 200);
     }
 
@@ -188,9 +186,7 @@ class VendorController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Vendor(s) restored successfully";
         DB::transaction(function () use ($id) {
-            // check if multiple records
             if (request()->has("ids")) {
                 foreach (request('ids') as $id) {
                     Vendor::onlyTrashed()->findOrFail($id)->restore();
@@ -199,6 +195,8 @@ class VendorController extends Controller
                 Vendor::onlyTrashed()->findOrFail($id)->restore();
             }
         });
+
+        $message = "Vendor(s) restored successfully";
         return $this->successResponse(null, $message, 201);
     }
 

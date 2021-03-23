@@ -128,9 +128,7 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Department(s) deleted successfully"; // return message
-
-        DB::transaction(function () use ($message, $id) {
+        DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request('ids') as $id) {
                     Department::findOrFail($id)->delete();
@@ -140,6 +138,7 @@ class DepartmentController extends Controller
             }
         });
 
+        $message = "Department(s) deleted successfully"; // return message
         return $this->successResponse(null, $message, 200);
     }
 
@@ -158,8 +157,6 @@ class DepartmentController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Department(s) restored successfully"; // return message
-
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request('ids') as $id) {
@@ -169,6 +166,8 @@ class DepartmentController extends Controller
                 Department::onlyTrashed()->findOrFail($id)->restore();
             }
         });
+
+        $message = "Department(s) restored successfully"; // return message
         return $this->successResponse(null, $message, 201);
     }
 

@@ -391,7 +391,8 @@ class ExpenseController extends Controller
             }
         });
 
-        return $this->successResponse(null, 'Deleted successfully', 200);
+        $message = "Expense(s) deleted successfully";
+        return $this->successResponse(null, $message, 200);
     }
 
     /*
@@ -402,8 +403,6 @@ class ExpenseController extends Controller
 
     public function restore(Request $request, $id)
     {
-        $message = "Expense restored successfully";
-
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request("ids") as $id) {
@@ -438,6 +437,7 @@ class ExpenseController extends Controller
             }
         });
 
+        $message = "Expense(s) restored successfully";
         return $this->successResponse(null, $message, 201);
     }
 

@@ -291,8 +291,6 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "User deleted successfully";
-        
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request("ids") as $id) {
@@ -302,6 +300,8 @@ class UserController extends Controller
                 User::findOrFail($id)->delete();
             }
         });
+
+        $message = "User(s) deleted successfully";
         return $this->successResponse(null, $message, 200);
     }
 
@@ -313,8 +313,6 @@ class UserController extends Controller
 
     public function restore(Request $request, $id)
     {
-        $message = "User restored successfully";
-
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request("ids") as $id) {
@@ -334,6 +332,7 @@ class UserController extends Controller
                 ->log("restored user");
         });
 
+        $message = "User restored successfully";
         return $this->successResponse(null, $message, 200);
     }
 
@@ -374,8 +373,6 @@ class UserController extends Controller
 
     public function reset_password(Request $request, $id)
     {
-        $message = "User password resetted successfully";
-
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request("ids") as $id) {
@@ -397,13 +394,12 @@ class UserController extends Controller
                 ->log("resetted user password");
         });
 
+        $message = "User(s) password resetted successfully";
         return $this->successResponse(null, $message, 200);
     }
 
     public function verify_email(Request $request, $id)
     {
-        $message = "User email verified successfully";
-
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request("ids") as $id) {
@@ -425,6 +421,7 @@ class UserController extends Controller
                 ->log("verified user email");
         });
 
+        $message = "User(s) email verified successfully";
         return $this->successResponse(null, $message, 200);
     }
 
@@ -496,7 +493,7 @@ class UserController extends Controller
     public function update_activation(Request $request, $id)
     {
         $activation = request("is_active") ? "activated" : "deactivated";
-        $message = "User {$activation} successfully";
+        $message = "User(s) {$activation} successfully";
 
         DB::transaction(function () use ($activation, $id) {
             if (request()->has("ids")) {
@@ -523,6 +520,7 @@ class UserController extends Controller
                 ->log("{$activation} user");
             }
         });
+        
         return $this->successResponse(null, $message, 200);
     }
     

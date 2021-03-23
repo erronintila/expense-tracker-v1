@@ -94,30 +94,8 @@ class ActivityLogController extends Controller
      *
      * @return \Illuminate\Http\Response|null
      */
-    public function destroy(Request $request, $id): ?\Illuminate\Http\Response
+    public function destroy(Request $request, $id)
     {
-        if (request()->has("delete_all")) {
-            $activity_logs = DB::table('activity_log')->delete();
-
-            return response(
-                [
-                    'message' => 'Deleted All Logs successfully'
-                ],
-                201
-            );
-        }
-
-        if (request()->has("ids")) {
-            foreach (request("ids") as $id) {
-                $activity_logs = DB::table('activity_log')->where("id", $id)->delete();
-            }
-
-            return response(
-                [
-                    'message' => 'Deleted Logs successfully'
-                ],
-                201
-            );
-        }
+        abort(422, "Activity Logs can't be deleted.");
     }
 }
