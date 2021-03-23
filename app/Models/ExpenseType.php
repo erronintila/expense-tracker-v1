@@ -70,6 +70,10 @@ class ExpenseType extends Model
 
                 abort(422, "Some records can't be deleted.");
             }
+
+            if (!auth()->user()->is_admin) {
+                abort(422, "Only administrators can delete record(s).");
+            }
         });
     }
 

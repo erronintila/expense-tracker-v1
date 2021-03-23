@@ -58,6 +58,10 @@ class Job extends Model
             if ($job->users()->count() > 0) {
                 abort(422, "Active user records found.");
             }
+
+            if (!auth()->user()->is_admin) {
+                abort(422, "Only administrators can delete record(s).");
+            }
         });
 
         static::restoring(function ($job) {

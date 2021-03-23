@@ -73,6 +73,17 @@ class Payment extends Model
         // 'total_amount'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($payment) {
+            if (!auth()->user()->is_admin) {
+                abort(422, "Only administrators can delete record(s).");
+            }
+        });
+    }
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LIBRARY/PACKAGE CONFIGURATION

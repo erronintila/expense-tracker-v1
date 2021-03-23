@@ -38,6 +38,10 @@ class User extends Authenticatable
             if ($user->expense_reports()->count() > 0) {
                 abort(422, "Active expense report records found.");
             }
+
+            if (!auth()->user()->is_admin) {
+                abort(422, "Only administrators can delete record(s).");
+            }
         });
 
         static::restoring(function ($user) {
