@@ -77,23 +77,25 @@ class ExpenseTypeController extends Controller
     {
         $validated = $request->validated(); // checks validation
         $message = "Expense type created successfully"; // return message
-
         $expense_type = new ExpenseType();
-        $expense_type->code = generate_code(ExpenseType::class, "EXT", 10);
-        $expense_type->name = request('name');
-        $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
-        $expense_type->save();
 
-        // store sub types associated with expense type
-        if (request()->has("sub_types")) {
-            foreach (request('sub_types') as $item) {
-                $sub_type = new ExpenseType();
-                $sub_type->name = $item["name"];
-                $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
-                $sub_type->expense_type_id = $expense_type->id;
-                $sub_type->save();
+        DB::transaction(function () use ($expense_type) {
+            $expense_type->code = generate_code(ExpenseType::class, "EXT", 10);
+            $expense_type->name = request('name');
+            $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
+            $expense_type->save();
+
+            // store sub types associated with expense type
+            if (request()->has("sub_types")) {
+                foreach (request('sub_types') as $item) {
+                    $sub_type = new ExpenseType();
+                    $sub_type->name = $item["name"];
+                    $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
+                    $sub_type->expense_type_id = $expense_type->id;
+                    $sub_type->save();
+                }
             }
-        }
+        });
 
         return $this->successResponse(new ExpenseTypeResource($expense_type), "$message", 201);
     }
@@ -124,28 +126,31 @@ class ExpenseTypeController extends Controller
     {
         $validated = $request->validated(); // checks validation
         $message = "Expense type updated successfully"; // return message
-        $expense_type = ExpenseType::where('expense_type_id', null)->findOrFail($id);
-        $expense_type->name = request('name');
-        $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
-        $expense_type->save();
 
-        // remove sub types associated with expense type
-        foreach ($expense_type->sub_types as $sub_type) {
-            $sub_type->delete();
-        }
+        DB::transaction(function () use ($id) {
+            $expense_type = ExpenseType::where('expense_type_id', null)->findOrFail($id);
+            $expense_type->name = request('name');
+            $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
+            $expense_type->save();
 
-        // update sub types associated with expense type
-        foreach (request('sub_types') as $key => $value) {
-            $sub_type = ExpenseType::updateOrCreate(
-                ['id' => $value["id"]],
-                [
+            // remove sub types associated with expense type
+            foreach ($expense_type->sub_types as $sub_type) {
+                $sub_type->delete();
+            }
+
+            // update sub types associated with expense type
+            foreach (request('sub_types') as $key => $value) {
+                $sub_type = ExpenseType::updateOrCreate(
+                    ['id' => $value["id"]],
+                    [
                     'name' => $value["name"],
                     "limit" => is_numeric($value["limit"]) && ($value["limit"] > 0) ? $value["limit"] : null,
                     'expense_type_id' => $expense_type->id,
                     'deleted_at' => null,
                 ]
-            );
-        }
+                );
+            }
+        });
 
         return $this->successResponse(null, $message, 201);
     }

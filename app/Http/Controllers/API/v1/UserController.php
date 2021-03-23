@@ -164,38 +164,40 @@ class UserController extends Controller
     {
         $validated = $request->validated(); // check validation
         $message = "User created successfully"; // return message
-
-        $expense_types = ExpenseType::where("expense_type_id", null)->get();
-
         $user = new User();
-        $user->code = request("code") ?? generate_code(User::class, "USR", 10);
-        $user->first_name = request("first_name");
-        $user->middle_name = request("middle_name");
-        $user->last_name = request("last_name");
-        $user->suffix = request("suffix");
-        $user->gender = request("gender");
-        $user->birthdate = request("birthdate");
-        $user->mobile_number = request("mobile_number");
-        $user->telephone_number = request("telephone_number");
-        $user->address = request("address");
-        $user->fund = request("fund");
-        $user->remaining_fund = request("fund");
-        $user->username = request("username");
-        $user->email    = request("email");
-        $user->password = Hash::make(request("password"));
-        $user->is_active = request("is_active");
-        $user->is_admin = request("is_admin");
-        $user->is_superadmin = request("is_superadmin");
-        $user->can_login = request("can_login");
-        $user->type = request("type");
-        $user->job_id = request("job_id");
-        $user->save();
 
-        foreach (request("permissions") as $permission) {
-            $user->givePermissionTo($permission["name"]);
-        }
+        DB::transaction(function () use ($user) {
+            $expense_types = ExpenseType::where("expense_type_id", null)->get();
 
-        $user->expense_types()->sync($expense_types);
+            $user->code = request("code") ?? generate_code(User::class, "USR", 10);
+            $user->first_name = request("first_name");
+            $user->middle_name = request("middle_name");
+            $user->last_name = request("last_name");
+            $user->suffix = request("suffix");
+            $user->gender = request("gender");
+            $user->birthdate = request("birthdate");
+            $user->mobile_number = request("mobile_number");
+            $user->telephone_number = request("telephone_number");
+            $user->address = request("address");
+            $user->fund = request("fund");
+            $user->remaining_fund = request("fund");
+            $user->username = request("username");
+            $user->email    = request("email");
+            $user->password = Hash::make(request("password"));
+            $user->is_active = request("is_active");
+            $user->is_admin = request("is_admin");
+            $user->is_superadmin = request("is_superadmin");
+            $user->can_login = request("can_login");
+            $user->type = request("type");
+            $user->job_id = request("job_id");
+            $user->save();
+
+            foreach (request("permissions") as $permission) {
+                $user->givePermissionTo($permission["name"]);
+            }
+
+            $user->expense_types()->sync($expense_types);
+        });
 
         return $this->successResponse(new UserResource($user), $message, 201);
     }
@@ -520,7 +522,7 @@ class UserController extends Controller
                 ->log("{$activation} user");
             }
         });
-        
+
         return $this->successResponse(null, $message, 200);
     }
     
