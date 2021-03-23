@@ -432,8 +432,18 @@ export default {
     },
     methods: {
         getData() {
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+            
             // this.loadUsers().then(
-            ExpenseDataService.show(this.$route.params.id)
+            ExpenseDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
 
@@ -522,6 +532,7 @@ export default {
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
+                    this.$router.push({ name: "user.expenses.index" }, () => {});
                 });
             // );
         }

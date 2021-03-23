@@ -96,7 +96,8 @@ class AdjustmentController extends Controller
         if (request()->has("type")) {
             switch (request("type")) {
                 case 'Manage Revolving Fund':
-                    $user = User::withTrashed()->findOrFail(request("user"));
+                    // $user = User::withTrashed()->findOrFail(request("user"));
+                    $user = User::findOrFail(request("user"));
                     $new_fund = ($user->fund + request("add_amount")) - request("subtract_amount");
                     $new_remaining_fund = ($user->remaining_fund + request("add_amount")) - request("subtract_amount");
                     if ($new_fund < 0 || $new_remaining_fund < 0) {
@@ -135,7 +136,8 @@ class AdjustmentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $adjustment = Adjustment::withTrashed()->findOrFail($id);
+        // $adjustment = Adjustment::withTrashed()->findOrFail($id);
+        $adjustment = Adjustment::findOrFail($id);
 
         return response(
             [

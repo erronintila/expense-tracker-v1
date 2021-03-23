@@ -107,12 +107,9 @@ class ExpenseTypeController extends Controller
     public function show(Request $request, $id)
     {
         $message = "Expense type retrieved successfully"; // return message
-        
-        $expense_type = ExpenseType::withTrashed()
-            ->with('sub_types')
+        $expense_type = ExpenseType::with('sub_types')
             ->where('expense_type_id', null)
             ->findOrFail($id);
-
         return $this->successResponse(new ExpenseTypeShowResource($expense_type), $message, 201);
     }
 
@@ -126,9 +123,8 @@ class ExpenseTypeController extends Controller
     public function update(ExpenseTypeUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // checks validation
-
         $message = "Expense type updated successfully"; // return message
-        $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
+        $expense_type = ExpenseType::where('expense_type_id', null)->findOrFail($id);
         $expense_type->name = request('name');
         $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
         $expense_type->save();
@@ -140,7 +136,7 @@ class ExpenseTypeController extends Controller
 
         // update sub types associated with expense type
         foreach (request('sub_types') as $key => $value) {
-            $sub_type = ExpenseType::withTrashed()->updateOrCreate(
+            $sub_type = ExpenseType::updateOrCreate(
                 ['id' => $value["id"]],
                 [
                     'name' => $value["name"],
@@ -176,8 +172,7 @@ class ExpenseTypeController extends Controller
                 if ($doesExpenseExist) {
                     abort(422, "Some records can't be deleted");
                 }
-
-                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+                $expense_type = ExpenseType::findOrFail($id);
                 $expense_type->delete();
             }
             $message = "Expense type(s) deleted successfully";
@@ -192,11 +187,9 @@ class ExpenseTypeController extends Controller
             if ($doesExpenseExist) {
                 abort(422, "Record can't be deleted");
             }
-                
-            $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+            $expense_type = ExpenseType::findOrFail($id);
             $expense_type->delete();
         }
-
         return $this->successResponse(null, $message, 200);
     }
 
@@ -219,20 +212,14 @@ class ExpenseTypeController extends Controller
 
         if (request()->has("ids")) {
             foreach (request('ids') as $id) {
-                // $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+                $expense_type = ExpenseType::onlyTrashed()->findOrFail($id);
                 $expense_type->restore();
             }
-
             $message = "Expense type(s) restored successfully.";
         } else {
-            // $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-            $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+            $expense_type = ExpenseType::onlyTrashed()->findOrFail($id);
             $expense_type->restore();
-
-            $message = "Expense type restored successfully.";
         }
-
         return $this->successResponse(null, $message, 201);
     }
 
@@ -248,31 +235,20 @@ class ExpenseTypeController extends Controller
             $expense_type = ExpenseType::orderBy("name")
                 ->where("expense_type_id", null)
                 ->get();
-
             return $this->successResponse($expense_type, "Retrieved successfully", 200);
         }
 
         if (request()->has('id')) {
-            $expense_type = ExpenseType::withTrashed()
-                ->with(['sub_types' => function ($query) {
-                    $query->withTrashed();
-                }])->with(['expenses' => function ($query) {
-                    $query->withTrashed();
-                }])
+            $expense_type = ExpenseType::with('sub_types')
+                ->with('expenses')
                 ->findOrFail(request('id'));
-
             return new ExpenseTypeResource($expense_type);
         }
 
-        $expense_types = ExpenseType::withTrashed()
-            ->with(['sub_types' => function ($query) {
-                $query->withTrashed();
-            }])->with(['expenses' => function ($query) {
-                $query->withTrashed();
-            }])
+        $expense_types = ExpenseType::with('sub_types')
+            ->with('expenses')
             ->where('expense_type_id', null)
             ->get();
-
         return ExpenseTypeResource::collection($expense_types);
     }
 }

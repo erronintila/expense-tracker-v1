@@ -137,6 +137,7 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loader = false;
+                        this.$router.push({ name: "admin.expense_reports.index" }, () => {});
                         reject();
                     });
             });

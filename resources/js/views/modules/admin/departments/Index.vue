@@ -146,7 +146,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit departments')"
+                            v-if="mixin_can('edit departments') && item.deleted_at == null"
                         >
                             mdi-pencil
                         </v-icon>

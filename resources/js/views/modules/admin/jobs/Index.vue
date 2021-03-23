@@ -231,7 +231,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit jobs')"
+                            v-if="mixin_can('edit jobs') && item.deleted_at == null"
                         >
                             mdi-pencil
                         </v-icon>
@@ -335,9 +335,15 @@ export default {
             this.collections.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
             this.$router.push({
                 name: "admin.jobs.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {

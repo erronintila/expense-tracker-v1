@@ -105,6 +105,7 @@
                     @selectUser="selectUser"
                     @onReset="resetUser"
                     :selectedUser="user"
+                    :usersParameters="{ params: { is_superadmin: false } }"
                 >
                     <template
                         v-slot:openDialog="{ bind, on, computedSelectedUser }"
@@ -413,7 +414,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="show_edit(item)"
+                            v-if="show_edit(item) && item.deleted_at == null"
                         >
                             mdi-pencil
                         </v-icon>
@@ -671,9 +672,15 @@ export default {
             this.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
             this.$router.push({
                 name: "admin.expenses.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {

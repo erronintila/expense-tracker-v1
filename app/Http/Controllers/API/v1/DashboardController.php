@@ -261,21 +261,11 @@ class DashboardController extends Controller
     public function expense_stats(Request $request)
     {
         $expenses_by_date = Expense::whereBetween('date', [request("start_date"), request("end_date")])
-            ->with(['user' => function ($query) {
-                $query->withTrashed();
-            }])
-                ->with(['expense_type' => function ($query) {
-                    $query->withTrashed();
-                }])
-                ->with(['expense_report' => function ($query) {
-                    $query->withTrashed();
-                }])
-                ->with(['sub_type' => function ($query) {
-                    $query->withTrashed();
-                }])
-                ->with(['vendor' => function ($query) {
-                    $query->withTrashed();
-                }])
+            ->with('user')
+                ->with('expense_type')
+                ->with('expense_report')
+                ->with('sub_type')
+                ->with('vendor')
             ->whereHas('expense_report', function ($q) {
                 $q->where('submitted_at', "<>", null);
                 $q->where('approved_at', '<>', null);
@@ -288,47 +278,26 @@ class DashboardController extends Controller
         $all_expenses = Expense::all();
         $users = User::all();
 
-        $unsubmitted_reports = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $unsubmitted_reports = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->whereHas('expense_report', function ($q) {
                 $q->where('submitted_at', null);
                 $q->where('approved_at', null);
                 $q->where('rejected_at', null);
                 $q->where('cancelled_at', null);
                 $q->where('deleted_at', null);
-
                 $q->whereDoesntHave("payments");
             })
             ->get();
 
-        $submitted_reports = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $submitted_reports = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->whereHas('expense_report', function ($q) {
                 $q->where('submitted_at', "<>", null);
                 $q->where('approved_at', null);
@@ -340,21 +309,11 @@ class DashboardController extends Controller
             })
             ->get();
 
-        $approved_reports = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $approved_reports = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->whereHas("expense_report", function ($query) {
                 $query->where([
                 ["submitted_at", "<>", null],
@@ -367,21 +326,11 @@ class DashboardController extends Controller
                 $query->whereDoesntHave("payments");
             })->get();
 
-        $payment_to_receive = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $payment_to_receive = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->whereHas("expense_report", function ($query) {
                 $query->where([
                     ["submitted_at", "<>", null],
@@ -413,37 +362,17 @@ class DashboardController extends Controller
         //
         //
         //
-        $total_expenses_by_date = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $total_expenses_by_date = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->whereBetween('date', [request("start_date"), request("end_date")])->get();
-        $pending_expenses = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $pending_expenses = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->with(['expense_report' => function ($q) {
                 $q->where('submitted_at', "<>", null);
                 $q->where('approved_at', null);
@@ -455,31 +384,17 @@ class DashboardController extends Controller
             ->get()
             ->where('expense_report', '<>', null);
 
-        $total_expenses = Expense::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['expense_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['expense_report' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['sub_type' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['vendor' => function ($query) {
-                $query->withTrashed();
-            }])
+        $total_expenses = Expense::with('user')
+            ->with('expense_type')
+            ->with('expense_report')
+            ->with('sub_type')
+            ->with('vendor')
             ->whereBetween('date', [request("start_date"), request("end_date")])
             ->where(function ($q) {
                 $q->whereHas("expense_report");
                 $q->orWhereDoesntHave("expense_report");
             })
             ->get();
-
-        //
-        //
-        //
 
         // if (request()->has('user_id') && request()->has("admin_page")) {
         if (request()->has('user_id')) {

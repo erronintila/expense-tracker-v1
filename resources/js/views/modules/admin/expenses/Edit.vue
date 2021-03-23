@@ -226,6 +226,7 @@ export default {
                         this.mixin_showErrors(error);
                         this.loading = false;
                         this.formDataLoaded = true;
+                        this.$router.push({ name: "admin.expenses.index" }, () => {});
                         reject();
                     });
             });

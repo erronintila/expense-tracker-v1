@@ -167,6 +167,7 @@ export default {
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
+                    this.$router.push({ name: "admin.users.index" }, () => {});
                 });
         },
         onSave() {

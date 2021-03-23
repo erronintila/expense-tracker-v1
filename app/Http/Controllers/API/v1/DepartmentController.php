@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Requests\Department\DepartmentStoreRequest;
 use App\Http\Requests\Department\DepartmentUpdateRequest;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
@@ -31,7 +32,7 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        if(!request("isSelection") || !request()->has("isSelection")) {
+        if (!request("isSelection") || !request()->has("isSelection")) {
             if (!app("auth")->user()->hasPermissionTo('view all departments')) {
                 abort(403);
             }
@@ -42,10 +43,8 @@ class DepartmentController extends Controller
         $sortType = request('sortType') ?? "asc";
         $itemsPerPage = request('itemsPerPage') ?? 10;
 
-        $departments = Department::with(['jobs' => function ($query) {
-            $query->withTrashed();
-        }])
-        ->orderBy($sortBy, $sortType);
+        $departments = Department::with('jobs')
+            ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch (request('status')) {
@@ -95,10 +94,8 @@ class DepartmentController extends Controller
     {
         $message = "Department retrieved successfully"; // return message
 
-        $department = Department::withTrashed()
-            ->with(['jobs' => function ($query) {
-                $query->withTrashed();
-            }])
+        $department = Department::
+            with('jobs')
             ->findOrFail($id);
 
         return $this->successResponse(new DepartmentResource($department), $message, 200);
@@ -116,7 +113,7 @@ class DepartmentController extends Controller
         $validated = $request->validated(); // check validation
         $message = "Department updated successfully"; // return message
 
-        $department = Department::withTrashed()->findOrFail($id);
+        $department = Department::findOrFail($id);
         $department->name = request('name');
         $department->save();
 
@@ -131,20 +128,17 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Department deleted successfully"; // return message
+        $message = "Department(s) deleted successfully"; // return message
 
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $department = Department::findOrFail($id);
-                $department->delete();
+        DB::transaction(function () use ($message, $id) {
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    Department::findOrFail($id)->delete();
+                }
+            } else {
+                Department::findOrFail($id)->delete();
             }
-
-            $message = "Department(s) deleted successfully";
-        } else {
-            $department = Department::findOrFail($id);
-            $department->delete();
-            $message = "Department deleted successfully";
-        }
+        });
 
         return $this->successResponse(null, $message, 200);
     }
@@ -164,24 +158,17 @@ class DepartmentController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Department restored successfully"; // return message
+        $message = "Department(s) restored successfully"; // return message
 
-        if (request()->has("ids")) {
-            // $department = Department::withTrashed()
-            //     ->whereIn('id', request('')ids)
-            //     ->restore();
-        
-            foreach (request('ids') as $id) {
-                $department = Department::withTrashed()->findOrFail($id);
-                $department->restore();
-                $message = "Department(s) restored successfully";
+        DB::transaction(function () use ($id) {
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    Department::onlyTrashed()->findOrFail($id)->restore();
+                }
+            } else {
+                Department::onlyTrashed()->findOrFail($id)->restore();
             }
-        } else {
-            $department = Department::withTrashed()->findOrFail($id);
-            $department->restore();
-            $message = "Department restored successfully";
-        }
-
+        });
         return $this->successResponse(null, $message, 201);
     }
 

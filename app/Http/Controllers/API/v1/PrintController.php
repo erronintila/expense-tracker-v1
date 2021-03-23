@@ -24,12 +24,11 @@ class PrintController extends Controller
     public function print(Request $request)
     {
         if (request()->has("expense_report_detailed")) {
-            $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->get();
-            $expense_report = ExpenseReport::withTrashed()->where("id", request("expense_report_id"));
-
+            $expense_types = ExpenseType::where('expense_type_id', null)->get();
+            $expense_report = ExpenseReport::where("id", request("expense_report_id"));
             $expense_report = new ExpenseReportResource($expense_report->first());
 
-            $data =  $expense_report->expenses()->withTrashed()->get()
+            $data =  $expense_report->expenses()->get()
                 ->sortBy("date")
                 ->groupBy("date")
                 ->map(function ($row) {
@@ -61,7 +60,7 @@ class PrintController extends Controller
                 array_push($main, $temp);
             }
 
-            $expenses = $expense_report->expenses()->withTrashed()->orderBy("date")->get()
+            $expenses = $expense_report->expenses()->orderBy("date")->get()
                 // ->sortBy("date")
                 // ->groupBy("id")
                 ->map(function ($row) {
@@ -104,12 +103,12 @@ class PrintController extends Controller
         }
 
         if (request()->has("expense_report_summary")) {
-            $expense_types = ExpenseType::withTrashed()->where('expense_type_id', null)->get();
-            $expense_report = ExpenseReport::withTrashed()->where("id", request("expense_report_id"));
+            $expense_types = ExpenseType::where('expense_type_id', null)->get();
+            $expense_report = ExpenseReport::where("id", request("expense_report_id"));
 
             $expense_report = new ExpenseReportResource($expense_report->first());
 
-            $data =  $expense_report->expenses()->withTrashed()->get()
+            $data =  $expense_report->expenses()->get()
                 ->sortBy("date")->groupBy("date")
                 ->map(function ($row) {
                     return $row->groupBy('expense_type.name')->map(function ($row) {

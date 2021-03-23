@@ -125,6 +125,7 @@ export default {
                 ExpenseDataService.show(this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
+                        console.log("edit expenses", data);
                         this.form.code = data.code;
                         this.form.description = data.description;
                         this.form.receipt_number = data.receipt_number;
@@ -175,6 +176,7 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.formDataLoaded = true;
+                        this.$router.push({ name: "user.expenses.index" }, () => {});
                         reject();
                     });
             });

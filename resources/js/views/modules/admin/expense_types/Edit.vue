@@ -60,7 +60,7 @@ export default {
                     .catch(error => {
                         this.formDataLoaded = true;
                         this.mixin_showErrors(error);
-
+                        this.$router.push({ name: "admin.expense_types.index" }, () => {});
                         reject();
                     });
             });

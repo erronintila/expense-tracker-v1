@@ -51,7 +51,7 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text color="green" @click="editData">
+                                    <v-btn v-if="!$route.params.isDeleted" text color="green" @click="editData">
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -226,7 +226,17 @@ export default {
     },
     methods: {
         getData() {
-            VendorDataService.show(this.$route.params.id)
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
+            VendorDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
 
@@ -247,6 +257,7 @@ export default {
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
+                    this.$router.push({ name: "admin.vendors.index" }, () => {});
                 });
         },
         editData() {

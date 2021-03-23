@@ -59,19 +59,8 @@ class Department extends Model
         parent::boot();
 
         static::deleting(function ($department) {
-            if ($department->jobs()->count() > 0) {
-                abort(422, "Some records can't be deleted.");
-
-                // throw new JsonException("Model has child records", 422);
-
-                // abort("Model has child records", 401);
-
-                // abort(response()->json(['Model has child records'], 401));
-
-                // return abort(500, 'Model has child records');
-
-                // return response("Model has child records", 500);
-                // throw new Exception("Model have child records");
+            if ($department->jobs()->count()) {
+                abort(422, "Active job designation records found.");
             }
         });
     }

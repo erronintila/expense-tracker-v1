@@ -57,13 +57,27 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id).then(function (response) {
+      var data = {};
+
+      if (this.$route.params.isDeleted) {
+        data = {
+          params: {
+            isDeleted: true
+          }
+        };
+      }
+
+      _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.$route.params.id, data).then(function (response) {
         _this.formDataLoaded = true;
         _this.form.name = response.data.data.name;
       })["catch"](function (error) {
         _this.formDataLoaded = true;
 
         _this.mixin_showErrors(error);
+
+        _this.$router.push({
+          name: "admin.departments.index"
+        }, function () {});
       });
     },
     onSave: function onSave(value) {

@@ -163,25 +163,25 @@ const adminRoutes = [
                     keepAlive: false
                 }
             },
-            {
-                path: "/admin/departments/:id",
-                name: "admin.departments.show",
-                component: () =>
-                    import("../../views/modules/admin/departments/Show.vue"),
-                beforeEnter: (to, from, next) => {
-                    let permissions = store.getters.user.permissions;
-                    permissions = permissions.map(item => item.name);
+            // {
+            //     path: "/admin/departments/:id",
+            //     name: "admin.departments.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/departments/Show.vue"),
+            //     beforeEnter: (to, from, next) => {
+            //         let permissions = store.getters.user.permissions;
+            //         permissions = permissions.map(item => item.name);
 
-                    if (permissions.includes("view departments")) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                },
-                meta: {
-                    keepAlive: true
-                }
-            },
+            //         if (permissions.includes("view departments")) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     },
+            //     meta: {
+            //         keepAlive: true
+            //     }
+            // },
             /**
              *
              *
@@ -369,25 +369,25 @@ const adminRoutes = [
                     keepAlive: false
                 }
             },
-            {
-                path: "/admin/expense_types/:id",
-                name: "admin.expense_types.show",
-                component: () =>
-                    import("../../views/modules/admin/expense_types/Show.vue"),
-                beforeEnter: (to, from, next) => {
-                    let permissions = store.getters.user.permissions;
-                    permissions = permissions.map(item => item.name);
+            // {
+            //     path: "/admin/expense_types/:id",
+            //     name: "admin.expense_types.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/expense_types/Show.vue"),
+            //     beforeEnter: (to, from, next) => {
+            //         let permissions = store.getters.user.permissions;
+            //         permissions = permissions.map(item => item.name);
 
-                    if (permissions.includes("view expense types")) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                },
-                meta: {
-                    keepAlive: true
-                }
-            },
+            //         if (permissions.includes("view expense types")) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     },
+            //     meta: {
+            //         keepAlive: true
+            //     }
+            // },
             /**
              *
              *
@@ -550,25 +550,25 @@ const adminRoutes = [
                     keepAlive: false
                 }
             },
-            {
-                path: "/admin/jobs/:id",
-                name: "admin.jobs.show",
-                component: () =>
-                    import("../../views/modules/admin/jobs/Show.vue"),
-                beforeEnter: (to, from, next) => {
-                    let permissions = store.getters.user.permissions;
-                    permissions = permissions.map(item => item.name);
+            // {
+            //     path: "/admin/jobs/:id",
+            //     name: "admin.jobs.show",
+            //     component: () =>
+            //         import("../../views/modules/admin/jobs/Show.vue"),
+            //     beforeEnter: (to, from, next) => {
+            //         let permissions = store.getters.user.permissions;
+            //         permissions = permissions.map(item => item.name);
 
-                    if (permissions.includes("view jobs")) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                },
-                meta: {
-                    keepAlive: true
-                }
-            },
+            //         if (permissions.includes("view jobs")) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     },
+            //     meta: {
+            //         keepAlive: true
+            //     }
+            // },
             /**
              *
              *
@@ -614,25 +614,25 @@ const adminRoutes = [
                     keepAlive: false
                 }
             },
-            {
-                path: "/admin/payments/:id/edit",
-                name: "admin.payments.edit",
-                component: () =>
-                    import("../../views/modules/admin/payments/Edit.vue"),
-                beforeEnter: (to, from, next) => {
-                    let permissions = store.getters.user.permissions;
-                    permissions = permissions.map(item => item.name);
+            // {
+            //     path: "/admin/payments/:id/edit",
+            //     name: "admin.payments.edit",
+            //     component: () =>
+            //         import("../../views/modules/admin/payments/Edit.vue"),
+            //     beforeEnter: (to, from, next) => {
+            //         let permissions = store.getters.user.permissions;
+            //         permissions = permissions.map(item => item.name);
 
-                    if (permissions.includes("edit payments")) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                },
-                meta: {
-                    keepAlive: false
-                }
-            },
+            //         if (permissions.includes("edit payments")) {
+            //             next();
+            //         } else {
+            //             next({ name: "error_403" });
+            //         }
+            //     },
+            //     meta: {
+            //         keepAlive: false
+            //     }
+            // },
             {
                 path: "/admin/payments/:id",
                 name: "admin.payments.show",

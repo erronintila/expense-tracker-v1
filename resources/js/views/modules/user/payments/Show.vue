@@ -414,7 +414,17 @@ export default {
     },
     methods: {
         getData() {
-            PaymentDataService.show(this.$route.params.id)
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
+            PaymentDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
 
@@ -473,6 +483,7 @@ export default {
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
+                    this.$router.push({ name: "user.payments.index" }, () => {});
                 });
         },
         getDataFromApi() {

@@ -522,6 +522,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -687,11 +688,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.selected = [];
     },
     onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
+
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true
+        };
+      }
+
       this.$router.push({
         name: "admin.expenses.show",
-        params: {
-          id: item.id
-        }
+        params: params
       });
     },
     onEdit: function onEdit(item) {
@@ -1174,7 +1184,10 @@ var render = function() {
                   _vm._v(" "),
                   _c("UserDialogSelector", {
                     ref: "userDialogSelector",
-                    attrs: { selectedUser: _vm.user },
+                    attrs: {
+                      selectedUser: _vm.user,
+                      usersParameters: { params: { is_superadmin: false } }
+                    },
                     on: { selectUser: _vm.selectUser, onReset: _vm.resetUser },
                     scopedSlots: _vm._u([
                       {
@@ -1758,7 +1771,7 @@ var render = function() {
                                   ]
                                 ),
                                 _vm._v(" "),
-                                _vm.show_edit(item)
+                                _vm.show_edit(item) && item.deleted_at == null
                                   ? _c(
                                       "v-icon",
                                       {

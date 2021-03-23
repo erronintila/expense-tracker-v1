@@ -399,20 +399,11 @@
                         }}
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon
-                            small
-                            class="mr-2"
-                            @click="
-                                $router.push({
-                                    name: 'admin.users.show',
-                                    params: { id: item.id }
-                                })
-                            "
-                        >
+                        <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
                         <v-icon
-                            v-if="mixin_can('edit users')"
+                            v-if="mixin_can('edit users') && item.is_active == 1 && item.deleted_at == null"
                             small
                             class="mr-2"
                             @click="
@@ -540,6 +531,18 @@ export default {
         };
     },
     methods: {
+        onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
+            this.$router.push({
+                name: "admin.users.show",
+                params: params
+            });
+        },
         changeStatus() {},
         onChangeDepartment(e) {
             this.department = e;

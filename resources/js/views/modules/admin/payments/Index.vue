@@ -101,6 +101,7 @@
                     @selectUser="selectUser"
                     @onReset="resetUser"
                     :selectedUser="user"
+                    :usersParameters="{ params: { is_superadmin: false } }"
                 >
                     <template
                         v-slot:openDialog="{ bind, on, computedSelectedUser }"
@@ -453,9 +454,15 @@ export default {
             this.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
             this.$router.push({
                 name: "admin.payments.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {

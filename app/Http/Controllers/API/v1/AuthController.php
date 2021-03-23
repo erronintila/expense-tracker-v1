@@ -66,7 +66,7 @@ class AuthController extends Controller
                 return response()->json($validator->errors(), 422);
             }
 
-            $user = User::withTrashed()->findOrFail($authenticated_user->id);
+            $user = User::findOrFail($authenticated_user->id);
 
             $token = $user->createToken('authToken')->accessToken;
 

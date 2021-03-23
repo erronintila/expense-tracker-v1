@@ -44,7 +44,17 @@ export default {
     },
     methods: {
         getData() {
-            DepartmentDataService.show(this.$route.params.id)
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
+            DepartmentDataService.show(this.$route.params.id, data)
                 .then(response => {
                     this.formDataLoaded = true;
                     this.form.name = response.data.data.name;
@@ -52,6 +62,7 @@ export default {
                 .catch(error => {
                     this.formDataLoaded = true;
                     this.mixin_showErrors(error);
+                    this.$router.push({ name: "admin.departments.index" }, () => {});
                 });
         },
         onSave(value) {

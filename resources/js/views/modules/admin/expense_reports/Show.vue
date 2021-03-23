@@ -1167,9 +1167,19 @@ export default {
             });
         },
         getData() {
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
             this.formDataLoaded = false;
             return new Promise((resolve, reject) => {
-                ExpenseReportDataService.show(this.router_params_id)
+                ExpenseReportDataService.show(this.router_params_id, data)
                     .then(response => {
                         let data = response.data.data;
 
@@ -1220,6 +1230,7 @@ export default {
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
+                        this.$router.push({ name: "admin.expense_reports.index" }, () => {});
                         reject();
                     });
             });

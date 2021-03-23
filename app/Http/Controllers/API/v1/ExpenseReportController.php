@@ -53,24 +53,17 @@ class ExpenseReportController extends Controller
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
-        $expense_reports = ExpenseReport::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
-            ->with(['payments' => function ($query) {
-                $query->withTrashed();
-            }])
+        $expense_reports = ExpenseReport::with('user')
+            ->with('payments')
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
             switch (request("status")) {
-
                 case 'Overdue Expense Reports':
                     $expense_reports = $expense_reports;
-
                     break;
                 case 'Cancelled Expense Reports':
                     $expense_reports = $expense_reports->onlyTrashed();
-
                     break;
                 case 'Reimbursed Expense Reports':
                     $expense_reports = $expense_reports->where([
@@ -88,7 +81,6 @@ class ExpenseReportController extends Controller
                                 ["deleted_at", "=", null],
                             ]);
                         });
-
                     break;
                 case 'Rejected Expense Reports':
                     $expense_reports = $expense_reports->where([
@@ -97,7 +89,6 @@ class ExpenseReportController extends Controller
                         ["rejected_at", "<>", null],
                         // ["cancelled_at", "=", null],
                     ]);
-
                     break;
                 case 'Approved Expense Reports':
                     $expense_reports = $expense_reports->where([
@@ -106,7 +97,6 @@ class ExpenseReportController extends Controller
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
                     ])->whereDoesntHave("payments");
-
                     break;
                 case 'Submitted Expense Reports':
                     $expense_reports = $expense_reports->where([
@@ -115,7 +105,6 @@ class ExpenseReportController extends Controller
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
                     ])->whereDoesntHave("payments");
-
                     break;
                 case 'Unsubmitted Expense Reports':
                     $expense_reports = $expense_reports->where([
@@ -124,12 +113,9 @@ class ExpenseReportController extends Controller
                         ["rejected_at", "=", null],
                         ["cancelled_at", "=", null],
                     ])->whereDoesntHave("payments");
-
                     break;
-
                 default:
                     $expense_reports = $expense_reports;
-
                     break;
             }
         }
@@ -164,9 +150,7 @@ class ExpenseReportController extends Controller
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
             $end_date = Carbon::parse(request("end_date"))->endOfDay();
 
-            $expense_reports = ExpenseReport::with(['user' => function ($query) {
-                $query->withTrashed();
-            }])
+            $expense_reports = ExpenseReport::with('user')
                 ->where(function ($query) use ($search) {
                     $query->where('code', "like", "%" . $search . "%");
                     $query->orWhere('description', "like", "%" . $search . "%");
@@ -209,7 +193,7 @@ class ExpenseReportController extends Controller
         $expense_report->save();
 
         foreach (request("expenses") as $key => $value) {
-            $expense = Expense::withTrashed()->findOrFail($value["id"]);
+            $expense = Expense::findOrFail($value["id"]);
             $expense->expense_report_id = $expense_report->id;
             $expense->disableLogging();
             $expense->save();
@@ -242,15 +226,22 @@ class ExpenseReportController extends Controller
     {
         $message = "Expense Report retrieved successfully";
 
-        $expense_report = ExpenseReport::withTrashed()
-            ->with(['user' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->with(['payments' => function ($query) {
-                $query->withTrashed();
-            }])
-            ->findOrFail($id);
-
+        if(request()->has("isDeleted")) {
+            if(request("isDeleted") != null) {
+                $expense_report = ExpenseReport::withTrashed()
+                ->with(['user' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->with(['payments' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->findOrFail($id);
+            }
+        } else {
+            $expense_report = ExpenseReport::with('user')
+                ->with('payments')
+                ->findOrFail($id);
+        }
         return $this->successResponse(new ExpenseReportShowResource($expense_report), $message, 200);
     }
 
@@ -265,47 +256,37 @@ class ExpenseReportController extends Controller
     {
         $validated = $request->validated();
         $message = "Expense Report updated successfully";
-
-        $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+        $expense_report = ExpenseReport::findOrFail($id);
 
         // // Prevent update if expense report has been cancelled
         if (Auth::user()->is_admin) {
             $count = 0;
-
-            $count = ExpenseReport::withTrashed()->where("id", $id)
-                    ->where(function ($query) {
-                        $query->whereHas('payments');
-                        $query->orWhere("cancelled_at", "<>", null);
-                        $query->orWhere("rejected_at", "<>", null);
-                        $query->orWhere("deleted_at", "<>", null);
-                    })
-                    ->count();
+            $count = ExpenseReport::where("id", $id)
+                ->where(function ($query) {
+                    $query->whereHas('payments');
+                    $query->orWhere("cancelled_at", "<>", null);
+                    $query->orWhere("rejected_at", "<>", null);
+                    $query->orWhere("deleted_at", "<>", null);
+                })
+                ->count();
                     
             if ($count > 0) {
                 return $this->errorResponse("Expense Report can't be edited.", 422);
             }
         } else {
             $count = 0;
-
-            $count = ExpenseReport::withTrashed()->where("id", $id)
-                    ->where(function ($query) {
-                        $query->where("approved_at", "<>", null);
-                        $query->orWhere("cancelled_at", "<>", null);
-                        $query->orWhere("rejected_at", "<>", null);
-                        $query->orWhere("deleted_at", "<>", null);
-                    })
-                    ->count();
+            $count = ExpenseReport::where("id", $id)
+                ->where(function ($query) {
+                    $query->where("approved_at", "<>", null);
+                    $query->orWhere("cancelled_at", "<>", null);
+                    $query->orWhere("rejected_at", "<>", null);
+                    $query->orWhere("deleted_at", "<>", null);
+                })
+                ->count();
                     
             if ($count > 0) {
                 return $this->errorResponse("Expense Report can't be edited.", 422);
             }
-            // if ($expense_report->approved_at !== null || $expense_report->rejected_at !== null || $expense_report->cancelled_at !== null || $expense_report->deleted_at !== null) {
-                    //     return $this->errorResponse("Action can't be performed", 422);
-                    // }
-
-                    // if ($expense_report->payment_id > 0) {
-                    //     return $this->errorResponse("Expense Report already has payment", 422);
-                    // }
         }
 
         $expense_report->description = request("description");
@@ -319,15 +300,14 @@ class ExpenseReportController extends Controller
 
         // set existing references to null
         foreach ($expense_report->expenses as $key => $value) {
-            $expense = Expense::withTrashed()->findOrFail($value["id"]);
+            $expense = Expense::findOrFail($value["id"]);
             $expense->expense_report_id = null;
-            // $expense->deleted_at = now();
             $expense->disableLogging();
             $expense->save();
         }
 
         foreach (request("expenses") as $key => $value) {
-            $expense = Expense::withTrashed()->findOrFail($value["id"]);
+            $expense = Expense::findOrFail($value["id"]);
             $expense->expense_report_id = $expense_report->id;
             $expense->deleted_at = null;
             $expense->disableLogging();
@@ -347,9 +327,7 @@ class ExpenseReportController extends Controller
                 "updated expense association with expense report #{$expense_report->code}"
             );
         }
-
         $message = "Expense Report updated successfully";
-
         return $this->successResponse(null, $message, 201);
     }
 
@@ -379,7 +357,7 @@ class ExpenseReportController extends Controller
 
         if (request()->has("ids")) {
             foreach (request("ids") as $id) {
-                $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+                $expense_report = ExpenseReport::findOrFail($id);
 
                 // // Prevent delete if expense report has been cancelled/deleted
                 // // Approved expense report can only be cancelled/deleted by Admin if expense report has no payment yet
@@ -388,32 +366,30 @@ class ExpenseReportController extends Controller
                 // }
 
                 $expense_report->deleted_by = Auth::id();
-                // $expense_report->notes = request("")notes;
+                // $expense_report->notes = request("notes");
                 $expense_report->disableLogging();
                 $expense_report->save();
                 $expense_report->enableLogging();
                 $expense_report->delete();
-
-                foreach ($expense_report->expenses as $expense) {
-                    $expense->delete();
-                }
+                $expense_report->expenses->each->delete();
+                // foreach ($expense_report->expenses as $expense) {
+                //     $expense->delete();
+                // }
             }
         } else {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+            $expense_report = ExpenseReport::findOrFail($id);
 
             // // Prevent delete if expense report has been cancelled/deleted
             // // Approved expense report can only be cancelled/deleted by Admin if expense report has no payment yet
             // if(true && !Auth::user()->is_admin) {
             //     abort(403);
             // }
-
-            // $expense_report->deleted_by = Auth::id();
-
             $expense_report->delete();
+            $expense_report->expenses->each->delete();
 
-            foreach ($expense_report->expenses as $expense) {
-                $expense->delete();
-            }
+            // foreach ($expense_report->expenses as $expense) {
+            //     $expense->delete();
+            // }
         }
 
         return response(
@@ -436,18 +412,15 @@ class ExpenseReportController extends Controller
 
         if (request()->has("ids")) {
             foreach (request("ids") as $id) {
-                $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
-        
+                $expense_report = ExpenseReport::onlyTrashed()->findOrFail($id);
                 $expense_report->restore();
-        
-                foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
-                    $expense->restore();
-                }
+                $expense_report->expenses()->onlyTrashed()->get()->each->restore();
+                // foreach ($expense_report->expenses()->onlyTrashed()->get() as $expense) {
+                //     $expense->restore();
+                // }
             }
-        
             $message = "Expense Report(s) restored successfully";
         }
-
         return $this->successResponse(null, $message, 201);
     }
 
@@ -504,20 +477,16 @@ class ExpenseReportController extends Controller
         // }
 
         foreach (request("ids") as $id) {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
-
+            $expense_report = ExpenseReport::findOrFail($id);
             $this->updateReport($expense_report, true, false, false, false, false);
-
             foreach (User::where("is_admin", 1)->get() as $user) {
                 Notification::send($user, new ExpenseReportNotification([
-                            "action" => "submit",
-                            "expense_report" => $expense_report
-                        ]));
+                        "action" => "submit",
+                        "expense_report" => $expense_report
+                    ]));
             }
         }
-
         $message = "Expense Report(s) submitted successfully";
-
         return $this->successResponse(null, $message, 201);
     }
 
@@ -543,7 +512,7 @@ class ExpenseReportController extends Controller
 
         // check if approved
         $approved = ExpenseReport::whereIn("id", request("ids"))
-                    ->where("approved_at", "<>", null)->count();
+            ->where("approved_at", "<>", null)->count();
 
         if ($approved > 0) {
             return $this->errorResponse("Expense Report has already been approved.", 422);
@@ -551,7 +520,7 @@ class ExpenseReportController extends Controller
 
         // check if has payment
         $paid = ExpenseReport::whereIn("id", request("ids"))
-                    ->whereHas("payments")->count();
+            ->whereHas("payments")->count();
 
         if ($paid > 0) {
             return $this->errorResponse("Expense Report has payment records", 422);
@@ -566,19 +535,14 @@ class ExpenseReportController extends Controller
         // }
 
         foreach (request("ids") as $id) {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
-
+            $expense_report = ExpenseReport::findOrFail($id);
             $this->updateReport($expense_report, false, false, true, false, false);
-
-            Notification::send(User::withTrashed()->find($expense_report->user->id), new ExpenseReportNotification([
-                        "action" => "approve",
-                        "expense_report" => $expense_report
-                    ]));
+            Notification::send(User::find($expense_report->user->id), new ExpenseReportNotification([
+                "action" => "approve",
+                "expense_report" => $expense_report
+            ]));
         }
-
         $message = "Expense Report(s) approved successfully";
-
-
         return $this->successResponse(null, $message, 201);
     }
 
@@ -611,18 +575,18 @@ class ExpenseReportController extends Controller
         // }
 
         foreach (request("ids") as $id) {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($id);
+            $expense_report = ExpenseReport::findOrFail($id);
             $this->updateReport($expense_report, false, false, false, true, false);
             $expense_report->notes = request("notes") ?? "";
             $expense_report->disableLogging();
             $expense_report->save();
 
-            Notification::send(User::withTrashed()->find($expense_report->user->id), new ExpenseReportNotification([
-                        "action" => "reject",
-                        "expense_report" => $expense_report
-                    ]));
+            Notification::send(User::find($expense_report->user->id), new ExpenseReportNotification([
+                "action" => "reject",
+                "expense_report" => $expense_report
+            ]));
 
-            foreach ($expense_report->expenses()->withTrashed()->get() as $expense) {
+            foreach ($expense_report->expenses()->get() as $expense) {
                 $expense_amount = $expense->amount - $expense->reimbursable_amount;
                 $expense->user->remaining_fund += $expense_amount;
                 $expense->user->disableLogging();
@@ -631,7 +595,6 @@ class ExpenseReportController extends Controller
         }
 
         $message = "Expense Report(s) rejected successfully";
-
         return $this->successResponse(null, $message, 201);
     }
 
@@ -645,13 +608,12 @@ class ExpenseReportController extends Controller
         }
 
         foreach (request("ids") as $value) {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($value);
+            $expense_report = ExpenseReport::findOrFail($value);
 
             // check if remaining fund will be less than zero when duplicated
-            $report_amount = $expense_report->expenses()->withTrashed()->sum("amount") - $expense_report->expenses()->withTrashed()->sum("reimbursable_amount");
+            $report_amount = $expense_report->expenses()->sum("amount") - $expense_report->expenses()->sum("reimbursable_amount");
 
-            $user = User::withTrashed()->findOrFail($expense_report->user_id);
-
+            $user = User::findOrFail($expense_report->user_id);
             if (($user->remaining_fund - $report_amount) < 0) {
                 return $this->errorResponse("Employee revolving fund can't be less than zero.", 422);
             }
@@ -670,16 +632,11 @@ class ExpenseReportController extends Controller
             $new_report->rejected_by = null;
             $new_report->cancelled_by = null;
             $new_report->deleted_by = null;
-
-            // $new_report->save();
-
             $new_report->code = generate_code(ExpenseReport::class, setting("expense_report.report_no.prefix"), setting("expense_report.report_no.num_length"));
-
             $new_report->save();
 
-            foreach ($expense_report->expenses()->withTrashed()->get() as $key => $value) {
-                $expense = Expense::withTrashed()->findOrFail($value["id"]);
-
+            foreach ($expense_report->expenses()->get() as $key => $value) {
+                $expense = Expense::findOrFail($value["id"]);
                 $new_expense = $expense->replicate();
                 $new_expense->code = generate_code(Expense::class, "EXP", 10);
                 $new_expense->deleted_at = null;
@@ -840,26 +797,12 @@ class ExpenseReportController extends Controller
     public function getExpenseReports(Request $request)
     {
         if (request()->has('edit_report')) {
-            $expense_report = ExpenseReport::withTrashed()
-            ->with(['user' => function ($query) {
-                $query->withTrashed();
-            }])
-            // ->with(['expenses' => function ($query) {
-            //     $query->withTrashed();
-            //     $query->with(['vendor' => function ($query) {
-            //         $query->withTrashed();
-            //     }]);
-            //     $query->with(['expense_type' => function ($query) {
-            //         $query->withTrashed();
-            //     }]);
-            // }])
-            // ->with('payments')
-            ->findOrFail(request("id"));
+            $expense_report = ExpenseReport::with('user')
+                ->findOrFail(request("id"));
 
             return response(
                 [
                 'data' => new ExpenseReportResource($expense_report),
-
                 'message' => 'Retrieved successfully'
             ],
                 200
@@ -867,14 +810,9 @@ class ExpenseReportController extends Controller
         }
 
         $expense_reports = ExpenseReport::with(['expenses' => function ($query) {
-            $query->withTrashed();
-            $query->with(['expense_type' => function ($query2) {
-                $query2->withTrashed();
-            }]);
+            $query->with('expense_type');
         }])
-        ->with(['user' => function ($query) {
-            $query->withTrashed();
-        }])
+        ->with('user')
         ->orderBy("created_at");
 
         if (request()->has("id")) {
@@ -884,11 +822,6 @@ class ExpenseReportController extends Controller
         if (request()->has("user_id")) {
             $expense_reports = $expense_reports->where("user_id", request("user_id"));
         }
-
-        // if (request()->has("payment_id")) {
-        //     // $expense_reports = $expense_reports->where("payment_id", request("")payment_id);
-        //     $expense_reports = $expense_reports;
-        // }
 
         if (request()->has("start_date") && request()->has("end_date")) {
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
@@ -924,19 +857,21 @@ class ExpenseReportController extends Controller
                 ["deleted_at", "=", null],
             ]);
 
-            if(request()->has("user_id")) {
+            if (request()->has("user_id")) {
                 if (request("user_id") > 0) {
                     $total_unsubmitted = $total_unsubmitted->where("user_id", request("user_id"));
                     $total_unapproved = $total_unapproved->where("user_id", request("user_id"));
                 }
             }
 
-            return $this->successResponse([
+            return $this->successResponse(
+                [
                 "total_unsubmitted" => $total_unsubmitted->count(),
                 "total_unapproved" => $total_unapproved->count()
-            ], 
-            "Success",
-            200);
+            ],
+                "Success",
+                200
+            );
         }
 
         if (request()->has("create_payment")) {

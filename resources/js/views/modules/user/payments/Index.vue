@@ -369,9 +369,15 @@ export default {
             this.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
             this.$router.push({
                 name: "user.payments.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {

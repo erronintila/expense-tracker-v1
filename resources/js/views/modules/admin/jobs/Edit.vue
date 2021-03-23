@@ -54,6 +54,7 @@ export default {
                         }
                     }
                     this.formDataLoaded = true;
+                    this.$router.push({ name: "admin.jobs.index" }, () => {});
                 });
         },
         onSave(value) {

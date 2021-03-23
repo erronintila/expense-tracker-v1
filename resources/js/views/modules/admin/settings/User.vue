@@ -9,7 +9,7 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title success--text">User Settings</h4>
+                <h4 class="title success--text">Employee Settings</h4>
             </v-card-title>
 
             <v-card class="mb-4">
@@ -35,7 +35,7 @@
                                         {{
                                             computedSelectedUser
                                                 ? computedSelectedUser.name
-                                                : "Select User"
+                                                : "Select Employee"
                                         }}
                                     </v-btn>
                                 </template>

@@ -39,7 +39,8 @@ class PaymentObserver
         // $received = $payment->getOriginal("received_at");
         // if ($received == null && $payment->received_at !== null) {
         foreach ($payment->expense_reports as $expense_report) {
-            $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
+            // $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
+            $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
             // $expense_report->paid_at = now();
             // $expense_report->paid_by = Auth::id();
             // $expense_report->save();
@@ -50,7 +51,8 @@ class PaymentObserver
                 // $expense->paid_by = Auth::id();
                 $expense->save();
                 // $expense->user->save();
-                $user = User::withTrashed()->findOrFail($expense->user_id);
+                // $user = User::withTrashed()->findOrFail($expense->user_id);
+                $user = User::findOrFail($expense->user_id);
                 $user->remaining_fund += $expense_amount;
                 $user->save();
             }

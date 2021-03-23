@@ -488,11 +488,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.collections.selected = [];
     },
     onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
+
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true
+        };
+      }
+
       this.$router.push({
         name: "admin.jobs.show",
-        params: {
-          id: item.id
-        }
+        params: params
       });
     },
     onEdit: function onEdit(item) {
@@ -1059,7 +1068,8 @@ var render = function() {
                           fn: function(ref) {
                             var item = ref.item
                             return [
-                              _vm.mixin_can("edit jobs")
+                              _vm.mixin_can("edit jobs") &&
+                              item.deleted_at == null
                                 ? _c(
                                     "v-icon",
                                     {

@@ -92,7 +92,7 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text color="green" @click="editUser">
+                                    <v-btn v-if="!$route.params.isDeleted" text color="green" @click="editUser">
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -376,7 +376,17 @@ export default {
                 });
         },
         getData() {
-            UserDataService.show(this.$route.params.id)
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
+            UserDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
 
@@ -403,6 +413,7 @@ export default {
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
+                    this.$router.push({ name: "admin.users.index" }, () => {});
                 });
         },
         editUser() {

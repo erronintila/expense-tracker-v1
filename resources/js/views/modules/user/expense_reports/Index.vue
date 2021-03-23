@@ -328,7 +328,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="show_edit(item)"
+                            v-if="show_edit(item) && item.deleted_at == null"
                         >
                             mdi-pencil
                         </v-icon>
@@ -1120,9 +1120,15 @@ export default {
             this.$store.dispatch("AUTH_SETTINGS");
         },
         onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
             this.$router.push({
                 name: "user.expense_reports.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {

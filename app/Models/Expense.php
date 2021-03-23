@@ -33,8 +33,26 @@ class Expense extends Model
     {
         parent::boot();
         static::deleting(function ($expense) {
-            if ($expense->expense_report()->count() > 0) {
+            if ($expense->expense_report()->count()) {
                 abort(422, "Some records can't be deleted.");
+            }
+        });
+
+        static::restoring(function ($expense) {
+            if ($expense->user()->onlyTrashed()->count()) {
+                abort(422, "No user found.");
+            }
+
+            if ($expense->vendor()->onlyTrashed()->count()) {
+                abort(422, "No vendor found.");
+            }
+
+            if ($expense->expense_type()->onlyTrashed()->count()) {
+                abort(422, "No expense type found.");
+            }
+
+            if ($expense->expense_report()->withTrashed()->count()) {
+                abort(422, "Expense Report was deleted.");
             }
         });
     }
@@ -458,7 +476,8 @@ class Expense extends Model
         if ($this->created_at) {
             return [
                 "created_at" => $this->created_at,
-                "created_by" => User::withTrashed()->findOrFail($this->created_by)
+                // "created_by" => User::withTrashed()->findOrFail($this->created_by)
+                "created_by" => User::findOrFail($this->created_by)
             ];
         }
 
@@ -475,7 +494,8 @@ class Expense extends Model
         if ($this->updated_at) {
             return [
                 "updated_at" => $this->updated_at,
-                "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
+                // "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
+                "updated_by" => User::findOrFail($this->updated_by)
             ];
         }
 
@@ -492,7 +512,8 @@ class Expense extends Model
         if ($this->deleted_at) {
             return [
                 "deleted_at" => $this->deleted_at,
-                "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
+                // "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
+                "deleted_by" => User::findOrFail($this->deleted_by)
             ];
         }
 
@@ -511,7 +532,8 @@ class Expense extends Model
         if ($expense_report && $expense_report->submitted_at) {
             return [
                 "submitted_at" => $expense_report->submitted_at,
-                "submitted_by" => User::withTrashed()->findOrFail($expense_report->submitted_by)
+                // "submitted_by" => User::withTrashed()->findOrFail($expense_report->submitted_by)
+                "submitted_by" => User::findOrFail($expense_report->submitted_by)
             ];
         }
 
@@ -530,7 +552,8 @@ class Expense extends Model
         if ($expense_report && $expense_report->reviewed_at) {
             return [
                 "reviewed_at" => $expense_report->reviewed_at,
-                "reviewed_by" => User::withTrashed()->findOrFail($expense_report->reviewed_by)
+                // "reviewed_by" => User::withTrashed()->findOrFail($expense_report->reviewed_by)
+                "reviewed_by" => User::findOrFail($expense_report->reviewed_by)
             ];
         }
 
@@ -549,7 +572,8 @@ class Expense extends Model
         if ($expense_report && $expense_report->approved_at) {
             return [
                 "approved_at" => $expense_report->approved_at,
-                "approved_by" => User::withTrashed()->findOrFail($expense_report->approved_by)
+                // "approved_by" => User::withTrashed()->findOrFail($expense_report->approved_by)
+                "approved_by" => User::findOrFail($expense_report->approved_by)
             ];
         }
 
@@ -568,7 +592,8 @@ class Expense extends Model
         if ($expense_report && $expense_report->rejected_at) {
             return [
                 "rejected_at" => $expense_report->rejected_at,
-                "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
+                // "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
+                "rejected_by" => User::findOrFail($expense_report->rejected_by)
             ];
         }
 
@@ -587,7 +612,8 @@ class Expense extends Model
         if ($expense_report && $expense_report->cancelled_at) {
             return [
                 "cancelled_at" => $expense_report->cancelled_at,
-                "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
+                // "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
+                "cancelled_by" => User::findOrFail($expense_report->cancelled_by)
             ];
         }
 
@@ -619,13 +645,13 @@ class Expense extends Model
         return null;
     }
 
-    public function getIsLateEncodedAttribute() {
-
+    public function getIsLateEncodedAttribute()
+    {
         $is_late_encoded = false;
         $due_date = Carbon::createFromFormat('Y-m-d', $this->date)->addDays($this->encoding_period ?? 0)->format("Y-m-d");
         $encoded_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format("Y-m-d");
 
-        if($due_date < $encoded_date) {
+        if ($due_date < $encoded_date) {
             $is_late_encoded = true;
         }
 

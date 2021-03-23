@@ -56,7 +56,13 @@ class Job extends Model
         parent::boot();
         static::deleting(function ($job) {
             if ($job->users()->count() > 0) {
-                abort(422, "Some records can't be deleted.");
+                abort(422, "Active user records found.");
+            }
+        });
+
+        static::restoring(function ($job) {
+            if ($job->department()->onlyTrashed()->count()) {
+                abort(422, "No department found.");
             }
         });
     }

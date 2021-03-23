@@ -32,7 +32,17 @@ class User extends Authenticatable
         parent::boot();
         static::deleting(function ($user) {
             if ($user->expenses()->count() > 0) {
-                abort(422, "Some records can't be deleted.");
+                abort(422, "Active expense records found.");
+            }
+
+            if ($user->expense_reports()->count() > 0) {
+                abort(422, "Active expense report records found.");
+            }
+        });
+
+        static::restoring(function ($user) {
+            if ($user->job()->onlyTrashed()->count()) {
+                abort(422, "No job designation found.");
             }
         });
     }

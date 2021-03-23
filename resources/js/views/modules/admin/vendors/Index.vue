@@ -259,7 +259,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit vendors')"
+                            v-if="mixin_can('edit vendors') && item.is_active == 1 && item.deleted_at == null"
                         >
                             mdi-pencil
                         </v-icon>
@@ -344,9 +344,15 @@ export default {
             this.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id }
+
+            if(item.deleted_at) {
+                params = { id: item.id, isDeleted: true }
+            }
+
             this.$router.push({
                 name: "admin.vendors.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {

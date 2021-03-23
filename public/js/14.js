@@ -780,15 +780,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -893,6 +884,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
+
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true
+        };
+      }
+
+      this.$router.push({
+        name: "admin.users.show",
+        params: params
+      });
+    },
     changeStatus: function changeStatus() {},
     onChangeDepartment: function onChangeDepartment(e) {
       this.department = e;
@@ -2068,10 +2076,7 @@ var render = function() {
                                     attrs: { small: "" },
                                     on: {
                                       click: function($event) {
-                                        return _vm.$router.push({
-                                          name: "admin.users.show",
-                                          params: { id: item.id }
-                                        })
+                                        return _vm.onShow(item)
                                       }
                                     }
                                   },
@@ -2082,7 +2087,9 @@ var render = function() {
                                   ]
                                 ),
                                 _vm._v(" "),
-                                _vm.mixin_can("edit users")
+                                _vm.mixin_can("edit users") &&
+                                item.is_active == 1 &&
+                                item.deleted_at == null
                                   ? _c(
                                       "v-icon",
                                       {

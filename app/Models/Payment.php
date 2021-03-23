@@ -264,7 +264,8 @@ class Payment extends Model
         if ($this->created_at) {
             return [
                 "created_at" => $this->created_at,
-                "created_by" => User::withTrashed()->find($this->created_by)
+                // "created_by" => User::withTrashed()->find($this->created_by)
+                "created_by" => User::find($this->created_by)
             ];
         }
 
@@ -281,7 +282,8 @@ class Payment extends Model
         if ($this->updated_at) {
             return [
                 "updated_at" => $this->updated_at,
-                "updated_by" => User::withTrashed()->find($this->updated_by)
+                // "updated_by" => User::withTrashed()->find($this->updated_by)
+                "updated_by" => User::find($this->updated_by)
             ];
         }
 
@@ -298,7 +300,8 @@ class Payment extends Model
         if ($this->deleted_at) {
             return [
                 "deleted_at" => $this->deleted_at,
-                "deleted_by" => User::withTrashed()->find($this->deleted_by)
+                // "deleted_by" => User::withTrashed()->find($this->deleted_by)
+                "deleted_by" => User::find($this->deleted_by)
             ];
         }
 
@@ -315,7 +318,8 @@ class Payment extends Model
         if ($this->approved_at) {
             return [
                 "approved_at" => $this->approved_at,
-                "approved_by" => User::withTrashed()->find($this->approved_by)
+                // "approved_by" => User::withTrashed()->find($this->approved_by)
+                "approved_by" => User::find($this->approved_by)
             ];
         }
 
@@ -332,7 +336,8 @@ class Payment extends Model
         if ($this->cancelled_at) {
             return [
                 "cancelled_at" => $this->cancelled_at,
-                "cancelled_by" => User::withTrashed()->find($this->cancelled_by)
+                // "cancelled_by" => User::withTrashed()->find($this->cancelled_by)
+                "cancelled_by" => User::find($this->cancelled_by)
             ];
         }
 
@@ -349,7 +354,8 @@ class Payment extends Model
         if ($this->released_at) {
             return [
                 "released_at" => $this->released_at,
-                "released_by" => User::withTrashed()->find($this->released_by)
+                // "released_by" => User::withTrashed()->find($this->released_by)
+                "released_by" => User::find($this->released_by)
             ];
         }
 
@@ -366,7 +372,8 @@ class Payment extends Model
         if ($this->received_at) {
             return [
                 "received_at" => $this->received_at,
-                "received_by" => User::withTrashed()->find($this->received_by)
+                // "received_by" => User::withTrashed()->find($this->received_by)
+                "received_by" => User::find($this->received_by)
             ];
         }
 

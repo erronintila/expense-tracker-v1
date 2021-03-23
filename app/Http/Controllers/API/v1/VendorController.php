@@ -11,6 +11,7 @@ use App\Http\Requests\Vendor\VendorStoreRequest;
 use App\Http\Requests\Vendor\VendorUpdateRequest;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\Vendor\VendorIndexResource;
+use Illuminate\Support\Facades\DB;
 
 class VendorController extends Controller
 {
@@ -112,8 +113,14 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $vendor = Vendor::withTrashed()->findOrFail($id);
-
+        if (request()->has("isDeleted")) {
+            if (request("isDeleted") != null) {
+                $vendor = Vendor::withTrashed()->findOrFail($id);
+            }
+        } else {
+            $vendor = Vendor::findOrFail($id);
+        }
+        
         return $this->successResponse(new VendorShowResource($vendor), 'Vendor retrieved successfully', 200);
     }
 
@@ -129,7 +136,7 @@ class VendorController extends Controller
         $validated = $request->validated();
         $message = "Vendor updated successfully";
 
-        $vendor = Vendor::withTrashed()->findOrFail($id);
+        $vendor = Vendor::findOrFail($id);
         $vendor->update($validated);
 
         // update expense types associated with vendor
@@ -150,23 +157,18 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Vendor deleted successfully";
+        $message = "Vendor(s) deleted successfully";
 
-        // check if multiple records
-        if (request()->has("ids")) {
-            // $vendor = Vendor::whereIn('id', request('ids'))->delete();
-
-            foreach (request('ids') as $id) {
-                $vendor = Vendor::findOrFail($id);
-                $vendor->delete();
+        DB::transaction(function () use ($id) {
+            // check if multiple records
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    Vendor::findOrFail($id)->delete();
+                }
+            } else {
+                Vendor::findOrFail($id)->delete();
             }
-
-            $message = "Vendor(s) deleted successfully";
-        } else {
-            $vendor = Vendor::findOrFail($id);
-            $vendor->delete();
-            $message = "Vendor deleted successfully";
-        }
+        });
 
         return $this->successResponse(null, $message, 200);
     }
@@ -186,25 +188,17 @@ class VendorController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Vendor restored successfully";
-
-        // check if multiple records
-        if (request()->has("ids")) {
-            // $vendor = Vendor::withTrashed()
-            //     ->whereIn('id', request('ids'))
-            //     ->restore();
-
-            foreach (request('ids') as $id) {
-                $vendor = Vendor::withTrashed()->findOrFail($id);
-                $vendor->restore();
+        $message = "Vendor(s) restored successfully";
+        DB::transaction(function () use ($id) {
+            // check if multiple records
+            if (request()->has("ids")) {
+                foreach (request('ids') as $id) {
+                    Vendor::onlyTrashed()->findOrFail($id)->restore();
+                }
+            } else {
+                Vendor::onlyTrashed()->findOrFail($id)->restore();
             }
-
-            $message = "Vendor(s) restored successfully";
-        } else {
-            $vendor = Vendor::withTrashed()->findOrFail($id);
-            $vendor->restore();
-        }
-
+        });
         return $this->successResponse(null, $message, 201);
     }
 
@@ -213,29 +207,31 @@ class VendorController extends Controller
         $activation = request("is_active") ? "activated" : "deactivated";
         $message = "Vendor {$activation} successfully";
 
-        if (request()->has("ids")) {
-            foreach (request("ids") as $id) {
-                $vendor = Vendor::withTrashed()->findOrFail($id);
+        DB::transaction(function () use ($activation, $id) {
+            if (request()->has("ids")) {
+                foreach (request("ids") as $id) {
+                    $vendor = Vendor::findOrFail($id);
+                    $vendor->disableLogging();
+                    $vendor->is_active = request("is_active");
+                    $vendor->save();
+    
+                    activity('vendor')
+                        ->performedOn($vendor)
+                        ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
+                        ->log("{$activation} vendor");
+                }
+            } else {
+                $vendor = Vendor::findOrFail($id);
                 $vendor->disableLogging();
                 $vendor->is_active = request("is_active");
                 $vendor->save();
-
+    
                 activity('vendor')
                     ->performedOn($vendor)
                     ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
                     ->log("{$activation} vendor");
             }
-        } else {
-            $vendor = Vendor::withTrashed()->findOrFail($id);
-            $vendor->disableLogging();
-            $vendor->is_active = request("is_active");
-            $vendor->save();
-
-            activity('vendor')
-                ->performedOn($vendor)
-                ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
-                ->log("{$activation} vendor");
-        }
+        });
         return $this->successResponse(null, $message, 200);
     }
 
@@ -246,11 +242,7 @@ class VendorController extends Controller
      */
     public function getVendors()
     {
-        $vendors = Vendor::with(['expense_types' => function ($query) {
-            $query->withTrashed();
-        }])
-        ->orderBy("name")->get();
-
+        $vendors = Vendor::with('expense_types')->orderBy("name")->get();
         return VendorResource::collection($vendors);
     }
 }

@@ -96,6 +96,7 @@ export default {
                         this.mixin_showErrors(error);
                         this.loader = false;
                         this.formDataLoaded = true;
+                        this.$router.push({ name: "admin.users.index" }, () => {});
                         reject();
                     });
             });

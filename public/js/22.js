@@ -1018,9 +1018,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getData: function getData() {
       var _this4 = this;
 
+      var data = {};
+
+      if (this.$route.params.isDeleted) {
+        data = {
+          params: {
+            isDeleted: true
+          }
+        };
+      }
+
       this.formDataLoaded = false;
       return new Promise(function (resolve, reject) {
-        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_4__["default"].show(_this4.router_params_id).then(function (response) {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_4__["default"].show(_this4.router_params_id, data).then(function (response) {
           var data = response.data.data;
           _this4.form.code = data.code;
           _this4.form.reference_no = data.reference_no;
@@ -1062,6 +1072,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           resolve();
         })["catch"](function (error) {
           _this4.mixin_showErrors(error);
+
+          _this4.$router.push({
+            name: "admin.expense_reports.index"
+          }, function () {});
 
           reject();
         });

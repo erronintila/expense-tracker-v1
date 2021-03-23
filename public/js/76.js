@@ -144,6 +144,7 @@ __webpack_require__.r(__webpack_exports__);
           var _data$details;
 
           var data = response.data.data;
+          console.log("edit expenses", data);
           _this.form.code = data.code;
           _this.form.description = data.description;
           _this.form.receipt_number = data.receipt_number;
@@ -196,6 +197,11 @@ __webpack_require__.r(__webpack_exports__);
           _this.mixin_showErrors(error);
 
           _this.formDataLoaded = true;
+
+          _this.$router.push({
+            name: "user.expenses.index"
+          }, function () {});
+
           reject();
         });
       });

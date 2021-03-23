@@ -124,9 +124,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // $user = $request->user();
         $user = User::with(['job' => function ($query) {
-            $query->withTrashed();
+            // $query->withTrashed();
             $query->with(['department' => function ($query) {
-                $query->withTrashed();
+                // $query->withTrashed();
             }]);
             // $query->with(['expense_types' => function ($query) {
             //     $query->withTrashed();
@@ -136,9 +136,9 @@ Route::middleware('auth:sanctum')->group(function () {
             // }]);
         }])
         ->with(['expense_types' => function ($query) {
-            $query->withTrashed();
+            // $query->withTrashed();
             $query->with(['sub_types' => function ($query) {
-                $query->withTrashed();
+                // $query->withTrashed();
             }]);
         }])
         ->findOrFail(Auth::id());
