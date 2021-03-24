@@ -38,7 +38,6 @@ class PaymentStoreRequest extends FormRequest
             "remarks"  => ['nullable'],
             "notes" => ['nullable'],
             "user_id" => ['required'],
-            "expense_reports" => ['required'],
         ];
     }
 

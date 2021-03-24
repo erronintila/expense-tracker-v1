@@ -534,20 +534,20 @@ export default {
                     let url = "";
 
                     switch (action) {
-                        case "release":
-                            url = `/api/payments/release_payment/${this.selected[0].id}`;
-                            break;
+                        // case "release":
+                        //     url = `/api/payments/release_payment/${ids}`;
+                        //     break;
                         case "receive":
-                            url = `/api/payments/receive_payment/${this.selected[0].id}`;
+                            url = `/api/payments/receive_payment/${ids}`;
                             break;
                         case "complete":
-                            url = `/api/payments/complete_payment/${this.selected[0].id}`;
+                            url = `/api/payments/complete_payment/${ids}`;
                             break;
-                        case "update":
-                            url = `/api/payments/${this.selected[0].id}`;
-                            break;
+                        // case "update":
+                        //     url = `/api/payments/${this.selected[0].id}`;
+                        //     break;
                         case "cancel":
-                            url = `/api/payments/${this.selected[0].id}`;
+                            url = `/api/payments/${ids}`;
                             break;
                         default:
                             this.mixin_errorDialog(
@@ -561,9 +561,9 @@ export default {
                     axios({
                         method: method,
                         url: url,
-                        data: {
-                            ids: ids
-                        }
+                        // data: {
+                        //     ids: ids
+                        // }
                     })
                         .then(response => {
                             this.mixin_successDialog(

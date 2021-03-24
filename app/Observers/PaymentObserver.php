@@ -4,8 +4,9 @@ namespace App\Observers;
 
 use App\Models\ExpenseReport;
 use App\Models\Payment;
+use App\Notifications\PaymentNotification;
 use App\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class PaymentObserver
 {
@@ -17,10 +18,10 @@ class PaymentObserver
      */
     public function created(Payment $payment)
     {
-        // $payment->code = "PV" . date("Y") . str_pad($payment->id, 5, '0', STR_PAD_LEFT);
-        // $payment->save();
-        // $payment->amount = $payment->getTotalAmountAttribute();
-        // $payment->save();
+        Notification::send($payment->user, new PaymentNotification([
+            "action" => "release",
+            "payment" => $payment
+        ]));
     }
 
     /**
@@ -58,27 +59,6 @@ class PaymentObserver
             }
         }
         // }
-    }
-
-    /**
-     * Handle the payment "deleting" event.
-     *
-     * @param  \App\Models\Payment  $payment
-     * @return void
-     */
-    public function deleting(Payment $payment)
-    {
-        // if ($payment->received_at !== null) {
-        //     foreach ($payment->expense_reports as $expense_report) {
-        //         foreach ($expense_report->expenses as $expense) {
-        //             $expense_amount = $expense->amount - $expense->reimbursable_amount;
-        //             $expense->user->remaining_fund -= $expense_amount;
-        //             $expense->user->save();
-        //         }
-        //     }
-        // }
-        // $payment->deleted_by = Auth::id();
-        // $payment->save();
     }
 
     /**

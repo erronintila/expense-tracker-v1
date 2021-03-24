@@ -559,24 +559,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var url = "";
 
           switch (action) {
-            case "release":
-              url = "/api/payments/release_payment/".concat(_this2.selected[0].id);
-              break;
-
+            // case "release":
+            //     url = `/api/payments/release_payment/${ids}`;
+            //     break;
             case "receive":
-              url = "/api/payments/receive_payment/".concat(_this2.selected[0].id);
+              url = "/api/payments/receive_payment/".concat(ids);
               break;
 
             case "complete":
-              url = "/api/payments/complete_payment/".concat(_this2.selected[0].id);
+              url = "/api/payments/complete_payment/".concat(ids);
               break;
-
-            case "update":
-              url = "/api/payments/".concat(_this2.selected[0].id);
-              break;
+            // case "update":
+            //     url = `/api/payments/${this.selected[0].id}`;
+            //     break;
 
             case "cancel":
-              url = "/api/payments/".concat(_this2.selected[0].id);
+              url = "/api/payments/".concat(ids);
               break;
 
             default:
@@ -588,10 +586,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           axios({
             method: method,
-            url: url,
-            data: {
-              ids: ids
-            }
+            url: url // data: {
+            //     ids: ids
+            // }
+
           }).then(function (response) {
             _this2.mixin_successDialog(response.data.status, response.data.message);
 
