@@ -232,7 +232,7 @@
 
             <v-row class="ml-4" v-if="selected.length > 0">
                 <v-chip
-                    v-show="selected.length == 1 && status == 'Active'"
+                    v-show="selected.length > 0 && status == 'Active'"
                     close
                     class="mr-2 mb-2"
                     small
@@ -403,7 +403,11 @@
                             mdi-eye
                         </v-icon>
                         <v-icon
-                            v-if="mixin_can('edit users') && item.is_active == 1 && item.deleted_at == null"
+                            v-if="
+                                mixin_can('edit users') &&
+                                    item.is_active == 1 &&
+                                    item.deleted_at == null
+                            "
                             small
                             class="mr-2"
                             @click="
@@ -532,10 +536,10 @@ export default {
     },
     methods: {
         onShow(item) {
-            let params = { id: item.id }
+            let params = { id: item.id };
 
-            if(item.deleted_at) {
-                params = { id: item.id, isDeleted: true }
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
             }
 
             this.$router.push({
@@ -632,12 +636,11 @@ export default {
 
             this.$confirm("Do you want to reset password?").then(res => {
                 if (res) {
-                    let data = {
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    };
-                    UserDataService.resetPassword(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+
+                    UserDataService.resetPassword(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -663,14 +666,11 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    let data = {
-                        params: {
-                            ids: this.selected.map(item => {
-                                return item.id;
-                            })
-                        }
-                    };
-                    UserDataService.delete(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+
+                    UserDataService.delete(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -696,12 +696,11 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    let data = {
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    };
-                    UserDataService.restore(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+
+                    UserDataService.restore(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -731,13 +730,13 @@ export default {
                 } account(s)?`
             ).then(res => {
                 if (res) {
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
                     let data = {
-                        is_active: is_active,
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
+                        is_active: is_active
                     };
-                    UserDataService.updateActivation(this.selected[0].id, data)
+                    UserDataService.updateActivation(ids, data)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,

@@ -8,7 +8,6 @@ use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
 use App\Exports\UsersExport;
 use Illuminate\Http\Request;
-use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -30,7 +29,6 @@ class UserController extends Controller
 
     public function __construct()
     {
-        // $this->middleware(['permission:view all users'], ['only' => ['index']]);
         $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
@@ -148,9 +146,6 @@ class UserController extends Controller
         });
 
         $users = $users->paginate($itemsPerPage);
-
-        // return UserResource::collection($users);
-        
         return UserOnlyResource::collection($users);
     }
 
@@ -162,34 +157,17 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
-        $message = "User created successfully"; // return message
-        $user = new User();
-
-        DB::transaction(function () use ($user) {
+        $validated = $request->validated();
+        $data = DB::transaction(function () use ($validated) {
             $expense_types = ExpenseType::where("expense_type_id", null)->get();
+            $job = Job::findOrFail($validated["job_id"]);
 
-            $user->code = request("code") ?? generate_code(User::class, "USR", 10);
-            $user->first_name = request("first_name");
-            $user->middle_name = request("middle_name");
-            $user->last_name = request("last_name");
-            $user->suffix = request("suffix");
-            $user->gender = request("gender");
-            $user->birthdate = request("birthdate");
-            $user->mobile_number = request("mobile_number");
-            $user->telephone_number = request("telephone_number");
-            $user->address = request("address");
-            $user->fund = request("fund");
-            $user->remaining_fund = request("fund");
-            $user->username = request("username");
-            $user->email    = request("email");
-            $user->password = Hash::make(request("password"));
-            $user->is_active = request("is_active");
-            $user->is_admin = request("is_admin");
-            $user->is_superadmin = request("is_superadmin");
-            $user->can_login = request("can_login");
-            $user->type = request("type");
-            $user->job_id = request("job_id");
+            $user = new User();
+            $user->fill($validated);
+            $user->code = $validated["code"] ?? generate_code(User::class, "USR", 10);
+            $user->remaining_fund = $validated["fund"];
+            $user->password = Hash::make($validated["password"]);
+            $user->job()->associate($job);
             $user->save();
 
             foreach (request("permissions") as $permission) {
@@ -197,9 +175,11 @@ class UserController extends Controller
             }
 
             $user->expense_types()->sync($expense_types);
+            return $user;
         });
 
-        return $this->successResponse(new UserResource($user), $message, 201);
+        $message = "User created successfully";
+        return $this->successResponse($data, $message, 201);
     }
 
     /**
@@ -253,36 +233,20 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
-        $message = "User updated successfully"; // return message
+        $validated = $request->validated();
+        $job = Job::findOrFail($validated["job_id"]);
 
         $user = User::findOrFail($id);
-
-        $user->code = request("code") ?? $user->code;
-        $user->first_name = request("first_name");
-        $user->middle_name = request("middle_name");
-        $user->last_name = request("last_name");
-        $user->suffix = request("suffix");
-        $user->gender = request("gender");
-        $user->birthdate = request("birthdate");
-        $user->mobile_number = request("mobile_number");
-        $user->telephone_number = request("telephone_number");
-        $user->address = request("address");
-        $user->username = request("username");
-        $user->email = request("email");
-        $user->type = request("type");
-
+        $user->fill($validated);
+        $user->code = $validated["code"] ?? $user->code;
         $user->password = $user->password;
         $user->fund = $user->fund;
         $user->remaining_fund = $user->remaining_fund;
-        $user->is_active = request("is_active");
-        $user->is_admin = request("is_admin");
-        $user->is_superadmin = request("is_superadmin");
-        $user->job_id = request("job_id");
-
+        $user->job()->associate($job);
         $user->save();
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
 
     /**
@@ -293,18 +257,14 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    User::findOrFail($id)->delete();
-                }
-            } else {
-                User::findOrFail($id)->delete();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = User::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
         });
 
         $message = "User(s) deleted successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -315,32 +275,19 @@ class UserController extends Controller
 
     public function restore(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    $user = User::onlyTrashed()->findOrFail($id);
-                    $user->disableLogging();
-                    $user->restore();
-                }
-            } else {
-                $user = User::onlyTrashed()->findOrFail($id);
-                $user->disableLogging();
-                $user->restore();
-            }
-    
-            activity('user')
-                ->performedOn($user)
-                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-                ->log("restored user");
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = User::onlyTrashed()->findOrFail($ids);
+            $data->each->restore();
+            return $data;
         });
 
-        $message = "User restored successfully";
-        return $this->successResponse(null, $message, 200);
+        $message = "User(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_settings(Request $request, $id)
     {
-        $message = "User settings updated successfully";
         $user = User::findOrFail($id);
 
         if (request()->has("expense_types")) {
@@ -352,13 +299,12 @@ class UserController extends Controller
             ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
             ->log("updated user settings");
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User settings updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
 
     public function update_fund(Request $request, $id)
     {
-        $message = "User fund updated successfully";
-
         $user = User::findOrFail($id);
         $user->fund = request("fund");
         $user->remaining_fund = request("remaining_fund");
@@ -370,101 +316,86 @@ class UserController extends Controller
             ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
             ->log("updated user fund");
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User fund updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
 
     public function reset_password(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    $user = User::findOrFail($id);
-                    $user->password = Hash::make('password');
-                    $user->disableLogging();
-                    $user->save();
-                }
-            } else {
-                $user = User::findOrFail($id);
-                $user->password = Hash::make('password');
-                $user->disableLogging();
-                $user->save();
-            }
-    
-            activity('user')
-                ->performedOn($user)
-                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-                ->log("resetted user password");
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = User::findOrFail($ids);
+            $data->each(function ($item) {
+                activity()->disableLogging();
+                $item->password = Hash::make('password');
+                $item->save();
+
+                activity()->enableLogging();
+                activity('user')
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->full_name], 'custom' => ['link' => null]])
+                    ->log("resetted user password");
+            });
+            return $data;
         });
 
         $message = "User(s) password resetted successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     public function verify_email(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    $user = User::findOrFail($id);
-                    $user->email_verified_at = now();
-                    $user->disableLogging();
-                    $user->save();
-                }
-            } else {
-                $user = User::findOrFail($id);
-                $user->email_verified_at = now();
-                $user->disableLogging();
-                $user->save();
-            }
-    
-            activity('user')
-                ->performedOn($user)
-                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-                ->log("verified user email");
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = User::findOrFail($ids);
+            $data->each(function ($item) {
+                activity()->disableLogging();
+                $item->email_verified_at = now();
+                $item->save();
+
+                activity()->enableLogging();
+                activity('user')
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->full_name], 'custom' => ['link' => null]])
+                    ->log("verified user email");
+            });
+            return $data;
         });
 
         $message = "User(s) email verified successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
     {
         $validated = $request->validated();
+        $data = DB::transaction(function () use ($validated) {
+            $user = User::findOrFail(auth()->user()->id);
+            $user->disableLogging();
+            $user->update(['password' => Hash::make($validated["password"])]);
+
+            activity('user')
+                ->performedOn($user)
+                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
+                ->log("updated user password");
+
+            return $user;
+        });
+
         $message = "User password updated successfully";
-
-        $user = User::findOrFail(auth()->user()->id);
-        $user->disableLogging();
-        $user->update(['password' => Hash::make(request("password"))]);
-
-        activity('user')
-            ->performedOn($user)
-            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-            ->log("updated user password");
-
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_profile(UserProfileUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // check validation
-        $message = "User profile updated successfully"; // return message
 
         $user = User::findOrFail($id);
-        $user->first_name = request("first_name");
-        $user->middle_name = request("middle_name");
-        $user->last_name = request("last_name");
-        $user->suffix = request("suffix");
-        $user->gender = request("gender");
-        $user->birthdate = request("birthdate");
-        $user->mobile_number = request("mobile_number");
-        $user->telephone_number = request("telephone_number");
-        $user->address = request("address");
-        $user->username = request("username");
-        $user->email = request("email");
-        $user->type = request("type");
+        $user->fill($validated);
         $user->save();
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User profile updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
         
     /**
@@ -476,54 +407,49 @@ class UserController extends Controller
      */
     public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->can_login = request("can_login");
-        $user->is_admin = request("is_admin");
-        $user->save();
+        $validated = $request->validated();
+        $data = DB::transaction(function () use ($validated, $id) {
+            $user = User::findOrFail($id);
+            $user->fill($validated);
+            $user->save();
 
-        if (request()->has("permissions")) {
-            $user->syncPermissions([]);
-            $user->syncRoles([]);
-            foreach (request("permissions") as $permission) {
-                $user->givePermissionTo($permission["name"]);
+            if (request()->has("permissions")) {
+                $user->syncPermissions([]);
+                $user->syncRoles([]);
+                foreach (request("permissions") as $permission) {
+                    $user->givePermissionTo($permission["name"]);
+                }
             }
-        }
 
-        return $this->successResponse(null, "User permissions updated successfully.", 200);
+            return $user;
+        });
+
+        return $this->successResponse($data, "User permissions updated successfully.", 200);
     }
 
     public function update_activation(Request $request, $id)
     {
         $activation = request("is_active") ? "activated" : "deactivated";
-        $message = "User(s) {$activation} successfully";
 
-        DB::transaction(function () use ($activation, $id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    $user = User::findOrFail($id);
-                    $user->disableLogging();
-                    $user->is_active = request("is_active");
-                    $user->save();
-    
-                    activity('user')
-                    ->performedOn($user)
-                    ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-                    ->log("{$activation} user");
-                }
-            } else {
-                $user = User::findOrFail($id);
-                $user->disableLogging();
-                $user->is_active = request("is_active");
-                $user->save();
-    
+        $data = DB::transaction(function () use ($activation, $id) {
+            $ids = explode(",", $id);
+            $data = User::findOrFail($ids);
+            $data->each(function ($item) use ($activation) {
+                activity()->disableLogging();
+                $item->is_active = request("is_active");
+                $item->save();
+
+                activity()->enableLogging();
                 activity('user')
-                ->performedOn($user)
-                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-                ->log("{$activation} user");
-            }
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->full_name], 'custom' => ['link' => null]])
+                    ->log("{$activation} user");
+            });
+            return $data;
         });
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User(s) {$activation} successfully";
+        return $this->successResponse($data, $message, 200);
     }
     
     /**
@@ -603,10 +529,8 @@ class UserController extends Controller
                 ->orderBy("last_name")
                 ->where("is_superadmin", false)
                 ->get();
-
             return UserShowResource::collection($user);
         }
-
         return UserResource::collection($user->get());
     }
 
@@ -633,11 +557,8 @@ class UserController extends Controller
             ->first();
 
         $user = User::findOrFail(request("id"));
-
         $user->remaining_fund = $user->fund - $deduction->deduction;
-
         $user->save();
-
         return response("Validated User Remaining Fund", 200);
     }
 }

@@ -780,6 +780,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -993,12 +997,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
-          var data = {
-            ids: _this2.selected.map(function (item) {
-              return item.id;
-            })
-          };
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].resetPassword(_this2.selected[0].id, data).then(function (response) {
+          var ids = _this2.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].resetPassword(ids).then(function (response) {
             _this2.mixin_successDialog(response.data.status, response.data.message);
 
             _this2.getDataFromApi().then(function (data) {
@@ -1023,14 +1026,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          var data = {
-            params: {
-              ids: _this3.selected.map(function (item) {
-                return item.id;
-              })
-            }
-          };
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this3.selected[0].id, data).then(function (response) {
+          var ids = _this3.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -1055,12 +1055,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          var data = {
-            ids: _this4.selected.map(function (item) {
-              return item.id;
-            })
-          };
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this4.selected[0].id, data).then(function (response) {
+          var ids = _this4.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
             _this4.mixin_successDialog(response.data.status, response.data.message);
 
             _this4.getDataFromApi().then(function (data) {
@@ -1085,13 +1084,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to ".concat(is_active ? "activate" : "deactivate", " account(s)?")).then(function (res) {
         if (res) {
+          var ids = _this5.selected.map(function (item) {
+            return item.id;
+          });
+
           var data = {
-            is_active: is_active,
-            ids: _this5.selected.map(function (item) {
-              return item.id;
-            })
+            is_active: is_active
           };
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(_this5.selected[0].id, data).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(ids, data).then(function (response) {
             _this5.mixin_successDialog(response.data.status, response.data.message);
 
             _this5.getDataFromApi().then(function (data) {
@@ -1662,10 +1662,10 @@ var render = function() {
                               name: "show",
                               rawName: "v-show",
                               value:
-                                _vm.selected.length == 1 &&
+                                _vm.selected.length > 0 &&
                                 _vm.status == "Active",
                               expression:
-                                "selected.length == 1 && status == 'Active'"
+                                "selected.length > 0 && status == 'Active'"
                             }
                           ],
                           staticClass: "mr-2 mb-2",

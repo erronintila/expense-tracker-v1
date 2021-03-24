@@ -25,6 +25,7 @@ class UserPermissionUpdateRequest extends FormRequest
     {
         return [
             'can_login' => ['required'],
+            'is_admin' => ["required"]
         ];
     }
 }
