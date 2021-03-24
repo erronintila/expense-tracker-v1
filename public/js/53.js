@@ -471,12 +471,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           switch (action) {
             case "receive":
-              url = "/api/payments/receive_payment/".concat(_this2.selected[0].id);
+              url = "/api/payments/receive_payment/".concat(ids);
               break;
-
-            case "update":
-              url = "/api/payments/".concat(_this2.selected[0].id);
-              break;
+            // case "update":
+            //     url = `/api/payments/${this.selected[0].id}`;
+            //     break;
 
             default:
               _this2.mixin_errorDialog("Error", "Action can't be processed.");

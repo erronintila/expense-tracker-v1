@@ -450,11 +450,11 @@ export default {
 
                     switch (action) {
                         case "receive":
-                            url = `/api/payments/receive_payment/${this.selected[0].id}`;
+                            url = `/api/payments/receive_payment/${ids}`;
                             break;
-                        case "update":
-                            url = `/api/payments/${this.selected[0].id}`;
-                            break;
+                        // case "update":
+                        //     url = `/api/payments/${this.selected[0].id}`;
+                        //     break;
                         default:
                             this.mixin_errorDialog(
                                 "Error",
