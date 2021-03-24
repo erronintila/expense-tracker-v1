@@ -162,6 +162,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/users', 'API\v1\UserController@getUsers');
     Route::get('/data/permissions', 'API\v1\UserController@getPermissions');
+    Route::get("/data/validateFund", 'API\v1\UserController@validateFund');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

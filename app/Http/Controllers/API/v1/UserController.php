@@ -557,8 +557,15 @@ class UserController extends Controller
             ->first();
 
         $user = User::findOrFail(request("id"));
-        $user->remaining_fund = $user->fund - $deduction->deduction;
+
+        if($user->remaining_fund > $user->fund ) {
+            $user->remaining_fund = $user->fund;
+        } else {
+            $user->remaining_fund = $user->fund - $deduction->deduction;
+        }
+
         $user->save();
-        return response("Validated User Remaining Fund", 200);
+
+        return $this->successResponse($user, "Validated User Remaining Fund", 200);
     }
 }
