@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseType extends Model
 {
@@ -67,12 +68,22 @@ class ExpenseType extends Model
 
         static::deleting(function ($expenseType) {
             if ($expenseType->expenses()->count() > 0) {
-
                 abort(422, "Some records can't be deleted.");
             }
-
+    
             if (!auth()->user()->is_admin) {
                 abort(422, "Only administrators can delete record(s).");
+            }
+    
+            $doesExpenseExist = DB::table("expense_types")
+                    ->where("expense_types.id", $expenseType->id)
+                    ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
+                    ->where("expenses.deleted_at", null)
+                    ->where("expense_types.deleted_at", null)
+                    ->count();
+        
+            if ($doesExpenseExist) {
+                abort(422, "Some records can't be deleted");
             }
         });
     }

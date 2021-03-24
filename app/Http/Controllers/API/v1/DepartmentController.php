@@ -18,7 +18,6 @@ class DepartmentController extends Controller
     public function __construct()
     {
         // apply permissions
-        // $this->middleware(['permission:view all departments'], ['only' => ['index']]);
         $this->middleware(['permission:view departments'], ['only' => ['show']]);
         $this->middleware(['permission:add departments'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit departments'], ['only' => ['edit', 'update']]);
@@ -73,15 +72,14 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
-        $message = "Department created successfully"; // return message
-
+        $validated = $request->validated();
         $department = new Department();
+        $department->fill($validated);
         $department->code = generate_code(Department::class, "DEP", 10);
-        $department->name = request('name');
         $department->save();
 
-        return $this->successResponse(new DepartmentResource($department), $message, 201);
+        $message = "Department created successfully";
+        return $this->successResponse($department, $message, 201);
     }
 
     /**
@@ -92,12 +90,8 @@ class DepartmentController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $message = "Department retrieved successfully"; // return message
-
-        $department = Department::
-            with('jobs')
-            ->findOrFail($id);
-
+        $department = Department::with('jobs')->findOrFail($id);
+        $message = "Department retrieved successfully";
         return $this->successResponse(new DepartmentResource($department), $message, 200);
     }
 
@@ -110,14 +104,12 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
-        $message = "Department updated successfully"; // return message
-
+        $validated = $request->validated();
         $department = Department::findOrFail($id);
-        $department->name = request('name');
-        $department->save();
+        $department->update($validated);
 
-        return $this->successResponse(null, $message, 201);
+        $message = "Department updated successfully";
+        return $this->successResponse($department, $message, 200);
     }
 
     /**
@@ -128,18 +120,14 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request('ids') as $id) {
-                    Department::findOrFail($id)->delete();
-                }
-            } else {
-                Department::findOrFail($id)->delete();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = Department::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
         });
 
-        $message = "Department(s) deleted successfully"; // return message
-        return $this->successResponse(null, $message, 200);
+        $message = "Department(s) deleted successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -157,18 +145,15 @@ class DepartmentController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request('ids') as $id) {
-                    Department::onlyTrashed()->findOrFail($id)->restore();
-                }
-            } else {
-                Department::onlyTrashed()->findOrFail($id)->restore();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = Department::onlyTrashed()->findOrFail($ids);
+            $data->each->restore();
+            return $data;
         });
 
-        $message = "Department(s) restored successfully"; // return message
-        return $this->successResponse(null, $message, 201);
+        $message = "Department(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**

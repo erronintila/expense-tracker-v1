@@ -20,7 +20,6 @@ class VendorController extends Controller
     public function __construct()
     {
         // apply permissions
-        // $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
         $this->middleware(['permission:view vendors'], ['only' => ['show']]);
         $this->middleware(['permission:add vendors'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
@@ -91,18 +90,15 @@ class VendorController extends Controller
     public function store(VendorStoreRequest $request)
     {
         $validated = $request->validated();
-        $message = "Vendor created successfully";
 
         $vendor = new Vendor();
         $vendor->fill($validated);
         $vendor->save();
 
-        // store expense types associated with vendor
-        if (request()->has("expense_types")) {
-            $vendor->expense_types()->sync(request('expense_types'));
-        }
+        $vendor->expense_types()->sync(request('expense_types') ?? []);
 
-        return $this->successResponse(new VendorResource($vendor), $message, 201);
+        $message = "Vendor created successfully";
+        return $this->successResponse($vendor, $message, 201);
     }
 
     /**
@@ -113,15 +109,14 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if (request()->has("isDeleted")) {
-            if (request("isDeleted") != null) {
-                $vendor = Vendor::withTrashed()->findOrFail($id);
-            }
+        if (request()->has("isDeleted") && request("isDeleted")) {
+            $vendor = Vendor::withTrashed()->findOrFail($id);
         } else {
             $vendor = Vendor::findOrFail($id);
         }
         
-        return $this->successResponse(new VendorShowResource($vendor), 'Vendor retrieved successfully', 200);
+        $message = 'Vendor retrieved successfully';
+        return $this->successResponse($vendor, $message, 200);
     }
 
     /**
@@ -134,19 +129,14 @@ class VendorController extends Controller
     public function update(VendorUpdateRequest $request, $id)
     {
         $validated = $request->validated();
-        $message = "Vendor updated successfully";
 
         $vendor = Vendor::findOrFail($id);
         $vendor->update($validated);
 
-        // update expense types associated with vendor
-        if (request()->has("expense_types")) {
-            $vendor->expense_types()->sync(request('expense_types'));
-        }
+        $vendor->expense_types()->sync(request('expense_types') ?? []);
 
         $message = "Vendor updated successfully";
-
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse($vendor, $message, 200);
     }
 
     /**
@@ -157,18 +147,14 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request('ids') as $id) {
-                    Vendor::findOrFail($id)->delete();
-                }
-            } else {
-                Vendor::findOrFail($id)->delete();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = Vendor::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
         });
 
         $message = "Vendor(s) deleted successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -186,51 +172,40 @@ class VendorController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request('ids') as $id) {
-                    Vendor::onlyTrashed()->findOrFail($id)->restore();
-                }
-            } else {
-                Vendor::onlyTrashed()->findOrFail($id)->restore();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = Vendor::onlyTrashed()->findOrFail($ids);
+            $data->each->restore();
+            return $data;
         });
 
         $message = "Vendor(s) restored successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_activation(Request $request, $id)
     {
         $activation = request("is_active") ? "activated" : "deactivated";
-        $message = "Vendor {$activation} successfully";
 
-        DB::transaction(function () use ($activation, $id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    $vendor = Vendor::findOrFail($id);
-                    $vendor->disableLogging();
-                    $vendor->is_active = request("is_active");
-                    $vendor->save();
-    
-                    activity('vendor')
-                        ->performedOn($vendor)
-                        ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
-                        ->log("{$activation} vendor");
-                }
-            } else {
-                $vendor = Vendor::findOrFail($id);
-                $vendor->disableLogging();
-                $vendor->is_active = request("is_active");
-                $vendor->save();
-    
+        $data = DB::transaction(function () use ($activation, $id) {
+            $ids = explode(",", $id);
+            $data = Vendor::findOrFail($ids);
+            $data->each(function ($item) use ($activation) {
+                activity()->disableLogging();
+                $item->is_active = request("is_active");
+                $item->save();
+
+                activity()->enableLogging();
                 activity('vendor')
-                    ->performedOn($vendor)
-                    ->withProperties(['attributes' => ["id" => $vendor->id, "code" => $vendor->code, "name" => $vendor->name], 'custom' => ['link' => null]])
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->name], 'custom' => ['link' => null]])
                     ->log("{$activation} vendor");
-            }
+            });
+            return $data;
         });
-        return $this->successResponse(null, $message, 200);
+
+        $message = "Vendor(s) {$activation} successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**

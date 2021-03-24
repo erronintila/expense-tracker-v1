@@ -282,7 +282,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     /**

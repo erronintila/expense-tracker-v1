@@ -259,7 +259,11 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit vendors') && item.is_active == 1 && item.deleted_at == null"
+                            v-if="
+                                mixin_can('edit vendors') &&
+                                    item.is_active == 1 &&
+                                    item.deleted_at == null
+                            "
                         >
                             mdi-pencil
                         </v-icon>
@@ -344,10 +348,10 @@ export default {
             this.selected = [];
         },
         onShow(item) {
-            let params = { id: item.id }
+            let params = { id: item.id };
 
-            if(item.deleted_at) {
-                params = { id: item.id, isDeleted: true }
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
             }
 
             this.$router.push({
@@ -369,15 +373,11 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    let data = {
-                        params: {
-                            ids: this.selected.map(item => {
-                                return item.id;
-                            })
-                        }
-                    };
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
 
-                    VendorDataService.delete(this.selected[0].id, data)
+                    VendorDataService.delete(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -400,19 +400,16 @@ export default {
         onRestore() {
             if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
-
                 return;
             }
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    let data = {
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    };
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
 
-                    VendorDataService.restore(this.selected[0].id, data)
+                    VendorDataService.restore(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -438,15 +435,18 @@ export default {
                 return;
             }
 
-            this.$confirm(`Do you want to ${is_active ? 'activate' : 'deactivate'} account(s)?`).then(res => {
+            this.$confirm(
+                `Do you want to ${
+                    is_active ? "activate" : "deactivate"
+                } account(s)?`
+            ).then(res => {
                 if (res) {
-                    let data = {
-                        is_active: is_active,
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    };
-                    VendorDataService.updateActivation(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    let data = { is_active: is_active };
+                    
+                    VendorDataService.updateActivation(ids, data)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -463,7 +463,7 @@ export default {
                         });
                 }
             });
-        },
+        }
     },
     watch: {
         params: {

@@ -36,6 +36,7 @@ export default {
         onSave(value) {
             DepartmentDataService.store(value)
                 .then(response => {
+                    console.log(response);
                     this.mixin_successDialog(
                         response.data.status,
                         response.data.message

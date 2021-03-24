@@ -46,7 +46,11 @@ class ExpenseController extends Controller
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
-        $expenses = Expense::with('user')
+        $expenses = Expense::with(['user' => function ($query) {
+            if (request("status") == "Cancelled Expenses") {
+                $query->withTrashed();
+            }
+        }])
             ->with('expense_type')
             ->with('expense_report')
             ->with('vendor')
@@ -56,7 +60,6 @@ class ExpenseController extends Controller
             switch (request("status")) {
                 case 'Cancelled Expenses':
                     $expenses = $expenses->onlyTrashed();
-
                     break;
                 case 'Reimbursed Expenses':
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
@@ -66,7 +69,6 @@ class ExpenseController extends Controller
                             ["rejected_at", "=", null],
                             ["cancelled_at", "=", null]
                         ]);
-
                         $query->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
@@ -77,7 +79,6 @@ class ExpenseController extends Controller
                             ]);
                         });
                     });
-
                     break;
                 case 'Rejected Expenses':
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
@@ -89,7 +90,6 @@ class ExpenseController extends Controller
                             // ["cancelled_at", "=", null],
                         ]);
                     });
-
                     break;
                 case 'Approved Expenses':
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
@@ -99,10 +99,8 @@ class ExpenseController extends Controller
                             ["rejected_at", "=", null],
                             ["cancelled_at", "=", null],
                         ]);
-
                         $query->whereDoesntHave("payments");
                     });
-
                     break;
                 case 'Submitted Expenses':
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
@@ -115,7 +113,6 @@ class ExpenseController extends Controller
 
                         $query->whereDoesntHave("payments");
                     });
-
                     break;
                 case 'Unsubmitted Expenses':
                     $expenses = $expenses->whereHas("expense_report", function ($query) {
@@ -128,15 +125,12 @@ class ExpenseController extends Controller
 
                         $query->whereDoesntHave("payments");
                     });
-
                     break;
                 case 'Unreported Expenses':
                     $expenses = $expenses->doesnthave("expense_report");
-
                     break;
                 default:
                     $expenses = $expenses;
-
                     break;
             }
         }
@@ -165,11 +159,8 @@ class ExpenseController extends Controller
 
         $expenses = $expenses->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere("description", "like", "%" . $search . "%");
-
             $query->orWhere("receipt_number", "like", "%" . $search . "%");
-
             $query->orWhere("date", "like", "%" . $search . "%");
         });
 
@@ -370,7 +361,7 @@ class ExpenseController extends Controller
             "updated expense record"
         );
 
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     /**
@@ -438,7 +429,7 @@ class ExpenseController extends Controller
         });
 
         $message = "Expense(s) restored successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     /**

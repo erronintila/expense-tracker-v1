@@ -9,6 +9,7 @@ use App\Http\Resources\JobResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobStoreRequest;
 use App\Http\Requests\Job\JobUpdateRequest;
+use App\Models\Department;
 use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
@@ -80,15 +81,17 @@ class JobController extends Controller
      */
     public function store(JobStoreRequest $request)
     {
-        $validated = $request->validated(); // checks validation
-        $message = "Job designation created successfully"; // return message
+        $validated = $request->validated();
+        $department = Department::findOrFail($validated["department_id"]);
+
         $job = new Job();
+        $job->fill($validated);
         $job->code = generate_code(Job::class, "JOB", 10);
-        $job->name = request('name');
-        $job->department_id = request('department_id');
+        $job->department()->associate($department);
         $job->save();
 
-        return $this->successResponse(new JobResource($job), $message, 201);
+        $message = "Job designation created successfully";
+        return $this->successResponse($job, $message, 201);
     }
 
     /**
@@ -113,15 +116,16 @@ class JobController extends Controller
      */
     public function update(JobUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // checks validation
-        $message = "Job designation updated successfully"; // return message
+        $validated = $request->validated();
+        $department = Department::findOrFail($validated["department_id"]);
 
         $job = Job::findOrFail($id);
-        $job->name = request('name');
-        $job->department_id = request('department_id');
+        $job->fill($validated);
+        $job->department()->associate($department);
         $job->save();
 
-        return $this->successResponse(null, $message, 201);
+        $message = "Job designation updated successfully";
+        return $this->successResponse($job, $message, 200);
     }
 
     /**
@@ -132,18 +136,14 @@ class JobController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request('ids') as $id) {
-                    Job::findOrFail($id)->delete();
-                }
-            } else {
-                Job::findOrFail($id)->delete();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = Job::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
         });
 
         $message = "Job designation(s) deleted successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -159,18 +159,14 @@ class JobController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request('ids') as $id) {
-                    Job::onlyTrashed()->findOrFail($id)->restore();
-                }
-            } else {
-                Job::onlyTrashed()->findOrFail($id)->restore();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = Job::onlyTrashed()->findOrFail(explode(",", $id));
+            $data->each->restore();
+            return $data;
         });
 
-        $message = "Job designation restored successfully"; // return message
-        return $this->successResponse(null, $message, 201);
+        $message = "Job designation(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**

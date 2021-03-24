@@ -175,6 +175,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -276,14 +279,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          var data = {
-            params: {
-              ids: _this2.selected.map(function (item) {
-                return item.id;
-              })
-            }
-          };
-          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](_this2.selected[0].id, data).then(function (response) {
+          var ids = _this2.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
+            console.log(response);
+
             _this2.mixin_successDialog(response.data.status, response.data.message);
 
             _this2.getDataFromApi().then(function (data) {
@@ -308,12 +310,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          var data = {
-            ids: _this3.selected.map(function (item) {
-              return item.id;
-            })
-          };
-          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(_this3.selected[0].id, data).then(function (response) {
+          var ids = _this3.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+            console.log(response);
+
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {

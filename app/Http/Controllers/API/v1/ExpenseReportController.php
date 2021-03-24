@@ -334,7 +334,7 @@ class ExpenseReportController extends Controller
         });
         
         $message = "Expense Report updated successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     /**
@@ -411,7 +411,7 @@ class ExpenseReportController extends Controller
         });
 
         $message = "Expense Report(s) restored successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     public function submit(Request $request, $id)
@@ -480,7 +480,7 @@ class ExpenseReportController extends Controller
         });
 
         $message = "Expense Report(s) submitted successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     public function approve(Request $request, $id)
@@ -539,7 +539,7 @@ class ExpenseReportController extends Controller
         });
         
         $message = "Expense Report(s) approved successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     public function reject(Request $request, $id)
@@ -593,7 +593,7 @@ class ExpenseReportController extends Controller
         });
 
         $message = "Expense Report(s) rejected successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
 
     public function duplicate(Request $request, $id)
@@ -655,7 +655,7 @@ class ExpenseReportController extends Controller
         });
 
         $message = "Expense Report(s) duplicated successfully";
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse(null, $message, 200);
     }
     
     /**

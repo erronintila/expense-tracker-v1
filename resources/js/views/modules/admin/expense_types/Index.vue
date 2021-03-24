@@ -301,14 +301,11 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    let data = {
-                        params: {
-                            ids: this.selected.map(item => {
-                                return item.id;
-                            })
-                        }
-                    };
-                    ExpenseTypeDataService.delete(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    
+                    ExpenseTypeDataService.delete(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -336,12 +333,11 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    let data = {
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    };
-                    ExpenseTypeDataService.restore(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    
+                    ExpenseTypeDataService.restore(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,

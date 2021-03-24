@@ -146,7 +146,10 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit departments') && item.deleted_at == null"
+                            v-if="
+                                mixin_can('edit departments') &&
+                                    item.deleted_at == null
+                            "
                         >
                             mdi-pencil
                         </v-icon>
@@ -243,15 +246,13 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    let data = {
-                        params: {
-                            ids: this.selected.map(item => {
-                                return item.id;
-                            })
-                        }
-                    };
-                    DepartmentDataService.delete(this.selected[0].id, data)
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+
+                    DepartmentDataService.delete(ids)
                         .then(response => {
+                            console.log(response);
                             this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message
@@ -278,14 +279,13 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    let data = {
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    };
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
 
-                    DepartmentDataService.restore(this.selected[0].id, data)
+                    DepartmentDataService.restore(ids)
                         .then(response => {
+                            console.log(response);
                             this.mixin_successDialog(
                                 response.data.status,
                                 response.data.message

@@ -231,7 +231,10 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit jobs') && item.deleted_at == null"
+                            v-if="
+                                mixin_can('edit jobs') &&
+                                    item.deleted_at == null
+                            "
                         >
                             mdi-pencil
                         </v-icon>
@@ -335,10 +338,10 @@ export default {
             this.collections.selected = [];
         },
         onShow(item) {
-            let params = { id: item.id }
+            let params = { id: item.id };
 
-            if(item.deleted_at) {
-                params = { id: item.id, isDeleted: true }
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
             }
 
             this.$router.push({
@@ -360,15 +363,11 @@ export default {
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    let data = {
-                        params: {
-                            ids: this.collections.selected.map(item => {
-                                return item.id;
-                            })
-                        }
-                    };
+                    let ids = this.collections.selected.map(item => {
+                        return item.id;
+                    });
 
-                    JobDataService.delete(this.collections.selected[0].id, data)
+                    JobDataService.delete(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -395,16 +394,11 @@ export default {
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    let data = {
-                        ids: this.collections.selected.map(item => {
-                            return item.id;
-                        })
-                    };
+                    let ids = this.collections.selected.map(item => {
+                        return item.id;
+                    });
 
-                    JobDataService.restore(
-                        this.collections.selected[0].id,
-                        data
-                    )
+                    JobDataService.restore(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
