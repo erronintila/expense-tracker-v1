@@ -67,13 +67,7 @@ class ExpenseType extends Model
         parent::boot();
 
         static::deleting(function ($expenseType) {
-            if ($expenseType->expenses()->count() > 0) {
-                abort(422, "Some records can't be deleted.");
-            }
-    
-            if (!auth()->user()->is_admin) {
-                abort(422, "Only administrators can delete record(s).");
-            }
+            abort_if($expenseType->expenses()->count() > 0, 422, "Some records can't be deleted.");
     
             $doesExpenseExist = DB::table("expense_types")
                     ->where("expense_types.id", $expenseType->id)
@@ -81,10 +75,8 @@ class ExpenseType extends Model
                     ->where("expenses.deleted_at", null)
                     ->where("expense_types.deleted_at", null)
                     ->count();
-        
-            if ($doesExpenseExist) {
-                abort(422, "Some records can't be deleted");
-            }
+            
+            abort_if($doesExpenseExist, 422, "Some records can't be deleted");
         });
     }
 

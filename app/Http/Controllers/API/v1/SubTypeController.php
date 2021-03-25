@@ -64,6 +64,8 @@ class SubTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         DB::transaction(function () use ($id) {
             if (request()->has("ids")) {
                 foreach (request("sub_types") as $key => $value) {

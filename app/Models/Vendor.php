@@ -30,13 +30,7 @@ class Vendor extends Model
     {
         parent::boot();
         static::deleting(function ($vendor) {
-            if ($vendor->expenses()->count() > 0) {
-                abort(422, "Some records can't be deleted.");
-            }
-
-            if (!auth()->user()->is_admin) {
-                abort(422, "Only administrators can delete record(s).");
-            }
+            abort_if($vendor->expenses()->count() > 0, 422,"Some records can't be deleted.");
         });
     }
     

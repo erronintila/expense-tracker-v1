@@ -128,6 +128,8 @@ class VendorController extends Controller
      */
     public function update(VendorUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $validated = $request->validated();
 
         $vendor = Vendor::findOrFail($id);
@@ -147,6 +149,8 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $data = Vendor::findOrFail(explode(",", $id));
             $data->each->delete();

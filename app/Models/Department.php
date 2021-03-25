@@ -59,13 +59,7 @@ class Department extends Model
         parent::boot();
 
         static::deleting(function ($department) {
-            if ($department->jobs()->count()) {
-                abort(422, "Active job designation records found.");
-            }
-
-            if (!auth()->user()->is_admin) {
-                abort(422, "Only administrators can delete record(s).");
-            }
+            abort_if($department->jobs()->count(), 422, "Active job designation records found.");
         });
     }
 

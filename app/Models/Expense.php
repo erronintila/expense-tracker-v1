@@ -33,27 +33,14 @@ class Expense extends Model
     {
         parent::boot();
         static::deleting(function ($expense) {
-            if ($expense->expense_report()->count()) {
-                abort(422, "Some records can't be deleted.");
-            }
+            abort_if($expense->expense_report()->count(), 422, "Some records can't be deleted.");
         });
 
         static::restoring(function ($expense) {
-            if ($expense->user()->onlyTrashed()->count()) {
-                abort(422, "No user found.");
-            }
-
-            if ($expense->vendor()->onlyTrashed()->count()) {
-                abort(422, "No vendor found.");
-            }
-
-            if ($expense->expense_type()->onlyTrashed()->count()) {
-                abort(422, "No expense type found.");
-            }
-
-            if ($expense->expense_report()->withTrashed()->count()) {
-                abort(422, "Expense Report was deleted.");
-            }
+            abort_if($expense->user()->onlyTrashed()->count(), 422, "No user found.");
+            abort_if($expense->vendor()->onlyTrashed()->count(), 422, "No vendor found.");
+            abort_if($expense->expense_type()->onlyTrashed()->count(), 422, "No expense type found.");
+            abort_if($expense->expense_report()->withTrashed()->count(), 422, "Expense Report was deleted.");
         });
     }
 

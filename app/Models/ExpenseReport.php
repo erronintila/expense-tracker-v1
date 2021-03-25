@@ -35,9 +35,7 @@ class ExpenseReport extends Model
     {
         parent::boot();
         static::deleting(function ($expense_report) {
-            if ($expense_report->payments()->count() > 0) {
-                abort(422, "Some records can't be cancelled.");
-            }
+            abort_if($expense_report->payments()->count() > 0, 422, "Some records can't be cancelled.");
         });
     }
     

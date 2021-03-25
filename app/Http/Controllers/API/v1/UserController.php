@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\User\UserStoreRequest;
@@ -157,6 +156,8 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $data = DB::transaction(function () use ($validated) {
             $expense_types = ExpenseType::where("expense_type_id", null)->get();
@@ -166,7 +167,7 @@ class UserController extends Controller
             $user->fill($validated);
             $user->code = $validated["code"] ?? generate_code(User::class, "USR", 10);
             $user->remaining_fund = $validated["fund"];
-            $user->password = Hash::make($validated["password"]);
+            $user->password = bcrypt($validated["password"]);
             $user->job()->associate($job);
             $user->save();
 
@@ -233,6 +234,8 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $job = Job::findOrFail($validated["job_id"]);
 
@@ -257,6 +260,8 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $data = User::findOrFail(explode(",", $id));
             $data->each->delete();
@@ -275,6 +280,8 @@ class UserController extends Controller
 
     public function restore(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $data = User::onlyTrashed()->findOrFail($ids);
@@ -288,6 +295,8 @@ class UserController extends Controller
 
     public function update_settings(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $user = User::findOrFail($id);
 
         if (request()->has("expense_types")) {
@@ -305,6 +314,8 @@ class UserController extends Controller
 
     public function update_fund(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $user = User::findOrFail($id);
         $user->fund = request("fund");
         $user->remaining_fund = request("remaining_fund");
@@ -322,12 +333,14 @@ class UserController extends Controller
 
     public function reset_password(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $data = User::findOrFail($ids);
             $data->each(function ($item) {
                 activity()->disableLogging();
-                $item->password = Hash::make('password');
+                $item->password = bcrypt('password');
                 $item->save();
 
                 activity()->enableLogging();
@@ -345,6 +358,8 @@ class UserController extends Controller
 
     public function verify_email(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $data = User::findOrFail($ids);
@@ -367,12 +382,12 @@ class UserController extends Controller
     }
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
-    {
+    {        
         $validated = $request->validated();
         $data = DB::transaction(function () use ($validated) {
             $user = User::findOrFail(auth()->user()->id);
             $user->disableLogging();
-            $user->update(['password' => Hash::make($validated["password"])]);
+            $user->update(['password' => bcrypt($validated["password"])]);
 
             activity('user')
                 ->performedOn($user)
@@ -407,6 +422,8 @@ class UserController extends Controller
      */
     public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $data = DB::transaction(function () use ($validated, $id) {
             $user = User::findOrFail($id);
@@ -429,6 +446,8 @@ class UserController extends Controller
 
     public function update_activation(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $activation = request("is_active") ? "activated" : "deactivated";
 
         $data = DB::transaction(function () use ($activation, $id) {

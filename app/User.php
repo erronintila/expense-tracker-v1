@@ -31,23 +31,12 @@ class User extends Authenticatable
     {
         parent::boot();
         static::deleting(function ($user) {
-            if ($user->expenses()->count() > 0) {
-                abort(422, "Active expense records found.");
-            }
-
-            if ($user->expense_reports()->count() > 0) {
-                abort(422, "Active expense report records found.");
-            }
-
-            if (!auth()->user()->is_admin) {
-                abort(422, "Only administrators can delete record(s).");
-            }
+            abort_if($user->expenses()->count() > 0, 422, "Active expense records found.");
+            abort_if($user->expense_reports()->count() > 0, 422, "Active expense report records found.");
         });
 
         static::restoring(function ($user) {
-            if ($user->job()->onlyTrashed()->count()) {
-                abort(422, "No job designation found.");
-            }
+            abort_if($user->job()->onlyTrashed()->count(), 422, "No job designation found.");
         });
     }
 

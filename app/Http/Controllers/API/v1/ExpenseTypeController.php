@@ -75,6 +75,8 @@ class ExpenseTypeController extends Controller
      */
     public function store(ExpenseTypeStoreRequest $request)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $expense_type = DB::transaction(function () use ($validated) {
             $expense_type = new ExpenseType();
@@ -124,6 +126,8 @@ class ExpenseTypeController extends Controller
      */
     public function update(ExpenseTypeUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $expense_type = DB::transaction(function () use ($id, $validated) {
             $expense_type = ExpenseType::where('expense_type_id', null)->findOrFail($id);
@@ -162,6 +166,8 @@ class ExpenseTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $data = ExpenseType::findOrFail(explode(",", $id));
             $data->each->delete();
@@ -187,6 +193,8 @@ class ExpenseTypeController extends Controller
      */
     public function restore(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $data = DB::transaction(function () use ($id) {
             $data = ExpenseType::onlyTrashed()->findOrFail(explode(",", $id));
             $data->each->restore();

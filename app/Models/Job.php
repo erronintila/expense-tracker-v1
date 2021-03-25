@@ -55,19 +55,11 @@ class Job extends Model
     {
         parent::boot();
         static::deleting(function ($job) {
-            if ($job->users()->count() > 0) {
-                abort(422, "Active user records found.");
-            }
-
-            if (!auth()->user()->is_admin) {
-                abort(422, "Only administrators can delete record(s).");
-            }
+            abort_if($job->users()->count() > 0, 422, "Active user records found.");
         });
 
         static::restoring(function ($job) {
-            if ($job->department()->onlyTrashed()->count()) {
-                abort(422, "No department found.");
-            }
+            abort_if($job->department()->onlyTrashed()->count(), 422, "No department found.");
         });
     }
 
@@ -80,7 +72,7 @@ class Job extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model

@@ -78,9 +78,7 @@ class Payment extends Model
         parent::boot();
 
         static::deleting(function ($payment) {
-            if (!auth()->user()->is_admin) {
-                abort(422, "Only administrators can delete record(s).");
-            }
+            
         });
     }
 

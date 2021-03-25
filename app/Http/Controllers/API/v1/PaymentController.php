@@ -127,6 +127,8 @@ class PaymentController extends Controller
      */
     public function store(PaymentStoreRequest $request)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $validated = $request->validated();
         
         $data = DB::transaction(function () use ($validated) {
@@ -225,6 +227,8 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);

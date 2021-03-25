@@ -479,6 +479,8 @@ class ExpenseReportController extends Controller
 
     public function approve(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         // check if deleted/cancelled
         $deleted = ExpenseReport::whereIn("id", explode(",", $id))
                     ->where("deleted_at", "<>", null)->count();
@@ -539,6 +541,7 @@ class ExpenseReportController extends Controller
 
     public function reject(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
         $message = "Expense Report rejected successfully";
 
         // check if rejected

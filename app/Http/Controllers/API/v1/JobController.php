@@ -34,9 +34,7 @@ class JobController extends Controller
     public function index(Request $request)
     {
         if (!request("isSelection") || !request()->has("isSelection")) {
-            if (!app("auth")->user()->hasPermissionTo('view all jobs')) {
-                abort(403);
-            }
+            abort_if(!app("auth")->user()->hasPermissionTo('view all jobs'), 403);
         }
 
         $search = request('search') ?? "";
@@ -81,6 +79,8 @@ class JobController extends Controller
      */
     public function store(JobStoreRequest $request)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $department = Department::findOrFail($validated["department_id"]);
 
@@ -116,6 +116,8 @@ class JobController extends Controller
      */
     public function update(JobUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $department = Department::findOrFail($validated["department_id"]);
 
@@ -136,6 +138,8 @@ class JobController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $data = Job::findOrFail(explode(",", $id));
             $data->each->delete();
@@ -159,6 +163,8 @@ class JobController extends Controller
      */
     public function restore(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $data = Job::onlyTrashed()->findOrFail(explode(",", $id));
             $data->each->restore();

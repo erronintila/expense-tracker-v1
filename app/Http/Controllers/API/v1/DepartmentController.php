@@ -72,6 +72,8 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentStoreRequest $request)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $validated = $request->validated();
         $department = new Department();
         $department->fill($validated);
@@ -104,6 +106,8 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $validated = $request->validated();
         $department = Department::findOrFail($id);
         $department->update($validated);
@@ -120,6 +124,8 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $data = Department::findOrFail(explode(",", $id));
             $data->each->delete();
@@ -145,6 +151,8 @@ class DepartmentController extends Controller
      */
     public function restore(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $data = Department::onlyTrashed()->findOrFail($ids);
