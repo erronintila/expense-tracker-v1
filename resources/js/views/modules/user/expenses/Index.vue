@@ -613,13 +613,10 @@ export default {
 
             this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
-                    ExpenseDataService.delete(this.selected[0].id, {
-                        params: {
-                            ids: this.selected.map(item => {
-                                return item.id;
-                            })
-                        }
-                    })
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    ExpenseDataService.delete(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,
@@ -661,11 +658,10 @@ export default {
 
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
-                    ExpenseDataService.restore(this.selected[0].id, {
-                        ids: this.selected.map(item => {
-                            return item.id;
-                        })
-                    })
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    ExpenseDataService.restore(ids)
                         .then(response => {
                             this.mixin_successDialog(
                                 response.data.status,

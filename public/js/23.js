@@ -757,13 +757,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to cancel expense(s)?").then(function (res) {
         if (res) {
-          _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"](_this3.selected[0].id, {
-            params: {
-              ids: _this3.selected.map(function (item) {
-                return item.id;
-              })
-            }
-          }).then(function (response) {
+          var ids = _this3.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"](ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -802,11 +800,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore expenses(s)?").then(function (res) {
         if (res) {
-          _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"].restore(_this4.selected[0].id, {
-            ids: _this4.selected.map(function (item) {
-              return item.id;
-            })
-          }).then(function (response) {
+          var ids = _this4.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"].restore(ids).then(function (response) {
             _this4.mixin_successDialog(response.data.status, response.data.message);
 
             _this4.getDataFromApi().then(function (data) {

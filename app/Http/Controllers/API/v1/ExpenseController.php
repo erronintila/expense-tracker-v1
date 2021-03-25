@@ -8,17 +8,15 @@ use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ExpenseResource;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Expense\ExpenseStoreRequest;
 use App\Http\Requests\Expense\ExpenseUpdateRequest;
-use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Http\Resources\Expense\ExpenseShowResource;
-use Illuminate\Support\Facades\DB;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use App\Http\Resources\Expense\ExpenseIndexResource;
+use App\Models\Vendor;
 
 class ExpenseController extends Controller
 {
@@ -209,7 +207,11 @@ class ExpenseController extends Controller
             $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
         }
 
-        $expense_type = ExpenseType::findOrFail(request("sub_type_id") ?? request("expense_type_id"));
+        $user = User::findOrFail($validated["user_id"]);
+        $expense_type = ExpenseType::findOrFail($validated["expense_type_id"]);
+        $sub_type = $validated["sub_type_id"] == null ? null : ExpenseType::findOrFail($validated["sub_type_id"]);
+        $vendor = $validated["vendor_id"] == null ? null : Vendor::findOrFail($validated["vendor_id"]);
+
         $expense = new Expense();
         $expense->fill($validated);
         $expense->code = generate_code(Expense::class, "EXP", 10);
@@ -217,11 +219,17 @@ class ExpenseController extends Controller
         $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
         $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
         $expense->details  = request("details") == null ? null : json_encode(request("details"));
+
         $expense->created_by = Auth::id();
         $expense->updated_by = Auth::id();
+        $expense->user()->associate($user);
+        $expense->expense_type()->associate($expense_type);
+        $expense->sub_type()->associate($sub_type);
+        $expense->vendor()->associate($vendor);
+
         $expense->save();
 
-        return $this->successResponse(new ExpenseResource($expense), $message, 201);
+        return $this->successResponse($expense, $message, 201);
     }
 
     /**
@@ -300,10 +308,12 @@ class ExpenseController extends Controller
     public function update(ExpenseUpdateRequest $request, $id)
     {
         $validated = $request->validated();
-        $message = "Expense updated successfully";
+        
+        $user = User::findOrFail($validated["user_id"]);
+        $expense_type = ExpenseType::findOrFail($validated["expense_type_id"]);
+        $sub_type = $validated["sub_type_id"] == null ? null : ExpenseType::findOrFail($validated["sub_type_id"]);
+        $vendor = $validated["vendor_id"] == null ? null : Vendor::findOrFail($validated["vendor_id"]);
 
-        $user = User::findOrFail(request("user_id"));
-        $expense_type = ExpenseType::findOrFail(request("sub_type_id") ?? request("expense_type_id"));
         $expense = Expense::findOrFail($id);
 
         if (request("reimbursable_amount") > request("amount")) {
@@ -343,11 +353,18 @@ class ExpenseController extends Controller
         }
 
         $expense->fill($validated);
+        $expense->code = $expense->code;
         $expense->description = request("description") ?? $expense_type->name;
         $expense->tax_rate = request("is_tax_inclusive") ? request("tax_rate") : 0;
         $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
         $expense->details  = request("details") == null ? null : json_encode(request("details"));
+
         $expense->updated_by = Auth::id();
+        $expense->user()->associate($user);
+        $expense->expense_type()->associate($expense_type);
+        $expense->sub_type()->associate($sub_type);
+        $expense->vendor()->associate($vendor);
+
         $expense->disableLogging();
         $expense->save();
 
@@ -361,7 +378,8 @@ class ExpenseController extends Controller
             "updated expense record"
         );
 
-        return $this->successResponse(null, $message, 200);
+        $message = "Expense updated successfully";
+        return $this->successResponse($expense, $message, 200);
     }
 
     /**
@@ -372,18 +390,14 @@ class ExpenseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    Expense::findOrFail($id)->delete();
-                }
-            } else {
-                Expense::findOrFail($id)->delete();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = Expense::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
         });
 
         $message = "Expense(s) deleted successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -394,42 +408,15 @@ class ExpenseController extends Controller
 
     public function restore(Request $request, $id)
     {
-        DB::transaction(function () use ($id) {
-            if (request()->has("ids")) {
-                foreach (request("ids") as $id) {
-                    $expense = Expense::onlyTrashed()->findOrFail($id);
-                    $expense->disableLogging();
-                    $expense->restore();
-    
-                    log_activity(
-                        "expense",
-                        $expense,
-                        [
-                            "attributes" => ["code" => $expense->code, "restored_at" => $expense->updated_at],
-                            "custom" => ["link" => "expenses/{$expense->id}"]
-                        ],
-                        "restored expense record"
-                    );
-                }
-            } else {
-                $expense = Expense::onlyTrashed()->findOrFail($id);
-                $expense->disableLogging();
-                $expense->restore();
-    
-                log_activity(
-                    "expense",
-                    $expense,
-                    [
-                        "attributes" => ["code" => $expense->code, "updated_at" => $expense->updated_at],
-                        "custom" => ["link" => "expenses/{$expense->id}"]
-                    ],
-                    "restored expense record"
-                );
-            }
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = Expense::onlyTrashed()->findOrFail($ids);
+            $data->each->restore();
+            return $data;
         });
 
         $message = "Expense(s) restored successfully";
-        return $this->successResponse(null, $message, 200);
+        return $this->successResponse($data, $message, 200);
     }
 
     /**

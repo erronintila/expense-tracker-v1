@@ -29,7 +29,7 @@ class ExpenseReportStoreRequest extends FormRequest
             'user_id' => ['required'],
             'remarks' => ['nullable'],
             'notes' => ['nullable'],
-            'expenses' => ['required']
+            // 'expenses' => ['required']
         ];
     }
 

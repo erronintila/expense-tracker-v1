@@ -1159,13 +1159,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to cancel expense report(s)?").then(function (res) {
         if (res) {
-          _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](_this6.selected[0].id, {
-            params: {
-              ids: _this6.selected.map(function (item) {
-                return item.id;
-              })
-            }
-          }).then(function (response) {
+          var ids = _this6.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](ids).then(function (response) {
             _this6.mixin_successDialog(response.data.status, response.data.message);
 
             _this6.getDataFromApi().then(function (data) {
@@ -1416,42 +1414,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this7 = this;
 
       var url = "";
+      var ids = this.selected.map(function (item) {
+        return item.id;
+      });
 
       switch (action) {
         case "submit":
-          url = "/api/expense_reports/submit/".concat(this.selected[0].id);
+          url = "/api/expense_reports/submit/".concat(ids);
           break;
 
         case "approve":
-          url = "/api/expense_reports/approve/".concat(this.selected[0].id);
+          url = "/api/expense_reports/approve/".concat(ids);
           break;
 
         case "reject":
-          url = "/api/expense_reports/reject/".concat(this.selected[0].id);
+          url = "/api/expense_reports/reject/".concat(ids);
           break;
 
         case "duplicate":
-          url = "/api/expense_reports/duplicate/".concat(this.selected[0].id);
+          url = "/api/expense_reports/duplicate/".concat(ids);
           break;
 
         default:
-          url = "/api/expense_reports/".concat(this.selected[0].id);
+          url = "/api/expense_reports/".concat(ids);
           break;
       }
 
       this.$confirm("Do you want to ".concat(action, " expense report(s)?")).then(function (res) {
         if (res) {
-          var ids = _this7.selected.map(function (item) {
-            return item.id;
-          });
-
           axios({
             method: method,
-            url: url,
-            data: {
-              ids: ids,
-              action: action
-            }
+            url: url
           }).then(function (response) {
             _this7.mixin_successDialog(response.data.status, response.data.message);
 

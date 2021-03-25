@@ -1238,10 +1238,10 @@ export default {
             this.$store.dispatch("AUTH_SETTINGS");
         },
         onShow(item) {
-            let params = { id: item.id }
+            let params = { id: item.id };
 
-            if(item.deleted_at) {
-                params = { id: item.id, isDeleted: true }
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
             }
 
             this.$router.push({
@@ -1306,13 +1306,10 @@ export default {
             this.$confirm("Do you want to cancel expense report(s)?").then(
                 res => {
                     if (res) {
-                        ExpenseReportDataService.delete(this.selected[0].id, {
-                            params: {
-                                ids: this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
+                        let ids = this.selected.map(item => {
+                            return item.id;
+                        });
+                        ExpenseReportDataService.delete(ids)
                             .then(response => {
                                 this.mixin_successDialog(
                                     response.data.status,
@@ -1585,45 +1582,34 @@ export default {
         // ------------------------------------------------------------------------------------------------------------------
         onUpdate(action, method) {
             let url = "";
+            let ids = this.selected.map(item => {
+                return item.id;
+            });
 
             switch (action) {
                 case "submit":
-                    url = `/api/expense_reports/submit/${this.selected[0].id}`;
-
+                    url = `/api/expense_reports/submit/${ids}`;
                     break;
                 case "approve":
-                    url = `/api/expense_reports/approve/${this.selected[0].id}`;
-
+                    url = `/api/expense_reports/approve/${ids}`;
                     break;
                 case "reject":
-                    url = `/api/expense_reports/reject/${this.selected[0].id}`;
-
+                    url = `/api/expense_reports/reject/${ids}`;
                     break;
                 case "duplicate":
-                    url = `/api/expense_reports/duplicate/${this.selected[0].id}`;
-
+                    url = `/api/expense_reports/duplicate/${ids}`;
                     break;
-
                 default:
-                    url = `/api/expense_reports/${this.selected[0].id}`;
-
+                    url = `/api/expense_reports/${ids}`;
                     break;
             }
 
             this.$confirm(`Do you want to ${action} expense report(s)?`).then(
                 res => {
                     if (res) {
-                        let ids = this.selected.map(item => {
-                            return item.id;
-                        });
-
                         axios({
                             method: method,
-                            url: url,
-                            data: {
-                                ids: ids,
-                                action: action
-                            }
+                            url: url
                         })
                             .then(response => {
                                 this.mixin_successDialog(
@@ -1730,9 +1716,7 @@ export default {
                     return item.id;
                 });
 
-                ExpenseReportDataService.reject(this.selected[0].id, {
-                    ids: ids,
-                    action: "reject",
+                ExpenseReportDataService.reject(ids, {
                     notes: notes
                 })
                     .then(response => {
