@@ -324,16 +324,6 @@ class ExpenseController extends Controller
 
         $expense = Expense::findOrFail($id);
 
-        // if (request("reimbursable_amount") > request("amount")) {
-        //     $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
-        // }
-
-        // $rem_fund = $user->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
-        
-        // if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
-        //     $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
-        // }
-
         if ($expense->expense_report) {
             if (Auth::user()->is_admin) {
                 $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
