@@ -188,6 +188,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     selectUser: function selectUser(e) {
+      this.errors.user_id = [];
+
       if (e == null || e == undefined) {
         this.form.user = null;
         return;

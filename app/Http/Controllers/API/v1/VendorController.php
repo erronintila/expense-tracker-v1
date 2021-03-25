@@ -5,13 +5,13 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
 use App\Http\Requests\Vendor\VendorStoreRequest;
 use App\Http\Requests\Vendor\VendorUpdateRequest;
 use App\Http\Resources\Vendor\VendorShowResource;
 use App\Http\Resources\Vendor\VendorIndexResource;
-use Illuminate\Support\Facades\DB;
 
 class VendorController extends Controller
 {
@@ -36,9 +36,7 @@ class VendorController extends Controller
     public function index(Request $request)
     {
         if (!request("isSelection") || !request()->has("isSelection")) {
-            if (!app("auth")->user()->hasPermissionTo('view all vendors')) {
-                abort(403);
-            }
+            abort_if(!app("auth")->user()->hasPermissionTo('view all vendors'), 403);
         }
 
         $search = request('search') ?? "";
@@ -116,7 +114,7 @@ class VendorController extends Controller
         }
         
         $message = 'Vendor retrieved successfully';
-        return $this->successResponse($vendor, $message, 200);
+        return $this->successResponse(new VendorShowResource($vendor), $message, 200);
     }
 
     /**
@@ -176,6 +174,8 @@ class VendorController extends Controller
      */
     public function restore(Request $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $data = Vendor::onlyTrashed()->findOrFail($ids);

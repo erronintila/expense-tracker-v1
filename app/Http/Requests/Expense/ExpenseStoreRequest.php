@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Expense;
 
+use App\Rules\LessRemainingFund;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,13 +25,13 @@ class ExpenseStoreRequest extends FormRequest
      */
     public function rules()
     {
-        $remaining_fund = User::findOrFail(request("user_id"), ['remaining_fund']);
+        // $remaining_fund = User::findOrFail(request("user_id"), ['remaining_fund']);
 
         return [
             'code' => ['nullable', 'unique:expenses', 'max:255'],
             'reference_no' => ['nullable'],
             'description' => ['nullable', 'max:255'],
-            'amount' => ['required', 'numeric', 'gt:0'],
+            'amount' => ['required', 'numeric', 'gt:0', new LessRemainingFund(request("user_id"), request("reimbursable_amount"), 0, "store")],
             'reimbursable_amount' => ['required', 'numeric', 'min:0', 'lte:amount'],
             'tax_name' => ['nullable', 'max:100'],
             'tax_rate' => ['required'],

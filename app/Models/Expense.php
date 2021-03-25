@@ -32,6 +32,11 @@ class Expense extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::creating(function ($expense) {
+            
+        });
+
         static::deleting(function ($expense) {
             abort_if($expense->expense_report()->count(), 422, "Some records can't be deleted.");
         });

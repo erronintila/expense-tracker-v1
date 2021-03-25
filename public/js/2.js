@@ -1266,47 +1266,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var expense_type_limit = this.form.expense_type ? this.form.expense_type.limit : null;
       var sub_type_limit = this.form.sub_type ? this.form.sub_type.limit : null;
       var expense_limit = sub_type_limit ? sub_type_limit : expense_type_limit;
-      var expense_amount = this.form.amount;
+      var expense_amount = this.form.amount; // if (!this.mixin_can("add expenses beyond limit")) {
+      //     if (!this.itemize) {
+      //         if (
+      //             expense_limit !== null &&
+      //             expense_limit < expense_amount
+      //         ) {
+      //             this.mixin_errorDialog(
+      //                 "Error",
+      //                 "Amount can't be greater than expense limit."
+      //             );
+      //             return;
+      //         }
+      //     } else {
+      //         if (
+      //             expense_limit !== null &&
+      //             expense_limit < this.form.details_amount
+      //         ) {
+      //             this.mixin_errorDialog(
+      //                 "Error",
+      //                 "Itemized Expenses Amount can't be greater than expense limit"
+      //             );
+      //             return;
+      //         }
+      //     }
+      // }
+      // if (this.form.user == null) {
+      //     this.mixin_errorDialog("Error", "No user selected");
+      //     return;
+      // }
+      // if (!this.form.expense_type) {
+      //     this.mixin_errorDialog("Error", "No Expense Type Selected");
+      //     return;
+      // }
+      // if (
+      //     this.amount_to_replenish >
+      //     (this.form.user ? this.form.user.remaining_fund : 0)
+      // ) {
+      //     this.mixin_errorDialog(
+      //         "Error",
+      //         "Amount to replenish is greater than remaining fund"
+      //     );
+      //     return;
+      // }
+      // if (
+      //     this.amount_to_replenish + this.amount_to_reimburse <
+      //     this.form.amount
+      // ) {
+      //     this.mixin_errorDialog(
+      //         "Error",
+      //         "Expense Amount is greater than amount to replenish/reimburse"
+      //     );
+      //     return;
+      // }
+      // if (this.amount_to_replenish + this.amount_to_reimburse <= 0) {
+      //     this.mixin_errorDialog(
+      //         "Error",
+      //         "Total Expenses can't be lesser or equal to zero"
+      //     );
+      //     return;
+      // }
 
-      if (!this.mixin_can("add expenses beyond limit")) {
-        if (!this.itemize) {
-          if (expense_limit !== null && expense_limit < expense_amount) {
-            this.mixin_errorDialog("Error", "Amount can't be greater than expense limit.");
-            return;
-          }
-        } else {
-          if (expense_limit !== null && expense_limit < this.form.details_amount) {
-            this.mixin_errorDialog("Error", "Itemized Expenses Amount can't be greater than expense limit");
-            return;
-          }
-        }
-      }
-
-      if (this.form.user == null) {
-        this.mixin_errorDialog("Error", "No user selected");
-        return;
-      }
-
-      if (!this.form.expense_type) {
-        this.mixin_errorDialog("Error", "No Expense Type Selected");
-        return;
-      }
-
-      if (this.amount_to_replenish > (this.form.user ? this.form.user.remaining_fund : 0)) {
-        this.mixin_errorDialog("Error", "Amount to replenish is greater than remaining fund");
-        return;
-      }
-
-      if (this.amount_to_replenish + this.amount_to_reimburse < this.form.amount) {
-        this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
-        return;
-      }
-
-      if (this.amount_to_replenish + this.amount_to_reimburse <= 0) {
-        this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
-        return;
-      }
-
+      console.log(this.form);
       this.$refs.form.validate();
 
       if (!this.$refs.form.validate()) {
@@ -1403,6 +1424,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
+      // temp
+      return this.form.reimbursable_amount;
       var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
       var amount = this.mixin_convertToNumber(this.form.amount);
       var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);

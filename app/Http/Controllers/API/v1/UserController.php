@@ -46,9 +46,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if (!request("isSelection") || !request()->has("isSelection")) {
-            if (!app("auth")->user()->hasPermissionTo('view all users')) {
-                abort(403);
-            }
+            abort_if(!app("auth")->user()->hasPermissionTo('view all users'), 403);
         }
         
         $search = request("search") ?? "";
@@ -67,7 +65,7 @@ class UserController extends Controller
         }
 
         switch ($sortBy) {
-            case 'fullname':
+            case 'full_name':
                 $users = $users->orderBy("last_name", $sortType);
                 break;
             case 'job.name':

@@ -17,6 +17,7 @@ use App\Http\Requests\Expense\ExpenseUpdateRequest;
 use App\Http\Resources\Expense\ExpenseShowResource;
 use App\Http\Resources\Expense\ExpenseIndexResource;
 use App\Models\Vendor;
+use Carbon\Carbon;
 
 class ExpenseController extends Controller
 {
@@ -43,19 +44,37 @@ class ExpenseController extends Controller
         $sortBy = request("sortBy") ?? "updated_at";
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
+        $status = request("status") ?? "All Expenses";
+        $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
+        $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        $user = request('user_id');
+        $expense_type = request('expense_type_id');
+        $expense_report = request('expense_report_id');
 
-        $expenses = Expense::with(['user' => function ($query) {
-            if (request("status") == "Cancelled Expenses") {
-                $query->withTrashed();
-            }
-        }])
-            ->with('expense_type')
-            ->with('expense_report')
-            ->with('vendor')
+        $expenses = Expense::whereBetween("date", [$start_date, $end_date])
+            ->with(['user' => function ($query) use ($status) {
+                if ($status === "Cancelled Expenses") {
+                    $query->withTrashed();
+                }
+            }])
+            ->with(['expense_type' => function ($query) use ($status) {
+                if ($status === "Cancelled Expenses") {
+                    $query->withTrashed();
+                }
+            }])
+            ->with(['expense_report' => function ($query) use ($status) {
+                if ($status === "Cancelled Expenses") {
+                    $query->withTrashed();
+                }
+            }])
+            ->with(['vendor' => function ($query) use ($status) {
+                if ($status === "Cancelled Expenses") {
+                    $query->withTrashed();
+                }
+            }])
             ->orderBy($sortBy, $sortType);
 
-        if (request()->has('status')) {
-            switch (request("status")) {
+        switch ($status) {
                 case 'Cancelled Expenses':
                     $expenses = $expenses->onlyTrashed();
                     break;
@@ -131,28 +150,17 @@ class ExpenseController extends Controller
                     $expenses = $expenses;
                     break;
             }
+
+        if ($user) {
+            $expenses = $expenses->where("user_id", $user);
         }
 
-        if (request()->has('start_date') && request()->has('end_date')) {
-            $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
+        if ($expense_type) {
+            $expenses = $expenses->where("expense_type_id", $expense_type);
         }
 
-        if (request()->has('user_id')) {
-            if (request("user_id") > 0) {
-                $expenses = $expenses->where("user_id", request("user_id"));
-            }
-        }
-
-        if (request()->has('expense_type_id')) {
-            if (request("expense_type_id") > 0) {
-                $expenses = $expenses->where("expense_type_id", request("expense_type_id"));
-            }
-        }
-
-        if (request()->has('expense_report_id')) {
-            if (request("expense_report_id") > 0) {
-                $expenses = $expenses->where("expense_report_id", request("expense_report_id"));
-            }
+        if ($expense_report) {
+            $expenses = $expenses->where("expense_report_id", $expense_report);
         }
 
         $expenses = $expenses->where(function ($query) use ($search) {
@@ -179,9 +187,7 @@ class ExpenseController extends Controller
                 })
                 ->where("user_id", request("user_id"));
 
-            if (request()->has('start_date') && request()->has('end_date')) {
-                $expenses = $expenses->whereBetween("date", [request("start_date"), request("end_date")]);
-            }
+            $expenses = $expenses->whereBetween("date", [$start_date, $end_date]);
         }
         $expenses = $expenses->paginate($itemsPerPage);
         return ExpenseIndexResource::collection($expenses);
@@ -196,21 +202,22 @@ class ExpenseController extends Controller
     public function store(ExpenseStoreRequest $request)
     {
         $validated = $request->validated();
-        $message = "Expense created successfully";
-        $user = User::findOrFail(request("user_id"));
-
-        if (request("reimbursable_amount") > request("amount")) {
-            $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
-        }
-
-        if (($user->remaining_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
-            $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
-        }
-
+        
         $user = User::findOrFail($validated["user_id"]);
         $expense_type = ExpenseType::findOrFail($validated["expense_type_id"]);
         $sub_type = $validated["sub_type_id"] == null ? null : ExpenseType::findOrFail($validated["sub_type_id"]);
         $vendor = $validated["vendor_id"] == null ? null : Vendor::findOrFail($validated["vendor_id"]);
+
+        abort_if(
+            request("reimbursable_amount") > request("amount"),
+            403,
+            "Reimbursable amount is greater than total expense amount"
+        );
+        abort_if(
+            ($user->remaining_fund - (request("amount") - request("reimbursable_amount"))) < 0,
+            403,
+            "Amount to replenish is greater than remaining fund"
+        );
 
         $expense = new Expense();
         $expense->fill($validated);
@@ -229,6 +236,7 @@ class ExpenseController extends Controller
 
         $expense->save();
 
+        $message = "Expense created successfully";
         return $this->successResponse($expense, $message, 201);
     }
 
@@ -316,15 +324,15 @@ class ExpenseController extends Controller
 
         $expense = Expense::findOrFail($id);
 
-        if (request("reimbursable_amount") > request("amount")) {
-            $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
-        }
+        // if (request("reimbursable_amount") > request("amount")) {
+        //     $this->errorResponse("Reimbursable amount is greater than total expense amount", 422);
+        // }
 
-        $rem_fund = $user->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
+        // $rem_fund = $user->remaining_fund + ($expense->amount - $expense->reimbursable_amount);
         
-        if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
-            $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
-        }
+        // if (($rem_fund - (request("amount") - request("reimbursable_amount"))) < 0) {
+        //     $this->errorResponse("Amount to replenish is greater than remaining fund", 422);
+        // }
 
         if ($expense->expense_report) {
             if (Auth::user()->is_admin) {

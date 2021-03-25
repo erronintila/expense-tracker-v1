@@ -32,9 +32,7 @@ class DepartmentController extends Controller
     public function index(Request $request)
     {
         if (!request("isSelection") || !request()->has("isSelection")) {
-            if (!app("auth")->user()->hasPermissionTo('view all departments')) {
-                abort(403);
-            }
+            abort_if(!app("auth")->user()->hasPermissionTo('view all departments'), 403);
         }
 
         $search = request('search') ?? "";
