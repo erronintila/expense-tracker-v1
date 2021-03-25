@@ -36,16 +36,16 @@ class LessRemainingFund implements Rule
     public function passes($attribute, $value)
     {
         $user = User::find($this->user_id);
-        $expense = Expense::find($this->expense);
         $remaining_fund = $user->remaining_fund ?? 0;
-        $original_amount = $expense->amount;
-        $original_amount_to_reimburse = $expense->reimbursable_amount;
 
         if (!$user) {
             return true;
         }
 
         if ($this->action == "update") {
+            $expense = Expense::find($this->expense);
+            $original_amount = $expense->amount;
+            $original_amount_to_reimburse = $expense->reimbursable_amount;
             $remaining_fund += ($original_amount - $original_amount_to_reimburse);
         }
 
