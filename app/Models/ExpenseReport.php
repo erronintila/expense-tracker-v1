@@ -398,8 +398,8 @@ class ExpenseReport extends Model
      */
     public function getExpenseStartDateAttribute()
     {
-        // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
-        return date('Y-m-d', min(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
+        return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
+        // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
     }
 
     /**
@@ -409,8 +409,8 @@ class ExpenseReport extends Model
      */
     public function getExpenseEndDateAttribute()
     {
-        // return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
-        return date('Y-m-d', max(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
+        return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
+        // return date('Y-m-d', max(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
     }
     
     /**
@@ -420,8 +420,8 @@ class ExpenseReport extends Model
      */
     public function getTotalExpenseAmountAttribute()
     {
-        // return $this->expenses()->withTrashed()->get()->sum('amount');
-        return $this->expenses()->get()->sum('amount');
+        return $this->expenses()->withTrashed()->get()->sum('amount');
+        // return $this->expenses()->get()->sum('amount');
     }
     
     /**
@@ -431,8 +431,8 @@ class ExpenseReport extends Model
      */
     public function getTotalReimbursableAmountAttribute()
     {
-        // return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
-        return $this->expenses()->get()->sum('reimbursable_amount');
+        return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
+        // return $this->expenses()->get()->sum('reimbursable_amount');
     }
 
     /**
