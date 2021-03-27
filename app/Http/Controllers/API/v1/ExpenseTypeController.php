@@ -87,6 +87,7 @@ class ExpenseTypeController extends Controller
 
             if (request()->has("sub_types")) {
                 foreach (request('sub_types') as $item) {
+                    abort_if($item["name"] == $expense_type->name, 422, "Subtype name already exists.");
                     $sub_type = new ExpenseType();
                     $sub_type->name = $item["name"];
                     $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
@@ -137,10 +138,12 @@ class ExpenseTypeController extends Controller
 
             // remove sub types associated with expense type
             $expense_type->sub_types->each->delete();
-
+            
             // update sub types associated with expense type
             foreach (request('sub_types') as $key => $value) {
-                ExpenseType::updateOrCreate(
+                abort_if($value["name"] == $expense_type->name, 422, "Subtype name already exists.");
+
+                ExpenseType::withTrashed()->updateOrCreate(
                     ['id' => $value["id"]],
                     [
                         'name' => $value["name"],
