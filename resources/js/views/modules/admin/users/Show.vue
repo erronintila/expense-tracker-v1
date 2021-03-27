@@ -369,7 +369,6 @@ export default {
             axios
                 .get(`/api/data/validateFund?id=${this.id}`)
                 .then(response => {
-                    console.log(response);
                     this.getData();
                 })
                 .catch(error => {

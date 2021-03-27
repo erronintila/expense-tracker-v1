@@ -89,7 +89,6 @@ export default {
                     .then(response => {
                         this.loader = false;
                         this.formDataLoaded = true;
-                        console.log(response.data);
                         resolve(response.data);
                     })
                     .catch(error => {

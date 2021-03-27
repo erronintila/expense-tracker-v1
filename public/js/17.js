@@ -48,8 +48,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_0__["default"].store(value).then(function (response) {
-        console.log(response);
-
         _this.mixin_successDialog(response.data.status, response.data.message);
 
         _this.$router.push({

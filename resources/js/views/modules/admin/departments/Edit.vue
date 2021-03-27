@@ -68,7 +68,6 @@ export default {
         onSave(value) {
             DepartmentDataService.update(this.$route.params.id, value)
                 .then(response => {
-                    console.log(response);
                     this.mixin_successDialog(
                         response.data.status,
                         response.data.message
