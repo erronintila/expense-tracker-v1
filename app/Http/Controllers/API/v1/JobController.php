@@ -45,7 +45,11 @@ class JobController extends Controller
         // if($sortBy == "department.name") {
         //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
         // } else {
-        $jobs = Job::with('department')->orderBy($sortBy, $sortType);
+        $jobs = Job::with(['department' => function($query) {
+            if(request()->has("isDeleted") && request("isDeleted")) {
+                $query->withTrashed();
+            }
+        }])->orderBy($sortBy, $sortType);
         // }
 
         if (request()->has('status')) {
@@ -102,8 +106,15 @@ class JobController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $message = "Job designation retrieved successfully"; // return message
-        $job = Job::with('department')->findOrFail($id);
+        if (request()->has("isDeleted") && request("isDeleted")) {
+            $job = Job::with(['department' => function ($query) {
+                $query->withTrashed();
+            }])->findOrFail($id);
+        } else {
+            $job = Job::with('department')->findOrFail($id);
+        }
+
+        $message = "Job designation retrieved successfully";
         return $this->successResponse(new JobResource($job), $message, 200);
     }
 
@@ -155,7 +166,7 @@ class JobController extends Controller
     | JOB CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+
     /**
      * Restore the specified resource from storage.
      *

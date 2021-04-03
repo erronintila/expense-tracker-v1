@@ -1790,48 +1790,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                            _c(
-                              "div",
-                              { staticClass: "text-right" },
-                              [
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: { color: "green", dark: "" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.generateExpenseReport(
-                                          "print"
-                                        )
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                Print\n                            "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: { color: "green", dark: "" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.generateExpenseReport("pdf")
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                Export to PDF\n                            "
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            )
+                            _c("div", { staticClass: "text-right" })
                           ])
                         ],
                         1

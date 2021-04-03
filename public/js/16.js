@@ -462,6 +462,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         var department_id = _this.filters.department.id;
         var status = _this.filters.status;
+        var isDeleted = _this.filters.status == "Archived";
         var data = {
           params: {
             search: search,
@@ -470,7 +471,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page: page,
             itemsPerPage: itemsPerPage,
             status: status,
-            department_id: department_id
+            department_id: department_id,
+            isDeleted: isDeleted
           }
         };
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {

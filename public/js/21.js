@@ -1263,6 +1263,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               _this6.formDataLoaded = true;
             });
 
+            _this6.loadTotalCountReportStatus();
+
             _this6.selected = [];
           })["catch"](function (error) {
             _this6.mixin_showErrors(error);

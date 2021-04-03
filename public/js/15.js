@@ -358,6 +358,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -548,6 +560,46 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c("v-chip", { attrs: { dark: "", color: "grey" } }, [
+            _vm._v("Unreported")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "orange" } }, [
+            _vm._v("Unsubmitted")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "blue" } }, [
+            _vm._v("Submitted")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "cyan" } }, [
+            _vm._v("Approved")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "red" } }, [
+            _vm._v("Rejected")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "red" } }, [
+            _vm._v("Cancelled")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "blue" } }, [
+            _vm._v("Released Payment")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "blue" } }, [
+            _vm._v("Released")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "green" } }, [
+            _vm._v("Completed")
+          ]),
+          _vm._v(" "),
+          _c("v-chip", { attrs: { dark: "", color: "green" } }, [
+            _vm._v("Reimbursed")
+          ]),
+          _vm._v(" "),
           _c("DepartmentDropdownSelector", {
             attrs: { showAll: true, selectedDepartment: _vm.department },
             on: {

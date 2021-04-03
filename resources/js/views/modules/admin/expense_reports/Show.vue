@@ -269,7 +269,7 @@
 
                         <v-col cols="12" md="4">
                             <div class="text-right">
-                                <v-btn
+                                <!-- <v-btn
                                     @click="generateExpenseReport('print')"
                                     color="green"
                                     dark
@@ -282,7 +282,7 @@
                                     dark
                                 >
                                     Export to PDF
-                                </v-btn>
+                                </v-btn> -->
                                 <!-- <v-btn
                                     @click="generatePDF('print')"
                                     color="green"
@@ -352,7 +352,7 @@
 
                     <!-- <v-card-actions>
                         <v-spacer></v-spacer>
-                        
+
                         <v-btn color="green" dark @click="onEdit"
                             >Print Report</v-btn
                         >

@@ -1,6 +1,18 @@
 <template>
     <div>
         <v-container>
+            <v-chip dark color="grey">Unreported</v-chip>
+            <v-chip dark color="orange">Unsubmitted</v-chip>
+            <v-chip dark color="blue">Submitted</v-chip>
+            <v-chip dark color="cyan">Approved</v-chip>
+            <v-chip dark color="red">Rejected</v-chip>
+            <v-chip dark color="red">Cancelled</v-chip>
+            <v-chip dark color="blue">Released Payment</v-chip>
+            <v-chip dark color="blue">Released</v-chip>
+            <v-chip dark color="green">Completed</v-chip>
+            <v-chip dark color="green">Reimbursed</v-chip>
+
+
             <DepartmentDropdownSelector
                 v-model="department"
                 :showAll="true"

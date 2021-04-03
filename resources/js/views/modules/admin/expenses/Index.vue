@@ -326,7 +326,7 @@
                                         <td>:</td>
                                         <td>{{ item.is_late_encoded }}</td>
                                     </tr>
-                                    <!-- 
+                                    <!--
                                     <tr>
                                         <td><strong>Created By</strong></td>
                                         <td>:</td>
@@ -630,7 +630,7 @@ export default {
                         user_id: user_id,
                         expense_type_id: expense_type_id,
                         start_date: range[0],
-                        end_date: range[1] ? range[1] : range[0]
+                        end_date: range[1] ? range[1] : range[0],
                     }
                 })
                     .then(response => {

@@ -1320,6 +1320,7 @@ export default {
                                     this.totalItems = data.total;
                                     this.formDataLoaded = true;
                                 });
+                                this.loadTotalCountReportStatus();
                                 this.selected = [];
                             })
                             .catch(error => {

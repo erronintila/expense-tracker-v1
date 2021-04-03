@@ -306,6 +306,8 @@ export default {
                 let search = this.filters.search.trim().toLowerCase();
                 let department_id = this.filters.department.id;
                 let status = this.filters.status;
+                let isDeleted = this.filters.status == "Archived";
+
                 let data = {
                     params: {
                         search: search,
@@ -314,7 +316,8 @@ export default {
                         page: page,
                         itemsPerPage: itemsPerPage,
                         status: status,
-                        department_id: department_id
+                        department_id: department_id,
+                        isDeleted: isDeleted
                     }
                 };
 
