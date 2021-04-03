@@ -76,22 +76,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -118,14 +102,29 @@ __webpack_require__.r(__webpack_exports__);
           label: "This Week",
           range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")]
         }, {
+          label: "Last Week",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").endOf("week").format("YYYY-MM-DD")]
+        }, {
           label: "This Month",
           range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")]
+        }, {
+          label: "Last Month",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").endOf("month").format("YYYY-MM-DD")]
         }, {
           label: "This Quarter",
           range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("quarter").format("YYYY-MM-DD")]
         }, {
+          label: "Last Quarter",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").endOf("quarter").format("YYYY-MM-DD")]
+        }, {
           label: "This Year",
           range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")]
+        }, {
+          label: "Last Year",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")]
+        }, {
+          label: "Last 5 Years",
+          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(5, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")]
         }];
       }
     }
@@ -300,9 +299,9 @@ var render = function() {
                                       [
                                         _c("v-icon", [_vm._v("mdi-calendar")]),
                                         _vm._v(
-                                          " \n                                    " +
+                                          " \n                  " +
                                             _vm._s(_vm.dateRangeText) +
-                                            "\n                                "
+                                            "\n                "
                                         )
                                       ],
                                       1
@@ -339,9 +338,9 @@ var render = function() {
                                       [
                                         _c("v-list-item-title", [
                                           _vm._v(
-                                            "\n                                            " +
+                                            "\n                      " +
                                               _vm._s(item.label) +
-                                              "\n                                        "
+                                              "\n                    "
                                           )
                                         ])
                                       ],
@@ -364,11 +363,7 @@ var render = function() {
                       ? _c(
                           "div",
                           { staticClass: "overline red--text text-capitalize" },
-                          [
-                            _vm._v(
-                              "\n                        *select 1 more\n                    "
-                            )
-                          ]
+                          [_vm._v("\n            *select 1 more\n          ")]
                         )
                       : _vm._e()
                   ])
@@ -412,7 +407,7 @@ var render = function() {
                   attrs: { text: "", color: "primary" },
                   on: { click: _vm.onCancel }
                 },
-                [_vm._v("\n                Cancel\n            ")]
+                [_vm._v(" Cancel ")]
               ),
               _vm._v(" "),
               _c(
@@ -421,7 +416,7 @@ var render = function() {
                   attrs: { text: "", color: "primary" },
                   on: { click: _vm.onSave }
                 },
-                [_vm._v("\n                OK\n            ")]
+                [_vm._v(" OK ")]
               )
             ],
             1
