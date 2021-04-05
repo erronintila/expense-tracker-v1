@@ -421,6 +421,16 @@ export default {
             });
         }
     },
+    computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.filters.search,
+                query: this.filters.status,
+                query: this.filters.department
+            };
+        }
+    },
     watch: {
         params: {
             immediate: true,
@@ -433,19 +443,9 @@ export default {
             }
         }
     },
-    computed: {
-        params(nv) {
-            return {
-                ...this.options,
-                query: this.filters.search,
-                query: this.filters.status,
-                query: this.filters.department
-            };
-        }
-    },
-    created() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-    },
+    // created() {
+    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {

@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Requests\ExpenseType\ExpenseTypeStoreRequest;
 use App\Http\Requests\ExpenseType\ExpenseTypeUpdateRequest;
-use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
-use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
+// use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
+// use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
 use Illuminate\Support\Facades\DB;
 
 class ExpenseTypeController extends Controller
@@ -64,7 +64,7 @@ class ExpenseTypeController extends Controller
 
         $expense_types = $expense_types->paginate($itemsPerPage);
 
-        return ExpenseTypeOnlyResource::collection($expense_types);
+        return ExpenseTypeResource::collection($expense_types);
     }
 
     /**
@@ -116,7 +116,7 @@ class ExpenseTypeController extends Controller
             ->where('expense_type_id', null)
             ->findOrFail($id);
         $message = "Expense type retrieved successfully";
-        return $this->successResponse(new ExpenseTypeShowResource($expense_type), $message, 200);
+        return $this->successResponse(new ExpenseTypeResource($expense_type), $message, 200);
     }
 
     /**

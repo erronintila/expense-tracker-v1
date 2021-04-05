@@ -5,8 +5,12 @@ namespace App\Http\Resources\Expense;
 use App\Http\Resources\User\UserShowResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
+use App\Http\Resources\ExpenseTypeResource;
 use App\Http\Resources\SubType\SubTypeShowResource;
+use App\Http\Resources\UserIndexResource;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\Vendor\VendorOnlyResource;
+use App\Http\Resources\VendorResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\Activitylog\Models\Activity;
@@ -79,10 +83,10 @@ class ExpenseShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "expense_type" => new ExpenseTypeShowResource($this->whenLoaded('expense_type')),
+            "expense_type" => new ExpenseTypeResource($this->whenLoaded('expense_type')),
             "sub_type" => new SubTypeShowResource($this->whenLoaded('sub_type')),
-            "vendor" => new VendorOnlyResource($this->whenLoaded('vendor')),
-            "user" => new UserShowResource($this->whenLoaded('user')),
+            "vendor" => new VendorResource($this->whenLoaded('vendor')),
+            "user" => new UserResource($this->whenLoaded('user')),
             "expense_report" => new ExpenseReportOnlyResource($this->whenLoaded('expense_report')),
             // "tax" => $this->tax,
         ];

@@ -576,6 +576,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
+  computed: {
+    params: function params(nv) {
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
+        query: this.filters.search
+      }, _defineProperty(_objectSpread2, "query", this.filters.status), _defineProperty(_objectSpread2, "query", this.filters.department), _objectSpread2));
+    }
+  },
   watch: {
     params: {
       immediate: true,
@@ -590,18 +599,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  computed: {
-    params: function params(nv) {
-      var _objectSpread2;
-
-      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.filters.search
-      }, _defineProperty(_objectSpread2, "query", this.filters.status), _defineProperty(_objectSpread2, "query", this.filters.department), _objectSpread2));
-    }
-  },
-  created: function created() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
+  // created() {
+  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+  // },
   activated: function activated() {
     var _this5 = this;
 

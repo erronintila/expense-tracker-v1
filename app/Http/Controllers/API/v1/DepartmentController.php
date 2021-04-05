@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Models\Department;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request;    
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Requests\Department\DepartmentStoreRequest;

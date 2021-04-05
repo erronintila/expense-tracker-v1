@@ -454,10 +454,10 @@ export default {
             this.selected = [];
         },
         onShow(item) {
-            let params = { id: item.id }
+            let params = { id: item.id };
 
-            if(item.deleted_at) {
-                params = { id: item.id, isDeleted: true }
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
             }
 
             this.$router.push({
@@ -560,7 +560,7 @@ export default {
 
                     axios({
                         method: method,
-                        url: url,
+                        url: url
                         // data: {
                         //     ids: ids
                         // }
@@ -582,23 +582,6 @@ export default {
                         });
                 }
             });
-        }
-    },
-    watch: {
-        params: {
-            immediate: true,
-            deep: true,
-            handler() {
-                this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
-                });
-            }
-        },
-        items() {
-            this.totalAmount = this.mixin_formatNumber(
-                this.items.reduce((total, item) => total + item.amount, 0)
-            );
         }
     },
     computed: {
@@ -626,16 +609,33 @@ export default {
             return `${start_date} ~ ${end_date}`;
         }
     },
+    watch: {
+        params: {
+            immediate: true,
+            deep: true,
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        },
+        items() {
+            this.totalAmount = this.mixin_formatNumber(
+                this.items.reduce((total, item) => total + item.amount, 0)
+            );
+        }
+    },
     // mounted() {
     //     this.getDataFromApi().then(data => {
     //         this.items = data.items;
     //         this.totalItems = data.total;
     //     });
     // },
-    created() {
-        // this.$store.dispatch("AUTH_USER");
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-    },
+    // created() {
+    //     // this.$store.dispatch("AUTH_USER");
+    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {

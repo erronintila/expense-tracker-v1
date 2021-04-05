@@ -328,6 +328,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
+  computed: {
+    params: function params(nv) {
+      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+        query: this.search
+      }, "query", this.status));
+    }
+  },
   watch: {
     params: {
       immediate: true,
@@ -342,16 +349,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  computed: {
-    params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
-        query: this.search
-      }, "query", this.status));
-    }
-  },
-  created: function created() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
+  // created() {
+  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+  // },
   activated: function activated() {
     var _this5 = this;
 

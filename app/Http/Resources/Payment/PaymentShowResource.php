@@ -4,6 +4,7 @@ namespace App\Http\Resources\Payment;
 
 use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
+use App\Http\Resources\UserIndexResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\Activitylog\Models\Activity;
@@ -80,7 +81,7 @@ class PaymentShowResource extends JsonResource
             // Relationships
             // -------------------------------------------------------------------
             "expense_reports" => ExpenseReportOnlyResource::collection($this->whenLoaded('expense_reports')),
-            "user" => new UserOnlyResource($this->whenLoaded('user'))
+            "user" => new UserIndexResource($this->whenLoaded('user'))
         ];
     }
 }

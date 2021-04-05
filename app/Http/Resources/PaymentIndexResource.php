@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Resources\Payment;
+namespace App\Http\Resources;
 
-use App\Http\Resources\User\UserOnlyResource;
-use App\Http\Resources\UserIndexResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentIndexResource extends JsonResource
@@ -16,8 +14,6 @@ class PaymentIndexResource extends JsonResource
      */
     public function toArray($request)
     {
-        
-
         return [
             // -------------------------------------------------------------------
             // Fields
@@ -54,13 +50,13 @@ class PaymentIndexResource extends JsonResource
             "received_at" => $this->received_at,
             "cancelled_at" => $this->cancelled_at,
 
-            "created_by" => $this->created_by,
-            "updated_by" => $this->updated_by,
-            "deleted_by" => $this->deleted_by,
-            "approved_by" => $this->approved_by,
-            "released_by" => $this->released_by,
-            "received_by" => $this->received_by,
-            "cancelled_by" => $this->cancelled_by,
+            // "created_by" => $this->created_by,
+            // "updated_by" => $this->updated_by,
+            // "deleted_by" => $this->deleted_by,
+            // "approved_by" => $this->approved_by,
+            // "released_by" => $this->released_by,
+            // "received_by" => $this->received_by,
+            // "cancelled_by" => $this->cancelled_by,
 
             // -------------------------------------------------------------------
             // Relationships

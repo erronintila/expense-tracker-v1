@@ -10,8 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
 use App\Http\Requests\Vendor\VendorStoreRequest;
 use App\Http\Requests\Vendor\VendorUpdateRequest;
-use App\Http\Resources\Vendor\VendorShowResource;
-use App\Http\Resources\Vendor\VendorIndexResource;
 
 class VendorController extends Controller
 {
@@ -76,7 +74,7 @@ class VendorController extends Controller
         });
 
         $vendors = $vendors->paginate($itemsPerPage);
-        return VendorIndexResource::collection($vendors);
+        return VendorResource::collection($vendors);
     }
 
     /**
@@ -114,7 +112,7 @@ class VendorController extends Controller
         }
         
         $message = 'Vendor retrieved successfully';
-        return $this->successResponse(new VendorShowResource($vendor), $message, 200);
+        return $this->successResponse(new VendorResource($vendor), $message, 200);
     }
 
     /**

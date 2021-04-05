@@ -17,8 +17,6 @@ use App\Http\Resources\ExpenseReportResource;
 use App\Notifications\ExpenseReportNotification;
 use App\Http\Requests\ExpenseReport\ExpenseReportStoreRequest;
 use App\Http\Requests\ExpenseReport\ExpenseReportUpdateRequest;
-use App\Http\Resources\ExpenseReport\ExpenseReportShowResource;
-use App\Http\Resources\ExpenseReport\ExpenseReportIndexResource;
 
 class ExpenseReportController extends Controller
 {
@@ -165,7 +163,7 @@ class ExpenseReportController extends Controller
 
         $expense_reports = $expense_reports->paginate($itemsPerPage);
 
-        return ExpenseReportIndexResource::collection($expense_reports);
+        return ExpenseReportResource::collection($expense_reports);
     }
 
     /**
@@ -246,7 +244,7 @@ class ExpenseReportController extends Controller
                 ->with('payments')
                 ->findOrFail($id);
         }
-        return $this->successResponse(new ExpenseReportShowResource($expense_report), $message, 200);
+        return $this->successResponse(new ExpenseReportResource($expense_report), $message, 200);
     }
 
     /**

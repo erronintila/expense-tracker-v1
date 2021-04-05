@@ -608,25 +608,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  watch: {
-    params: {
-      immediate: true,
-      deep: true,
-      handler: function handler() {
-        var _this3 = this;
-
-        this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
-        });
-      }
-    },
-    items: function items() {
-      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
-        return total + item.amount;
-      }, 0));
-    }
-  },
   computed: {
     params: function params(nv) {
       var _objectSpread2;
@@ -650,16 +631,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
+  watch: {
+    params: {
+      immediate: true,
+      deep: true,
+      handler: function handler() {
+        var _this3 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this3.items = data.items;
+          _this3.totalItems = data.total;
+        });
+      }
+    },
+    items: function items() {
+      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
+        return total + item.amount;
+      }, 0));
+    }
+  },
   // mounted() {
   //     this.getDataFromApi().then(data => {
   //         this.items = data.items;
   //         this.totalItems = data.total;
   //     });
   // },
-  created: function created() {
-    // this.$store.dispatch("AUTH_USER");
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
+  // created() {
+  //     // this.$store.dispatch("AUTH_USER");
+  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+  // },
   activated: function activated() {
     var _this4 = this;
 

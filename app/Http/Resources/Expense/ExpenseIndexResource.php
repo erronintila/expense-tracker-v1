@@ -5,7 +5,10 @@ namespace App\Http\Resources\Expense;
 use App\Http\Resources\User\UserOnlyResource;
 use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
 use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
+use App\Http\Resources\ExpenseTypeResource;
+use App\Http\Resources\UserIndexResource;
 use App\Http\Resources\Vendor\VendorOnlyResource;
+use App\Http\Resources\VendorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseIndexResource extends JsonResource
@@ -88,10 +91,10 @@ class ExpenseIndexResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "expense_type" => new ExpenseTypeOnlyResource($this->whenLoaded('expense_type')),
+            "expense_type" => new ExpenseTypeResource($this->whenLoaded('expense_type')),
             // "sub_type" => new SubTypeShowResource($this->whenLoaded('sub_type')),
-            "vendor" => new VendorOnlyResource($this->whenLoaded('vendor')),
-            "user" => new UserOnlyResource($this->whenLoaded('user')),
+            "vendor" => new VendorResource($this->whenLoaded('vendor')),
+            "user" => new UserIndexResource($this->whenLoaded('user')),
             "expense_report" => new ExpenseReportOnlyResource($this->whenLoaded('expense_report')),
             // "expense_report" => $this->whenLoaded('expense_report'),
             // "expense_report" => new ExpenseReportShowResource($this->whenLoaded('expense_report')),

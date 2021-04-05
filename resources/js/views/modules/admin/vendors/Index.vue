@@ -465,6 +465,15 @@ export default {
             });
         }
     },
+    computed: {
+        params(nv) {
+            return {
+                ...this.options,
+                query: this.search,
+                query: this.status
+            };
+        }
+    },
     watch: {
         params: {
             immediate: true,
@@ -477,18 +486,9 @@ export default {
             }
         }
     },
-    computed: {
-        params(nv) {
-            return {
-                ...this.options,
-                query: this.search,
-                query: this.status
-            };
-        }
-    },
-    created() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-    },
+    // created() {
+    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {

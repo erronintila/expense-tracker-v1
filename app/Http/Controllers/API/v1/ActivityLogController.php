@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Resources\ActivityLogResource;
@@ -31,6 +30,7 @@ class ActivityLogController extends Controller
         $sortBy = request("sortBy") ?? "updated_at";
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
+
         $activity_logs = Activity::orderBy($sortBy, $sortType);
 
         if (request()->has('start_date') && request()->has('end_date')) {
