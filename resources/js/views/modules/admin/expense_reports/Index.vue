@@ -2078,13 +2078,13 @@ export default {
             };
         }
     },
-    created() {
-        // this.$store.dispatch("AUTH_USER");
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.$store.dispatch("AUTH_SETTINGS");
-        this.loadTotalCountReportStatus();
-        this.loadExpenseTypes();
-    },
+    // created() {
+    //     // this.$store.dispatch("AUTH_USER");
+    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+    //     // this.$store.dispatch("AUTH_SETTINGS");
+    //     // this.loadTotalCountReportStatus();
+    //     // this.loadExpenseTypes();
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.$store.dispatch("AUTH_SETTINGS");

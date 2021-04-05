@@ -398,7 +398,7 @@ class ExpenseReport extends Model
      */
     public function getExpenseStartDateAttribute()
     {
-        return $this->expenses()->withTrashed()->min("date");
+        return $this->expenses->min("date");
         // return date('Y-m-d', $this->expenses()->withTrashed()->min("date"));
         // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
         // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
@@ -423,7 +423,8 @@ class ExpenseReport extends Model
      */
     public function getTotalExpenseAmountAttribute()
     {
-        return $this->expenses()->withTrashed()->sum('amount');
+        // return $this->expenses()->withTrashed()->sum('amount');
+        return 0;
         // return $this->expenses()->get()->sum('amount');
     }
     
@@ -451,7 +452,8 @@ class ExpenseReport extends Model
         //     $sum_payment += $payment->pivot->payment;
         // }
 
-        $sum_payment = $this->payments->sum('pivot.payment');
+        // $sum_payment = $this->payments->sum('pivot.payment');
+        $sum_payment = 0;
         return $this->getTotalExpenseAmountAttribute() - $sum_payment;
     }
     
@@ -471,7 +473,8 @@ class ExpenseReport extends Model
         //     $sum_received_payment += $payment->pivot->payment;
         // }
 
-        $sum_received_payment = $this->payments->where("received_at", "<>", null)->sum('pivot.payment');
+        // $sum_received_payment = $this->payments->where("received_at", "<>", null)->sum('pivot.payment');
+        $sum_received_payment = 0;
 
         return $sum_received_payment;
     }
@@ -492,7 +495,8 @@ class ExpenseReport extends Model
         //     $sum_unreceived_payment += $payment->pivot->payment;
         // }
 
-        $sum_unreceived_payment = $this->payments->where("received_at", null)->sum('pivot.payment');
+        // $sum_unreceived_payment = $this->payments->where("received_at", null)->sum('pivot.payment');
+        $sum_unreceived_payment = 0;
 
         return $sum_unreceived_payment;
     }
