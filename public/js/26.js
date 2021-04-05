@@ -641,9 +641,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this4.form = response;
-
-      _this4.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this4.form = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
 
       _this4.formDataLoaded = true;
     });
@@ -652,9 +650,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this5 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this5.form = response;
-
-      _this5.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this5.form = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
 
       _this5.formDataLoaded = true;
     });

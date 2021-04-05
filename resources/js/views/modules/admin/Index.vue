@@ -510,13 +510,13 @@ export default {
     created() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.user = response;
-            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            // this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.user = response;
-            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            // this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };

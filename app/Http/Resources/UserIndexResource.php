@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources;
 
-use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
-use App\Http\Resources\Job\JobIndexResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserShowResource extends JsonResource
+class UserIndexResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -59,8 +57,11 @@ class UserShowResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "job" => new JobIndexResource($this->whenLoaded("job")),
-            "expense_types" => ExpenseTypeShowResource::collection($this->whenLoaded('expense_types')),
+            "job" => new JobResource($this->whenLoaded("job")),
+            "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
+            "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
+            "expense_types" => ExpenseTypeResource::collection($this->whenLoaded('expense_types')),
+            "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
         ];
     }
 }

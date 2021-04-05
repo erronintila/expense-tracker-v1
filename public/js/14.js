@@ -1140,14 +1140,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    this.$store.dispatch("AUTH_USER");
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.$store.dispatch("AUTH_USER"); // this.$store.dispatch("AUTH_NOTIFICATIONS");
   },
   activated: function activated() {
     var _this7 = this;
 
-    this.$store.dispatch("AUTH_USER");
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.$store.dispatch("AUTH_USER"); // this.$store.dispatch("AUTH_NOTIFICATIONS");
+
     this.getDataFromApi().then(function (data) {
       _this7.items = data.data;
       _this7.meta = data.meta;

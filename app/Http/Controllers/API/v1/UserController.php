@@ -14,10 +14,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Permission;
+use App\Http\Resources\UserIndexResource;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
-use App\Http\Resources\User\UserOnlyResource;
-use App\Http\Resources\User\UserShowResource;
 use App\Http\Requests\User\UserProfileUpdateRequest;
 use App\Http\Requests\User\UserUpdatePasswordRequest;
 use App\Http\Requests\User\UserPermissionUpdateRequest;
@@ -53,12 +52,24 @@ class UserController extends Controller
         $sortBy = request("sortBy") ?? "last_name";
         $sortType = request("sortType") ?? "asc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
+        $status = request("status") ?? "";
+        $with_expense_types = request("with_expense_types");
+        $is_admin = request("is_admin");
+        $is_superadmin = request("is_superadmin");
+        $is_active = request("is_active");
 
-        $users = User::with(['job' => function ($query) {
-            $query->with('department');
+        $users = User::with(['job' => function ($query) use ($status) {
+            if ($status == "Archived") {
+                $query->withTrashed();
+            }
+            $query->with(['department' => function ($query2) use ($status) {
+                if ($status == "Archived") {
+                    $query2->withTrashed();
+                }
+            }]);
         }]);
 
-        if (request()->has("with_expense_types")) {
+        if ($with_expense_types) {
             $users = $users->with(['expense_types' => function ($query) {
                 $query->with('sub_types');
             }]);
@@ -82,39 +93,37 @@ class UserController extends Controller
                 break;
         }
 
-        if (request()->has('is_admin')) {
-            $users = $users->where('is_admin', request("is_admin"));
+        if ($is_admin) {
+            $users = $users->where('is_admin', $is_admin);
         }
 
-        if (request()->has('is_superadmin')) {
-            $users = $users->where('is_superadmin', request("is_superadmin"));
+        if ($is_superadmin) {
+            $users = $users->where('is_superadmin', $is_superadmin);
         }
 
-        if (request()->has('status')) {
-            switch (request("status")) {
-                case 'Archived':
-                    $users = $users->onlyTrashed();
-                    break;
-                case 'Verified':
-                    $users = $users->where('email_verified_at', '<>', null);
-                    break;
-                case 'Unverified':
-                    $users = $users->where('email_verified_at', null);
-                    break;
-                case 'Inactive':
-                    $users = $users->where('is_active', 0);
-                    break;
-                case 'Active':
-                    $users = $users->where('is_active', 1);
-                    break;
-                default:
-                    $users = $users;
-                    break;
-            }
+        switch ($status) {
+            case 'Archived':
+                $users = $users->onlyTrashed();
+                break;
+            case 'Verified':
+                $users = $users->where('email_verified_at', '<>', null);
+                break;
+            case 'Unverified':
+                $users = $users->where('email_verified_at', null);
+                break;
+            case 'Inactive':
+                $users = $users->where('is_active', 0);
+                break;
+            case 'Active':
+                $users = $users->where('is_active', 1);
+                break;
+            default:
+                $users = $users;
+                break;
         }
 
-        if (request()->has("is_active")) {
-            $users = $users->where('is_active', (request("is_active") || strtolower(request("is_active")) == 'true') ?? 1);
+        if ($is_active) {
+            $users = $users->where('is_active', ($is_active || strtolower($is_active) == 'true') ?? 1);
         }
 
         if (request()->has('department_id')) {
@@ -143,7 +152,7 @@ class UserController extends Controller
         });
 
         $users = $users->paginate($itemsPerPage);
-        return UserOnlyResource::collection($users);
+        return UserIndexResource::collection($users);
     }
 
     /**
@@ -189,8 +198,6 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $message = "User retrieved successfully.";
-
         if (request()->has("isDeleted")) {
             if (request("isDeleted")) {
                 $user = User::withTrashed()
@@ -220,6 +227,7 @@ class UserController extends Controller
             ->findOrFail($id);
         }
 
+        $message = "User retrieved successfully.";
         return $this->successResponse(new UserResource($user), $message, 200);
     }
 
@@ -380,7 +388,7 @@ class UserController extends Controller
     }
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
-    {        
+    {
         $validated = $request->validated();
         $data = DB::transaction(function () use ($validated) {
             $user = User::findOrFail(auth()->user()->id);
@@ -523,7 +531,7 @@ class UserController extends Controller
     
             return response(
                 [
-                    'data' => new UserShowResource($user),
+                    'data' => new UserIndexResource($user),
     
                     'message' => 'Retrieved successfully'
                 ],
@@ -546,7 +554,7 @@ class UserController extends Controller
                 ->orderBy("last_name")
                 ->where("is_superadmin", false)
                 ->get();
-            return UserShowResource::collection($user);
+            return UserIndexResource::collection($user);
         }
         return UserResource::collection($user->get());
     }
@@ -575,7 +583,7 @@ class UserController extends Controller
 
         $user = User::findOrFail(request("id"));
 
-        if($user->remaining_fund > $user->fund ) {
+        if ($user->remaining_fund > $user->fund) {
             $user->remaining_fund = $user->fund;
         } else {
             $user->remaining_fund = $user->fund - $deduction->deduction;

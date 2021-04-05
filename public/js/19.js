@@ -532,18 +532,14 @@ __webpack_require__.r(__webpack_exports__);
     var _this3 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this3.user = response;
-
-      _this3.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this3.user = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   },
   activated: function activated() {
     var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this4.user = response;
-
-      _this4.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this4.user = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
     });
   }
 });

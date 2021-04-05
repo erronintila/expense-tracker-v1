@@ -473,11 +473,15 @@ export default {
             );
         }
     },
-    created() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-    },
+    // created() {
+    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.getDataFromApi().then(data => {
+            this.items = data.data;
+            this.meta = data.meta;
+        });
     }
 };
 </script>

@@ -628,14 +628,14 @@ export default {
     created() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.form = response;
-            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            // this.$store.dispatch("AUTH_NOTIFICATIONS");
             this.formDataLoaded = true;
         });
     },
     activated() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.form = response;
-            this.$store.dispatch("AUTH_NOTIFICATIONS");
+            // this.$store.dispatch("AUTH_NOTIFICATIONS");
             this.formDataLoaded = true;
         });
     }

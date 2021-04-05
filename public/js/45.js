@@ -512,14 +512,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, 0));
     }
   },
-  created: function created() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
+  // created() {
+  //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+  // },
   activated: function activated() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS"); // this.getDataFromApi().then(data => {
-    //     this.items = data.data;
-    //     this.meta = data.meta;
-    // });
+    var _this4 = this;
+
+    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.getDataFromApi().then(function (data) {
+      _this4.items = data.data;
+      _this4.meta = data.meta;
+    });
   }
 });
 
