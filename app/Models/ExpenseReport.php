@@ -398,8 +398,8 @@ class ExpenseReport extends Model
      */
     public function getExpenseStartDateAttribute()
     {
-        return $this->expenses->min("date");
-        // return date('Y-m-d', $this->expenses()->withTrashed()->min("date"));
+        // return $this->expenses->min("date");
+        return date('Y-m-d', $this->expenses()->withTrashed()->min("date"));
         // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
         // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
     }
