@@ -39,7 +39,7 @@ class PaymentController extends Controller
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
-        $payments = Payment::with('user')
+        $payments = Payment::with('user')->with("expense_reports")
         ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {

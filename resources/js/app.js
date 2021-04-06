@@ -104,7 +104,6 @@ import Mixin from "./mixins/index";
 
 axios.interceptors.response.use(
     function(config) {
-        console.log("config");
         //  Generate cancel token source
         let source = axios.CancelToken.source();
 

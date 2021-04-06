@@ -394,13 +394,15 @@ class Payment extends Model
      */
     public function getTotalAmountAttribute()
     {
-        $expense_reports = $this->expense_reports;
-        $sum = 0;
+        return $this->expense_reports->sum('pivot.payment');
 
-        foreach ($expense_reports as $expense_report) {
-            $sum += $expense_report->pivot->payment;
-        }
+        // $expense_reports = $this->expense_reports;
+        // $sum = 0;
 
-        return $sum;
+        // foreach ($expense_reports as $expense_report) {
+        //     $sum += $expense_report->pivot->payment;
+        // }
+
+        // return $sum;
     }
 }
