@@ -625,13 +625,13 @@ export default {
             return moment(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
         }
     },
-    created() {
-        this.$store.dispatch("AUTH_USER").then(response => {
-            this.form = response;
-            // this.$store.dispatch("AUTH_NOTIFICATIONS");
-            this.formDataLoaded = true;
-        });
-    },
+    // created() {
+    //     this.$store.dispatch("AUTH_USER").then(response => {
+    //         this.form = response;
+    //         // this.$store.dispatch("AUTH_NOTIFICATIONS");
+    //         this.formDataLoaded = true;
+    //     });
+    // },
     activated() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.form = response;

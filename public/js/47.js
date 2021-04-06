@@ -585,12 +585,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
-  created: function created() {
-    // this.$store.dispatch("AUTH_USER");
-    this.$store.dispatch("AUTH_SETTINGS");
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-    this.onLoad();
-  },
+  // created() {
+  //     // this.$store.dispatch("AUTH_USER");
+  //     this.$store.dispatch("AUTH_SETTINGS");
+  //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+  //     this.onLoad();
+  // },
   activated: function activated() {
     this.$store.dispatch("AUTH_SETTINGS");
     this.$store.dispatch("AUTH_NOTIFICATIONS");

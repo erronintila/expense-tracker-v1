@@ -532,10 +532,10 @@ export default {
             return `${start_date} ~ ${end_date}`;
         }
     },
-    created() {
-        this.$store.dispatch("AUTH_USER");
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-    },
+    // created() {
+    //     this.$store.dispatch("AUTH_USER");
+    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_USER");
         this.$store.dispatch("AUTH_NOTIFICATIONS");

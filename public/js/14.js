@@ -1139,9 +1139,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
     }
   },
-  created: function created() {
-    this.$store.dispatch("AUTH_USER"); // this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
+  // created() {
+  //     this.$store.dispatch("AUTH_USER");
+  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+  // },
   activated: function activated() {
     var _this7 = this;
 

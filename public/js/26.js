@@ -637,22 +637,20 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
     }
   },
-  created: function created() {
+  // created() {
+  //     this.$store.dispatch("AUTH_USER").then(response => {
+  //         this.form = response;
+  //         // this.$store.dispatch("AUTH_NOTIFICATIONS");
+  //         this.formDataLoaded = true;
+  //     });
+  // },
+  activated: function activated() {
     var _this4 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this4.form = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
 
       _this4.formDataLoaded = true;
-    });
-  },
-  activated: function activated() {
-    var _this5 = this;
-
-    this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this5.form = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-      _this5.formDataLoaded = true;
     });
   }
 });

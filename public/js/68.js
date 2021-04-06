@@ -981,7 +981,7 @@ __webpack_require__.r(__webpack_exports__);
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     this.$store.dispatch("AUTH_USER"); // this.load_expense_types_expenses(
     //     this.date_range[0],
     //     this.date_range[1],
@@ -998,20 +998,6 @@ __webpack_require__.r(__webpack_exports__);
     // );
 
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
-  },
-  created: function created() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
-  activated: function activated() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-    this.$store.dispatch("AUTH_USER"); // this.load_pie_chart();
-    // this.load_bar_chart();
-    // this.load_line_chart();
-    // this.getExpenseStats(
-    //     this.date_range[0],
-    //     this.date_range[1],
-    //     this.user.id
-    // );
   }
 });
 

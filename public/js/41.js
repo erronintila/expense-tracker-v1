@@ -343,9 +343,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  created: function created() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
+  // created() {
+  //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+  // },
   activated: function activated() {
     var _this3 = this;
 

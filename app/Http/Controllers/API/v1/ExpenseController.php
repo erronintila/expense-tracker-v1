@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ExpenseResource;
 use App\Http\Requests\Expense\ExpenseStoreRequest;
 use App\Http\Requests\Expense\ExpenseUpdateRequest;
-use App\Http\Resources\Expense\ExpenseShowResource;
-use App\Http\Resources\Expense\ExpenseIndexResource;
+use App\Http\Resources\Expense\expenseindex;
+use App\Http\Resources\Expense\expenseshow;
+use App\Http\Resources\ExpenseIndexResource;
+use App\Http\Resources\ExpesneIndexResource;
 use App\Models\Vendor;
 use Carbon\Carbon;
 
@@ -57,6 +59,11 @@ class ExpenseController extends Controller
                     $query->withTrashed();
                 }
             }])
+            ->with(['vendor' => function ($query) use ($status) {
+                if ($status === "Cancelled Expenses") {
+                    $query->withTrashed();
+                }
+            }])
             ->with(['expense_type' => function ($query) use ($status) {
                 if ($status === "Cancelled Expenses") {
                     $query->withTrashed();
@@ -67,89 +74,84 @@ class ExpenseController extends Controller
                     $query->withTrashed();
                 }
             }])
-            ->with(['vendor' => function ($query) use ($status) {
-                if ($status === "Cancelled Expenses") {
-                    $query->withTrashed();
-                }
-            }])
             ->orderBy($sortBy, $sortType);
 
         switch ($status) {
-                case 'Cancelled Expenses':
-                    $expenses = $expenses->onlyTrashed();
-                    break;
-                case 'Reimbursed Expenses':
-                    $expenses = $expenses->whereHas("expense_report", function ($query) {
+            case 'Cancelled Expenses':
+                $expenses = $expenses->onlyTrashed();
+                break;
+            case 'Reimbursed Expenses':
+                $expenses = $expenses->whereHas("expense_report", function ($query) {
+                    $query->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null]
+                    ]);
+                    $query->whereHas("payments", function ($query) {
                         $query->where([
-                            ["submitted_at", "<>", null],
                             ["approved_at", "<>", null],
-                            ["rejected_at", "=", null],
-                            ["cancelled_at", "=", null]
-                        ]);
-                        $query->whereHas("payments", function ($query) {
-                            $query->where([
-                                ["approved_at", "<>", null],
-                                ["released_at", "<>", null],
-                                ["received_at", "<>", null],
-                                ["cancelled_at", "=", null],
-                                ["deleted_at", "=", null],
-                            ]);
-                        });
-                    });
-                    break;
-                case 'Rejected Expenses':
-                    $expenses = $expenses->whereHas("expense_report", function ($query) {
-                        $query->where([
-                            ["expense_report_id", "<>", null],
-                            ["submitted_at", "<>", null],
-                            // ["approved_at", "<>", null],
-                            ["rejected_at", "<>", null],
-                            // ["cancelled_at", "=", null],
-                        ]);
-                    });
-                    break;
-                case 'Approved Expenses':
-                    $expenses = $expenses->whereHas("expense_report", function ($query) {
-                        $query->where([
-                            ["submitted_at", "<>", null],
-                            ["approved_at", "<>", null],
-                            ["rejected_at", "=", null],
+                            ["released_at", "<>", null],
+                            ["received_at", "<>", null],
                             ["cancelled_at", "=", null],
+                            ["deleted_at", "=", null],
                         ]);
-                        $query->whereDoesntHave("payments");
                     });
-                    break;
-                case 'Submitted Expenses':
-                    $expenses = $expenses->whereHas("expense_report", function ($query) {
-                        $query->where([
-                            ["submitted_at", "<>", null],
-                            ["approved_at", "=", null],
-                            ["rejected_at", "=", null],
-                            ["cancelled_at", "=", null],
-                        ]);
+                });
+                break;
+            case 'Rejected Expenses':
+                $expenses = $expenses->whereHas("expense_report", function ($query) {
+                    $query->where([
+                        ["expense_report_id", "<>", null],
+                        ["submitted_at", "<>", null],
+                        // ["approved_at", "<>", null],
+                        ["rejected_at", "<>", null],
+                        // ["cancelled_at", "=", null],
+                    ]);
+                });
+                break;
+            case 'Approved Expenses':
+                $expenses = $expenses->whereHas("expense_report", function ($query) {
+                    $query->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
+                    $query->whereDoesntHave("payments");
+                });
+                break;
+            case 'Submitted Expenses':
+                $expenses = $expenses->whereHas("expense_report", function ($query) {
+                    $query->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
 
-                        $query->whereDoesntHave("payments");
-                    });
-                    break;
-                case 'Unsubmitted Expenses':
-                    $expenses = $expenses->whereHas("expense_report", function ($query) {
-                        $query->where([
-                            ["submitted_at", "=", null],
-                            ["approved_at", "=", null],
-                            ["rejected_at", "=", null],
-                            ["cancelled_at", "=", null],
-                        ]);
+                    $query->whereDoesntHave("payments");
+                });
+                break;
+            case 'Unsubmitted Expenses':
+                $expenses = $expenses->whereHas("expense_report", function ($query) {
+                    $query->where([
+                        ["submitted_at", "=", null],
+                        ["approved_at", "=", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null],
+                    ]);
 
-                        $query->whereDoesntHave("payments");
-                    });
-                    break;
-                case 'Unreported Expenses':
-                    $expenses = $expenses->doesnthave("expense_report");
-                    break;
-                default:
-                    $expenses = $expenses;
-                    break;
-            }
+                    $query->whereDoesntHave("payments");
+                });
+                break;
+            case 'Unreported Expenses':
+                $expenses = $expenses->doesnthave("expense_report");
+                break;
+            default:
+                $expenses = $expenses;
+                break;
+        }
 
         if ($user) {
             $expenses = $expenses->where("user_id", $user);
@@ -170,27 +172,164 @@ class ExpenseController extends Controller
             $query->orWhere("date", "like", "%" . $search . "%");
         });
 
-        if (request()->has("update_report")) {
-            $expenses = Expense::with('user')
-                ->with('expense_type')
-                ->with('expense_report')
-                ->with('sub_type')
-                ->with('vendor')
-                ->orderBy($sortBy, $sortType)
-                ->where(function ($q) use ($request) {
-                    $q->where("expense_report_id", request("expense_report_id"));
-                    $q->orWhere("expense_report_id", null);
-                })
-                ->where(function ($q) use ($request) {
-                    $q->whereBetween("date", [request("start_date"), request("end_date")]);
-                    $q->orWhere("expense_report_id", request("expense_report_id"));
-                })
-                ->where("user_id", request("user_id"));
 
-            $expenses = $expenses->whereBetween("date", [$start_date, $end_date]);
-        }
         $expenses = $expenses->paginate($itemsPerPage);
         return ExpenseIndexResource::collection($expenses);
+
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        /////////////////////////////////////////////
+        // $search = request("search") ?? "";
+        // $sortBy = request("sortBy") ?? "updated_at";
+        // $sortType = request("sortType") ?? "desc";
+        // $itemsPerPage = request("itemsPerPage") ?? 10;
+        // $status = request("status") ?? "All Expenses";
+        // $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
+        // $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        // $user = request('user_id');
+        // $expense_type = request('expense_type_id');
+        // $expense_report = request('expense_report_id');
+
+        // $expenses = Expense::whereBetween("date", [$start_date, $end_date])
+        //     ->with(['user' => function ($query) use ($status) {
+        //         if ($status === "Cancelled Expenses") {
+        //             $query->withTrashed();
+        //         }
+        //     }])
+        //     ->with(['expense_type' => function ($query) use ($status) {
+        //         if ($status === "Cancelled Expenses") {
+        //             $query->withTrashed();
+        //         }
+        //     }])
+        //     ->with(['expense_report' => function ($query) use ($status) {
+        //         if ($status === "Cancelled Expenses") {
+        //             $query->withTrashed();
+        //         }
+        //     }])
+        //     ->with(['vendor' => function ($query) use ($status) {
+        //         if ($status === "Cancelled Expenses") {
+        //             $query->withTrashed();
+        //         }
+        //     }])
+        //     ->orderBy($sortBy, $sortType);
+
+        // switch ($status) {
+        //         case 'Cancelled Expenses':
+        //             $expenses = $expenses->onlyTrashed();
+        //             break;
+        //         case 'Reimbursed Expenses':
+        //             $expenses = $expenses->whereHas("expense_report", function ($query) {
+        //                 $query->where([
+        //                     ["submitted_at", "<>", null],
+        //                     ["approved_at", "<>", null],
+        //                     ["rejected_at", "=", null],
+        //                     ["cancelled_at", "=", null]
+        //                 ]);
+        //                 $query->whereHas("payments", function ($query) {
+        //                     $query->where([
+        //                         ["approved_at", "<>", null],
+        //                         ["released_at", "<>", null],
+        //                         ["received_at", "<>", null],
+        //                         ["cancelled_at", "=", null],
+        //                         ["deleted_at", "=", null],
+        //                     ]);
+        //                 });
+        //             });
+        //             break;
+        //         case 'Rejected Expenses':
+        //             $expenses = $expenses->whereHas("expense_report", function ($query) {
+        //                 $query->where([
+        //                     ["expense_report_id", "<>", null],
+        //                     ["submitted_at", "<>", null],
+        //                     // ["approved_at", "<>", null],
+        //                     ["rejected_at", "<>", null],
+        //                     // ["cancelled_at", "=", null],
+        //                 ]);
+        //             });
+        //             break;
+        //         case 'Approved Expenses':
+        //             $expenses = $expenses->whereHas("expense_report", function ($query) {
+        //                 $query->where([
+        //                     ["submitted_at", "<>", null],
+        //                     ["approved_at", "<>", null],
+        //                     ["rejected_at", "=", null],
+        //                     ["cancelled_at", "=", null],
+        //                 ]);
+        //                 $query->whereDoesntHave("payments");
+        //             });
+        //             break;
+        //         case 'Submitted Expenses':
+        //             $expenses = $expenses->whereHas("expense_report", function ($query) {
+        //                 $query->where([
+        //                     ["submitted_at", "<>", null],
+        //                     ["approved_at", "=", null],
+        //                     ["rejected_at", "=", null],
+        //                     ["cancelled_at", "=", null],
+        //                 ]);
+
+        //                 $query->whereDoesntHave("payments");
+        //             });
+        //             break;
+        //         case 'Unsubmitted Expenses':
+        //             $expenses = $expenses->whereHas("expense_report", function ($query) {
+        //                 $query->where([
+        //                     ["submitted_at", "=", null],
+        //                     ["approved_at", "=", null],
+        //                     ["rejected_at", "=", null],
+        //                     ["cancelled_at", "=", null],
+        //                 ]);
+
+        //                 $query->whereDoesntHave("payments");
+        //             });
+        //             break;
+        //         case 'Unreported Expenses':
+        //             $expenses = $expenses->doesnthave("expense_report");
+        //             break;
+        //         default:
+        //             $expenses = $expenses;
+        //             break;
+        //     }
+
+        // if ($user) {
+        //     $expenses = $expenses->where("user_id", $user);
+        // }
+
+        // if ($expense_type) {
+        //     $expenses = $expenses->where("expense_type_id", $expense_type);
+        // }
+
+        // if ($expense_report) {
+        //     $expenses = $expenses->where("expense_report_id", $expense_report);
+        // }
+
+        // $expenses = $expenses->where(function ($query) use ($search) {
+        //     $query->where('code', "like", "%" . $search . "%");
+        //     $query->orWhere("description", "like", "%" . $search . "%");
+        //     $query->orWhere("receipt_number", "like", "%" . $search . "%");
+        //     $query->orWhere("date", "like", "%" . $search . "%");
+        // });
+
+        // if (request()->has("update_report")) {
+        //     $expenses = Expense::with('user')
+        //         ->with('expense_type')
+        //         ->with('expense_report')
+        //         ->with('sub_type')
+        //         ->with('vendor')
+        //         ->orderBy($sortBy, $sortType)
+        //         ->where(function ($q) use ($request) {
+        //             $q->where("expense_report_id", request("expense_report_id"));
+        //             $q->orWhere("expense_report_id", null);
+        //         })
+        //         ->where(function ($q) use ($request) {
+        //             $q->whereBetween("date", [request("start_date"), request("end_date")]);
+        //             $q->orWhere("expense_report_id", request("expense_report_id"));
+        //         })
+        //         ->where("user_id", request("user_id"));
+
+        //     $expenses = $expenses->whereBetween("date", [$start_date, $end_date]);
+        // }
+        // $expenses = $expenses->paginate($itemsPerPage);
+        // return ExpesneIndexResource::collection($expenses);
     }
 
     /**
@@ -299,7 +438,7 @@ class ExpenseController extends Controller
 
         return response(
             [
-                'data' => new ExpenseShowResource($expense),
+                'data' => new expenseshow($expense),
                 'message' => 'Retrieved successfully'
             ],
             200
@@ -436,7 +575,7 @@ class ExpenseController extends Controller
                 ->orderBy($sortBy, $sortType)
                 ->get();
 
-                return ExpenseIndexResource::collection($expenses);
+                return expenseindex::collection($expenses);
             }
         }
 

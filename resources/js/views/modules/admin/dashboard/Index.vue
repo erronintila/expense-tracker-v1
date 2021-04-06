@@ -1160,12 +1160,13 @@ export default {
             this.onTimeUnitChange();
             this.getExpenseStats(
                 this.date_range[0],
-                this.date_range[1],
+                this.date_range[1],  
                 this.user ? this.user.id : null
             );
         }
     },
-    mounted() {
+    created() {
+         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
@@ -1178,22 +1179,5 @@ export default {
 
         // this.loadStatistics();
     },
-    created() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        // this.$store.dispatch("AUTH_USER");
-    },
-    activated() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-        this.load_pie_chart();
-        this.load_bar_chart();
-        this.load_line_chart();
-
-        this.getExpenseStats(
-            this.date_range[0],
-            this.date_range[1],
-            this.user ? this.user.id : null
-        );
-    }
 };
 </script>

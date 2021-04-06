@@ -461,13 +461,13 @@ class Expense extends Model
      */
     public function getCreatedInfoAttribute()
     {
-        if ($this->created_at) {
-            return [
-                "created_at" => $this->created_at,
-                "created_by" => User::withTrashed()->findOrFail($this->created_by)
-                // "created_by" => User::findOrFail($this->created_by)
-            ];
-        }
+        // if ($this->created_at) {
+        //     return [
+        //         "created_at" => $this->created_at,
+        //         "created_by" => User::withTrashed()->findOrFail($this->created_by)
+        //         // "created_by" => User::findOrFail($this->created_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -479,13 +479,13 @@ class Expense extends Model
      */
     public function getUpdatedInfoAttribute()
     {
-        if ($this->updated_at) {
-            return [
-                "updated_at" => $this->updated_at,
-                "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
-                // "updated_by" => User::findOrFail($this->updated_by)
-            ];
-        }
+        // if ($this->updated_at) {
+        //     return [
+        //         "updated_at" => $this->updated_at,
+        //         "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
+        //         // "updated_by" => User::findOrFail($this->updated_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -497,13 +497,13 @@ class Expense extends Model
      */
     public function getDeletedInfoAttribute()
     {
-        if ($this->deleted_at) {
-            return [
-                "deleted_at" => $this->deleted_at,
-                "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
-                // "deleted_by" => User::findOrFail($this->deleted_by)
-            ];
-        }
+        // if ($this->deleted_at) {
+        //     return [
+        //         "deleted_at" => $this->deleted_at,
+        //         "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
+        //         // "deleted_by" => User::findOrFail($this->deleted_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -515,15 +515,15 @@ class Expense extends Model
      */
     public function getSubmittedInfoAttribute()
     {
-        $expense_report = $this->expense_report;
+        // $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->submitted_at) {
-            return [
-                "submitted_at" => $expense_report->submitted_at,
-                "submitted_by" => User::withTrashed()->findOrFail($expense_report->submitted_by)
-                // "submitted_by" => User::findOrFail($expense_report->submitted_by)
-            ];
-        }
+        // if ($expense_report && $expense_report->submitted_at) {
+        //     return [
+        //         "submitted_at" => $expense_report->submitted_at,
+        //         "submitted_by" => User::withTrashed()->findOrFail($expense_report->submitted_by)
+        //         // "submitted_by" => User::findOrFail($expense_report->submitted_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -535,15 +535,15 @@ class Expense extends Model
      */
     public function getReviewedInfoAttribute()
     {
-        $expense_report = $this->expense_report;
+        // $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->reviewed_at) {
-            return [
-                "reviewed_at" => $expense_report->reviewed_at,
-                "reviewed_by" => User::withTrashed()->findOrFail($expense_report->reviewed_by)
-                // "reviewed_by" => User::findOrFail($expense_report->reviewed_by)
-            ];
-        }
+        // if ($expense_report && $expense_report->reviewed_at) {
+        //     return [
+        //         "reviewed_at" => $expense_report->reviewed_at,
+        //         "reviewed_by" => User::withTrashed()->findOrFail($expense_report->reviewed_by)
+        //         // "reviewed_by" => User::findOrFail($expense_report->reviewed_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -555,15 +555,15 @@ class Expense extends Model
      */
     public function getApprovedInfoAttribute()
     {
-        $expense_report = $this->expense_report;
+        // $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->approved_at) {
-            return [
-                "approved_at" => $expense_report->approved_at,
-                "approved_by" => User::withTrashed()->findOrFail($expense_report->approved_by)
-                // "approved_by" => User::findOrFail($expense_report->approved_by)
-            ];
-        }
+        // if ($expense_report && $expense_report->approved_at) {
+        //     return [
+        //         "approved_at" => $expense_report->approved_at,
+        //         "approved_by" => User::withTrashed()->findOrFail($expense_report->approved_by)
+        //         // "approved_by" => User::findOrFail($expense_report->approved_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -575,15 +575,15 @@ class Expense extends Model
      */
     public function getRejectedInfoAttribute()
     {
-        $expense_report = $this->expense_report;
+        // $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->rejected_at) {
-            return [
-                "rejected_at" => $expense_report->rejected_at,
-                "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
-                // "rejected_by" => User::findOrFail($expense_report->rejected_by)
-            ];
-        }
+        // if ($expense_report && $expense_report->rejected_at) {
+        //     return [
+        //         "rejected_at" => $expense_report->rejected_at,
+        //         "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
+        //         // "rejected_by" => User::findOrFail($expense_report->rejected_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -595,15 +595,15 @@ class Expense extends Model
      */
     public function getCancelledInfoAttribute()
     {
-        $expense_report = $this->expense_report;
+        // $expense_report = $this->expense_report;
 
-        if ($expense_report && $expense_report->cancelled_at) {
-            return [
-                "cancelled_at" => $expense_report->cancelled_at,
-                "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
-                // "cancelled_by" => User::findOrFail($expense_report->cancelled_by)
-            ];
-        }
+        // if ($expense_report && $expense_report->cancelled_at) {
+        //     return [
+        //         "cancelled_at" => $expense_report->cancelled_at,
+        //         "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
+        //         // "cancelled_by" => User::findOrFail($expense_report->cancelled_by)
+        //     ];
+        // }
 
         return null;
     }

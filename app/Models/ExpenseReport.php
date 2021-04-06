@@ -331,10 +331,10 @@ class ExpenseReport extends Model
 
         switch ($submission_period) {
             case 'Weekly':
-                $due_date = Carbon::createFromFormat('Y-m-d', $this->expense_start_date)->endOfWeek()->format("Y-m-d");
+                $due_date = Carbon::createFromFormat('Y-m-d', $this->getExpenseStartDateAttribute())->endOfWeek()->format("Y-m-d");
                 break;
             case 'Monthly':
-                $due_date = Carbon::createFromFormat('Y-m-d', $this->expense_end_date)->endOfMonth()->format("Y-m-d");
+                $due_date = Carbon::createFromFormat('Y-m-d', $this->getExpenseStartDateAttribute())->endOfMonth()->format("Y-m-d");
                 break;
             default:
                 // $due_date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->endOfDay()->format("Y-m-d");
@@ -372,35 +372,14 @@ class ExpenseReport extends Model
     }
 
     /**
-     * late_submitted
-     *
-     * @return mixed
-     */
-    public function isLateSubmitted()
-    {
-        return false;
-    }
-
-    /**
-     * late_approved
-     *
-     * @return mixed
-     */
-    public function isLateApproved()
-    {
-        return false;
-    }
-
-    /**
      * Displays the earliest start date covered by the expense report.
      *
      * @return mixed
      */
     public function getExpenseStartDateAttribute()
     {
-        // return $this->expenses->min("date");
-        return date('Y-m-d', $this->expenses()->withTrashed()->min("date"));
-        // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
+        // return $this->expenses()->withTrashed()->min("date");
+        return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
         // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
     }
 
@@ -411,8 +390,8 @@ class ExpenseReport extends Model
      */
     public function getExpenseEndDateAttribute()
     {
-        return $this->expenses()->withTrashed()->max("date");
-        // return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
+        // return $this->expenses()->withTrashed()->max("date");
+        return date('Y-m-d', max(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
         // return date('Y-m-d', max(array_map('strtotime', $this->expenses()->get()->pluck('date')->toArray())));
     }
     
@@ -423,8 +402,7 @@ class ExpenseReport extends Model
      */
     public function getTotalExpenseAmountAttribute()
     {
-        // return $this->expenses()->withTrashed()->sum('amount');
-        return 0;
+        return $this->expenses()->withTrashed()->get()->sum('amount');
         // return $this->expenses()->get()->sum('amount');
     }
     
@@ -435,7 +413,7 @@ class ExpenseReport extends Model
      */
     public function getTotalReimbursableAmountAttribute()
     {
-        return $this->expenses()->withTrashed()->sum('reimbursable_amount');
+        return $this->expenses()->withTrashed()->get()->sum('reimbursable_amount');
         // return $this->expenses()->get()->sum('reimbursable_amount');
     }
 
@@ -446,14 +424,12 @@ class ExpenseReport extends Model
      */
     public function getBalanceAttribute()
     {
-        // $sum_payment = 0;
-
-        // foreach ($this->payments as $payment) {
-        //     $sum_payment += $payment->pivot->payment;
-        // }
-
-        // $sum_payment = $this->payments->sum('pivot.payment');
         $sum_payment = 0;
+
+        foreach ($this->payments as $payment) {
+            $sum_payment += $payment->pivot->payment;
+        }
+
         return $this->getTotalExpenseAmountAttribute() - $sum_payment;
     }
     
@@ -464,17 +440,14 @@ class ExpenseReport extends Model
      */
     public function getReceivedPaymentAmountAttribute()
     {
-        // $payments = $this->payments()->where("received_at", "<>", null)->get();
-        // $sum_received_payment = 0;
-
-        // // return $payments;
-
-        // foreach ($payments as $payment) {
-        //     $sum_received_payment += $payment->pivot->payment;
-        // }
-
-        // $sum_received_payment = $this->payments->where("received_at", "<>", null)->sum('pivot.payment');
+        $payments = $this->payments()->where("received_at", "<>", null)->get();
         $sum_received_payment = 0;
+
+        // return $payments;
+
+        foreach ($payments as $payment) {
+            $sum_received_payment += $payment->pivot->payment;
+        }
 
         return $sum_received_payment;
     }
@@ -486,17 +459,14 @@ class ExpenseReport extends Model
      */
     public function getUnreceivedPaymentAmountAttribute()
     {
-        // $payments = $this->payments()->where("received_at", null)->get();
-        // $sum_unreceived_payment = 0;
-
-        // // return $payments;
-
-        // foreach ($payments as $payment) {
-        //     $sum_unreceived_payment += $payment->pivot->payment;
-        // }
-
-        // $sum_unreceived_payment = $this->payments->where("received_at", null)->sum('pivot.payment');
+        $payments = $this->payments()->where("received_at", null)->get();
         $sum_unreceived_payment = 0;
+
+        // return $payments;
+
+        foreach ($payments as $payment) {
+            $sum_unreceived_payment += $payment->pivot->payment;
+        }
 
         return $sum_unreceived_payment;
     }
@@ -508,13 +478,13 @@ class ExpenseReport extends Model
      */
     public function getCreatedInfoAttribute()
     {
-        // if ($this->created_at) {
-        //     return [
-        //         "created_at" => $this->created_at,
-        //         "created_by" => User::withTrashed()->findOrFail($this->created_by)
-        //         // "created_by" => User::findOrFail($this->created_by)
-        //     ];
-        // }
+        if ($this->created_at) {
+            return [
+                "created_at" => $this->created_at,
+                "created_by" => User::withTrashed()->findOrFail($this->created_by)
+                // "created_by" => User::findOrFail($this->created_by)
+            ];
+        }
 
         return null;
     }
@@ -526,13 +496,13 @@ class ExpenseReport extends Model
      */
     public function getUpdatedInfoAttribute()
     {
-        // if ($this->updated_at) {
-        //     return [
-        //         "updated_at" => $this->updated_at,
-        //         "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
-        //         // "updated_by" => User::findOrFail($this->updated_by)
-        //     ];
-        // }
+        if ($this->updated_at) {
+            return [
+                "updated_at" => $this->updated_at,
+                "updated_by" => User::withTrashed()->findOrFail($this->updated_by)
+                // "updated_by" => User::findOrFail($this->updated_by)
+            ];
+        }
 
         return null;
     }
@@ -544,13 +514,13 @@ class ExpenseReport extends Model
      */
     public function getDeletedInfoAttribute()
     {
-        // if ($this->deleted_at) {
-        //     return [
-        //         "deleted_at" => $this->deleted_at,
-        //         "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
-        //         // "deleted_by" => User::findOrFail($this->deleted_by)
-        //     ];
-        // }
+        if ($this->deleted_at) {
+            return [
+                "deleted_at" => $this->deleted_at,
+                "deleted_by" => User::withTrashed()->findOrFail($this->deleted_by)
+                // "deleted_by" => User::findOrFail($this->deleted_by)
+            ];
+        }
 
         return null;
     }
@@ -562,13 +532,13 @@ class ExpenseReport extends Model
      */
     public function getSubmittedInfoAttribute()
     {
-        // if ($this->submitted_at) {
-        //     return [
-        //         "submitted_at" => $this->submitted_at,
-        //         "submitted_by" => User::withTrashed()->findOrFail($this->submitted_by)
-        //         // "submitted_by" => User::findOrFail($this->submitted_by)
-        //     ];
-        // }
+        if ($this->submitted_at) {
+            return [
+                "submitted_at" => $this->submitted_at,
+                "submitted_by" => User::withTrashed()->findOrFail($this->submitted_by)
+                // "submitted_by" => User::findOrFail($this->submitted_by)
+            ];
+        }
 
         return null;
     }
@@ -580,13 +550,13 @@ class ExpenseReport extends Model
      */
     public function getReviewedInfoAttribute()
     {
-        // if ($this->reviewed_at) {
-        //     return [
-        //         "reviewed_at" => $this->reviewed_at,
-        //         "reviewed_by" => User::withTrashed()->findOrFail($this->reviewed_by)
-        //         // "reviewed_by" => User::findOrFail($this->reviewed_by)
-        //     ];
-        // }
+        if ($this->reviewed_at) {
+            return [
+                "reviewed_at" => $this->reviewed_at,
+                "reviewed_by" => User::withTrashed()->findOrFail($this->reviewed_by)
+                // "reviewed_by" => User::findOrFail($this->reviewed_by)
+            ];
+        }
 
         return null;
     }
@@ -598,13 +568,13 @@ class ExpenseReport extends Model
      */
     public function getApprovedInfoAttribute()
     {
-        // if ($this->approved_at) {
-        //     return [
-        //         "approved_at" => $this->approved_at,
-        //         "approved_by" => User::withTrashed()->findOrFail($this->approved_by)
-        //         // "approved_by" => User::findOrFail($this->approved_by)
-        //     ];
-        // }
+        if ($this->approved_at) {
+            return [
+                "approved_at" => $this->approved_at,
+                "approved_by" => User::withTrashed()->findOrFail($this->approved_by)
+                // "approved_by" => User::findOrFail($this->approved_by)
+            ];
+        }
 
         return null;
     }
@@ -616,13 +586,13 @@ class ExpenseReport extends Model
      */
     public function getRejectedInfoAttribute()
     {
-        // if ($this->rejected_at) {
-        //     return [
-        //         "rejected_at" => $this->rejected_at,
-        //         "rejected_by" => User::withTrashed()->findOrFail($this->rejected_by)
-        //         // "rejected_by" => User::findOrFail($this->rejected_by)
-        //     ];
-        // }
+        if ($this->rejected_at) {
+            return [
+                "rejected_at" => $this->rejected_at,
+                "rejected_by" => User::withTrashed()->findOrFail($this->rejected_by)
+                // "rejected_by" => User::findOrFail($this->rejected_by)
+            ];
+        }
 
         return null;
     }
@@ -634,13 +604,13 @@ class ExpenseReport extends Model
      */
     public function getCancelledInfoAttribute()
     {
-        // if ($this->cancelled_at) {
-        //     return [
-        //         "cancelled_at" => $this->cancelled_at,
-        //         "cancelled_by" => User::withTrashed()->findOrFail($this->cancelled_by)
-        //         // "cancelled_by" => User::findOrFail($this->cancelled_by)
-        //     ];
-        // }
+        if ($this->cancelled_at) {
+            return [
+                "cancelled_at" => $this->cancelled_at,
+                "cancelled_by" => User::withTrashed()->findOrFail($this->cancelled_by)
+                // "cancelled_by" => User::findOrFail($this->cancelled_by)
+            ];
+        }
 
         return null;
     }

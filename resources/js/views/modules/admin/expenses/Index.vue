@@ -914,9 +914,9 @@ export default {
             return `${start_date} ~ ${end_date}`;
         }
     },
-    created() {
-        this.loadExpenseTypes();
-    },
+    // created() {
+    //     this.loadExpenseTypes();
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadExpenseTypes();
