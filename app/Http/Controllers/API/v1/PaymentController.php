@@ -193,7 +193,9 @@ class PaymentController extends Controller
                 ->findOrFail($id);
             }
         } else {
-            $payment = Payment::with('expense_reports')
+            $payment = Payment::with(['expense_reports' => function($query) {
+                $query->with("expenses");
+            }])
                 ->with('user')
                 ->findOrFail($id);
         }

@@ -351,7 +351,6 @@ class ExpenseReport extends Model
                 $is_late_submitted = true;
             }
         }
-
         return $is_late_submitted;
     }
 
@@ -378,7 +377,8 @@ class ExpenseReport extends Model
      */
     public function getExpenseStartDateAttribute()
     {
-        return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
+        return $this->expenses()->withTrashed()->min("date");
+        // return date('Y-m-d', min(array_map('strtotime', $this->expenses()->withTrashed()->get()->pluck('date')->toArray())));
     }
 
     /**
