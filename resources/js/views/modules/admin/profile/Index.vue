@@ -257,7 +257,7 @@
                                     <v-col cols="12" md="12">
                                         <v-text-field
                                             v-model="form.username"
-                                            :rules="rules.username"
+                                            :rules="mixin_validation.required"
                                             :counter="100"
                                             :error-messages="errors.username"
                                             @input="errors.username = []"
@@ -268,7 +268,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.first_name"
-                                            :rules="rules.first_name"
+                                            :rules="mixin_validation.required"
                                             :counter="100"
                                             :error-messages="errors.first_name"
                                             @input="errors.first_name = []"
@@ -291,7 +291,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.last_name"
-                                            :rules="rules.last_name"
+                                            :rules="mixin_validation.required"
                                             :counter="100"
                                             :error-messages="errors.last_name"
                                             @input="errors.last_name = []"
@@ -366,7 +366,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.mobile_number"
-                                            :rules="rules.mobile_number"
+                                            :rules="mixin_validation.required"
                                             :counter="30"
                                             :error-messages="
                                                 errors.mobile_number
@@ -396,7 +396,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.email"
-                                            :rules="rules.email"
+                                            :rules="mixin_validation.required"
                                             :error-messages="errors.email"
                                             @input="errors.email = []"
                                             label="Email Address"
@@ -406,7 +406,7 @@
                                     <v-col cols="12">
                                         <v-textarea
                                             v-model="form.address"
-                                            :rules="rules.address"
+                                            :rules="mixin_validation.required"
                                             :error-messages="errors.address"
                                             @input="errors.address = []"
                                             label="Address"
@@ -576,6 +576,7 @@ export default {
                         this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
+                        console.log("error", error);
                         this.mixin_showErrors(error);
                         this.errors = error.response.data.errors;
                     });

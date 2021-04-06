@@ -103,19 +103,18 @@ import Mixin from "./mixins/index";
 //     "Bearer " + localStorage.getItem("access_token");
 
 axios.interceptors.response.use(
-    function(config) {
-        //  Generate cancel token source
-        let source = axios.CancelToken.source();
+    // function(config) {
+    //     //  Generate cancel token source
+    //     let source = axios.CancelToken.source();
 
-        // Set cancel token on this request
-        config.cancelToken = source.token;
+    //     // Set cancel token on this request
+    //     config.cancelToken = source.token;
 
-        // Add to vuex to make cancellation available from anywhere
-        store.commit("ADD_CANCEL_TOKEN", source);
-        return config;
-    },
+    //     // Add to vuex to make cancellation available from anywhere
+    //     store.commit("ADD_CANCEL_TOKEN", source);
+    //     return config;
+    // },
     function(response) {
-        console.log("response");
         return response;
     },
     function(error) {

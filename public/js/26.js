@@ -588,6 +588,8 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
+          console.log("error", error);
+
           _this2.mixin_showErrors(error);
 
           _this2.errors = error.response.data.errors;
@@ -1248,7 +1250,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.username,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 100,
                                               "error-messages":
                                                 _vm.errors.username,
@@ -1282,7 +1285,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.first_name,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 100,
                                               "error-messages":
                                                 _vm.errors.first_name,
@@ -1349,7 +1353,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.last_name,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 100,
                                               "error-messages":
                                                 _vm.errors.last_name,
@@ -1559,7 +1564,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.mobile_number,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 30,
                                               "error-messages":
                                                 _vm.errors.mobile_number,
@@ -1628,7 +1634,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.email,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               "error-messages":
                                                 _vm.errors.email,
                                               label: "Email Address"
@@ -1656,7 +1663,8 @@ var render = function() {
                                         [
                                           _c("v-textarea", {
                                             attrs: {
-                                              rules: _vm.rules.address,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               "error-messages":
                                                 _vm.errors.address,
                                               label: "Address",

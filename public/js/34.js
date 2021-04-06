@@ -701,11 +701,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("v-card-subtitle", [
-                _vm._v(
-                  "\n            Last updated: " +
-                    _vm._s(_vm.lastUpdated) +
-                    "\n        "
-                )
+                _vm._v(" Last updated: " + _vm._s(_vm.lastUpdated) + " ")
               ]),
               _vm._v(" "),
               _c(
@@ -1254,7 +1250,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.username,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 100,
                                               "error-messages":
                                                 _vm.errors.username,
@@ -1288,7 +1285,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.first_name,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 100,
                                               "error-messages":
                                                 _vm.errors.first_name,
@@ -1355,7 +1353,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.last_name,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 100,
                                               "error-messages":
                                                 _vm.errors.last_name,
@@ -1423,7 +1422,8 @@ var render = function() {
                                         [
                                           _c("v-select", {
                                             attrs: {
-                                              rules: _vm.rules.gender,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               items: ["Male", "Female"],
                                               "error-messages":
                                                 _vm.errors.gender,
@@ -1479,8 +1479,9 @@ var render = function() {
                                                             {
                                                               attrs: {
                                                                 rules:
-                                                                  _vm.rules
-                                                                    .birthdate,
+                                                                  _vm
+                                                                    .mixin_validation
+                                                                    .required,
                                                                 "error-messages":
                                                                   _vm.errors
                                                                     .birthdate,
@@ -1565,7 +1566,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.mobile_number,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               counter: 30,
                                               "error-messages":
                                                 _vm.errors.mobile_number,
@@ -1634,7 +1636,8 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
-                                              rules: _vm.rules.email,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               "error-messages":
                                                 _vm.errors.email,
                                               label: "Email Address"
@@ -1662,7 +1665,8 @@ var render = function() {
                                         [
                                           _c("v-textarea", {
                                             attrs: {
-                                              rules: _vm.rules.address,
+                                              rules:
+                                                _vm.mixin_validation.required,
                                               "error-messages":
                                                 _vm.errors.address,
                                               label: "Address",
@@ -1703,7 +1707,11 @@ var render = function() {
                                           attrs: { color: "primary" },
                                           on: { click: _vm.onSave }
                                         },
-                                        [_vm._v("Update Profile")]
+                                        [
+                                          _vm._v(
+                                            "\n                                    Update Profile\n                                "
+                                          )
+                                        ]
                                       )
                                     ],
                                     1

@@ -6,9 +6,7 @@
                 <h4 class="title green--text">Profile</h4>
                 <v-spacer></v-spacer>
             </v-card-title>
-            <v-card-subtitle>
-                Last updated: {{ lastUpdated }}
-            </v-card-subtitle>
+            <v-card-subtitle> Last updated: {{ lastUpdated }} </v-card-subtitle>
 
             <v-card-text>
                 <v-container>
@@ -257,7 +255,7 @@
                                     <v-col cols="12" md="12">
                                         <v-text-field
                                             v-model="form.username"
-                                            :rules="rules.username"
+                                            :rules="mixin_validation.required"
                                             :counter="100"
                                             :error-messages="errors.username"
                                             @input="errors.username = []"
@@ -268,7 +266,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.first_name"
-                                            :rules="rules.first_name"
+                                            :rules="mixin_validation.required"
                                             :counter="100"
                                             :error-messages="errors.first_name"
                                             @input="errors.first_name = []"
@@ -291,7 +289,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.last_name"
-                                            :rules="rules.last_name"
+                                            :rules="mixin_validation.required"
                                             :counter="100"
                                             :error-messages="errors.last_name"
                                             @input="errors.last_name = []"
@@ -315,7 +313,7 @@
                                     <v-col cols="12" md="4">
                                         <v-select
                                             v-model="form.gender"
-                                            :rules="rules.gender"
+                                            :rules="mixin_validation.required"
                                             :items="['Male', 'Female']"
                                             :error-messages="errors.gender"
                                             @input="errors.gender = []"
@@ -339,7 +337,9 @@
                                             >
                                                 <v-text-field
                                                     v-model="form.birthdate"
-                                                    :rules="rules.birthdate"
+                                                    :rules="
+                                                        mixin_validation.required
+                                                    "
                                                     :error-messages="
                                                         errors.birthdate
                                                     "
@@ -366,7 +366,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.mobile_number"
-                                            :rules="rules.mobile_number"
+                                            :rules="mixin_validation.required"
                                             :counter="30"
                                             :error-messages="
                                                 errors.mobile_number
@@ -396,7 +396,7 @@
                                     <v-col cols="12" md="4">
                                         <v-text-field
                                             v-model="form.email"
-                                            :rules="rules.email"
+                                            :rules="mixin_validation.required"
                                             :error-messages="errors.email"
                                             @input="errors.email = []"
                                             label="Email Address"
@@ -406,7 +406,7 @@
                                     <v-col cols="12">
                                         <v-textarea
                                             v-model="form.address"
-                                            :rules="rules.address"
+                                            :rules="mixin_validation.required"
                                             :error-messages="errors.address"
                                             @input="errors.address = []"
                                             label="Address"
@@ -417,9 +417,9 @@
 
                                 <v-row>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="primary" @click="onSave"
-                                        >Update Profile</v-btn
-                                    >
+                                    <v-btn color="primary" @click="onSave">
+                                        Update Profile
+                                    </v-btn>
                                 </v-row>
                             </v-form>
                         </v-col>
