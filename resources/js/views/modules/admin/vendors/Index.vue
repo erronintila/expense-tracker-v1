@@ -1,13 +1,17 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Vendors</h4>
 
                 <v-spacer></v-spacer>
 
                 <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }"  v-if="mixin_can('add vendors')">
+                    <template
+                        v-slot:activator="{ on, attrs }"
+                        v-if="mixin_can('add vendors')"
+                    >
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
@@ -24,65 +28,7 @@
                     <span>Add New</span>
                 </v-tooltip>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
-
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-
-                <v-menu offset-y transition="scale-transition" left>
+                <!-- <v-menu offset-y transition="scale-transition" left>
                     <template v-slot:activator="{ on: menu, attrs }">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on: tooltip }">
@@ -123,18 +69,114 @@
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
-                </v-menu>
+                </v-menu> -->
             </v-card-title>
 
             <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
                 </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip
+                            v-if="status != null"
+                            class="mr-2 mb-2"
+                            small
+                            v-bind="attrs"
+                            v-on="menu"
+                        >
+                            {{ status }}
+                        </v-chip>
+                    </template>
+
+                    <v-card>
+                        <v-list>
+                            <v-list-item>
+                                <v-select
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
+                                ></v-select>
+                            </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
+                <v-chip
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(true)"
+                    close-icon="mdi-check"
+                    color="green"
+                    dark
+                >
+                    Activate
+                </v-chip>
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Active'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onSetActivation(false)"
+                    close-icon="mdi-lock"
+                    color="red"
+                    dark
+                >
+                    Deactivate
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Archived'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                    dark
+                >
+                    Restore
+                </v-chip>
+
+                <v-chip
+                    v-show="selected.length > 0 && status == 'Inactive'"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                    dark
+                >
+                    Archive
                 </v-chip>
             </v-row>
 
@@ -213,7 +255,16 @@
                         <v-icon small class="mr-2" @click="onShow(item)">
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)" v-if="mixin_can('edit vendors')">
+                        <v-icon
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                            v-if="
+                                mixin_can('edit vendors') &&
+                                    item.is_active == 1 &&
+                                    item.deleted_at == null
+                            "
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -224,10 +275,13 @@
 </template>
 
 <script>
+import VendorDataService from "../../../../services/VendorDataService";
+
 export default {
     props: {},
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Name", value: "name" },
@@ -241,7 +295,7 @@ export default {
             ],
             items: [],
             status: "Active",
-            statuses: ["Active", "Archived"],
+            statuses: ["Active", "Inactive", "Archived"],
             selected: [],
             search: "",
             totalItems: 0,
@@ -255,45 +309,37 @@ export default {
     },
     methods: {
         getDataFromApi() {
-            let self = this;
-
-            self.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = self.search.trim().toLowerCase();
-                let status = self.status;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status
+                    }
+                };
 
-                axios
-                    .get("/api/vendors", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status
-                        }
-                    })
+                VendorDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        self.loading = false;
-
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        self.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.data.message
-                        );
-
-                        self.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
@@ -302,9 +348,15 @@ export default {
             this.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id };
+
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
+            }
+
             this.$router.push({
                 name: "admin.vendors.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {
@@ -314,106 +366,103 @@ export default {
             });
         },
         onDelete() {
-            let self = this;
-
-            if (self.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
             this.$confirm("Move item(s) to archive?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/vendors/${self.selected[0].id}`, {
-                            params: {
-                                ids: self.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
 
-                            self.mixin_successDialog(response.data.status, response.data.message);
+                    VendorDataService.delete(ids)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
 
-                            // self.$dialog.message.success(
-                            //     "Item(s) moved to archive.",
-                            //     {
-                            //         position: "top-right",
-                            //         timeout: 2000
-                            //     }
-                            // );
-
-                            self.getDataFromApi().then(data => {
-                                self.items = data.items;
-                                self.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            self.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            self.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let self = this;
-
-            if (self.selected.length == 0) {
+            if (this.selected.length == 0) {
                 this.mixin_errorDialog("Error", "No item(s) selected");
-
                 return;
             }
 
             this.$confirm("Do you want to restore account(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/vendors/restore/${self.selected[0].id}`, {
-                            ids: self.selected.map(item => {
-                                return item.id;
-                            }),
-                        })
-                        .then(function(response) {
-                            self.mixin_successDialog(response.data.status, response.data.message);
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
 
-                            self.getDataFromApi().then(data => {
-                                self.items = data.items;
-                                self.totalItems = data.total;
+                    VendorDataService.restore(ids)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            self.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            self.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.data.message
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
-        }
-    },
-    watch: {
-        params: {
-            handler() {
-                this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
-                });
-            },
-            deep: true
+        },
+        onSetActivation(is_active) {
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
+                return;
+            }
+
+            this.$confirm(
+                `Do you want to ${
+                    is_active ? "activate" : "deactivate"
+                } account(s)?`
+            ).then(res => {
+                if (res) {
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    let data = { is_active: is_active };
+                    
+                    VendorDataService.updateActivation(ids, data)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
+                            });
+                            this.selected = [];
+                        })
+                        .catch(error => {
+                            this.mixin_showErrors(error);
+                        });
+                }
+            });
         }
     },
     computed: {
@@ -425,9 +474,21 @@ export default {
             };
         }
     },
-    created() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
+    watch: {
+        params: {
+            immediate: true,
+            deep: true,
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        }
     },
+    // created() {
+    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {

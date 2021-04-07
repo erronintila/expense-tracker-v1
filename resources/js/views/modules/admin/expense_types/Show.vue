@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -15,26 +16,24 @@
 </template>
 
 <script>
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
     data() {
-        return {};
+        return {
+            formDataLoaded: false
+        };
     },
     methods: {
         loadItem() {
-            let _this = this;
-
-            axios
-                .get(`/api/users/${_this.$route.params.id}`)
-                .then(function(response) {
+            ExpenseTypeDataService.show(this.$route.params.id)
+                .then(response => {
+                    this.formDataLoaded = true;
                 })
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                .catch(error => {
+                    this.formDataLoaded = true;
+                    this.mixin_showErrors(error);
+                    this.$router.push({ name: "admin.expense_types.index" }, () => {});
                 });
         }
     },

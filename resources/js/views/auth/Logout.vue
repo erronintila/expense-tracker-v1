@@ -8,9 +8,8 @@ export default {
         return {};
     },
     created() {
-        let _this = this;
         this.$store.dispatch("AUTH_LOGOUT").then(response => {
-            _this.$router.push({ name: "login" });
+            this.$router.push({ name: "login" });
             // window.location.replace("/login");
         });
         // this.$store.dispatch("AUTH_LOGOUT").then(response => {

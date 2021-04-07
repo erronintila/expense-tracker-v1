@@ -1,20 +1,6 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
@@ -42,7 +28,6 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
                                         v-model="form.date"
-                                        :rules="mixin_validation.required"
                                         :error-messages="errors.date"
                                         @input="errors.date = []"
                                         label="Date"
@@ -60,20 +45,48 @@
                                 >
                                 </v-date-picker>
                             </v-menu>
-                            <v-autocomplete
-                                v-model="form.user"
-                                :rules="mixin_validation.required"
-                                :items="users"
-                                :error-messages="errors.user"
-                                @input="errors.user = []"
-                                @change="updateUser"
-                                item-value="id"
-                                item-text="full_name"
+                            <v-text-field
+                                :value="
+                                    form.user
+                                        ? form.user.full_name
+                                        : 'No Employee'
+                                "
+                                :error-messages="errors.user_id"
+                                @input="errors.user_id = []"
                                 label="Employee"
-                                return-object
-                                required
+                                readonly
                             >
-                            </v-autocomplete>
+                                <template v-slot:append>
+                                    <UserDialogSelector
+                                        ref="userDialogSelector"
+                                        @selectUser="selectUser"
+                                        @onReset="resetUser"
+                                        :selectedUser="form.user"
+                                        :usersParameters="usersParameters"
+                                    >
+                                        <template
+                                            v-slot:openDialog="{
+                                                bind,
+                                                on
+                                            }"
+                                        >
+                                            <v-btn
+                                                fab
+                                                color="primary"
+                                                text
+                                                x-small
+                                                v-bind="bind"
+                                                v-on="on"
+                                            >
+                                                <v-icon dark
+                                                    >mdi-magnify</v-icon
+                                                >
+                                            </v-btn>
+                                        </template>
+                                    </UserDialogSelector>
+                                </template>
+                            </v-text-field>
+
                             <v-text-field
                                 v-model="form.description"
                                 :rules="[
@@ -97,150 +110,14 @@
                                 Expense Reports
                             </div>
 
-                            <!-- <v-data-table
-                                elevation="0"
-                                v-model="selected"
-                                :headers="headers"
-                                :items="items"
-                                :items-per-page="5"
-                                :search="search"
-                                item-key="id"
-                                show-select
-                                single-expand
-                                show-expand
-                                class="elevation-0"
+                            <small
+                                v-if="
+                                    errors.expense_reports &&
+                                        errors.expense_reports.length > 0
+                                "
+                                class="red--text"
+                                >{{ errors.expense_reports[0] }}</small
                             >
-                                <template
-                                    slot="body.append"
-                                    v-if="items.length > 0"
-                                >
-                                    <tr class="green--text">
-                                        <td class="title">Total</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <strong>{{ total }}</strong>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </template>
-                                <template v-slot:top>
-                                    <DateRangePicker
-                                        :preset="preset"
-                                        :presets="presets"
-                                        :value="date_range"
-                                        :solo="false"
-                                        :buttonType="false"
-                                        :buttonColor="'white'"
-                                        :buttonDark="false"
-                                        @updateDates="updateDates"
-                                    ></DateRangePicker>
-
-                                    <v-text-field
-                                        v-model="search"
-                                        append-icon="mdi-magnify"
-                                        label="Search"
-                                        single-line
-                                        hide-details
-                                    ></v-text-field>
-                                </template>
-                                <template v-slot:[`item.user`]="{ item }">
-                                    {{
-                                        item.user.last_name +
-                                            " " +
-                                            item.user.first_name +
-                                            " " +
-                                            item.user.suffix
-                                    }}
-                                </template>
-                                <template v-slot:[`item.created`]="{ item }">
-                                    {{
-                                        mixin_formatDate(
-                                            item.created.created_at,
-                                            "YYYY-MM-DD HH:mm:ss"
-                                        )
-                                    }}
-                                </template>
-                                <template v-slot:[`item.period`]="{ item }">
-                                    {{ item.from }} ~ {{ item.to }}
-                                </template>
-                                <template v-slot:[`item.actions`]="{ item }">
-                                    <v-icon
-                                        small
-                                        class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/admin/expense_reports/${item.id}`
-                                            )
-                                        "
-                                    >
-                                        mdi-eye
-                                    </v-icon>
-                                </template>
-                                <template
-                                    v-slot:expanded-item="{ headers, item }"
-                                >
-                                    <td :colspan="headers.length">
-                                        <v-container>
-                                            <div v-if="item"></div>
-                                            <div>
-                                                Expenses
-                                            </div>
-                                            <v-simple-table dense>
-                                                <template v-slot:default>
-                                                    <thead>
-                                                        <tr>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Date
-                                                            </th>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Expense
-                                                            </th>
-                                                            <th
-                                                                class="text-left"
-                                                            >
-                                                                Amount
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr
-                                                            v-for="item in item.expenses"
-                                                            :key="item.id"
-                                                        >
-                                                            <td>
-                                                                {{ item.date }}
-                                                            </td>
-                                                            <td>
-                                                                {{
-                                                                    item
-                                                                        .expense_type
-                                                                        .name
-                                                                }}
-                                                            </td>
-                                                            <td>
-                                                                {{
-                                                                    mixin_formatNumber(
-                                                                        item.amount
-                                                                    )
-                                                                }}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </template>
-                                            </v-simple-table>
-                                        </v-container>
-                                    </td>
-                                </template>
-                            </v-data-table> -->
 
                             <v-data-table
                                 :headers="headers"
@@ -265,15 +142,27 @@
                             >
                                 <template v-slot:top>
                                     <DateRangePicker
-                                        :preset="preset"
-                                        :presets="presets"
-                                        :value="date_range"
-                                        :solo="false"
-                                        :buttonType="false"
-                                        :buttonColor="'white'"
-                                        :buttonDark="false"
-                                        @updateDates="updateDates"
-                                    ></DateRangePicker>
+                                        ref="dateRangePicker"
+                                        :dateRange="date_range"
+                                        @on-change="updateDates"
+                                    >
+                                        <template
+                                            v-slot:openDialog="{
+                                                on,
+                                                attrs,
+                                                dateRangeText
+                                            }"
+                                        >
+                                            <v-text-field
+                                                label="Date"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                readonly
+                                                :value="dateRangeText"
+                                            >
+                                            </v-text-field>
+                                        </template>
+                                    </DateRangePicker>
 
                                     <div v-if="selected.length > 0">
                                         <div class="d-inline">
@@ -317,13 +206,15 @@
                                             <table>
                                                 <tr>
                                                     <td>
-                                                        <strong>Created</strong
-                                                        >
+                                                        <strong>Created</strong>
                                                     </td>
                                                     <td>:</td>
                                                     <td>
                                                         {{
-                                                            mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss")
+                                                            mixin_formatDate(
+                                                                item.created_at,
+                                                                "YYYY-MM-DD HH:mm:ss"
+                                                            )
                                                         }}
                                                     </td>
                                                 </tr>
@@ -397,9 +288,7 @@
                                 </template>
                                 <template v-slot:[`item.user`]="{ item }">
                                     {{
-                                        item.last_name +
-                                            ", " +
-                                            item.first_name
+                                        item.last_name + ", " + item.first_name
                                     }}
                                 </template>
                                 <template v-slot:[`item.updated_at`]="{ item }">
@@ -455,20 +344,30 @@
 
 <script>
 import moment from "moment";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import PaymentDataService from "../../../../services/PaymentDataService";
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
+        UserDialogSelector
     },
     data() {
         return {
             loading: true,
-            loader: false,
+            formDataLoaded: false,
             valid: false,
             menu: false,
             menu_payee: false,
             search: "",
+            usersParameters: {
+                params: {
+                    with_expense_types: true,
+                    is_superadmin: false
+                }
+            },
             date_range: [
                 moment()
                     .startOf("week")
@@ -487,12 +386,6 @@ export default {
                 "This Year"
             ],
             headers: [
-                // { text: "User", value: "user" },
-                // { text: "Description", value: "description" },
-                // { text: "Amount", value: "total" },
-                // { text: "Created", value: "created" },
-                // { text: "", value: "data-table-expand" },
-
                 { text: "Period", value: "period", sortable: false },
                 { text: "Code", value: "code", sortable: false },
                 { text: "Description", value: "description", sortable: false },
@@ -530,10 +423,10 @@ export default {
                 payee_phone: "",
                 remarks: "",
                 notes: "",
-                user: { id: null }
+                user: null
             },
             errors: {
-                user: [],
+                user_id: [],
                 code: [],
                 reference_no: [],
                 voucher_no: [],
@@ -546,11 +439,22 @@ export default {
                 payee_address: [],
                 payee_phone: [],
                 remarks: [],
-                notes: []
+                notes: [],
+                expense_reports: []
             }
         };
     },
     methods: {
+        selectUser(e) {
+            if (e == null || e == undefined) {
+                this.form.user = null;
+                return;
+            }
+            this.form.user = e;
+        },
+        resetUser() {
+            this.form.user = null;
+        },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
@@ -563,166 +467,100 @@ export default {
             });
         },
         updateUser() {
+            this.errors.user_id = [];
             this.getDataFromApi().then(data => {
                 this.items = data.items;
                 this.totalItems = data.total;
             });
         },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users")
-                .then(response => {
-                    _this.users = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
-        },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.form.user.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.form.user ? this.form.user.id : null;
+                let range = this.date_range;
 
-                axios
-                    .get("/api/expense_reports", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            user_id: user_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            admin_page: true,
-                            create_payment: true
-                        }
-                    })
+                ExpenseReportDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        user_id: user_id,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        admin_page: true,
+                        create_payment: true
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
-                        console.log(items);
-
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
-        // loadExpenseReports() {
-        //     let start_date = this.date_range[0];
-        //     let end_date = this.date_range[1];
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/expense_reports", {
-        //             params: {
-        //                 create_payment: true,
-        //                 start_date: start_date,
-        //                 end_date: end_date,
-        //                 user_id: _this.form.user.id
-        //             }
-        //         })
-        //         .then(response => {
-        //             _this.items = response.data.data;
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         onSave() {
-            let _this = this;
+            this.$refs.form.validate();
 
-            _this.$refs.form.validate();
+            if (!this.form.user) {
+                this.mixin_errorDialog("Error", "No Employee selected.");
+                return;
+            }
 
             if (this.selected == 0) {
                 this.mixin_errorDialog("Error", "No Expense Report selected.");
                 return;
             }
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.formDataLoaded = false;
 
-                axios
-                    .post("/api/payments", {
-                        code: _this.form.code,
-                        reference_no: _this.form.reference_no,
-                        voucher_no: _this.form.voucher_no,
-                        description: _this.form.description,
-                        date: _this.form.date,
-                        cheque_no: _this.form.cheque_no,
-                        cheque_date: _this.form.cheque_date,
-                        amount: _this.total,
-                        payee: _this.form.payee,
-                        payee_address: _this.form.payee_address,
-                        payee_phone: _this.form.payee_phone,
-                        remarks: _this.form.remarks,
-                        notes: _this.form.notes,
-                        expense_reports: _this.selected,
-                        user_id: _this.form.user.id
-                    })
-                    .then(function(response) {
-                        _this.onRefresh();
+                PaymentDataService.store({
+                    code: this.form.code,
+                    reference_no: this.form.reference_no,
+                    voucher_no: this.form.voucher_no,
+                    description: this.form.description,
+                    date: this.form.date,
+                    cheque_no: this.form.cheque_no,
+                    cheque_date: this.form.cheque_date,
+                    amount: this.total,
+                    payee: this.form.payee,
+                    payee_address: this.form.payee_address,
+                    payee_phone: this.form.payee_phone,
+                    remarks: this.form.remarks,
+                    notes: this.form.notes,
+                    expense_reports: this.selected,
+                    user_id: this.form.user ? this.form.user.id : null
+                })
+                    .then(response => {
+                        this.onRefresh();
 
-                        _this.$dialog.message.success(
-                            "Payment created successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
+                        this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
                         );
-
-                        _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                        // _this.$store.dispatch("AUTH_USER");
-
-                        _this.$router.push({ name: "admin.payments.index" });
+                        this.$store.dispatch("AUTH_NOTIFICATIONS");
+                        this.$router.push({ name: "admin.payments.index" });
                     })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.errors = error.response.data.errors;
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
+                        this.formDataLoaded = true;
                     });
 
                 return;
@@ -744,27 +582,26 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         },
         selected() {
             this.totalAmount = this.mixin_formatNumber(
                 this.selected.reduce((total, item) => total + item.total, 0)
             );
+        },
+        "form.user": function() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
         }
-    },
-    created() {
-        // this.$store.dispatch("AUTH_USER");
-        this.loadUsers();
-    },
-    activated() {
-        // this.$store.dispatch("AUTH_USER");
-        this.loadUsers();
     }
 };
 </script>

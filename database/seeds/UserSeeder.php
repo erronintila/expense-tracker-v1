@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 10)->create();
+        // factory(\App\User::class, 1000)->create();
 
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
@@ -93,6 +93,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'edit users fund', 'category' => $model]);
                 Permission::create(['name' => 'restore users', 'category' => $model]);
                 Permission::create(['name' => 'edit permissions', 'category' => $model]);
+                Permission::create(['name' => 'set user activation', 'category' => $model]);
             }
 
             if ($model == "expenses") {
@@ -118,6 +119,11 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'receive payments', 'category' => $model]);
                 // Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
                 // Permission::create(['name' => 'approve payments', 'category' => $model]);
+            }
+
+            if ($model == "vendors") {
+                Permission::create(['name' => 'restore vendors', 'category' => $model]);
+                Permission::create(['name' => 'set vendor activation', 'category' => $model]);
             }
         }
 
@@ -242,7 +248,7 @@ class UserSeeder extends Seeder
         Setting::set("expense_report.print_format.defaultStyle.font", 'Roboto');
         // Setting::set("expense_report.print_format.background.alignment", 'right');
         Setting::set("expense_report.print_format.background.width", 2.2);
-        Setting::set("expense_report.print_format.background.height", 0);
+        Setting::set("expense_report.print_format.background.height", 1);
         Setting::set("expense_report.print_format.background.image", null);
         // Setting::set("expense_report.print_format.background.margin.left", 0.5);
         // Setting::set("expense_report.print_format.background.margin.top", 0.4);

@@ -7,8 +7,10 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\JobResource;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\JobStoreRequest;
-use App\Http\Requests\JobUpdateRequest;
+use App\Http\Requests\Job\JobStoreRequest;
+use App\Http\Requests\Job\JobUpdateRequest;
+use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -17,7 +19,7 @@ class JobController extends Controller
     public function __construct()
     {
         // apply permissions
-        $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
+        // $this->middleware(['permission:view all jobs'], ['only' => ['index']]);
         $this->middleware(['permission:view jobs'], ['only' => ['show']]);
         $this->middleware(['permission:add jobs'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit jobs'], ['only' => ['edit', 'update']]);
@@ -31,6 +33,10 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
+        if (!request("isSelection") || !request()->has("isSelection")) {
+            abort_if(!app("auth")->user()->hasPermissionTo('view all jobs'), 403);
+        }
+
         $search = request('search') ?? "";
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";
@@ -39,8 +45,10 @@ class JobController extends Controller
         // if($sortBy == "department.name") {
         //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
         // } else {
-        $jobs = Job::with(['department' => function ($query) {
-            $query->withTrashed();
+        $jobs = Job::with(['department' => function($query) {
+            if(request()->has("isDeleted") && request("isDeleted")) {
+                $query->withTrashed();
+            }
         }])->orderBy($sortBy, $sortType);
         // }
 
@@ -48,11 +56,9 @@ class JobController extends Controller
             switch (request('status')) {
                 case 'Archived':
                     $jobs = $jobs->onlyTrashed();
-
                     break;
                 default:
                     $jobs = $jobs;
-
                     break;
             }
         }
@@ -77,15 +83,19 @@ class JobController extends Controller
      */
     public function store(JobStoreRequest $request)
     {
-        $validated = $request->validated(); // checks validation
-        $message = "Job designation created successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
+
+        $validated = $request->validated();
+        $department = Department::findOrFail($validated["department_id"]);
+
         $job = new Job();
+        $job->fill($validated);
         $job->code = generate_code(Job::class, "JOB", 10);
-        $job->name = request('name');
-        $job->department_id = request('department_id');
+        $job->department()->associate($department);
         $job->save();
 
-        return $this->successResponse(new JobResource($job), $message, 201);
+        $message = "Job designation created successfully";
+        return $this->successResponse($job, $message, 201);
     }
 
     /**
@@ -96,13 +106,15 @@ class JobController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $message = "Job designation retrieved successfully"; // return message
+        if (request()->has("isDeleted") && request("isDeleted")) {
+            $job = Job::with(['department' => function ($query) {
+                $query->withTrashed();
+            }])->findOrFail($id);
+        } else {
+            $job = Job::with('department')->findOrFail($id);
+        }
 
-        $job = Job::withTrashed()->with(['department' => function ($query) {
-            $query->withTrashed();
-        }])
-        ->findOrFail($id);
-
+        $message = "Job designation retrieved successfully";
         return $this->successResponse(new JobResource($job), $message, 200);
     }
 
@@ -115,15 +127,18 @@ class JobController extends Controller
      */
     public function update(JobUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // checks validation
-        $message = "Job designation updated successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $job = Job::withTrashed()->findOrFail($id);
-        $job->name = request('name');
-        $job->department_id = request('department_id');
+        $validated = $request->validated();
+        $department = Department::findOrFail($validated["department_id"]);
+
+        $job = Job::findOrFail($id);
+        $job->fill($validated);
+        $job->department()->associate($department);
         $job->save();
 
-        return $this->successResponse(null, $message, 201);
+        $message = "Job designation updated successfully";
+        return $this->successResponse($job, $message, 200);
     }
 
     /**
@@ -134,24 +149,16 @@ class JobController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Job designation deleted successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (request()->has("ids")) {
-            // $job = Job::whereIn('id', request('')ids)->delete();
+        $data = DB::transaction(function () use ($id) {
+            $data = Job::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
+        });
 
-            foreach (request('ids') as $id) {
-                $job = Job::withTrashed()->findOrFail($id);
-                $job->delete();
-            }
-
-            $message = "Job designation(s) deleted successfully";
-        } else {
-            $job = Job::withTrashed()->findOrFail($id);
-            $job->delete();
-            $message = "Job designation deleted successfully";
-        }
-
-        return $this->successResponse(null, $message, 200);
+        $message = "Job designation(s) deleted successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -159,7 +166,7 @@ class JobController extends Controller
     | JOB CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
-    
+
     /**
      * Restore the specified resource from storage.
      *
@@ -167,22 +174,16 @@ class JobController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Job designation restored successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $job = Job::withTrashed()->findOrFail($id);
-                $job->restore();
-            }
+        $data = DB::transaction(function () use ($id) {
+            $data = Job::onlyTrashed()->findOrFail(explode(",", $id));
+            $data->each->restore();
+            return $data;
+        });
 
-            $message = "Job designation(s) restored successfully";
-        } else {
-            $job = Job::withTrashed()->findOrFail($id);
-            $job->restore();
-            $message = "Job designation restored successfully";
-        }
-
-        return $this->successResponse(null, $message, 201);
+        $message = "Job designation(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**
@@ -201,20 +202,16 @@ class JobController extends Controller
                     $jobs = $jobs->where("department_id", request('department_id'));
                 }
             }
-
             return $this->successResponse($jobs->get(), "", 200);
         }
 
-        $jobs = Job::with(['department' => function ($query) {
-            $query->withTrashed();
-        }])->orderBy("name");
+        $jobs = Job::with('department')->orderBy("name");
 
         if (request()->has("department_id")) {
             if (request('department_id') > 0) {
                 $jobs = $jobs->where("department_id", request('department_id'));
             }
         }
-
         return JobResource::collection($jobs->get());
     }
 }

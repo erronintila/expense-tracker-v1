@@ -15,36 +15,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(randomcolor__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/daterangepicker/DateRangePicker */ "./resources/js/components/daterangepicker/DateRangePicker.vue");
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 /* harmony import */ var _components_chart_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/chart/DoughnutChart */ "./resources/js/components/chart/DoughnutChart.vue");
 /* harmony import */ var _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/chart/HorizontalBarChart */ "./resources/js/components/chart/HorizontalBarChart.vue");
 /* harmony import */ var _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/chart/LineChart */ "./resources/js/components/chart/LineChart.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -508,11 +482,11 @@ __webpack_require__.r(__webpack_exports__);
     // BarChart,
     HorizontalBarChart: _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__["default"],
     LineChart: _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__["default"],
-    DateRangePicker: _components_daterangepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"]
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
-      loader: true,
+      formDataLoaded: false,
       total: {
         awaiting_for_reimbursement_reports: 0,
         expenses_by_date: 0,
@@ -599,8 +573,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     load_department_expenses: function load_department_expenses(start, end, user) {
-      var _this2 = this;
-
       var _this = this;
 
       axios.get("/api/data/departments_expenses_summary", {
@@ -628,20 +600,15 @@ __webpack_require__.r(__webpack_exports__);
           return item.value / sum * 100;
         });
 
-        _this2.updatePieChartValues(labels, percentages, backgroundColors);
+        _this.updatePieChartValues(labels, percentages, backgroundColors);
 
-        _this2.updateBarChartValues(labels, data, backgroundColors);
+        _this.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.mixin_showErrors(error);
       });
     },
     load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
-      var _this3 = this;
-
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/api/data/expense_types_expenses_summary", {
         params: {
@@ -651,7 +618,7 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: false
         }
       }).then(function (response) {
-        _this.expenses_by_category = response.data;
+        _this2.expenses_by_category = response.data;
         var labels = response.data.map(function (item) {
           return item.text;
         });
@@ -659,7 +626,42 @@ __webpack_require__.r(__webpack_exports__);
           return item.value;
         });
 
-        var backgroundColors = _this.getBackgroundColors(data.length);
+        var backgroundColors = _this2.getBackgroundColors(data.length);
+
+        var sum = response.data.reduce(function (a, b) {
+          return a + b.value;
+        }, 0);
+        var percentages = response.data.map(function (item) {
+          return item.value / sum * 100;
+        });
+
+        _this2.updatePieChartValues(labels, percentages, backgroundColors);
+
+        _this2.updateBarChartValues(labels, data, backgroundColors);
+      })["catch"](function (error) {
+        _this2.mixin_showErrors(error);
+      });
+    },
+    load_users_expenses: function load_users_expenses(start, end, user) {
+      var _this3 = this;
+
+      axios.get("/api/data/users_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          user_id: user,
+          admin_page: false
+        }
+      }).then(function (response) {
+        _this3.expenses_by_category = response.data;
+        var labels = response.data.map(function (item) {
+          return item.text;
+        });
+        var data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        var backgroundColors = _this3.getBackgroundColors(data.length);
 
         var sum = response.data.reduce(function (a, b) {
           return a + b.value;
@@ -672,57 +674,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.updateBarChartValues(labels, data, backgroundColors);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response); // _this.mixin_errorDialog(
-        //     `Error ${error.response.status}`,
-        //     error.response.statusText
-        // );
-      });
-    },
-    load_users_expenses: function load_users_expenses(start, end, user) {
-      var _this4 = this;
-
-      var _this = this;
-
-      axios.get("/api/data/users_expenses_summary", {
-        params: {
-          start_date: start,
-          end_date: end,
-          user_id: user,
-          admin_page: false
-        }
-      }).then(function (response) {
-        _this.expenses_by_category = response.data;
-        var labels = response.data.map(function (item) {
-          return item.text;
-        });
-        var data = response.data.map(function (item) {
-          return item.value;
-        });
-
-        var backgroundColors = _this.getBackgroundColors(data.length);
-
-        var sum = response.data.reduce(function (a, b) {
-          return a + b.value;
-        }, 0);
-        var percentages = response.data.map(function (item) {
-          return item.value / sum * 100;
-        });
-
-        _this4.updatePieChartValues(labels, percentages, backgroundColors);
-
-        _this4.updateBarChartValues(labels, data, backgroundColors);
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
-
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this3.mixin_showErrors(error);
       });
     },
     load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
-      var _this5 = this;
-
-      var _this = this;
+      var _this4 = this;
 
       axios.get("/api/data/expenses_summary", {
         params: {
@@ -733,33 +689,33 @@ __webpack_require__.r(__webpack_exports__);
           admin_page: false
         }
       }).then(function (response) {
-        switch (_this.groupBy) {
+        switch (_this4.groupBy) {
           case "day":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return item.text;
             });
             break;
 
           case "week":
-            _this.lineChart_labels = response.data.map(function (item) {
-              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this5.getWeekInMonth(new Date(item.text)));
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this4.getWeekInMonth(new Date(item.text)));
             });
             break;
 
           case "month":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("MMM YYYY");
             });
             break;
 
           case "quarter":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY"), " Q:").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("Q"));
             });
             break;
 
           case "year":
-            _this.lineChart_labels = response.data.map(function (item) {
+            _this4.lineChart_labels = response.data.map(function (item) {
               return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY");
             });
             break;
@@ -768,17 +724,13 @@ __webpack_require__.r(__webpack_exports__);
             break;
         }
 
-        _this.lineChart_data = response.data.map(function (item) {
+        _this4.lineChart_data = response.data.map(function (item) {
           return item.value;
         });
 
-        _this.updateLineChartValues(_this.lineChart_labels, _this.lineChart_data);
+        _this4.updateLineChartValues(_this4.lineChart_labels, _this4.lineChart_data);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response); // _this.mixin_errorDialog(
-        //     `Error ${error.response.status}`,
-        //     error.response.statusText
-        // );
+        _this4.mixin_showErrors(error);
       });
     },
     load_bar_chart: function load_bar_chart() {
@@ -817,7 +769,7 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     load_pie_chart: function load_pie_chart() {
-      var _this6 = this;
+      var _this5 = this;
 
       this.doughnutChartOptions = {
         hoverBorderWidth: 20,
@@ -836,7 +788,7 @@ __webpack_require__.r(__webpack_exports__);
             },
             backgroundColor: "lightgray",
             formatter: function formatter(value, ctx) {
-              return _this6.mixin_formatNumber(value) + " %";
+              return _this5.mixin_formatNumber(value) + " %";
             }
           }
         }
@@ -996,25 +948,20 @@ __webpack_require__.r(__webpack_exports__);
       this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
     },
     getExpenseStats: function getExpenseStats(start, end, emp) {
-      var _this7 = this;
-
-      var _this = this;
+      var _this6 = this;
 
       axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&user_id=").concat(emp)).then(function (response) {
-        _this.total = response.data.total;
-        _this.count = response.data.count;
-        _this.loader = false;
+        _this6.total = response.data.total;
+        _this6.count = response.data.count;
+        _this6.formDataLoaded = true;
 
-        _this7.load_expense_types_expenses(_this7.date_range[0], _this7.date_range[1], _this7.user.id);
+        _this6.load_expense_types_expenses(_this6.date_range[0], _this6.date_range[1], _this6.user.id);
 
-        _this7.load_expenses_summary(_this7.date_range[0], _this7.date_range[1], _this7.groupBy, _this7.user.id);
+        _this6.load_expenses_summary(_this6.date_range[0], _this6.date_range[1], _this6.groupBy, _this6.user.id);
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this6.mixin_showErrors(error);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
-
-        _this.loader = true;
+        _this6.formDataLoaded = true;
       });
     }
   },
@@ -1034,7 +981,7 @@ __webpack_require__.r(__webpack_exports__);
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     this.$store.dispatch("AUTH_USER"); // this.load_expense_types_expenses(
     //     this.date_range[0],
     //     this.date_range[1],
@@ -1051,20 +998,6 @@ __webpack_require__.r(__webpack_exports__);
     // );
 
     this.getExpenseStats(this.date_range[0], this.date_range[1], this.user.id);
-  },
-  created: function created() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-  },
-  activated: function activated() {
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-    this.$store.dispatch("AUTH_USER"); // this.load_pie_chart();
-    // this.load_bar_chart();
-    // this.load_line_chart();
-    // this.getExpenseStats(
-    //     this.date_range[0],
-    //     this.date_range[1],
-    //     this.user.id
-    // );
   }
 });
 
@@ -1088,144 +1021,63 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0 pt-0" },
             [
+              _c("v-card-title", { staticClass: "pt-0" }, [
+                _c("h4", { staticClass: "title green--text" }, [
+                  _vm._v("Dashboard")
+                ])
+              ]),
+              _vm._v(" "),
               _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
+                "v-card-subtitle",
                 [
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Dashboard")
-                  ]),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-menu",
-                    {
-                      attrs: {
-                        "close-on-content-click": false,
-                        "nudge-width": 200,
-                        "offset-y": "",
-                        left: "",
-                        bottom: ""
-                      },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "activator",
-                          fn: function(ref) {
-                            var on = ref.on
-                            var attrs = ref.attrs
-                            return [
-                              _c(
-                                "v-btn",
-                                _vm._g(
-                                  _vm._b(
-                                    { attrs: { icon: "" } },
-                                    "v-btn",
-                                    attrs,
-                                    false
-                                  ),
-                                  on
+                  _c("DateRangePicker", {
+                    ref: "dateRangePicker",
+                    attrs: { dateRange: _vm.date_range },
+                    on: { "on-change": _vm.updateDates },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "openDialog",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          var dateRangeText = ref.dateRangeText
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-0 pl-0",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
                                 ),
-                                [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
-                                1
-                              )
-                            ]
-                          }
+                                on
+                              ),
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(dateRangeText) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
                         }
-                      ])
-                    },
-                    [
-                      _vm._v(" "),
-                      _c(
-                        "v-card",
-                        [
-                          _c(
-                            "v-list",
-                            [
-                              _c(
-                                "v-list-item",
-                                [
-                                  _c("DateRangePicker", {
-                                    attrs: {
-                                      preset: _vm.preset,
-                                      presets: _vm.presets,
-                                      value: _vm.date_range
-                                    },
-                                    on: { updateDates: _vm.updateDates }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
+                      }
+                    ])
+                  })
                 ],
                 1
               ),
-              _vm._v(" "),
-              _c("v-card-subtitle", [
-                _vm._v(
-                  "\n            " +
-                    _vm._s(_vm.formattedDateRange) +
-                    "\n        "
-                )
-              ]),
               _vm._v(" "),
               _c(
                 "v-row",

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ActivityLogResource extends JsonResource
@@ -30,7 +29,7 @@ class ActivityLogResource extends JsonResource
             // -------------------------------------------------------------------
             // Additional Fields
             // -------------------------------------------------------------------
-            "user" => User::find($this->causer_id ?? 0),
+            "user" => $this->causer,
 
             // -------------------------------------------------------------------
             // Transaction Logs

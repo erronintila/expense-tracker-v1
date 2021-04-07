@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Settings</h4>
                 <v-spacer></v-spacer>
@@ -17,29 +18,6 @@
             </v-card-title>
 
             <v-expansion-panels v-model="panel" multiple>
-                <!-- <v-expansion-panel>
-                    <v-expansion-panel-header>
-                        <div class="green--text">
-                            General Settings
-                        </div>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <v-row>
-                            <v-col cols="12" md="4">
-                                <v-text-field
-                                    label="Company Name"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" md="4">
-                                <v-select
-                                    label="Currency"
-                                    :items="['Philippine Peso']"
-                                ></v-select>
-                            </v-col>
-                        </v-row>
-                    </v-expansion-panel-content>
-                </v-expansion-panel> -->
-
                 <v-expansion-panel>
                     <v-expansion-panel-header>
                         <div class="green--text">
@@ -319,16 +297,6 @@
                                     </v-col>
                                 </v-row>
 
-                                <!-- <v-row>
-                                    <v-col>
-                                        <v-textarea
-                                            v-model="base64Image"
-                                            readonly
-                                            label="Background Image"
-                                        ></v-textarea>
-                                    </v-col>
-                                </v-row> -->
-
                                 <v-divider></v-divider>
 
                                 <v-row>
@@ -396,73 +364,6 @@
                                         </v-text-field>
                                     </v-col>
                                 </v-row>
-
-                                <!-- <v-row>
-                                    <v-col cols="12" md="3">
-                                        <v-select
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .alignment
-                                            "
-                                            :items="['left', 'right', 'center']"
-                                            label="Logo Alignment"
-                                        >
-                                        </v-select>
-                                    </v-col>
-                                   
-                                </v-row>
-
-                                <v-row>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.left
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Left)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.top
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Top)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.right
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Right)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="3">
-                                        <v-text-field
-                                            v-model="
-                                                settings.expense_report
-                                                    .print_format.background
-                                                    .margin.bottom
-                                            "
-                                            type="number"
-                                            label="Logo Margin (Bottom)"
-                                        >
-                                        </v-text-field>
-                                    </v-col>
-                                </v-row> -->
                             </v-form>
                         </v-container>
                     </v-expansion-panel-content>
@@ -507,10 +408,12 @@
 
 <script>
 import moment from "moment";
+import SettingDataService from "../../../../services/SettingDataService";
 
 export default {
     data() {
         return {
+            formDataLoaded: false,
             validExpenses: false,
             validExpenseReports: false,
             validTaxes: false,
@@ -570,65 +473,50 @@ export default {
         };
     },
     methods: {
-        onLoad: function() {
-            let _this = this;
-            axios
-                .get("/api/settings")
-                .then(response => {
-                    _this.file_input = null;
-                    _this.settings = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        error.response.status,
-                        error.response.statusText
-                    );
-                });
+        onLoad() {
+            return new Promise((resolve, reject) => {
+                SettingDataService.getAll()
+                    .then(response => {
+                        this.file_input = null;
+                        this.settings = response.data;
+                        this.formDataLoaded = true;
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
         },
-        onSave: function() {
-            let _this = this;
-
-            // let settings = Object.assign(
-            //     this.general_settings,
-            //     this.expense_settings,
-            //     this.expense_report_settings
-            // );
-
-            _this.$refs.formExpenses.validate();
-            _this.$refs.formExpenseReports.validate();
-            _this.$refs.formTaxes.validate();
+        onSave() {
+            this.$refs.formExpenses.validate();
+            this.$refs.formExpenseReports.validate();
+            this.$refs.formTaxes.validate();
 
             if (
-                _this.$refs.formExpenses.validate() &&
-                _this.$refs.formExpenseReports.validate() &&
-                _this.$refs.formTaxes.validate()
+                this.$refs.formExpenses.validate() &&
+                this.$refs.formExpenseReports.validate() &&
+                this.$refs.formTaxes.validate()
             ) {
-                axios
-                    .post("/api/settings", {
-                        settings: _this.settings
-                    })
+                let data = {
+                    settings: this.settings
+                };
+
+                SettingDataService.store(data)
                     .then(response => {
-                        _this.mixin_successDialog(
+                        this.mixin_successDialog(
                             "Success",
                             "Saved settings successfully"
                         );
 
-                        _this.$store.dispatch("AUTH_USER");
-                        _this.$store.dispatch("AUTH_SETTINGS");
+                        this.$store.dispatch("AUTH_USER");
+                        this.$store.dispatch("AUTH_SETTINGS");
 
                         window.location.replace("/admin/settings");
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            error.response.status,
-                            error.response.statusText
-                        );
+                        this.mixin_showErrors(error);
                     });
             }
         }
@@ -703,28 +591,6 @@ export default {
             return this.$store.getters.settings.expense_report.print_format
                 .background.image;
         },
-        base64Image() {
-            // let _this = this;
-            // if (this.file_input) {
-            //     let reader = new FileReader();
-            //     reader.readAsDataURL(this.file_input);
-            //     reader.onload = () => {
-            //         _this.settings.expense_report.print_format.background.image =
-            //             reader.result;
-            //         return reader.result;
-            //     };
-            //     reader.onerror = function(error) {
-            //         console.log("Error: ", error);
-            //         // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
-            //         return;
-            //     };
-            // }
-
-            // this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
-
-            // return this.$store.getters.settings.expense_report.print_format.background.image;
-            return;
-        },
         report_no: {
             get() {
                 let prefix = this.settings.expense_report.report_no.prefix;
@@ -750,20 +616,20 @@ export default {
                     this.settings.expense_report.print_format.background.image =
                         reader.result;
                 };
-                reader.onerror = function(error) {
-                    console.log("Error: ", error);
+                reader.onerror = error => {
+                    this.mixin_showErrors(error);
                 };
             } else {
                 this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
             }
         }
     },
-    created() {
-        // this.$store.dispatch("AUTH_USER");
-        this.$store.dispatch("AUTH_SETTINGS");
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.onLoad();
-    },
+    // created() {
+    //     // this.$store.dispatch("AUTH_USER");
+    //     this.$store.dispatch("AUTH_SETTINGS");
+    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    //     this.onLoad();
+    // },
     activated() {
         this.$store.dispatch("AUTH_SETTINGS");
         this.$store.dispatch("AUTH_NOTIFICATIONS");

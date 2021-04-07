@@ -62,8 +62,9 @@ class ExpenseObserver
      */
     public function deleted(Expense $expense)
     {
-        if ($expense->expense_report) {
-            if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
+        if ($expense->expense_report()->onlyTrashed()->count()) {
+            // if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
+            if ($expense->expense_report()->onlyTrashed()->first()->rejected_at) {
                 return;
             }
         }
@@ -82,7 +83,8 @@ class ExpenseObserver
     public function restored(Expense $expense)
     {
         if ($expense->expense_report) {
-            if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
+            // if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
+            if ($expense->expense_report()->first()->rejected_at) {
                 return;
             }
         }

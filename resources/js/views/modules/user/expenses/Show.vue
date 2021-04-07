@@ -1,24 +1,10 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
-                <v-btn @click="$router.go(-1)" class="mr-3" icon>
+                <v-btn @click="goBack()" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -37,9 +23,7 @@
                                     v-if="canEdit"
                                     text
                                     color="green"
-                                    :to="
-                                        `/expenses/${$route.params.id}/edit`
-                                    "
+                                    :to="`/expenses/${$route.params.id}/edit`"
                                 >
                                     Edit
                                 </v-btn>
@@ -354,11 +338,12 @@
 
 <script>
 import numeral from "numeral";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     data() {
         return {
-            loader: true,
+            formDataLoaded: false,
             panel: [0, 1],
             itemize: false,
             // paid_through_fund: false,
@@ -446,107 +431,122 @@ export default {
         };
     },
     methods: {
+        goBack() {
+            if(this.$route.params.isDeleted && this.$route.params.fromExpenseReport) {
+                this.$router.push({
+                    name: "user.expense_reports.show",
+                    params: {
+                        id: this.form.expense_report.id,
+                        isDeleted : true,
+                        fromExpense: true
+                    }
+                });
+                return;
+            }
+            this.$router.go(-1);
+        },
         getData() {
-            let _this = this;
+            let data = {};
 
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+            
             // this.loadUsers().then(
-            axios
-                .get("/api/expenses/" + _this.$route.params.id)
+            ExpenseDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.form.code = data.code;
-                    _this.form.description = data.description;
+                    this.form.code = data.code;
+                    this.form.description = data.description;
 
-                    _this.form.receipt_number = data.receipt_number;
-                    _this.form.date = data.date;
-                    _this.form.remarks = data.remarks;
-                    _this.form.notes = data.notes;
-                    _this.form.is_active = data.is_active;
-                    _this.form.user = data.user;
-                    _this.form.vendor =
+                    this.form.receipt_number = data.receipt_number;
+                    this.form.date = data.date;
+                    this.form.remarks = data.remarks;
+                    this.form.notes = data.notes;
+                    this.form.is_active = data.is_active;
+                    this.form.user = data.user;
+                    this.form.vendor =
                         data.vendor == null
                             ? { id: null, name: "", is_vat_inclusive: true }
                             : data.vendor;
 
-                    _this.form.expense_type = data.expense_type;
-                    // _this.form.sub_type = data.sub_type_id;
+                    this.form.expense_type = data.expense_type;
+                    // this.form.sub_type = data.sub_type_id;
 
-                    // _this.expense_types = data.user.expense_types;
-                    // _this.sub_types = data.expense_type.sub_types;
+                    // this.expense_types = data.user.expense_types;
+                    // this.sub_types = data.expense_type.sub_types;
 
-                    _this.form.is_tax_inclusive = data.is_tax_inclusive;
-                    _this.form.tax_name = data.tax_name;
-                    _this.form.tax_rate = data.tax_rate;
-                    _this.form.tax_amount = data.tax_amount;
+                    this.form.is_tax_inclusive = data.is_tax_inclusive;
+                    this.form.tax_name = data.tax_name;
+                    this.form.tax_rate = data.tax_rate;
+                    this.form.tax_amount = data.tax_amount;
 
-                    _this.form.status = data.status;
-                    _this.form.is_late_encoded = data.is_late_encoded;
+                    this.form.status = data.status;
+                    this.form.is_late_encoded = data.is_late_encoded;
 
                     if (data.details !== null) {
-                        _this.itemize = true;
-                        _this.items = data.details;
+                        this.itemize = true;
+                        this.items = data.details;
                     } else {
-                        // _this.itemize = false;
-                        // _this.items = [];
-                        _this.form.amount = data.amount;
+                        // this.itemize = false;
+                        // this.items = [];
+                        this.form.amount = data.amount;
                     }
 
-                    // _this.sub_types.unshift({
+                    // this.sub_types.unshift({
                     //     id: null,
                     //     name: "None",
                     //     limit: null
                     // });
-                    _this.form.sub_type =
+                    this.form.sub_type =
                         data.sub_type == null
                             ? { id: null, name: "None", limit: null }
                             : data.sub_type;
 
                     if (data.revolving_fund > 0) {
-                        _this.paid_through_fund = true;
-                        _this.form.revolving_fund = data.revolving_fund;
+                        this.paid_through_fund = true;
+                        this.form.revolving_fund = data.revolving_fund;
                     } else {
-                        _this.paid_through_fund = false;
-                        _this.form.revolving_fund = 0;
+                        this.paid_through_fund = false;
+                        this.form.revolving_fund = 0;
                     }
 
-                    _this.form.reimbursable_amount = data.reimbursable_amount;
+                    this.form.reimbursable_amount = data.reimbursable_amount;
 
-                    _this.form.user.remaining_fund +=
+                    this.form.user.remaining_fund +=
                         data.amount - data.reimbursable_amount;
 
-                    _this.form.expense_report = data.expense_report;
+                    this.form.expense_report = data.expense_report;
 
-                    _this.form.created_at = data.created_at;
-                    _this.form.updated_at = data.updated_at;
-                    _this.form.deleted_at = data.deleted_at;
-                    _this.form.submitted_at = data.expense_report
+                    this.form.created_at = data.created_at;
+                    this.form.updated_at = data.updated_at;
+                    this.form.deleted_at = data.deleted_at;
+                    this.form.submitted_at = data.expense_report
                         ? data.expense_report.submitted_at
                         : null;
-                    _this.form.approved_at = data.expense_report
+                    this.form.approved_at = data.expense_report
                         ? data.expense_report.approved_at
                         : null;
-                    _this.form.rejected_at = data.expense_report
+                    this.form.rejected_at = data.expense_report
                         ? data.expense_report.rejected_at
                         : null;
-                    _this.form.cancelled_at = data.expense_report
+                    this.form.cancelled_at = data.expense_report
                         ? data.expense_report.cancelled_at
                         : null;
 
-                    _this.form.logs = data.logs;
+                    this.form.logs = data.logs;
 
-                    _this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
-                    _this.loader = false;
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
+                    this.$router.push({ name: "user.expenses.index" }, () => {});
                 });
             // );
         }
@@ -562,24 +562,46 @@ export default {
                 return false;
             }
 
-            if(this.form.expense_report !== null) {
+            if (this.form.expense_report !== null) {
                 if (
-                this.form.expense_report.approved_at !== null ||
-                this.form.expense_report.cancelled_at !== null ||
-                this.form.expense_report.deleted_at !== null ||
-                this.form.expense_report.rejected_at !== null
-            ) {
-                return false;
-            }
+                    this.form.expense_report.approved_at !== null ||
+                    this.form.expense_report.cancelled_at !== null ||
+                    this.form.expense_report.deleted_at !== null ||
+                    this.form.expense_report.rejected_at !== null
+                ) {
+                    return false;
+                }
             }
 
             return true;
         },
         amount_to_replenish() {
+            // let remaining_fund = this.mixin_convertToNumber(
+            //     this.form.user.remaining_fund
+            // );
+            // let amount = this.mixin_convertToNumber(this.form.amount);
+
+            // if (remaining_fund >= amount) {
+            //     return amount;
+            // }
+
+            // return amount - Math.abs(remaining_fund - amount);
+
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.user.remaining_fund
+                this.form.user ? this.form.user.remaining_fund : 0
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
+            let reimbursable = this.mixin_convertToNumber(
+                this.form.reimbursable_amount
+            );
+            let amt_to_replenish =
+                amount < reimbursable ? 0 : amount - reimbursable;
+
+            if (this.mixin_can("set reimbursable amount")) {
+                return amount - reimbursable > remaining_fund
+                    ? 0
+                    : amt_to_replenish;
+            }
 
             if (remaining_fund >= amount) {
                 return amount;
@@ -588,10 +610,32 @@ export default {
             return amount - Math.abs(remaining_fund - amount);
         },
         amount_to_reimburse() {
+            // let remaining_fund = this.mixin_convertToNumber(
+            //     this.form.user.remaining_fund
+            // );
+            // let amount = this.mixin_convertToNumber(this.form.amount);
+
+            // if (remaining_fund < amount) {
+            //     let to_replenish = Math.abs(remaining_fund - amount);
+
+            //     this.form.reimbursable_amount = to_replenish;
+
+            //     return to_replenish;
+            // }
+
+            // return 0;
+
             let remaining_fund = this.mixin_convertToNumber(
-                this.form.user.remaining_fund
+                this.form.user ? this.form.user.remaining_fund : 0
             );
             let amount = this.mixin_convertToNumber(this.form.amount);
+            let reimbursable = this.mixin_convertToNumber(
+                this.form.reimbursable_amount
+            );
+
+            if (this.mixin_can("set reimbursable amount")) {
+                return reimbursable > amount ? 0 : reimbursable;
+            }
 
             if (remaining_fund < amount) {
                 let to_replenish = Math.abs(remaining_fund - amount);
@@ -600,6 +644,8 @@ export default {
 
                 return to_replenish;
             }
+
+            this.form.reimbursable_amount = 0;
 
             return 0;
         },

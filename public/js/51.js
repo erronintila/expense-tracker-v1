@@ -11,22 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
 //
 //
 //
@@ -366,10 +351,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loader: true,
+      formDataLoaded: false,
       panel: [0, 1],
       itemize: false,
       // paid_through_fund: false,
@@ -477,11 +463,36 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    goBack: function goBack() {
+      if (this.$route.params.isDeleted && this.$route.params.fromExpenseReport) {
+        this.$router.push({
+          name: "user.expense_reports.show",
+          params: {
+            id: this.form.expense_report.id,
+            isDeleted: true,
+            fromExpense: true
+          }
+        });
+        return;
+      }
+
+      this.$router.go(-1);
+    },
     getData: function getData() {
-      var _this = this; // this.loadUsers().then(
+      var _this = this;
+
+      var data = {};
+
+      if (this.$route.params.isDeleted) {
+        data = {
+          params: {
+            isDeleted: true
+          }
+        };
+      } // this.loadUsers().then(
 
 
-      axios.get("/api/expenses/" + _this.$route.params.id).then(function (response) {
+      _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(this.$route.params.id, data).then(function (response) {
         var data = response.data.data;
         _this.form.code = data.code;
         _this.form.description = data.description;
@@ -496,9 +507,9 @@ __webpack_require__.r(__webpack_exports__);
           name: "",
           is_vat_inclusive: true
         } : data.vendor;
-        _this.form.expense_type = data.expense_type; // _this.form.sub_type = data.sub_type_id;
-        // _this.expense_types = data.user.expense_types;
-        // _this.sub_types = data.expense_type.sub_types;
+        _this.form.expense_type = data.expense_type; // this.form.sub_type = data.sub_type_id;
+        // this.expense_types = data.user.expense_types;
+        // this.sub_types = data.expense_type.sub_types;
 
         _this.form.is_tax_inclusive = data.is_tax_inclusive;
         _this.form.tax_name = data.tax_name;
@@ -511,10 +522,10 @@ __webpack_require__.r(__webpack_exports__);
           _this.itemize = true;
           _this.items = data.details;
         } else {
-          // _this.itemize = false;
-          // _this.items = [];
+          // this.itemize = false;
+          // this.items = [];
           _this.form.amount = data.amount;
-        } // _this.sub_types.unshift({
+        } // this.sub_types.unshift({
         //     id: null,
         //     name: "None",
         //     limit: null
@@ -546,14 +557,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.rejected_at = data.expense_report ? data.expense_report.rejected_at : null;
         _this.form.cancelled_at = data.expense_report ? data.expense_report.cancelled_at : null;
         _this.form.logs = data.logs;
-        _this.loader = false;
+        _this.formDataLoaded = true;
       })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+        _this.mixin_showErrors(error);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+        _this.formDataLoaded = true;
 
-        _this.loader = false;
+        _this.$router.push({
+          name: "user.expenses.index"
+        }, function () {});
       }); // );
     }
   },
@@ -572,8 +584,22 @@ __webpack_require__.r(__webpack_exports__);
       return true;
     },
     amount_to_replenish: function amount_to_replenish() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
+      // let remaining_fund = this.mixin_convertToNumber(
+      //     this.form.user.remaining_fund
+      // );
+      // let amount = this.mixin_convertToNumber(this.form.amount);
+      // if (remaining_fund >= amount) {
+      //     return amount;
+      // }
+      // return amount - Math.abs(remaining_fund - amount);
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+      var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
+      }
 
       if (remaining_fund >= amount) {
         return amount;
@@ -582,8 +608,23 @@ __webpack_require__.r(__webpack_exports__);
       return amount - Math.abs(remaining_fund - amount);
     },
     amount_to_reimburse: function amount_to_reimburse() {
-      var remaining_fund = this.mixin_convertToNumber(this.form.user.remaining_fund);
+      // let remaining_fund = this.mixin_convertToNumber(
+      //     this.form.user.remaining_fund
+      // );
+      // let amount = this.mixin_convertToNumber(this.form.amount);
+      // if (remaining_fund < amount) {
+      //     let to_replenish = Math.abs(remaining_fund - amount);
+      //     this.form.reimbursable_amount = to_replenish;
+      //     return to_replenish;
+      // }
+      // return 0;
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
       var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return reimbursable > amount ? 0 : reimbursable;
+      }
 
       if (remaining_fund < amount) {
         var to_replenish = Math.abs(remaining_fund - amount);
@@ -591,6 +632,7 @@ __webpack_require__.r(__webpack_exports__);
         return to_replenish;
       }
 
+      this.form.reimbursable_amount = 0;
       return 0;
     },
     expense_amount: function expense_amount() {
@@ -650,52 +692,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0 pt-0" },
@@ -711,7 +709,7 @@ var render = function() {
                       attrs: { icon: "" },
                       on: {
                         click: function($event) {
-                          return _vm.$router.go(-1)
+                          return _vm.goBack()
                         }
                       }
                     },
@@ -1359,6 +1357,75 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/services/ExpenseDataService.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/services/ExpenseDataService.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var ExpenseDataService = /*#__PURE__*/function () {
+  function ExpenseDataService() {
+    _classCallCheck(this, ExpenseDataService);
+  }
+
+  _createClass(ExpenseDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expenses", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expenses", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
+    }
+  }]);
+
+  return ExpenseDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseDataService());
 
 /***/ }),
 

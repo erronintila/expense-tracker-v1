@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\User;
-use App\Models\Expense;
 use App\Models\ExpenseReport;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
@@ -72,6 +70,15 @@ class Payment extends Model
         // 'received_info',
         // 'total_amount'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($payment) {
+            
+        });
+    }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -261,12 +268,13 @@ class Payment extends Model
      */
     public function getCreatedInfoAttribute()
     {
-        if ($this->created_at) {
-            return [
-                "created_at" => $this->created_at,
-                "created_by" => User::withTrashed()->find($this->created_by)
-            ];
-        }
+        // if ($this->created_at) {
+        //     return [
+        //         "created_at" => $this->created_at,
+        //         "created_by" => User::withTrashed()->find($this->created_by)
+        //         // "created_by" => User::find($this->created_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -278,12 +286,13 @@ class Payment extends Model
      */
     public function getUpdatedInfoAttribute()
     {
-        if ($this->updated_at) {
-            return [
-                "updated_at" => $this->updated_at,
-                "updated_by" => User::withTrashed()->find($this->updated_by)
-            ];
-        }
+        // if ($this->updated_at) {
+        //     return [
+        //         "updated_at" => $this->updated_at,
+        //         "updated_by" => User::withTrashed()->find($this->updated_by)
+        //         // "updated_by" => User::find($this->updated_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -295,12 +304,13 @@ class Payment extends Model
      */
     public function getDeletedInfoAttribute()
     {
-        if ($this->deleted_at) {
-            return [
-                "deleted_at" => $this->deleted_at,
-                "deleted_by" => User::withTrashed()->find($this->deleted_by)
-            ];
-        }
+        // if ($this->deleted_at) {
+        //     return [
+        //         "deleted_at" => $this->deleted_at,
+        //         "deleted_by" => User::withTrashed()->find($this->deleted_by)
+        //         // "deleted_by" => User::find($this->deleted_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -312,12 +322,13 @@ class Payment extends Model
      */
     public function getApprovedInfoAttribute()
     {
-        if ($this->approved_at) {
-            return [
-                "approved_at" => $this->approved_at,
-                "approved_by" => User::withTrashed()->find($this->approved_by)
-            ];
-        }
+        // if ($this->approved_at) {
+        //     return [
+        //         "approved_at" => $this->approved_at,
+        //         "approved_by" => User::withTrashed()->find($this->approved_by)
+        //         // "approved_by" => User::find($this->approved_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -329,12 +340,13 @@ class Payment extends Model
      */
     public function getCancelledInfoAttribute()
     {
-        if ($this->cancelled_at) {
-            return [
-                "cancelled_at" => $this->cancelled_at,
-                "cancelled_by" => User::withTrashed()->find($this->cancelled_by)
-            ];
-        }
+        // if ($this->cancelled_at) {
+        //     return [
+        //         "cancelled_at" => $this->cancelled_at,
+        //         "cancelled_by" => User::withTrashed()->find($this->cancelled_by)
+        //         // "cancelled_by" => User::find($this->cancelled_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -346,12 +358,13 @@ class Payment extends Model
      */
     public function getReleasedInfoAttribute()
     {
-        if ($this->released_at) {
-            return [
-                "released_at" => $this->released_at,
-                "released_by" => User::withTrashed()->find($this->released_by)
-            ];
-        }
+        // if ($this->released_at) {
+        //     return [
+        //         "released_at" => $this->released_at,
+        //         "released_by" => User::withTrashed()->find($this->released_by)
+        //         // "released_by" => User::find($this->released_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -363,12 +376,13 @@ class Payment extends Model
      */
     public function getReceivedInfoAttribute()
     {
-        if ($this->received_at) {
-            return [
-                "received_at" => $this->received_at,
-                "received_by" => User::withTrashed()->find($this->received_by)
-            ];
-        }
+        // if ($this->received_at) {
+        //     return [
+        //         "received_at" => $this->received_at,
+        //         "received_by" => User::withTrashed()->find($this->received_by)
+        //         // "received_by" => User::find($this->received_by)
+        //     ];
+        // }
 
         return null;
     }
@@ -380,13 +394,15 @@ class Payment extends Model
      */
     public function getTotalAmountAttribute()
     {
-        $expense_reports = $this->expense_reports;
-        $sum = 0;
+        return $this->expense_reports->sum('pivot.payment');
 
-        foreach ($expense_reports as $expense_report) {
-            $sum += $expense_report->pivot->payment;
-        }
+        // $expense_reports = $this->expense_reports;
+        // $sum = 0;
 
-        return $sum;
+        // foreach ($expense_reports as $expense_report) {
+        //     $sum += $expense_report->pivot->payment;
+        // }
+
+        // return $sum;
     }
 }

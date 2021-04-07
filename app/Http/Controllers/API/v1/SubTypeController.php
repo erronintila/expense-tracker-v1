@@ -6,6 +6,7 @@ use App\Models\SubType;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class SubTypeController extends Controller
 {
@@ -63,10 +64,27 @@ class SubTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if (request()->has("ids")) {
-            foreach (request("sub_types") as $key => $value) {
-                $sub_type = SubType::withTrashed()->findOrFail($value["id"]);
-
+        abort_if(!auth()->user()->is_admin, 403);
+        
+        DB::transaction(function () use ($id) {
+            if (request()->has("ids")) {
+                foreach (request("sub_types") as $key => $value) {
+                    $sub_type = SubType::findOrFail($value["id"]);
+    
+                    if (count($sub_type->expenses)) {
+                        return response(
+                            [
+                                'message' => 'Sub-type contains parent data'
+                            ],
+                            403
+                        );
+                    }
+    
+                    $sub_type->delete();
+                }
+            } else {
+                $sub_type = SubType::findOrFail($id);
+    
                 if (count($sub_type->expenses)) {
                     return response(
                         [
@@ -75,23 +93,9 @@ class SubTypeController extends Controller
                         403
                     );
                 }
-
                 $sub_type->delete();
             }
-        } else {
-            $sub_type = SubType::withTrashed()->findOrFail($id);
-
-            if (count($sub_type->expenses)) {
-                return response(
-                    [
-                        'message' => 'Sub-type contains parent data'
-                    ],
-                    403
-                );
-            }
-
-            $sub_type->delete();
-        }
+        });
 
         return response(
             [

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -50,7 +51,7 @@
                                     </v-row>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn text color="green" @click="editData">
+                                    <v-btn v-if="!$route.params.isDeleted" text color="green" @click="editData">
                                         Edit Info
                                     </v-btn>
                                 </v-card-actions>
@@ -204,10 +205,12 @@
 </template>
 
 <script>
+import VendorDataService from "../../../../services/VendorDataService";
 export default {
     data() {
         return {
-            panel: [],
+            formDataLoaded: false,
+            panel: 0,
             code: "",
             name: "",
             email: "",
@@ -223,33 +226,38 @@ export default {
     },
     methods: {
         getData() {
-            let _this = this;
+            let data = {};
 
-            axios
-                .get(`/api/vendors/${_this.$route.params.id}`)
-                .then(function(response) {
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
+            VendorDataService.show(this.$route.params.id, data)
+                .then(response => {
                     let data = response.data.data;
 
-                    _this.code = data.code;
-                    _this.name = data.name;
-                    _this.email = data.email;
-                    _this.tin = data.tin == null ? "N/A" : data.tin;
-                    _this.contact_person = data.contact_person;
-                    _this.mobile_number = data.mobile_number;
-                    _this.telephone_number = data.telephone_number;
-                    _this.remarks = data.remarks;
-                    _this.website = data.website;
-                    _this.is_vat_inclusive = data.is_vat_inclusive;
-                    _this.address = data.address;
-                })
-                .catch(function(error) {
-                    console.log(error);
-                    console.log(error.response);
+                    this.code = data.code;
+                    this.name = data.name;
+                    this.email = data.email;
+                    this.tin = data.tin == null ? "N/A" : data.tin;
+                    this.contact_person = data.contact_person;
+                    this.mobile_number = data.mobile_number;
+                    this.telephone_number = data.telephone_number;
+                    this.remarks = data.remarks;
+                    this.website = data.website;
+                    this.is_vat_inclusive = data.is_vat_inclusive;
+                    this.address = data.address;
 
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
+                    this.formDataLoaded = true;
+                })
+                .catch(error => {
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
+                    this.$router.push({ name: "admin.vendors.index" }, () => {});
                 });
         },
         editData() {

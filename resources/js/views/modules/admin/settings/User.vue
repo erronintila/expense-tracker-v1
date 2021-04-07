@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0">
             <v-card-title class="pt-0">
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
@@ -8,21 +9,37 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title success--text">User Settings</h4>
+                <h4 class="title success--text">Employee Settings</h4>
             </v-card-title>
 
             <v-card class="mb-4">
                 <v-card-text>
                     <v-row>
                         <v-col cols="12" md="6">
-                            <v-autocomplete
+                            <UserDialogSelector
                                 v-model="user"
-                                label="User"
-                                return-object
-                                :items="users"
-                                item-text="full_name"
-                                item-value="id"
-                            ></v-autocomplete>
+                                ref="userDialogSelector"
+                                @selectUser="onChangeUser"
+                                @onReset="onResetUser"
+                                :selectedUser="user"
+                                :usersParameters="usersParameters"
+                            >
+                                <template
+                                    v-slot:openDialog="{
+                                        bind,
+                                        on,
+                                        computedSelectedUser
+                                    }"
+                                >
+                                    <v-btn v-bind="bind" v-on="on">
+                                        {{
+                                            computedSelectedUser
+                                                ? computedSelectedUser.name
+                                                : "Select Employee"
+                                        }}
+                                    </v-btn>
+                                </template>
+                            </UserDialogSelector>
                         </v-col>
                     </v-row>
                 </v-card-text>
@@ -67,14 +84,6 @@
                                     </v-select>
                                 </v-col>
                             </v-row>
-                            <!-- <v-row>
-                                <v-col>
-                                    <v-data-table
-                                        :headers="headerExpenseTypes"
-                                        :items="pivot_expense_types"
-                                    ></v-data-table>
-                                </v-col>
-                            </v-row> -->
                             <v-row>
                                 <v-col cols="12" md="4">
                                     <v-btn @click="onSave" color="green" dark>
@@ -91,13 +100,26 @@
 </template>
 
 <script>
+import UserDataService from "../../../../services/UserDataService";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
+
 export default {
+    components: {
+        UserDialogSelector
+    },
     data() {
         return {
+            formDataLoaded: false,
             panel: [0],
             valid: false,
-            users: [],
-            user: { id: null, expense_types: null, sub_types: null },
+            usersParameters: {
+                params: {
+                    is_superadmin: false,
+                    with_expense_types: true
+                }
+            },
+            user: null,
 
             headerExpenseTypes: [
                 { text: "Name", value: "name" },
@@ -113,90 +135,62 @@ export default {
             // expense_type_limit: null
 
             pivot_expense_types: [],
-            pivot_sub_types: null
+            pivot_sub_types: null,
+
+            collections: {},
+            filters: {}
         };
     },
     methods: {
-        loadUsers() {
-            let _this = this;
-            axios
-                .get("/api/data/users?update_settings=true")
-                .then(response => {
-                    let data = response.data.data;
-
-                    _this.users = data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+        onChangeUser(e) {
+            this.user = e;
+        },
+        onResetUser() {
+            this.user = null;
         },
         loadExpenseTypes() {
-            let _this = this;
-            axios
-                .get("/api/data/expense_types?only=true")
-                .then(response => {
-                    _this.all_expense_types = response.data.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+            return new Promise((resolve, reject) => {
+                ExpenseTypeDataService.getAll({ params: { itemsPerPage: 100 } })
+                    .then(response => {
+                        this.all_expense_types = response.data.data;
+                        this.formDataLoaded = true;
+                        resolve();
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.formDataLoaded = true;
+                        reject();
+                    });
+            });
         },
         onSave() {
-            let _this = this;
-
-            if (_this.user.id == null) {
-                _this.mixin_errorDialog("Error", "No user selected");
+            if (this.user == null) {
+                this.mixin_errorDialog("Error", "No user selected");
                 return;
             }
 
-            _this.$refs.form.validate();
+            this.$refs.form.validate();
 
-            if (_this.$refs.form.validate()) {
-                _this.loader = true;
+            if (this.$refs.form.validate()) {
+                this.loader = true;
 
-                axios
-                    .put("/api/users/update_settings/" + _this.user.id, {
-                        expense_types: _this.allowed_expense_types.map(
-                            item => item.id
-                        )
+                let data = {
+                    expense_types: this.allowed_expense_types.map(
+                        item => item.id
+                    )
+                };
+
+                UserDataService.updateSettings(this.user.id, data)
+                    .then(response => {
+                        this.mixin_successDialog(response.data.status, response.data.message);
+                        this.$store.dispatch("AUTH_USER");
                     })
-                    .then(function(response) {
-                        _this.$dialog.message.success(
-                            "User settings updated successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
-                        _this.$store.dispatch("AUTH_USER");
-
-                        // _this.$router.push({ name: "admin.users.index" });
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
+                    .catch(error => {
+                        this.mixin_showErrors(error);
 
                         if (error.response) {
                             if (error.response.data) {
-                                _this.errors = error.response.data.errors;
+                                this.errors = error.response.data.errors;
                             }
                         }
                     });
@@ -208,9 +202,8 @@ export default {
     watch: {
         user(item) {
             // this.expense_types = item.expense_types;
-            this.allowed_expense_types = item.expense_types;
-
-            this.pivot_expense_types = item.pivot_expense_types;
+            this.allowed_expense_types = item ? item.expense_types : null;
+            this.pivot_expense_types = item ? item.pivot_expense_types : null;
         },
         allowed_expense_types(items) {
             this.expense_types = items;
@@ -229,7 +222,7 @@ export default {
     },
     computed: {
         expense_type_limit: {
-            get: function() {
+            get() {
                 let limit =
                     this.expense_type.pivot == null
                         ? null
@@ -237,7 +230,7 @@ export default {
 
                 return limit;
             },
-            set: function(newValue) {
+            set(newValue) {
                 return newValue;
             }
         }
@@ -245,11 +238,9 @@ export default {
     created() {
         // this.$store.dispatch("AUTH_USER");
         this.loadExpenseTypes();
-        this.loadUsers();
     },
     activated() {
         this.loadExpenseTypes();
-        this.loadUsers();
     }
 };
 </script>

@@ -1,24 +1,10 @@
 <template>
     <div>
-        <v-container v-if="loader" style="height: 400px;">
-            <v-row class="fill-height" align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Loading, Please wait...
-                </v-col>
-                <v-col cols="6">
-                    <v-progress-linear
-                        color="green accent-4"
-                        indeterminate
-                        rounded
-                        height="6"
-                    ></v-progress-linear>
-                </v-col>
-            </v-row>
-        </v-container>
+        <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
-                <v-btn @click="$router.go(-1)" class="mr-3" icon>
+                <v-btn @click="goBack()" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -207,9 +193,7 @@
                                     <v-icon
                                         small
                                         class="mr-2"
-                                        @click="
-                                            $router.push(`/expenses/${item.id}`)
-                                        "
+                                        @click="onShow(item)"
                                     >
                                         mdi-eye
                                     </v-icon>
@@ -283,7 +267,7 @@
 
                         <v-col cols="12" md="4">
                             <div class="text-right">
-                                <v-btn
+                                <!-- <v-btn
                                     @click="generateExpenseReport('print')"
                                     color="green"
                                     dark
@@ -296,7 +280,7 @@
                                     dark
                                 >
                                     Export to PDF
-                                </v-btn>
+                                </v-btn> -->
                                 <!-- <v-btn
                                     @click="generatePDF('print')"
                                     color="green"
@@ -403,12 +387,14 @@ import moment from "moment";
 import numeral from "numeral";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 
 export default {
     data() {
         return {
             loading: true,
-            loader: true,
+            formDataLoaded: false,
             headers: [
                 { text: "Date", value: "date", sortable: false },
                 {
@@ -649,6 +635,25 @@ export default {
                     doc.save(`${pdfName}.pdf`);
                 }
                 //end of print or export record
+            });
+        },
+        goBack() {
+            if(this.$route.params.fromExpense) {
+                this.$router.push({name: "user.expense_reports.index"});
+                return;
+            }
+            this.$router.go(-1);
+        },
+        onShow(item) {
+            let params = { id: item.id };
+
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true, fromExpenseReport: true };
+            }
+
+            this.$router.push({
+                name: "user.expenses.show",
+                params: params
             });
         },
         generateReport(action) {
@@ -1159,140 +1164,133 @@ export default {
         },
         loadExpenses() {
             return new Promise((resolve, reject) => {
-                axios
-                    .get(
-                        `/api/data/expenses?expense_report_id=${this.router_params_id}&only=true&sortBy=date&sortType=asc`
-                    )
+                ExpenseDataService.get({
+                    params: {
+                        expense_report_id: this.router_params_id,
+                        only: true,
+                        sortBy: "date",
+                        sortType: "asc"
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         resolve({ items });
                     })
                     .catch(error => {
+                        this.mixin_showErrors(error);
                         reject();
-
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
                     });
             });
         },
         getData() {
-            let _this = this;
-            axios
-                .get(`/api/expense_reports/${_this.router_params_id}`)
+            let data = {};
+
+            if(this.$route.params.isDeleted) {
+                data = {
+                    params: {
+                        isDeleted : true
+                    }
+                }
+            }
+
+            ExpenseReportDataService.show(this.router_params_id, data)
                 .then(response => {
                     let data = response.data.data;
 
-                    _this.form.code = data.code;
-                    _this.form.reference_no = data.reference_no;
-                    _this.form.description = data.description;
-                    _this.form.remarks = data.remarks;
-                    _this.form.notes = data.notes;
-                    _this.form.submission_period = data.submission_period;
-                    _this.form.approval_period = data.approval_period;
-                    _this.form.from = data.from;
-                    _this.form.to = data.to;
-                    _this.form.status = data.status;
-                    _this.form.is_late_submitted = data.is_late_submitted;
-                    _this.form.is_late_approved = data.is_late_approved;
+                    this.form.code = data.code;
+                    this.form.reference_no = data.reference_no;
+                    this.form.description = data.description;
+                    this.form.remarks = data.remarks;
+                    this.form.notes = data.notes;
+                    this.form.submission_period = data.submission_period;
+                    this.form.approval_period = data.approval_period;
+                    this.form.from = data.from;
+                    this.form.to = data.to;
+                    this.form.status = data.status;
+                    this.form.is_late_submitted = data.is_late_submitted;
+                    this.form.is_late_approved = data.is_late_approved;
 
-                    _this.form.total = data.total;
-                    _this.form.total_reimbursable = data.total_reimbursable;
-                    _this.form.paid = data.paid;
-                    _this.form.payments = data.payments;
-                    _this.form.payment_id = data.payment_id;
-                    _this.form.balance = data.balance;
+                    this.form.total = data.total;
+                    this.form.total_reimbursable = data.total_reimbursable;
+                    this.form.paid = data.paid;
+                    this.form.payments = data.payments;
+                    this.form.payment_id = data.payment_id;
+                    this.form.balance = data.balance;
 
-                    _this.form.user = data.user;
-                    _this.form.payment = data.payment;
-                    // _this.form.expenses = data.expenses;
+                    this.form.user = data.user;
+                    this.form.payment = data.payment;
+                    // this.form.expenses = data.expenses;
 
-                    // _this.form.created = data.created;
-                    // _this.form.updated = data.updated;
-                    // _this.form.deleted = data.deleted;
-                    // _this.form.submitted = data.submitted;
-                    // _this.form.approved = data.approved;
-                    // _this.form.rejected = data.rejected;
-                    // _this.form.cancelled = data.cancelled;
+                    // this.form.created = data.created;
+                    // this.form.updated = data.updated;
+                    // this.form.deleted = data.deleted;
+                    // this.form.submitted = data.submitted;
+                    // this.form.approved = data.approved;
+                    // this.form.rejected = data.rejected;
+                    // this.form.cancelled = data.cancelled;
 
-                    _this.form.created_at = data.created_at;
-                    _this.form.updated_at = data.updated_at;
-                    _this.form.deleted_at = data.deleted_at;
-                    _this.form.submitted_at = data.submitted_at;
-                    _this.form.approved_at = data.approved_at;
-                    _this.form.rejected_at = data.rejected_at;
-                    _this.form.cancelled_at = data.cancelled_at;
+                    this.form.created_at = data.created_at;
+                    this.form.updated_at = data.updated_at;
+                    this.form.deleted_at = data.deleted_at;
+                    this.form.submitted_at = data.submitted_at;
+                    this.form.approved_at = data.approved_at;
+                    this.form.rejected_at = data.rejected_at;
+                    this.form.cancelled_at = data.cancelled_at;
 
-                    _this.form.logs = data.logs;
+                    this.form.logs = data.logs;
 
-                    // _this.loadExpenses();
+                    // this.loadExpenses();
 
-                    _this.getDataFromApi().then(data => {
-                        _this.form.expenses = data.items;
-                        _this.totalItems = data.total;
+                    this.getDataFromApi().then(data => {
+                        this.form.expenses = data.items;
+                        this.totalItems = data.total;
                     });
 
-                    _this.loader = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-
-                    _this.loader = false;
+                    this.mixin_showErrors(error);
+                    this.formDataLoaded = true;
+                    this.$router.push({ name: "user.expense_reports.index" }, () => {});
                 });
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
-                const { sortBy, sortDesc, page, itemsPerPage } = _this.options;
+                const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+                let range = [this.form.from, this.form.to];
+                let expense_report_id = this.router_params_id;
 
-                console.log(_this.options);
+                let data = {
+                    params: {
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        expense_report_id: expense_report_id,
+                        sortBy: "date",
+                        sortType: "asc"
+                    }
+                };
 
-                let range = [_this.form.from, _this.form.to];
-                let expense_report_id = _this.router_params_id;
+                if(this.$route.params.isDeleted) {
+                    data.params.isDeleted = true;
+                }
 
-                axios
-                    .get("/api/expenses", {
-                        params: {
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            expense_report_id: expense_report_id,
-                            sortBy: "date",
-                            sortType: "asc"
-                        }
-                    })
+                ExpenseDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
 
-                        _this.loading = false;
+                        this.loading = false;
 
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        reject();
                     });
             });
         }
@@ -1357,6 +1355,6 @@ export default {
     deactivated() {
         this.form.expenses = [];
         Object.assign(this.$data.form, this.$options.data());
-    },
+    }
 };
 </script>

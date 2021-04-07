@@ -103,6 +103,17 @@ import Mixin from "./mixins/index";
 //     "Bearer " + localStorage.getItem("access_token");
 
 axios.interceptors.response.use(
+    // function(config) {
+    //     //  Generate cancel token source
+    //     let source = axios.CancelToken.source();
+
+    //     // Set cancel token on this request
+    //     config.cancelToken = source.token;
+
+    //     // Add to vuex to make cancellation available from anywhere
+    //     store.commit("ADD_CANCEL_TOKEN", source);
+    //     return config;
+    // },
     function(response) {
         return response;
     },
@@ -149,6 +160,10 @@ Vue.mixin(Mixin);
  * ------------------------------------------------------------------------------------------------------------------
  */
 
+Vue.component(
+    "loader-component",
+    require("../js/components/loader/Loader.vue").default
+);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);

@@ -29,6 +29,10 @@ class VendorDataService {
     restore(id, data) {
         return axios.put(`/api/vendors/restore/${id}`, data);
     }
+
+    updateActivation(id, data) {
+        return axios.put(`/api/vendors/update_activation/${id}`, data);
+    }
 }
 
 export default new VendorDataService();

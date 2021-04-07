@@ -51,17 +51,17 @@ class Job extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($job) {
+            abort_if($job->users()->count() > 0, 422, "Active user records found.");
+        });
 
-    //     static::deleting(function ($job) {
-    //         if ($job->users()->count() > 0) {
-
-    //             abort(422, "Item has child records");
-    //         }
-    //     });
-    // }
+        static::restoring(function ($job) {
+            abort_if($job->department()->onlyTrashed()->count(), 422, "No department found.");
+        });
+    }
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class Job extends Model
     /**
      * Activity Logs Configuration
      *
-     * 
+     *
      */
 
     // // log changes to all the $fillable/$guarded attributes of the model

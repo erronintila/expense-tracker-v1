@@ -7,10 +7,11 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ExpenseTypeResource;
-use App\Http\Requests\ExpenseTypeStoreRequest;
-use App\Http\Requests\ExpenseTypeUpdateRequest;
-use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
-use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
+use App\Http\Requests\ExpenseType\ExpenseTypeStoreRequest;
+use App\Http\Requests\ExpenseType\ExpenseTypeUpdateRequest;
+// use App\Http\Resources\ExpenseType\ExpenseTypeOnlyResource;
+// use App\Http\Resources\ExpenseType\ExpenseTypeShowResource;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseTypeController extends Controller
 {
@@ -37,8 +38,9 @@ class ExpenseTypeController extends Controller
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";
         $itemsPerPage = request('itemsPerPage') ?? 10;
+        $expense_type_id = request("expense_type_id") ?? null;
 
-        $expense_types = ExpenseType::where('expense_type_id', null)
+        $expense_types = ExpenseType::where('expense_type_id', $expense_type_id)
             ->orderBy($sortBy, $sortType);
 
         if (request()->has('status')) {
@@ -55,9 +57,14 @@ class ExpenseTypeController extends Controller
         }
 
         $expense_types = $expense_types->where('name', "like", "%" . $search . "%");
+
+        if ($itemsPerPage == "false" || $itemsPerPage == false) {
+            $itemsPerPage = $expense_types->count();
+        }
+
         $expense_types = $expense_types->paginate($itemsPerPage);
 
-        return ExpenseTypeOnlyResource::collection($expense_types);
+        return ExpenseTypeResource::collection($expense_types);
     }
 
     /**
@@ -68,26 +75,32 @@ class ExpenseTypeController extends Controller
      */
     public function store(ExpenseTypeStoreRequest $request)
     {
-        $validated = $request->validated(); // checks validation
-        $message = "Expense type created successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $expense_type = new ExpenseType();
-        $expense_type->code = generate_code(ExpenseType::class, "EXT", 10);
-        $expense_type->name = request('name');
-        $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
-        $expense_type->save();
+        $validated = $request->validated();
+        $expense_type = DB::transaction(function () use ($validated) {
+            $expense_type = new ExpenseType();
+            $expense_type->fill($validated);
+            $expense_type->code = generate_code(ExpenseType::class, "EXT", 10);
+            $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
+            $expense_type->save();
 
-        // store sub types associated with expense type
-        if (request()->has("sub_types")) {
-            foreach (request('sub_types') as $item) {
-                $sub_type = new ExpenseType();
-                $sub_type->name = $item["name"];
-                $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
-                $sub_type->expense_type_id = $expense_type->id;
-                $sub_type->save();
+            if (request()->has("sub_types")) {
+                foreach (request('sub_types') as $item) {
+                    abort_if(DB::table("expense_types")->where("name", $item["name"])->exists(), 422, "Subtype name already exists.");
+
+                    $sub_type = new ExpenseType();
+                    $sub_type->name = $item["name"];
+                    $sub_type->limit = is_numeric($item["limit"]) && ($item["limit"] > 0) ? $item["limit"] : null;
+                    $sub_type->expense_type_id = $expense_type->id;
+                    $sub_type->save();
+                }
             }
-        }
 
+            return $expense_type;
+        });
+
+        $message = "Expense type created successfully";
         return $this->successResponse(new ExpenseTypeResource($expense_type), "$message", 201);
     }
 
@@ -99,14 +112,11 @@ class ExpenseTypeController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $message = "Expense type retrieved successfully"; // return message
-        
-        $expense_type = ExpenseType::withTrashed()
-            ->with('sub_types')
+        $expense_type = ExpenseType::with('sub_types')
             ->where('expense_type_id', null)
             ->findOrFail($id);
-
-        return $this->successResponse(new ExpenseTypeShowResource($expense_type), $message, 201);
+        $message = "Expense type retrieved successfully";
+        return $this->successResponse(new ExpenseTypeResource($expense_type), $message, 200);
     }
 
     /**
@@ -118,33 +128,38 @@ class ExpenseTypeController extends Controller
      */
     public function update(ExpenseTypeUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // checks validation
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $message = "Expense type updated successfully"; // return message
-        $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-        $expense_type->name = request('name');
-        $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
-        $expense_type->save();
+        $validated = $request->validated();
+        $expense_type = DB::transaction(function () use ($id, $validated) {
+            $expense_type = ExpenseType::where('expense_type_id', null)->findOrFail($id);
+            $expense_type->fill($validated);
+            $expense_type->limit = is_numeric(request('limit')) && (request('limit') > 0) ? request('limit') : null;
+            $expense_type->save();
 
-        // remove sub types associated with expense type
-        foreach ($expense_type->sub_types as $sub_type) {
-            $sub_type->delete();
-        }
+            // remove sub types associated with expense type
+            $expense_type->sub_types->each->delete();
+            
+            // update sub types associated with expense type
+            foreach (request('sub_types') as $key => $value) {
+                abort_if(DB::table("expense_types")->where("id", "<>", $value["id"])->where("name", $value["name"])->exists(), 422, "Subtype name already exists.");
 
-        // update sub types associated with expense type
-        foreach (request('sub_types') as $key => $value) {
-            $sub_type = ExpenseType::withTrashed()->updateOrCreate(
-                ['id' => $value["id"]],
-                [
-                    'name' => $value["name"],
-                    "limit" => is_numeric($value["limit"]) && ($value["limit"] > 0) ? $value["limit"] : null,
-                    'expense_type_id' => $expense_type->id,
-                    'deleted_at' => null,
-                ]
-            );
-        }
+                ExpenseType::withTrashed()->updateOrCreate(
+                    ['id' => $value["id"]],
+                    [
+                        'name' => $value["name"],
+                        "limit" => is_numeric($value["limit"]) && ($value["limit"] > 0) ? $value["limit"] : null,
+                        'expense_type_id' => $expense_type->id,
+                        'deleted_at' => null,
+                    ]
+                );
+            }
 
-        return $this->successResponse(null, $message, 201);
+            return $expense_type;
+        });
+
+        $message = "Expense type updated successfully";
+        return $this->successResponse($expense_type, $message, 200);
     }
 
     /**
@@ -155,29 +170,16 @@ class ExpenseTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Expense type deleted successfully";
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $expense_type = ExpenseType::withTrashed()->findOrFail($id);
+        $data = DB::transaction(function () use ($id) {
+            $data = ExpenseType::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
+        });
 
-                $expense_type->delete();
-            }
-
-            $message = "Expense type(s) deleted successfully";
-        } else {
-            $expense_type = ExpenseType::withTrashed()->findOrFail($id);
-
-            if ($expense_type->expenses) {
-                return $this->errorResponse(null, "Record has been associated with expenses", 422);
-            }
-
-            $expense_type->delete();
-
-            $message = "Expense type deleted successfully";
-        }
-
-        return $this->successResponse(null, $message, 200);
+        $message = "Expense type(s) deleted successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -195,24 +197,16 @@ class ExpenseTypeController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Expense type restored successfully.";
+        abort_if(!auth()->user()->is_admin, 403);
+        
+        $data = DB::transaction(function () use ($id) {
+            $data = ExpenseType::onlyTrashed()->findOrFail(explode(",", $id));
+            $data->each->restore();
+            return $data;
+        });
 
-        if (request()->has("ids")) {
-            foreach (request('ids') as $id) {
-                $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-
-                $expense_type->restore();
-            }
-
-            $message = "Expense type(s) restored successfully.";
-        } else {
-            $expense_type = ExpenseType::withTrashed()->where('expense_type_id', null)->findOrFail($id);
-            $expense_type->restore();
-
-            $message = "Expense type restored successfully.";
-        }
-
-        return $this->successResponse(null, $message, 201);
+        $message = "Expense type(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**
@@ -227,31 +221,20 @@ class ExpenseTypeController extends Controller
             $expense_type = ExpenseType::orderBy("name")
                 ->where("expense_type_id", null)
                 ->get();
-
             return $this->successResponse($expense_type, "Retrieved successfully", 200);
         }
 
         if (request()->has('id')) {
-            $expense_type = ExpenseType::withTrashed()
-                ->with(['sub_types' => function ($query) {
-                    $query->withTrashed();
-                }])->with(['expenses' => function ($query) {
-                    $query->withTrashed();
-                }])
+            $expense_type = ExpenseType::with('sub_types')
+                ->with('expenses')
                 ->findOrFail(request('id'));
-
             return new ExpenseTypeResource($expense_type);
         }
 
-        $expense_types = ExpenseType::withTrashed()
-            ->with(['sub_types' => function ($query) {
-                $query->withTrashed();
-            }])->with(['expenses' => function ($query) {
-                $query->withTrashed();
-            }])
+        $expense_types = ExpenseType::with('sub_types')
+            ->with('expenses')
             ->where('expense_type_id', null)
             ->get();
-
         return ExpenseTypeResource::collection($expense_types);
     }
 }

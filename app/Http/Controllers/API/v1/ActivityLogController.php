@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Resources\ActivityLogResource;
@@ -16,7 +15,7 @@ class ActivityLogController extends Controller
 
     public function __construct()
     {
-            $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
+        $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
         $this->middleware(['permission:delete activity logs'], ['only' => ['destroy']]);
     }
 
@@ -31,6 +30,7 @@ class ActivityLogController extends Controller
         $sortBy = request("sortBy") ?? "updated_at";
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
+
         $activity_logs = Activity::orderBy($sortBy, $sortType);
 
         if (request()->has('start_date') && request()->has('end_date')) {
@@ -94,30 +94,8 @@ class ActivityLogController extends Controller
      *
      * @return \Illuminate\Http\Response|null
      */
-    public function destroy(Request $request, $id): ?\Illuminate\Http\Response
+    public function destroy(Request $request, $id)
     {
-        if (request()->has("delete_all")) {
-            $activity_logs = DB::table('activity_log')->delete();
-
-            return response(
-                [
-                    'message' => 'Deleted All Logs successfully'
-                ],
-                201
-            );
-        }
-
-        if (request()->has("ids")) {
-            foreach (request("ids") as $id) {
-                $activity_logs = DB::table('activity_log')->where("id", $id)->delete();
-            }
-
-            return response(
-                [
-                    'message' => 'Deleted Logs successfully'
-                ],
-                201
-            );
-        }
+        abort(422, "Activity Logs can't be deleted.");
     }
 }

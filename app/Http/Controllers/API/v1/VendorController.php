@@ -5,12 +5,11 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
-use App\Http\Requests\VendorStoreRequest;
-use App\Http\Requests\VendorUpdateRequest;
-use App\Http\Resources\Vendor\VendorShowResource;
-use App\Http\Resources\Vendor\VendorIndexResource;
+use App\Http\Requests\Vendor\VendorStoreRequest;
+use App\Http\Requests\Vendor\VendorUpdateRequest;
 
 class VendorController extends Controller
 {
@@ -19,12 +18,12 @@ class VendorController extends Controller
     public function __construct()
     {
         // apply permissions
-        $this->middleware(['permission:view all vendors'], ['only' => ['index']]);
         $this->middleware(['permission:view vendors'], ['only' => ['show']]);
         $this->middleware(['permission:add vendors'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit vendors'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete vendors'], ['only' => ['destroy']]);
         $this->middleware(['permission:restore vendors'], ['only' => ['restore']]);
+        $this->middleware(['permission:set vendor activation'], ['only' => ['update_activation']]);
     }
 
     /**
@@ -34,6 +33,10 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
+        if (!request("isSelection") || !request()->has("isSelection")) {
+            abort_if(!app("auth")->user()->hasPermissionTo('view all vendors'), 403);
+        }
+
         $search = request('search') ?? "";
         $sortBy = request('sortBy') ?? "name";
         $sortType = request('sortType') ?? "asc";
@@ -45,10 +48,20 @@ class VendorController extends Controller
                 case 'Archived':
                     $vendors = $vendors->onlyTrashed();
                     break;
+                case 'Inactive':
+                    $vendors = $vendors->where('is_active', 0);
+                    break;
+                case 'Active':
+                    $vendors = $vendors->where('is_active', 1);
+                    break;
                 default:
                     $vendors = $vendors;
                     break;
             }
+        }
+
+        if (request()->has("is_active")) {
+            $vendors = $vendors->where('is_active', (request("is_active") || strtolower(request("is_active")) == 'true') ?? 1);
         }
 
         $vendors = $vendors->where(function ($query) use ($search) {
@@ -61,7 +74,7 @@ class VendorController extends Controller
         });
 
         $vendors = $vendors->paginate($itemsPerPage);
-        return VendorIndexResource::collection($vendors);
+        return VendorResource::collection($vendors);
     }
 
     /**
@@ -73,17 +86,15 @@ class VendorController extends Controller
     public function store(VendorStoreRequest $request)
     {
         $validated = $request->validated();
-        $message = "Vendor created successfully"; 
 
         $vendor = new Vendor();
-        $vendor->create($validated);
+        $vendor->fill($validated);
+        $vendor->save();
 
-        // store expense types associated with vendor
-        if (request()->has("expense_types")) {
-            $vendor->expense_types()->sync(request('expense_types'));
-        }
+        $vendor->expense_types()->sync(request('expense_types') ?? []);
 
-        return $this->successResponse(new VendorResource($vendor), $message, 201);
+        $message = "Vendor created successfully";
+        return $this->successResponse($vendor, $message, 201);
     }
 
     /**
@@ -94,9 +105,14 @@ class VendorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $vendor = Vendor::withTrashed()->findOrFail($id);
-
-        return $this->successResponse(new VendorShowResource($vendor), 'Vendor retrieved successfully', 200);
+        if (request()->has("isDeleted") && request("isDeleted")) {
+            $vendor = Vendor::withTrashed()->findOrFail($id);
+        } else {
+            $vendor = Vendor::findOrFail($id);
+        }
+        
+        $message = 'Vendor retrieved successfully';
+        return $this->successResponse(new VendorResource($vendor), $message, 200);
     }
 
     /**
@@ -108,20 +124,17 @@ class VendorController extends Controller
      */
     public function update(VendorUpdateRequest $request, $id)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $validated = $request->validated();
-        $message = "Vendor updated successfully";
 
-        $vendor = Vendor::withTrashed()->findOrFail($id);
+        $vendor = Vendor::findOrFail($id);
         $vendor->update($validated);
 
-        // update expense types associated with vendor
-        if (request()->has("expense_types")) {
-            $vendor->expense_types()->sync(request('expense_types'));
-        }
+        $vendor->expense_types()->sync(request('expense_types') ?? []);
 
         $message = "Vendor updated successfully";
-
-        return $this->successResponse(null, $message, 201);
+        return $this->successResponse($vendor, $message, 200);
     }
 
     /**
@@ -132,25 +145,16 @@ class VendorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "Vendor deleted successfully";
+        abort_if(!auth()->user()->is_admin, 403);
 
-        // check if multiple records
-        if (request()->has("ids")) {
-            $vendor = Vendor::whereIn('id', request('ids'))->delete();
+        $data = DB::transaction(function () use ($id) {
+            $data = Vendor::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
+        });
 
-            // foreach (request('ids') as $id) {
-            //     $vendor = Vendor::findOrFail($id);
-            //     $vendor->delete();
-            // }
-
-            $message = "Vendor(s) deleted successfully";
-        } else {
-            $vendor = Vendor::findOrFail($id);
-            $vendor->delete();
-            $message = "Vendor deleted successfully";
-        }
-
-        return $this->successResponse(null, $message, 200);
+        $message = "Vendor(s) deleted successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -168,26 +172,42 @@ class VendorController extends Controller
      */
     public function restore(Request $request, $id)
     {
-        $message = "Vendor restored successfully";
+        abort_if(!auth()->user()->is_admin, 403);
+        
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = Vendor::onlyTrashed()->findOrFail($ids);
+            $data->each->restore();
+            return $data;
+        });
 
-        // check if multiple records
-        if (request()->has("ids")) {
-            $vendor = Vendor::withTrashed()
-                ->whereIn('id', request('ids'))
-                ->restore();
+        $message = "Vendor(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
+    }
 
-            // foreach (request('ids') as $id) {
-            //     $vendor = Vendor::withTrashed()->findOrFail($id);
-            //     $vendor->restore();
-            // }
+    public function update_activation(Request $request, $id)
+    {
+        $activation = request("is_active") ? "activated" : "deactivated";
 
-            $message = "Vendor(s) restored successfully";
-        } else {
-            $vendor = Vendor::withTrashed()->findOrFail($id);
-            $vendor->restore();
-        }
+        $data = DB::transaction(function () use ($activation, $id) {
+            $ids = explode(",", $id);
+            $data = Vendor::findOrFail($ids);
+            $data->each(function ($item) use ($activation) {
+                activity()->disableLogging();
+                $item->is_active = request("is_active");
+                $item->save();
 
-        return $this->successResponse(null, $message, 201);
+                activity()->enableLogging();
+                activity('vendor')
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->name], 'custom' => ['link' => null]])
+                    ->log("{$activation} vendor");
+            });
+            return $data;
+        });
+
+        $message = "Vendor(s) {$activation} successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**
@@ -197,11 +217,7 @@ class VendorController extends Controller
      */
     public function getVendors()
     {
-        $vendors = Vendor::with(['expense_types' => function ($query) {
-            $query->withTrashed();
-        }])
-        ->orderBy("name")->get();
-
+        $vendors = Vendor::with('expense_types')->orderBy("name")->get();
         return VendorResource::collection($vendors);
     }
 }

@@ -27,14 +27,29 @@ class User extends Authenticatable
         LARAVEL MODEL CONFIGURATION
     ============================================================================================================================================ */
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'username', 'password',
-    ];
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($user) {
+            abort_if($user->expenses()->count() > 0, 422, "Active expense records found.");
+            abort_if($user->expense_reports()->count() > 0, 422, "Active expense report records found.");
+        });
+
+        static::restoring(function ($user) {
+            abort_if($user->job()->onlyTrashed()->count(), 422, "No job designation found.");
+        });
+    }
+
+    // /**
+    //  * The attributes that are mass assignable.
+    //  *
+    //  * @var array
+    //  */
+    // protected $fillable = [
+    //     'name', 'email', 'username', 'password',
+    // ];
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.

@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
+/* harmony import */ var _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/PermissionDataService */ "./resources/js/services/PermissionDataService.js");
 //
 //
 //
@@ -89,24 +91,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      loader: true,
+      formDataLoaded: false,
       panel: [0, 1],
       valid: false,
       menu: false,
@@ -134,73 +124,73 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData() {
       var _this = this;
 
-      this.loadPermissions().then(axios.get("/api/users/" + _this.$route.params.id).then(function (response) {
-        var data = response.data.data;
-        console.log(data);
-        _this.form.is_admin = data.is_admin;
-        _this.form.can_login = data.can_login;
-        _this.form.permissions = data.permissions;
-        _this.form.old_permissions = data.permissions;
-        _this.form.role = data.role[0];
-        _this.form.old_role = data.role[0];
-        _this.loader = false;
-      })["catch"](function (error) {
-        console.log(error);
-        console.log(error.response);
+      this.loadPermissions().then(function (data) {
+        _this.permissions = data;
+        _this.form.permissions = [];
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].show(_this.$route.params.id).then(function (response) {
+          var data = response.data.data;
+          _this.form.is_admin = data.is_admin;
+          _this.form.can_login = data.can_login;
+          _this.form.permissions = data.permissions;
+          _this.form.old_permissions = data.permissions;
+          _this.form.role = data.role[0];
+          _this.form.old_role = data.role[0];
+          _this.formDataLoaded = true;
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
 
-        _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this.formDataLoaded = true;
 
-        _this.loader = false;
-      }));
+          _this.$router.push({
+            name: "admin.users.index"
+          }, function () {});
+        });
+      });
     },
     loadPermissions: function loadPermissions() {
-      var _this = this;
+      var _this2 = this;
 
       return new Promise(function (resolve, reject) {
-        axios.get("/api/data/permissions?role=".concat(_this.form.role)).then(function (response) {
-          console.log(response);
-          _this.permissions = response.data;
-          _this.form.permissions = [];
-          resolve();
+        _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_1__["default"].get({
+          params: {
+            role: _this2.form.role
+          }
+        }).then(function (response) {
+          resolve(response.data);
         })["catch"](function (error) {
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this2.mixin_showErrors(error);
 
           reject();
         });
       });
     },
     onSave: function onSave() {
-      var _this = this;
+      var _this3 = this;
 
       var is_administrator = this.form.role == "Administrator" ? true : false;
+      this.$refs.form.validate();
 
-      _this.$refs.form.validate();
-
-      if (_this.$refs.form.validate()) {
-        _this.loader = true;
-        axios.put("/api/users/update_permissions/" + _this.$route.params.id, {
+      if (this.$refs.form.validate()) {
+        this.formDataLoaded = false;
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updatePermissions(this.$route.params.id, {
           is_admin: is_administrator,
-          can_login: _this.form.can_login,
-          permissions: _this.form.permissions
+          can_login: this.form.can_login,
+          permissions: this.form.permissions
         }).then(function (response) {
-          _this.mixin_successDialog(response.data.status, response.data.message);
+          _this3.mixin_successDialog(response.data.status, response.data.message);
 
+          _this3.formDataLoaded = true;
           window.location.replace("/admin/users");
         })["catch"](function (error) {
-          _this.loader = false;
-          console.log(error);
-          console.log(error.response);
-
-          _this.mixin_errorDialog("Error ".concat(error.response.status), error.response.statusText);
+          _this3.mixin_showErrors(error);
 
           if (error.response) {
             if (error.response.data) {
-              _this.errors = error.response.data.errors;
+              _this3.errors = error.response.data.errors;
             }
           }
+
+          _this3.formDataLoaded = true;
         });
         return;
       }
@@ -208,11 +198,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     "form.role": function formRole() {
-      var _this2 = this;
+      var _this4 = this;
 
-      this.loadPermissions().then(function () {
-        if (_this2.form.old_role == _this2.form.role) {
-          _this2.form.permissions = _this2.form.old_permissions;
+      this.loadPermissions().then(function (data) {
+        _this4.permissions = data;
+        _this4.form.permissions = [];
+
+        if (_this4.form.old_role == _this4.form.role) {
+          _this4.form.permissions = _this4.form.old_permissions;
         }
       });
     }
@@ -245,52 +238,8 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.loader
-        ? _c(
-            "v-container",
-            { staticStyle: { height: "400px" } },
-            [
-              _c(
-                "v-row",
-                {
-                  staticClass: "fill-height",
-                  attrs: { "align-content": "center", justify: "center" }
-                },
-                [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "subtitle-1 text-center",
-                      attrs: { cols: "12" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                Loading, Please wait...\n            "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { attrs: { cols: "6" } },
-                    [
-                      _c("v-progress-linear", {
-                        attrs: {
-                          color: "green accent-4",
-                          indeterminate: "",
-                          rounded: "",
-                          height: "6"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+      !_vm.formDataLoaded
+        ? _c("loader-component")
         : _c(
             "v-card",
             { staticClass: "elevation-0 pt-0" },
@@ -517,6 +466,164 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/js/services/PermissionDataService.js":
+/*!********************************************************!*\
+  !*** ./resources/js/services/PermissionDataService.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var PermissionDataService = /*#__PURE__*/function () {
+  function PermissionDataService() {
+    _classCallCheck(this, PermissionDataService);
+  }
+
+  _createClass(PermissionDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/permissions", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/permissions", data);
+    }
+  }]);
+
+  return PermissionDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new PermissionDataService());
+
+/***/ }),
+
+/***/ "./resources/js/services/UserDataService.js":
+/*!**************************************************!*\
+  !*** ./resources/js/services/UserDataService.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var UserDataService = /*#__PURE__*/function () {
+  function UserDataService() {
+    _classCallCheck(this, UserDataService);
+  }
+
+  _createClass(UserDataService, [{
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/users", data);
+    }
+  }, {
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/users", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/users/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/restore/".concat(id), data);
+    }
+  }, {
+    key: "updatePassword",
+    value: function updatePassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_password/".concat(id), data);
+    }
+  }, {
+    key: "resetPassword",
+    value: function resetPassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/reset_password/".concat(id), data);
+    }
+  }, {
+    key: "verifyEmail",
+    value: function verifyEmail(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/verify_email/".concat(id), data);
+    }
+  }, {
+    key: "updateFund",
+    value: function updateFund(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_fund/".concat(id), data);
+    }
+  }, {
+    key: "updateSettings",
+    value: function updateSettings(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
+    }
+  }, {
+    key: "updatePermissions",
+    value: function updatePermissions(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_permissions/".concat(id), data);
+    }
+  }, {
+    key: "updateProfile",
+    value: function updateProfile(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
+    }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
+    }
+  }]);
+
+  return UserDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new UserDataService());
 
 /***/ }),
 

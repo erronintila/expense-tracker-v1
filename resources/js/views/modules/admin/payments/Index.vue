@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Payment Records</h4>
 
@@ -26,62 +27,64 @@
                     </template>
                     <span>Add New Record</span>
                 </v-tooltip>
+            </v-card-title>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
+            <v-card-subtitle>
+                <!-- <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker> -->
+
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
                         </v-btn>
                     </template>
-                    <span>Refresh</span>
-                </v-tooltip>
+                </DateRangePicker>
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
+                </v-chip>
 
                 <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-y
-                    left
+                    right
                     bottom
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
+                        <v-chip class="mr-2" v-bind="attrs" v-on="menu" small>
+                            {{ status }}
+                        </v-chip>
                     </template>
 
                     <v-card>
                         <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
                             <v-list-item>
                                 <v-select
                                     v-model="status"
@@ -89,109 +92,72 @@
                                     label="Status"
                                 ></v-select>
                             </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    label="User"
-                                    return-object
-                                ></v-select>
-                            </v-list-item>
                         </v-list>
                     </v-card>
                 </v-menu>
 
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
+                <UserDialogSelector
+                    ref="userDialogSelector"
+                    @selectUser="selectUser"
+                    @onReset="resetUser"
+                    :selectedUser="user"
+                    :usersParameters="{ params: { is_superadmin: false } }"
+                >
+                    <template
+                        v-slot:openDialog="{ bind, on, computedSelectedUser }"
+                    >
+                        <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
+                            {{
+                                computedSelectedUser
+                                    ? computedSelectedUser.name
+                                    : "All Employees"
+                            }}
+                        </v-chip>
                     </template>
+                </UserDialogSelector>
 
-                    <v-list>
-                        <!-- <v-list-item @click="onUpdate('approve', 'put')">
-                            <v-list-item-title>
-                                Approve Payment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item @click="onUpdate('release', 'put')">
-                            <v-list-item-title>
-                                Release Payment(s)
-                            </v-list-item-title>
-                        </v-list-item>
-
-                         -->
-
-                        <v-list-item @click="onUpdate('receive', 'put')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-credit-card-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Mark as Received
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <!-- <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Advance Payment
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <v-list-item @click="onUpdate('cancel', 'delete')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Payment Record(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <!-- <v-list-item  @click="onUpdate('complete', 'put')">
-                            <v-list-item-title>
-                                Complete Transaction(s)
-                            </v-list-item-title>
-                        </v-list-item> -->
-                    </v-list>
-                </v-menu>
-            </v-card-title>
-
-            <v-card-subtitle>
-                {{ formattedDateRange }}
-            </v-card-subtitle>
-
-            <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
-                </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip v-if="user!=null" class="mr-2" small>
-                    {{ user.full_name }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        selected.length > 0 &&
+                            selected.filter(item => item.received_at == null)
+                                .length > 0
+                    "
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onUpdate('receive', 'put')"
+                    close-icon="mdi-download"
+                    color="orange"
+                    dark
+                >
+                    Mark as received
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        selected.length > 0 &&
+                            selected.filter(item => item.deleted_at == null)
+                                .length > 0
+                    "
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onUpdate('cancel', 'delete')"
+                    close-icon="mdi-close"
+                    color="red"
+                    dark
+                >
+                    Cancel Payment(s)
                 </v-chip>
             </v-row>
 
@@ -234,7 +200,14 @@
                                     <tr>
                                         <td><strong>Created</strong></td>
                                         <td>:</td>
-                                        <td>{{ mixin_formatDate(item.created_at, "YYYY-MM-DD HH:mm:ss") }}</td>
+                                        <td>
+                                            {{
+                                                mixin_formatDate(
+                                                    item.created_at,
+                                                    "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                            }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Code</strong></td>
@@ -300,9 +273,7 @@
                         }}</v-chip>
                     </template>
                     <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            `${item.user.full_name}`
-                        }}
+                        {{ `${item.user.full_name}` }}
                     </template>
                     <template v-slot:[`item.created_at`]="{ item }">
                         {{ mixin_getHumanDate(item.created_at) }}
@@ -355,12 +326,15 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import PaymentDataService from "../../../../services/PaymentDataService";
 
 export default {
-    components: { DateRangePicker },
+    components: { DateRangePicker, UserDialogSelector },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
@@ -374,8 +348,7 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            user: {id: 0, full_name: "All Users"},
-            users: [],
+            user: null,
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -425,86 +398,71 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users?only=true")
-                .then(response => {
-                    _this.users = response.data.data;
-                    _this.users.unshift({
-                        id: 0,
-                        full_name: "All Users"
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.mixin_errorDialog(
-                        `Error ${error.response.status}`,
-                        error.response.statusText
-                    );
-                });
+        selectUser(e) {
+            this.selected = [];
+            if (e == null || e == undefined) {
+                this.user = null;
+                return;
+            }
+            this.user = e;
+        },
+        resetUser() {
+            this.selected = [];
+            this.user = null;
         },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let range = _this.date_range;
-                let user_id = _this.user.id;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let range = this.date_range;
+                let user_id = this.user ? this.user.id : null;
 
-                axios
-                    .get("/api/payments", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0],
-                            user_id: user_id
-                        }
-                    })
+                PaymentDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                        user_id: user_id
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
             this.selected = [];
-            this.loadUsers();
         },
         onShow(item) {
+            let params = { id: item.id };
+
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
+            }
+
             this.$router.push({
                 name: "admin.payments.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {
@@ -514,63 +472,43 @@ export default {
             });
         },
         // onDelete() {
-        //     let _this = this;
-
-        //     if (_this.selected.length == 0) {
-        //         this.$dialog.message.error("No item(s) selected", {
-        //             position: "top-right",
-        //             timeout: 2000
-        //         });
+        //     if (this.selected.length == 0) {
+        //         this.mixin_errorDialog("Error", "No item(s) selected");
         //         return;
         //     }
 
         //     this.$confirm("do you want to cancel payment?").then(res => {
         //         if (res) {
         //             axios
-        //                 .delete(`/api/payments/${_this.selected[0].id}`, {
+        //                 .delete(`/api/payments/${this.selected[0].id}`, {
         //                     params: {
-        //                         ids: _this.selected.map(item => {
+        //                         ids: this.selected.map(item => {
         //                             return item.id;
         //                         })
         //                     }
         //                 })
-        //                 .then(function(response) {
-        //                     _this.$dialog.message.success(
-        //                         "Item(s) moved to archive.",
-        //                         {
-        //                             position: "top-right",
-        //                             timeout: 2000
-        //                         }
-        //                     );
-        //                     _this.getDataFromApi().then(data => {
-        //                         _this.items = data.items;
-        //                         _this.totalItems = data.total;
+        //                 .then(response => {
+        //                      this.mixin_successDialog(response.data.status, response.data.message);
+        //                     this.getDataFromApi().then(data => {
+        //                         this.items = data.items;
+        //                         this.totalItems = data.total;
         //                     });
         //                 })
-        //                 .catch(function(error) {
-        //                     console.log(error);
-        //                      console.log(error.response);
+        //                 .catch(error => {
+        //                     this.mixin_showErrors(error);
         //                 });
         //         }
         //     });
         // },
         onUpdate(action, method) {
-            let _this = this;
-
             if (action == "receive" && !this.mixin_can("receive payments")) {
-                _this.mixin_errorDialog(
-                    `Error`,
-                    "Not allowed"
-                );
+                this.mixin_errorDialog(`Error`, "Not allowed");
 
                 return;
             }
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
@@ -580,75 +518,70 @@ export default {
                     .map(item => item.status.status)
                     .includes("Completed")
             ) {
-                this.$dialog.message.error(
-                    "Payment has already been received",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
+                this.mixin_errorDialog(
+                    "Error",
+                    "Payment has already been received"
                 );
                 return;
             }
 
             this.$confirm(`Do you want to ${action} payment(s)?`).then(res => {
                 if (res) {
-                    let ids = _this.selected.map(item => {
+                    let ids = this.selected.map(item => {
                         return item.id;
                     });
 
+                    let url = "";
+
+                    switch (action) {
+                        // case "release":
+                        //     url = `/api/payments/release_payment/${ids}`;
+                        //     break;
+                        case "receive":
+                            url = `/api/payments/receive_payment/${ids}`;
+                            break;
+                        case "complete":
+                            url = `/api/payments/complete_payment/${ids}`;
+                            break;
+                        // case "update":
+                        //     url = `/api/payments/${this.selected[0].id}`;
+                        //     break;
+                        case "cancel":
+                            url = `/api/payments/${ids}`;
+                            break;
+                        default:
+                            this.mixin_errorDialog(
+                                "Error",
+                                "Action can't be processed."
+                            );
+                            return;
+                            break;
+                    }
+
                     axios({
                         method: method,
-                        url: `/api/payments/${_this.selected[0].id}`,
-                        data: {
-                            ids: ids,
-                            action: action
-                        }
+                        url: url
+                        // data: {
+                        //     ids: ids
+                        // }
                     })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                response.data.message,
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-                            _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                            _this.selected = [];
+                            this.$store.dispatch("AUTH_NOTIFICATIONS");
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            console.log(error);
-                            console.log(error.response);
-
-                            _this.mixin_errorDialog(
-                                `Error ${error.response.status}`,
-                                error.response.statusText
-                            );
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
-        }
-    },
-    watch: {
-        params: {
-            handler() {
-                this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
-                });
-            },
-            deep: true
-        },
-        items() {
-            this.totalAmount = this.mixin_formatNumber(
-                this.items.reduce((total, item) => total + item.amount, 0)
-            );
         }
     },
     computed: {
@@ -665,15 +598,32 @@ export default {
             let start_date = moment(this.date_range[0]).format("MMM DD, YYYY");
             let end_date = moment(this.date_range[1]).format("MMM DD, YYYY");
 
-            if(JSON.stringify(start_date) == JSON.stringify(end_date)) {
+            if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
                 return start_date;
             }
 
-            if(JSON.stringify(end_date) == null) {
+            if (JSON.stringify(end_date) == null) {
                 return start_date;
             }
 
             return `${start_date} ~ ${end_date}`;
+        }
+    },
+    watch: {
+        params: {
+            immediate: true,
+            deep: true,
+            handler() {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        },
+        items() {
+            this.totalAmount = this.mixin_formatNumber(
+                this.items.reduce((total, item) => total + item.amount, 0)
+            );
         }
     },
     // mounted() {
@@ -682,14 +632,12 @@ export default {
     //         this.totalItems = data.total;
     //     });
     // },
-    created() {
-        // this.$store.dispatch("AUTH_USER");
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadUsers();
-    },
+    // created() {
+    //     // this.$store.dispatch("AUTH_USER");
+    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadUsers();
         this.getDataFromApi().then(data => {
             this.items = data.items;
             this.totalItems = data.total;

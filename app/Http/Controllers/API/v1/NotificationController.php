@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
 use App\Http\Resources\NotificationResource;
+use Carbon\Carbon;
 
 class NotificationController extends Controller
 {
@@ -37,8 +38,13 @@ class NotificationController extends Controller
 
         $status = request("status") ?? "All Notifications";
 
-        $notifications = $user->notifications()
-            ->whereBetween("created_at", [$start_date, $end_date]);
+        if (request()->has("start_date") && request()->has("end_date")) {
+            $start_date = Carbon::parse(request("start_date"))->startOfDay();
+            $end_date = Carbon::parse(request("end_date"))->endOfDay();
+            $notifications = $user->notifications()->whereBetween("created_at", [$start_date, $end_date]);
+        }
+
+        
 
         switch ($status) {
             case 'All Read':

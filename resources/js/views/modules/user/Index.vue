@@ -172,7 +172,12 @@
                         v-on="on"
                         @click.stop="notificationDrawer = !notificationDrawer"
                     >
-                        <v-badge :content="$store.getters.notifications.data.length" :value="$store.getters.notifications.data.length" color="red" overlap>
+                        <v-badge
+                            :content="$store.getters.notifications.data.length"
+                            :value="$store.getters.notifications.data.length"
+                            color="red"
+                            overlap
+                        >
                             <v-icon>mdi-bell</v-icon>
                         </v-badge>
                     </v-btn>
@@ -198,10 +203,19 @@
                 <v-col>
                     <!-- <router-view></router-view> -->
 
-                    <keep-alive>
-                        <router-view v-if="$route.meta.keepAlive"></router-view>
-                    </keep-alive>
-                    <router-view v-if="!$route.meta.keepAlive"></router-view>
+                    <transition name="fade" mode="out-in">
+                        <keep-alive>
+                            <router-view
+                                v-if="$route.meta.keepAlive"
+                            ></router-view>
+                        </keep-alive>
+                    </transition>
+
+                    <transition name="fade" mode="out-in">
+                        <router-view
+                            v-if="!$route.meta.keepAlive"
+                        ></router-view>
+                    </transition>
 
                     <!-- <keep-alive>
                         <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -231,8 +245,16 @@
 
                     <v-list-item-content>
                         <v-list-item-title>Notifications</v-list-item-title>
-                        <v-list-item-subtitle v-if="$store.getters.notifications.data.length > 0">{{$store.getters.notifications.data.length}} Unread</v-list-item-subtitle>
-                        <v-list-item-subtitle v-else>No notifications</v-list-item-subtitle>
+                        <v-list-item-subtitle
+                            v-if="$store.getters.notifications.data.length > 0"
+                            >{{
+                                $store.getters.notifications.data.length
+                            }}
+                            Unread</v-list-item-subtitle
+                        >
+                        <v-list-item-subtitle v-else
+                            >No notifications</v-list-item-subtitle
+                        >
                         <v-list-item-title>
                             <router-link
                                 :to="{ name: 'user.notifications.index' }"
@@ -250,8 +272,14 @@
 
             <v-list two-line>
                 <v-list-item-group active-class="">
-                    <template v-for="(item, index) in $store.getters.notifications.data">
-                        <v-list-item :key="item.title" @click="redirectPage(item)">
+                    <template
+                        v-for="(item, index) in $store.getters.notifications
+                            .data"
+                    >
+                        <v-list-item
+                            :key="item.title"
+                            @click="redirectPage(item)"
+                        >
                             <template>
                                 <v-list-item-content>
                                     <v-list-item-title
@@ -264,7 +292,9 @@
                                     ></v-list-item-subtitle>
 
                                     <v-list-item-subtitle
-                                        v-text="mixin_getHumanDate(item.created_at)"
+                                        v-text="
+                                            mixin_getHumanDate(item.created_at)
+                                        "
                                     ></v-list-item-subtitle>
                                 </v-list-item-content>
                             </template>
@@ -277,7 +307,6 @@
                     </template>
                 </v-list-item-group>
             </v-list>
-
         </v-navigation-drawer>
         <!-- End of Notifications Drawer -->
     </div>
@@ -314,52 +343,108 @@ export default {
                 icon: "mdi-currency-usd",
                 text: "Payments",
                 link: { name: "user.payments.index" }
-            },
+            }
         ]
     }),
     methods: {
         redirectPage(item) {
-            let _this = this;
-
             axios
-                .put(`/api/notifications/${item.id}?action=${'read'}&type=${'single'}`)
+                .put(
+                    `/api/notifications/${
+                        item.id
+                    }?action=${"read"}&type=${"single"}`
+                )
                 .then(response => {
-                    console.log(response);
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-                    window.location.replace(`/${item.data.data.model}/${item.data.data.id}`);
-                    // _this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
+                    window.location.replace(
+                        `/${item.data.data.model}/${item.data.data.id}`
+                    );
+                    // this.$router.push(`/${item.data.data.model}/${item.data.data.id}`);
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
+                    this.mixin_showErrors(error);
                 });
         },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
             this.$router.push({ name: "user.profile.index" }, () => {});
         },
-        onLogout() {
-            this.$confirm("Do you want to log out?").then(res => {
-                if (res) {
-                    this.$router.push({ name: "logout" });
-                }
+        checkExpenseSummary() {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get(
+                        `/api/summary/expenses?user_id=${this.$store.getters.user.id}`
+                    )
+                    .then(response => {
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        reject();
+                    });
             });
+        },
+        onLogout() {
+            this.checkExpenseSummary()
+                .then(data => {
+                    if (
+                        data.expenses ? data.expenses.total_count : 0 ?? 0 > 0
+                    ) {
+                        this.$confirm(
+                            "WARNING: There are still UNREPORTED EXPENSES, do you want to log out?"
+                        ).then(res => {
+                            if (res) {
+                                this.$router.push({ name: "logout" });
+                            }
+                        });
+                        return;
+                    }
+
+                    this.$confirm("Do you want to log out?").then(res => {
+                        if (res) {
+                            this.$router.push({ name: "logout" });
+                        }
+                    });
+                })
+                .catch(() => {
+                    this.$confirm("Do you want to log out?").then(res => {
+                        if (res) {
+                            this.$router.push({ name: "logout" });
+                        }
+                    });
+                });
         }
     },
     created() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.user = response;
+            // this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
-        let _this = this;
         this.$store.dispatch("AUTH_USER").then(response => {
-            _this.user = response;
-            _this.$store.dispatch("AUTH_NOTIFICATIONS");
+            this.user = response;
+            // this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };
 </script>
+
+<style scoped>
+#app {
+    overflow: hidden;
+    width: 100vw;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+    /* transform: translateX(2em); */
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.3s ease;
+}
+</style>

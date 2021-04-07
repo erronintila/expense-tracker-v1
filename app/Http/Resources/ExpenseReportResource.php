@@ -81,9 +81,13 @@ class ExpenseReportResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
-            // "payments" => PaymentResource::collection($this->whenLoaded('payments')),
-            "user" => new UserResource($this->whenLoaded('user'))
+            // "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
+            // "payments" => PaymentIndexResource::collection($this->whenLoaded('payments')),
+            // "user" => new UserIndexResource($this->whenLoaded('user'))
+            
+            "expenses" => ExpenseIndexResource::collection($this->whenLoaded('expenses')),
+            "payments" => $this->whenLoaded('payments'),
+            "user" => $this->whenLoaded('user')
         ];
     }
 }

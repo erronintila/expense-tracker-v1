@@ -5,12 +5,12 @@ namespace App\Models;
 use App\User;
 use App\Models\Vendor;
 use App\Models\Expense;
-use App\Models\SubType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseType extends Model
 {
@@ -67,10 +67,16 @@ class ExpenseType extends Model
         parent::boot();
 
         static::deleting(function ($expenseType) {
-            if ($expenseType->expenses()->count() > 0) {
-
-                abort(422, "Item has active child records");
-            }
+            abort_if($expenseType->expenses()->count() > 0, 422, "Some records can't be deleted.");
+    
+            $doesExpenseExist = DB::table("expense_types")
+                    ->where("expense_types.id", $expenseType->id)
+                    ->join("expenses", "expenses.sub_type_id", "=", "expense_types.id")
+                    ->where("expenses.deleted_at", null)
+                    ->where("expense_types.deleted_at", null)
+                    ->count();
+            
+            abort_if($doesExpenseExist, 422, "Some records can't be deleted");
         });
     }
 

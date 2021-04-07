@@ -50,19 +50,19 @@ class PaymentResource extends JsonResource
             "received_at" => $this->received_at,
             "cancelled_at" => $this->cancelled_at,
 
-            "created_by" => $this->created_by,
-            "updated_by" => $this->updated_by,
-            "deleted_by" => $this->deleted_by,
-            "approved_by" => $this->approved_by,
-            "released_by" => $this->released_by,
-            "received_by" => $this->received_by,
-            "cancelled_by" => $this->cancelled_by,
+            // "created_by" => $this->created_by,
+            // "updated_by" => $this->updated_by,
+            // "deleted_by" => $this->deleted_by,
+            // "approved_by" => $this->approved_by,
+            // "released_by" => $this->released_by,
+            // "received_by" => $this->received_by,
+            // "cancelled_by" => $this->cancelled_by,
 
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
             "expense_reports" => ExpenseReportResource::collection($this->whenLoaded('expense_reports')),
-            "user" => new UserResource($this->whenLoaded('user'))
+            "user" => new UserIndexResource($this->whenLoaded('user'))
         ];
     }
 }

@@ -165,40 +165,24 @@ export default {
     },
     methods: {
         onRegister() {
-            let _this = this;
-
-            _this.$refs.form.validate();
-
-            if (_this.$refs.form.validate()) {
+            this.$refs.form.validate();
+            if (this.$refs.form.validate()) {
                 axios
                     .post("/api/register", {
-                        name: _this.name,
-                        username: _this.username,
-                        email: _this.email,
-                        password: _this.password,
-                        password_confirmation: _this.password_confirmation
+                        name: this.name,
+                        username: this.username,
+                        email: this.email,
+                        password: this.password,
+                        password_confirmation: this.password_confirmation
                     })
-                    .then(function(response) {
-                        _this.$dialog.message.success(
-                            "Registered successfully.",
-                            {
-                                position: "top-right",
-                                timeout: 2000
-                            }
-                        );
-
-                        _this.$router.push({ name: "login" });
+                    .then(response => {
+                        thids.mixin_successDialog(response.data.status, response.data.message);
+                        this.$router.push({ name: "login" });
                     })
-                    .catch(function(error) {
-                        console.log(error);
-
-                        console.log(error.response);
-
-                        _this.errors = error.response.data.errors;
-
-                        _this.errorDialog(`Error ${error.status}`, error.statusText);
+                    .catch(error => {
+                        this.mixin_showErrors(error);
+                        this.errors = error.response.data.errors;
                     });
-
                 return;
             }
         }

@@ -2,12 +2,12 @@
 import axios from "axios";
 
 class UserDataService {
-    getAll(data) {
-        return axios.get("/api/users", data);
-    }
-
     get(data) {
         return axios.get("/api/data/users", data);
+    }
+
+    getAll(data) {
+        return axios.get("/api/users", data);
     }
 
     show(id, data) {
@@ -48,6 +48,22 @@ class UserDataService {
 
     updateSettings(id, data) {
         return axios.put(`/api/users/update_settings/${id}`, data);
+    }
+
+    updatePermissions(id, data) {
+        return axios.put(`/api/users/update_permissions/${id}`, data);
+    }
+
+    updateProfile(id, data) {
+        return axios.put(`/api/users/update_profile/${id}`, data);
+    }
+
+    updateActivation(id, data) {
+        return axios.put(`/api/users/update_activation/${id}`, data);
+    }
+
+    export() {
+        return axios.get("/api/users/export");
     }
 }
 

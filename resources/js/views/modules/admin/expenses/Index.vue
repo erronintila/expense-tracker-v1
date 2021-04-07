@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Expenses</h4>
 
@@ -26,81 +27,115 @@
                     </template>
                     <span>Add New</span>
                 </v-tooltip>
+            </v-card-title>
 
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
+            <v-card-subtitle>
+                <!-- <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker> -->
+
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
                         </v-btn>
                     </template>
-                    <span>Refresh</span>
-                </v-tooltip>
+                </DateRangePicker>
+            </v-card-subtitle>
+
+            <v-row class="ml-4">
+                <v-chip
+                    color="green"
+                    dark
+                    v-if="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="selected = []"
+                    close-icon="mdi-close"
+                >
+                    {{ selected.length }} Selected
+                </v-chip>
 
                 <v-menu
                     transition="scale-transition"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-y
-                    left
+                    right
                     bottom
                 >
                     <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
+                        <v-chip class="mr-2" small v-bind="attrs" v-on="menu">
+                            {{ status }}
+                        </v-chip>
                     </template>
 
                     <v-card>
                         <v-list>
                             <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
-                            <v-list-item>
-                                <keep-alive>
-                                    <v-select
-                                        v-model="status"
-                                        :items="statuses"
-                                        label="Status"
-                                    ></v-select>
-                                </keep-alive>
-                            </v-list-item>
-                            <v-list-item>
                                 <v-select
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    label="Employee"
-                                    return-object
+                                    v-model="status"
+                                    :items="statuses"
+                                    label="Status"
                                 ></v-select>
                             </v-list-item>
+                        </v-list>
+                    </v-card>
+                </v-menu>
+
+                <!-- <v-chip v-if="user != null" class="mr-2" small>
+                    {{ user.full_name }}
+                </v-chip> -->
+
+                <UserDialogSelector
+                    ref="userDialogSelector"
+                    @selectUser="selectUser"
+                    @onReset="resetUser"
+                    :selectedUser="user"
+                    :usersParameters="{ params: { is_superadmin: false } }"
+                >
+                    <template
+                        v-slot:openDialog="{ bind, on, computedSelectedUser }"
+                    >
+                        <v-chip class="mr-2 mb-2" small v-bind="bind" v-on="on">
+                            {{
+                                computedSelectedUser
+                                    ? computedSelectedUser.name
+                                    : "All Employees"
+                            }}
+                        </v-chip>
+                    </template>
+                </UserDialogSelector>
+
+                <v-menu
+                    transition="scale-transition"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+                    right
+                    bottom
+                >
+                    <template v-slot:activator="{ on: menu, attrs }">
+                        <v-chip class="mr-2" small v-bind="attrs" v-on="menu">
+                            {{ expense_type.name }}
+                        </v-chip>
+                    </template>
+
+                    <v-card>
+                        <v-list>
                             <v-list-item>
                                 <v-select
                                     v-model="expense_type"
@@ -115,86 +150,43 @@
                     </v-card>
                 </v-menu>
 
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onRestore">
-                            <v-list-item-icon>
-                                <v-icon>mdi-restore</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Restore
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                        <!-- <v-list-item>
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Expense Report
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <!-- <v-list-item @click="$router.push('/admin/expenses/create/bulk')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-plus</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Add Bulk Expense(s)
-                            </v-list-item-subtitle>
-                        </v-list-item> -->
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-close</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Cancel Expense(s)
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-            </v-card-title>
-
-            <v-card-subtitle>
-                {{ formattedDateRange }}
-            </v-card-subtitle>
-
-            <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
-                </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip v-if="user!=null" class="mr-2" small>
-                    {{ user.full_name }}
-                </v-chip>
-                <v-chip v-if="expense_type!=null" class="mr-2" small>
-                    {{ expense_type.name }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
+                <v-chip
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onRefresh"
+                    close-icon="mdi-refresh"
+                >
                     Refresh
+                </v-chip>
+                <v-chip
+                    v-show="
+                        selected.length > 0 && status == 'Cancelled Expenses'
+                    "
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onRestore"
+                    close-icon="mdi-history"
+                    color="green"
+                    dark
+                >
+                    Restore
+                </v-chip>
+
+                <v-chip
+                    v-show="
+                        selected.length > 0 && status !== 'Cancelled Expenses'
+                    "
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onDelete"
+                    close-icon="mdi-trash-can-outline"
+                    color="red"
+                    dark
+                >
+                    Cancel Expense(s)
                 </v-chip>
             </v-row>
 
@@ -334,7 +326,7 @@
                                         <td>:</td>
                                         <td>{{ item.is_late_encoded }}</td>
                                     </tr>
-                                    <!-- 
+                                    <!--
                                     <tr>
                                         <td><strong>Created By</strong></td>
                                         <td>:</td>
@@ -422,7 +414,7 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="show_edit(item)"
+                            v-if="show_edit(item) && item.deleted_at == null"
                         >
                             mdi-pencil
                         </v-icon>
@@ -509,14 +501,19 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
+import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
 
 export default {
     components: {
-        DateRangePicker
+        DateRangePicker,
+        UserDialogSelector
     },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             date_range: [
                 moment()
@@ -566,8 +563,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: { id: 0, full_name: "All Employees" },
-            users: [],
+            user: null,
             expense_type: { id: 0, name: "All Expense Types" },
             expense_types: [],
             status: "All Expenses",
@@ -599,124 +595,115 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
+        selectUser(e) {
+            this.selected = [];
+            if (e == null || e == undefined) {
+                this.user = null;
+                return;
+            }
+            this.user = e;
+        },
+        resetUser() {
+            this.selected = [];
+            this.user = null;
+        },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
+            this.loading = true;
 
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let user_id = _this.user.id;
-                let expense_type_id = _this.expense_type.id;
-                let range = _this.date_range;
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let user_id = this.user ? this.user.id : null;
+                let expense_type_id = this.expense_type.id;
+                let range = this.date_range;
 
-                axios
-                    .get("/api/expenses", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            user_id: user_id,
-                            expense_type_id: expense_type_id,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0]
-                        }
-                    })
+                ExpenseDataService.getAll({
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        user_id: user_id,
+                        expense_type_id: expense_type_id,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0],
+                    }
+                })
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
-
-                        _this.loading = false;
-
+                        this.loading = false;
+                        this.formDataLoaded = true;
                         resolve({ items, total });
                     })
                     .catch(error => {
-                        _this.mixin_showErrors(error);
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
-        loadUsers() {
-            let _this = this;
-
-            axios
-                .get("/api/data/users?only=true")
-                .then(response => {
-                    _this.users = response.data.data;
-                    _this.users.unshift({
-                        id: 0,
-                        full_name: "All Employees"
-                    });
-                })
-                .catch(error => {
-                    _this.mixin_showErrors(error);
-                });
-        },
         loadExpenseTypes() {
-            let _this = this;
-
-            axios
-                .get("/api/data/expense_types?only=true")
+            ExpenseTypeDataService.get({
+                params: {
+                    only: true
+                }
+            })
                 .then(response => {
-                    _this.expense_types = response.data.data;
-                    _this.expense_types.unshift({
+                    this.expense_types = response.data.data;
+                    this.expense_types.unshift({
                         id: 0,
                         name: "All Expense Types"
                     });
                 })
                 .catch(error => {
-                    _this.mixin_showErrors(error);
+                    this.mixin_showErrors(error);
                 });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
             this.status = "All Expenses";
-            this.loadUsers();
             this.loadExpenseTypes();
             this.selected = [];
         },
         onShow(item) {
+            let params = { id: item.id };
+
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
+            }
+
             this.$router.push({
                 name: "admin.expenses.show",
-                params: { id: item.id }
+                params: params
             });
         },
         onEdit(item) {
             if (item.expense_report) {
                 if (item.expense_report.approved_at) {
-                    this.$dialog.message.error(
-                        "Expense with an approved report can't be edited",
-                        {
-                            position: "top-right",
-                            timeout: 2000
-                        }
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Expense with an approved report can't be edited"
                     );
                     return;
                 }
 
                 if (item.expense_report.deleted_at) {
-                    this.$dialog.message.error(
-                        "Expense with a deleted report can't be edited",
-                        {
-                            position: "top-right",
-                            timeout: 2000
-                        }
+                    this.mixin_errorDialog(
+                        "Error",
+                        "Expense with a deleted report can't be edited"
                     );
                     return;
                 }
             }
 
             if (this.status == "Cancelled") {
-                this.$dialog.message.error("Expense has been deleted.", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+                this.mixin_errorDialog("Error", "Expense has been deleted.");
                 return;
             }
 
@@ -726,128 +713,99 @@ export default {
             });
         },
         onDelete() {
-            let _this = this;
             let arr = this.selected.map(item => item.expense_report === null);
 
             // this.mixin_is_empty(
-            //     _this.selected.length,
+            //     this.selected.length,
             //     "No item(s) selected bitch"
             // );
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
             // this.mixin_check_if_error(
             //     arr.includes(false),
-            //     "Expense(s) can't be cancelled bitch"
+            //     "Expense(s) can't be cancelled"
             // );
 
-            if (arr.includes(false)) {
-                this.$dialog.message.error("Expense(s) can't be cancelled", {
-                    position: "top-right",
-                    timeout: 2000
-                });
-                return;
-            }
+            // if (arr.includes(false)) {
+            //     this.mixin_errorDialog(
+            //         "Error",
+            //         "Expense(s) can't be cancelled"
+            //     );
+            //     return;
+            // }
 
             this.$confirm("Do you want to cancel expense(s)?").then(res => {
                 if (res) {
-                    axios
-                        .delete(`/api/expenses/${_this.selected[0].id}`, {
-                            params: {
-                                ids: _this.selected.map(item => {
-                                    return item.id;
-                                })
-                            }
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success(
-                                "Cancelled successfully.",
-                                {
-                                    position: "top-right",
-                                    timeout: 2000
-                                }
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    ExpenseDataService.delete(ids)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
                             );
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
-
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            _this.mixin_showErrors(error);
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
         },
         onRestore() {
-            let _this = this;
             let arr = this.selected.map(item => item.expense_report === null);
 
-            if (_this.selected.length == 0) {
-                this.$dialog.message.error("No item(s) selected", {
-                    position: "top-right",
-                    timeout: 2000
-                });
+            if (this.selected.length == 0) {
+                this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
 
             if (!this.mixin_can("restore expenses")) {
-                this.$dialog.message.error(
-                    "Not allowed",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
-                );
+                this.mixin_errorDialog("Error", "Not allowed");
                 return;
             }
 
             if (arr.includes(false)) {
-                this.$dialog.message.error(
-                    "Expense(s) with report(s) can't be restored",
-                    {
-                        position: "top-right",
-                        timeout: 2000
-                    }
+                this.mixin_errorDialog(
+                    "Error",
+                    "Expense(s) with report(s) can't be restored"
                 );
                 return;
             }
 
             this.$confirm("Do you want to restore expenses(s)?").then(res => {
                 if (res) {
-                    axios
-                        .put(`/api/expenses/restore/${_this.selected[0].id}`, {
-                            ids: _this.selected.map(item => {
-                                return item.id;
-                            }),
-                        })
-                        .then(function(response) {
-                            _this.$dialog.message.success("Item(s) restored.", {
-                                position: "top-right",
-                                timeout: 2000
+                    let ids = this.selected.map(item => {
+                        return item.id;
+                    });
+                    ExpenseDataService.restore(ids)
+                        .then(response => {
+                            this.mixin_successDialog(
+                                response.data.status,
+                                response.data.message
+                            );
+
+                            this.getDataFromApi().then(data => {
+                                this.items = data.items;
+                                this.totalItems = data.total;
                             });
 
-                            _this.getDataFromApi().then(data => {
-                                _this.items = data.items;
-                                _this.totalItems = data.total;
-                            });
+                            // this.$store.dispatch("AUTH_USER");
 
-                            // _this.$store.dispatch("AUTH_USER");
-
-                            _this.selected = [];
+                            this.selected = [];
                         })
-                        .catch(function(error) {
-                            _this.mixin_showErrors(error);
+                        .catch(error => {
+                            this.mixin_showErrors(error);
                         });
                 }
             });
@@ -876,13 +834,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
                 });
-            },
-            deep: true
+            }
         },
         items() {
             this.totalAmount = this.mixin_formatNumber(
@@ -955,13 +914,11 @@ export default {
             return `${start_date} ~ ${end_date}`;
         }
     },
-    created() {
-        this.loadUsers();
-        this.loadExpenseTypes();
-    },
+    // created() {
+    //     this.loadExpenseTypes();
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.loadUsers();
         this.loadExpenseTypes();
         this.getDataFromApi().then(data => {
             this.items = data.items;

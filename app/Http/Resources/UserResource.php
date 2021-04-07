@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\Job\JobIndexResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -40,6 +39,7 @@ class UserResource extends JsonResource
             "is_admin" => $this->is_admin,
             "is_superadmin" => $this->is_superadmin,
             "can_login" => $this->can_login,
+            "is_active" => $this->is_active,
 
             // -------------------------------------------------------------------
             // Additional Fields
@@ -57,7 +57,7 @@ class UserResource extends JsonResource
             // -------------------------------------------------------------------
             // Relationships
             // -------------------------------------------------------------------
-            "job" => new JobIndexResource($this->whenLoaded("job")),
+            "job" => new JobResource($this->whenLoaded("job")),
             "role" => $this->is_admin ? ["Administrator"] : ["Standard User"],
             "permissions" => $this->getAllPermissions(),
             "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),

@@ -13,7 +13,8 @@ export const store = new Vuex.Store({
         authenticated: localStorage.getItem("authenticated") || false,
         user: null || null,
         settings: null || null,
-        notifications: null || null
+        notifications: null || null,
+        cancelTokens: [],
     },
     plugins: [
         createPersistedState()
@@ -40,6 +41,9 @@ export const store = new Vuex.Store({
         },
         notifications(state) {
             return state.notifications;
+        },
+        cancelTokens(state) {
+            return state.cancelTokens;
         }
     },
     mutations: {
@@ -55,6 +59,12 @@ export const store = new Vuex.Store({
         },
         SET_NOTIFICATIONS(state, value) {
             state.notifications = value;
+        },
+        ADD_CANCEL_TOKEN(state, token) {
+            state.cancelTokens.push(token);
+        },
+        CLEAR_CANCEL_TOKENS(state) {
+            state.cancelTokens = [];
         }
     },
     actions: {
@@ -195,6 +205,19 @@ export const store = new Vuex.Store({
                         reject(error);
                     });
             });
+        },
+
+        CANCEL_PENDING_REQUESTS(context) {
+
+            // Cancel all request where a token exists
+            context.state.cancelTokens.forEach((request, i) => {
+                if(request.cancel){
+                    request.cancel();
+                }
+            });
+
+            // Reset the cancelTokens store
+            context.commit('CLEAR_CANCEL_TOKENS');
         }
     }
 });

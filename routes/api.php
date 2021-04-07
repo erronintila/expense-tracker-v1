@@ -28,9 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResources(
         [
             'activity_logs' => 'API\v1\ActivityLogController',
-            // 'adjustments' => 'API\v1\AdjustmentController',
             'departments' => 'API\v1\DepartmentController',
-            // 'users' => 'API\v1\UserController',
             'expense_types' => 'API\v1\ExpenseTypeController',
             'sub_types' => 'API\v1\SubTypeController',
             'expenses' => 'API\v1\ExpenseController',
@@ -54,18 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/data/departments', 'API\v1\DepartmentController@getDepartments');
     Route::put('/departments/restore/{id}', 'API\v1\DepartmentController@restore');
 
-    // /*
-    // |------------------------------------------------------------------------------------------------------------------------------------
-    // | EMPLOYEE CONTROLLER CUSTOM ROUTES
-    // |------------------------------------------------------------------------------------------------------------------------------------
-    // */
-
-    // Route::get('/data/users', 'API\v1\UserController@getUsers');
-    // Route::get('/data/validateFund', 'API\v1\UserController@validateFund');
-    // Route::put('/employees/restore/{id}', 'API\v1\EmployeeController@restore');
-    // Route::put('/employees/update_settings/{id}', 'API\v1\EmployeeController@updateSettings');
-    // Route::put('/employees/update_fund/{id}', 'API\v1\EmployeeController@updateFund');
-
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | EXPENSE CONTROLLER CUSTOM ROUTES
@@ -74,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/expenses', 'API\v1\ExpenseController@getExpenses');
     Route::put('/expenses/restore/{id}', 'API\v1\ExpenseController@restore');
+    Route::get('/summary/expenses', 'API\v1\ExpenseController@getExpenseSummary');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -112,6 +99,11 @@ Route::middleware('auth:sanctum')->group(function () {
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
+    Route::put('/payments/approve_payment/{id}', 'API\v1\PaymentController@approve_payment');
+    Route::put('/payments/release_payment/{id}', 'API\v1\PaymentController@release_payment');
+    Route::put('/payments/receive_payment/{id}', 'API\v1\PaymentController@receive_payment');
+    Route::put('/payments/complete_payment/{id}', 'API\v1\PaymentController@complete_payment');
+
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | VENDOR CONTROLLER CUSTOM ROUTES
@@ -120,6 +112,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/vendors', 'API\v1\VendorController@getVendors');
     Route::put('/vendors/restore/{id}', 'API\v1\VendorController@restore');
+    Route::put('/vendors/update_activation/{id}', 'API\v1\VendorController@update_activation');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -131,9 +124,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // $user = $request->user();
         $user = User::with(['job' => function ($query) {
-            $query->withTrashed();
+            // $query->withTrashed();
             $query->with(['department' => function ($query) {
-                $query->withTrashed();
+                // $query->withTrashed();
+            }]);
+            // $query->with(['expense_types' => function ($query) {
+            //     $query->withTrashed();
+            //     $query->with(['sub_types' => function ($query) {
+            //         $query->withTrashed();
+            //     }]);
+            // }]);
+        }])
+        ->with(['expense_types' => function ($query) {
+            // $query->withTrashed();
+            $query->with(['sub_types' => function ($query) {
+                // $query->withTrashed();
             }]);
         }])
         ->findOrFail(Auth::id());
@@ -149,6 +154,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/update_password/{id}', 'API\v1\UserController@update_password');
     Route::put('/users/update_profile/{id}', 'API\v1\UserController@update_profile');
     Route::put('/users/update_permissions/{id}', 'API\v1\UserController@update_permissions');
+    Route::put('/users/update_activation/{id}', 'API\v1\UserController@update_activation');
 
     Route::get('/permissions', function (Request $request) {
         return $request->user->getAllPermissions();
@@ -156,6 +162,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/data/users', 'API\v1\UserController@getUsers');
     Route::get('/data/permissions', 'API\v1\UserController@getPermissions');
+    Route::get("/data/validateFund", 'API\v1\UserController@validateFund');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

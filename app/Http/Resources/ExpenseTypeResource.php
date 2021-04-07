@@ -36,7 +36,7 @@ class ExpenseTypeResource extends JsonResource
             // -------------------------------------------------------------------
             "expenses" => ExpenseResource::collection($this->whenLoaded('expenses')),
             "vendors" => VendorResource::collection($this->whenLoaded('vendors')),
-            "users" => UserResource::collection($this->whenLoaded('empployees')),
+            "users" => UserIndexResource::collection($this->whenLoaded('users')),
             "sub_types" => ExpenseTypeResource::collection($this->whenLoaded('sub_types')),
         ];
     }

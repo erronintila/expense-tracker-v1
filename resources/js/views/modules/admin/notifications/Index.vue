@@ -1,161 +1,142 @@
 <template>
     <div>
-        <v-card class="elevation-0 pt-0">
+        <loader-component v-if="!formDataLoaded"></loader-component>
+        <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
                 <h4 class="title green--text">Notifications</h4>
-
                 <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            dark
-                            fab
-                            x-small
-                            @click="onRefresh"
-                            v-bind="attrs"
-                            v-on="on"
-                        >
-                            <v-icon dark>mdi-reload</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Refresh</span>
-                </v-tooltip>
-
-                <v-menu
-                    transition="scale-transition"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3 mr-2"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark>mdi-filter</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Filter Data</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <DateRangePicker
-                                    :preset="preset"
-                                    :presets="presets"
-                                    :value="date_range"
-                                    @updateDates="updateDates"
-                                ></DateRangePicker>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    v-model="status"
-                                    :items="statuses"
-                                    label="Status"
-                                ></v-select>
-                            </v-list-item>
-                            <!-- <v-list-item>
-                                <v-select
-                                    v-model="user"
-                                    :items="users"
-                                    item-text="full_name"
-                                    item-value="id"
-                                    label="User"
-                                ></v-select>
-                            </v-list-item> -->
-                        </v-list>
-                    </v-card>
-                </v-menu>
-
-                <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onReadUpdate(null, 'read', 'all')">
-                            <v-list-item-icon>
-                                <v-icon>mdi-credit-card-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Mark all as read
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-
-                    <v-list>
-                        <v-list-item
-                            @click="onReadUpdate(null, 'read', 'multiple')"
-                        >
-                            <v-list-item-icon>
-                                <v-icon>mdi-credit-card-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Mark as read
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-
-                    <v-list>
-                        <v-list-item
-                            @click="onReadUpdate(null, 'unread', 'multiple')"
-                        >
-                            <v-list-item-icon>
-                                <v-icon>mdi-credit-card-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Mark as unread
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
             </v-card-title>
 
             <v-card-subtitle>
-                {{ formattedDateRange }}
+                <!-- <DateRangePicker
+                    :buttonType="true"
+                    :buttonText="true"
+                    :buttonColor="'grey'"
+                    :buttonClass="'ml-0 pl-0'"
+                    :preset="preset"
+                    :presets="presets"
+                    :value="date_range"
+                    @updateDates="updateDates"
+                >
+                </DateRangePicker> -->
+
+                <DateRangePicker
+                    ref="dateRangePicker"
+                    :dateRange="date_range"
+                    @on-change="updateDates"
+                >
+                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
+                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
+                            {{ dateRangeText }}
+                        </v-btn>
+                    </template>
+                </DateRangePicker>
             </v-card-subtitle>
 
-            <v-row class="ml-4">
-                <v-chip color="green" dark v-if="selected.length > 0" close class="mr-2" small @click:close="selected = []" close-icon="mdi-close"> 
-                    {{selected.length}} Selected
-                </v-chip>
-                <v-chip v-if="status!=null" class="mr-2" small>
-                    {{ status }}
-                </v-chip>
-                <v-chip close class="mr-2" small @click:close="onRefresh" close-icon="mdi-refresh"> 
-                    Refresh
-                </v-chip>
+            <v-row class="ml-2">
+                <v-col>
+                    <v-chip
+                        color="green"
+                        dark
+                        v-show="selected.length > 0"
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="selected = []"
+                        close-icon="mdi-close"
+                    >
+                        {{ selected.length }} Selected
+                    </v-chip>
+
+                    <v-menu
+                        transition="scale-transition"
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-y
+                        right
+                        bottom
+                    >
+                        <template v-slot:activator="{ on: menu, attrs }">
+                            <v-chip
+                                class="mr-2 mb-2"
+                                small
+                                v-bind="attrs"
+                                v-on="menu"
+                            >
+                                {{ status ? status : "" }}
+                            </v-chip>
+                        </template>
+                        <v-card>
+                            <v-list>
+                                <v-list-item>
+                                    <v-select
+                                        v-model="status"
+                                        :items="statuses"
+                                        label="Status"
+                                    ></v-select>
+                                </v-list-item>
+                            </v-list>
+                        </v-card>
+                    </v-menu>
+
+                    <v-chip
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onRefresh"
+                        close-icon="mdi-refresh"
+                    >
+                        Refresh
+                    </v-chip>
+
+                    <v-chip
+                        v-show="
+                            items.filter(item => item.read_at == null).length >
+                                0 && selected.length == 0
+                        "
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onReadUpdate(null, 'read', 'all')"
+                        close-icon="mdi-check"
+                        color="green"
+                        dark
+                    >
+                        Mark all as read
+                    </v-chip>
+
+                    <v-chip
+                        v-show="
+                            selected.filter(item => item.read_at == null)
+                                .length > 0
+                        "
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onReadUpdate(null, 'read', 'multiple')"
+                        close-icon="mdi-check"
+                        color="green"
+                        dark
+                    >
+                        Mark as read
+                    </v-chip>
+
+                    <v-chip
+                        v-show="
+                            selected.filter(item => item.read_at != null)
+                                .length > 0
+                        "
+                        close
+                        class="mr-2 mb-2"
+                        small
+                        @click:close="onReadUpdate(null, 'unread', 'multiple')"
+                        close-icon="mdi-check"
+                        color="red"
+                        dark
+                    >
+                        Mark as unread
+                    </v-chip>
+                </v-col>
             </v-row>
 
             <v-card-text>
@@ -164,7 +145,7 @@
                     :items="items"
                     :loading="loading"
                     :options.sync="options"
-                    :server-items-length="totalItems"
+                    :server-items-length="meta.total"
                     :footer-props="{
                         itemsPerPageOptions: [10, 20, 50, 100],
                         showFirstLastPage: true,
@@ -290,48 +271,7 @@
                             Unread
                         </v-chip>
                     </template>
-                    <!-- <template v-slot:[`item.status.status`]="{ item }">
-                        <v-chip :color="item.status.color" dark small>{{
-                            item.status.status
-                        }}</v-chip>
-                    </template>
-                    <template v-slot:[`item.user`]="{ item }">
-                        {{
-                            `${item.user.last_name}, ${item.user.first_name} ${item.user.middle_name}`
-                        }}
-                    </template>
-                    
-                    <template v-slot:[`item.updated_at`]="{ item }">
-                        {{ mixin_getHumanDate(item.updated_at) }}
-                    </template>
-                    <template v-slot:[`item.amount`]="{ item }">
-                        {{ mixin_formatNumber(item.amount) }}
-                    </template>
-                    <template slot="body.append" v-if="items.length > 0">
-                        <tr class="green--text hidden-md-and-up">
-                            <td class="title">
-                                Total: <strong>{{ totalAmount }}</strong>
-                            </td>
-                        </tr>
-                        <tr class="green--text hidden-sm-and-down">
-                            <td class="title">Total</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <strong>{{ totalAmount }}</strong>
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </template> -->
                 </v-data-table>
-
-                <v-btn v-if="selected.length > 0" @click="selected = []"
-                    >Clear All Selected</v-btn
-                >
             </v-card-text>
         </v-card>
     </div>
@@ -340,35 +280,43 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import DateRangePicker from "../../../../components/daterangepicker/DateRangePicker";
+import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
+import NotificationDataService from "../../../../services/NotificationDataService";
 
 export default {
     components: { DateRangePicker },
     data() {
         return {
+            formDataLoaded: false,
             loading: true,
             headers: [
                 { text: "Date", value: "created_at" },
                 { text: "Employee", value: "data.data.user.full_name" },
-                { text: "Description", value: "description" },
+                { text: "Description", value: "data.data.description" },
                 { text: "Status", value: "status" },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             totalAmount: 0,
             items: [],
-            // user: 0,
-            // users: [],
             status: "All Unread",
             statuses: ["All Unread", "All Read", "All Notifications"],
             selected: [],
             search: "",
-            totalItems: 0,
             options: {
                 sortBy: ["updated_at"],
                 sortDesc: [true],
                 page: 1,
                 itemsPerPage: 10
+            },
+            meta: {
+                current_page: 0,
+                from: 0,
+                last_page: 0,
+                path: "",
+                per_page: 10,
+                to: 0,
+                total: 0
             },
             date_range: [
                 moment()
@@ -400,81 +348,42 @@ export default {
         updateDates(e) {
             this.date_range = e;
         },
-        // loadUsers() {
-        //     let _this = this;
-
-        //     axios
-        //         .get("/api/data/users?only=true")
-        //         .then(response => {
-        //             _this.users = response.data.data;
-        //             _this.users.unshift({
-        //                 id: 0,
-        //                 full_name: "All Users"
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.log(error);
-        //             console.log(error.response);
-
-        //             _this.mixin_errorDialog(
-        //                 `Error ${error.response.status}`,
-        //                 error.response.statusText
-        //             );
-        //         });
-        // },
         getDataFromApi() {
-            let _this = this;
-
-            _this.loading = true;
-
+            this.loading = true;
             return new Promise((resolve, reject) => {
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-                let search = _this.search.trim().toLowerCase();
-                let status = _this.status;
-                let range = _this.date_range;
-                // let user_id = _this.user;
-
-                axios
-                    .get("/api/notifications", {
-                        params: {
-                            search: search,
-                            sortBy: sortBy[0],
-                            sortType: sortDesc[0] ? "desc" : "asc",
-                            page: page,
-                            itemsPerPage: itemsPerPage,
-                            status: status,
-                            start_date: range[0],
-                            end_date: range[1] ? range[1] : range[0]
-                            // user_id: user_id
-                        }
-                    })
+                let search = this.search.trim().toLowerCase();
+                let status = this.status;
+                let range = this.date_range;
+                let data = {
+                    params: {
+                        search: search,
+                        sortBy: sortBy[0],
+                        sortType: sortDesc[0] ? "desc" : "asc",
+                        page: page,
+                        itemsPerPage: itemsPerPage,
+                        status: status,
+                        start_date: range[0],
+                        end_date: range[1] ? range[1] : range[0]
+                    }
+                };
+                NotificationDataService.getAll(data)
                     .then(response => {
-                        let items = response.data.data;
-                        let total = response.data.meta.total;
-
-                        _this.loading = false;
-
-                        resolve({ items, total });
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        resolve(response.data);
                     })
                     .catch(error => {
-                        console.log(error);
-                        console.log(error.response);
-
-                        _this.mixin_errorDialog(
-                            `Error ${error.response.status}`,
-                            error.response.statusText
-                        );
-
-                        _this.loading = false;
+                        this.mixin_showErrors(error);
+                        this.loading = false;
+                        this.formDataLoaded = true;
+                        reject();
                     });
             });
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
-
             this.selected = [];
-            // this.loadUsers();
         },
         onShow(item) {
             this.$router.push({
@@ -483,10 +392,8 @@ export default {
             });
         },
         onReadUpdate(item, action, type) {
-            let _this = this;
             let parameters = {};
             let item_id = item ? item : this.selected.map(item => item.id)[0];
-
             switch (type) {
                 case "all":
                     if (this.items.length <= 0) {
@@ -522,24 +429,18 @@ export default {
                     break;
             }
 
-            axios
-                .patch(`/api/notifications/${item_id}`, parameters)
+            NotificationDataService.update(item_id, parameters)
                 .then(response => {
-                    _this.getDataFromApi().then(data => {
-                        _this.items = data.items;
-                        _this.totalItems = data.total;
+                    this.getDataFromApi().then(data => {
+                        this.items = data.data;
+                        this.meta = data.meta;
                     });
-
-                    _this.$store.dispatch("AUTH_NOTIFICATIONS");
-
-                    _this.selected = [];
+                    this.$store.dispatch("AUTH_NOTIFICATIONS");
                 })
                 .catch(error => {
-                    console.log(error);
-                    console.log(error.response);
-
-                    _this.selected = [];
-                });
+                    this.mixin_showErrors(error);
+                })
+                .finally((this.selected = []));
         }
     },
     computed: {
@@ -549,7 +450,6 @@ export default {
                 query: this.search,
                 query: this.status,
                 query: this.date_range
-                // query: this.user
             };
         },
         formattedDateRange() {
@@ -569,13 +469,14 @@ export default {
     },
     watch: {
         params: {
+            immediate: true,
+            deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
+                    this.items = data.data;
+                    this.meta = data.meta;
                 });
-            },
-            deep: true
+            }
         },
         items() {
             this.totalAmount = this.mixin_formatNumber(
@@ -583,15 +484,14 @@ export default {
             );
         }
     },
-    created() {
-        // this.loadUsers();
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-    },
+    // created() {
+    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
+            this.items = data.data;
+            this.meta = data.meta;
         });
     }
 };

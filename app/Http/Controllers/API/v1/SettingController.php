@@ -30,6 +30,8 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(!auth()->user()->is_admin, 403);
+        
         $settings = request()->has("settings") ? request("settings") : [];
 
         foreach ($settings as $key => $value) {

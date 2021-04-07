@@ -8,21 +8,19 @@ use App\Models\ExpenseType;
 use App\Traits\ApiResponse;
 use App\Exports\UsersExport;
 use Illuminate\Http\Request;
-use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserProfileUpdateRequest;
-use App\Http\Requests\UserPermissionUpdateRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use Spatie\Permission\Models\Permission;
-use App\Http\Resources\User\UserOnlyResource;
-use App\Http\Resources\User\UserShowResource;
-use App\Http\Requests\UserUpdatePasswordRequest;
+use App\Http\Resources\UserIndexResource;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use App\Http\Requests\User\UserProfileUpdateRequest;
+use App\Http\Requests\User\UserUpdatePasswordRequest;
+use App\Http\Requests\User\UserPermissionUpdateRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -30,11 +28,14 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['permission:view all users'], ['only' => ['index']]);
         $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
+        $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
+        $this->middleware(['permission:edit users fund'], ['only' => ['update_fund']]);
+        $this->middleware(['permission:reset user passwords'], ['only' => ['reset_password']]);
+        $this->middleware(['permission:edit permissions'], ['only' => ['update_permissions']]);
+        $this->middleware(['permission:set user activation'], ['only' => ['update_activation']]);
     }
 
     /**
@@ -44,21 +45,39 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // abort(422);
+        if (!request("isSelection") || !request()->has("isSelection")) {
+            abort_if(!app("auth")->user()->hasPermissionTo('view all users'), 403);
+        }
+        
         $search = request("search") ?? "";
         $sortBy = request("sortBy") ?? "last_name";
         $sortType = request("sortType") ?? "asc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
+        $status = request("status") ?? "";
+        $with_expense_types = request("with_expense_types");
+        $is_admin = request("is_admin");
+        $is_superadmin = request("is_superadmin");
+        $is_active = request("is_active");
 
-        $users = User::with(['job' => function ($query) {
-            $query->withTrashed();
-            $query->with(['department' => function ($query2) {
-                $query2->withTrashed();
+        $users = User::with(['job' => function ($query) use ($status) {
+            if ($status == "Archived") {
+                $query->withTrashed();
+            }
+            $query->with(['department' => function ($query2) use ($status) {
+                if ($status == "Archived") {
+                    $query2->withTrashed();
+                }
             }]);
         }]);
 
+        if ($with_expense_types) {
+            $users = $users->with(['expense_types' => function ($query) {
+                $query->with('sub_types');
+            }]);
+        }
+
         switch ($sortBy) {
-            case 'fullname':
+            case 'full_name':
                 $users = $users->orderBy("last_name", $sortType);
                 break;
             case 'job.name':
@@ -75,35 +94,42 @@ class UserController extends Controller
                 break;
         }
 
-        if (request()->has('is_admin')) {
-            $users = $users->where('is_admin', request("is_admin"));
+        if ($is_admin) {
+            $users = $users->where('is_admin', $is_admin);
         }
 
-        if (request()->has('is_superadmin')) {
-            $users = $users->where('is_superadmin', request("is_superadmin"));
+        if ($is_superadmin) {
+            $users = $users->where('is_superadmin', $is_superadmin);
         }
 
-        if (request()->has('status')) {
-            switch (request("status")) {
-                case 'Archived':
-                    $users = $users->onlyTrashed();
-                    break;
-                case 'Verified':
-                    $users = $users->where('email_verified_at', '<>', null);
-                    break;
-                case 'Unverified':
-                    $users = $users->where('email_verified_at', null);
-                    break;
-                default:
-                    $users = $users;
-                    break;
-            }
+        switch ($status) {
+            case 'Archived':
+                $users = $users->onlyTrashed();
+                break;
+            case 'Verified':
+                $users = $users->where('email_verified_at', '<>', null);
+                break;
+            case 'Unverified':
+                $users = $users->where('email_verified_at', null);
+                break;
+            case 'Inactive':
+                $users = $users->where('is_active', 0);
+                break;
+            case 'Active':
+                $users = $users->where('is_active', 1);
+                break;
+            default:
+                $users = $users;
+                break;
+        }
+
+        if ($is_active) {
+            $users = $users->where('is_active', ($is_active || strtolower($is_active) == 'true') ?? 1);
         }
 
         if (request()->has('department_id')) {
             if (request("department_id") > 0) {
                 $jobs = Job::where('department_id', request("department_id"));
-
                 $users = $users->whereIn('job_id', $jobs->pluck('id'));
             }
         }
@@ -127,10 +153,7 @@ class UserController extends Controller
         });
 
         $users = $users->paginate($itemsPerPage);
-
-        // return UserResource::collection($users);
-        
-        return UserOnlyResource::collection($users);
+        return UserIndexResource::collection($users);
     }
 
     /**
@@ -141,41 +164,31 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        $validated = $request->validated(); // check validation
-        $message = "User created successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $expense_types = ExpenseType::where("expense_type_id", null)->get();
+        $validated = $request->validated();
+        $data = DB::transaction(function () use ($validated) {
+            $expense_types = ExpenseType::where("expense_type_id", null)->get();
+            $job = Job::findOrFail($validated["job_id"]);
 
-        $user = new User();
-        $user->code = request("code") ?? generate_code(User::class, "USR", 10);
-        $user->first_name = request("first_name");
-        $user->middle_name = request("middle_name");
-        $user->last_name = request("last_name");
-        $user->suffix = request("suffix");
-        $user->gender = request("gender");
-        $user->birthdate = request("birthdate");
-        $user->mobile_number = request("mobile_number");
-        $user->telephone_number = request("telephone_number");
-        $user->address = request("address");
-        $user->fund = request("fund");
-        $user->remaining_fund = request("fund");
-        $user->username = request("username");
-        $user->email    = request("email");
-        $user->password = Hash::make(request("password"));
-        $user->is_admin = request("is_admin");
-        $user->is_superadmin = request("is_superadmin");
-        $user->can_login = request("can_login");
-        $user->type = request("type");
-        $user->job_id = request("job_id");
-        $user->save();
+            $user = new User();
+            $user->fill($validated);
+            $user->code = $validated["code"] ?? generate_code(User::class, "USR", 10);
+            $user->remaining_fund = $validated["fund"];
+            $user->password = bcrypt($validated["password"]);
+            $user->job()->associate($job);
+            $user->save();
 
-        foreach (request("permissions") as $permission) {
-            $user->givePermissionTo($permission["name"]);
-        }
+            foreach (request("permissions") as $permission) {
+                $user->givePermissionTo($permission["name"]);
+            }
 
-        $user->expense_types()->sync($expense_types);
+            $user->expense_types()->sync($expense_types);
+            return $user;
+        });
 
-        return $this->successResponse(new UserResource($user), $message, 201);
+        $message = "User created successfully";
+        return $this->successResponse($data, $message, 201);
     }
 
     /**
@@ -186,24 +199,36 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     {
+        if (request()->has("isDeleted")) {
+            if (request("isDeleted")) {
+                $user = User::withTrashed()
+                ->with(['job' => function ($query) {
+                    $query->withTrashed();
+                    $query->with(['department' => function ($query2) {
+                        $query2->withTrashed();
+                    }]);
+                }])
+                ->with(['expense_types' => function ($query) {
+                    $query->withTrashed();
+                    $query->with(['sub_types' => function ($query) {
+                        $query->withTrashed();
+                    }]);
+                }])
+                ->where("is_superadmin", false)
+                ->findOrFail($id);
+            }
+        } else {
+            $user = User::with(['job' => function ($query) {
+                $query->with('department');
+            }])
+            ->with(['expense_types' => function ($query) {
+                $query->with('sub_types');
+            }])
+            ->where("is_superadmin", false)
+            ->findOrFail($id);
+        }
+
         $message = "User retrieved successfully.";
-
-        $user = User::withTrashed()
-        ->with(['job' => function ($query) {
-            $query->withTrashed();
-            $query->with(['department' => function ($query2) {
-                $query2->withTrashed();
-            }]);
-        }])
-        ->with(['expense_types' => function ($query) {
-            $query->withTrashed();
-            $query->with(['sub_types' => function ($query) {
-                $query->withTrashed();
-            }]);
-        }])
-        ->where("is_superadmin", false)
-        ->findOrFail($id);
-
         return $this->successResponse(new UserResource($user), $message, 200);
     }
 
@@ -216,39 +241,19 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        $validated = $request->validated(); // check validation
-        $message = "User updated successfully"; // return message
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (!app("auth")->user()->hasPermissionTo('edit users')) {
-            abort(403);
-        }
+        $validated = $request->validated();
+        $job = Job::findOrFail($validated["job_id"]);
 
-        $user = User::withTrashed()->findOrFail($id);
-
-        $user->code = request("code") ?? $user->code;
-        $user->first_name = request("first_name");
-        $user->middle_name = request("middle_name");
-        $user->last_name = request("last_name");
-        $user->suffix = request("suffix");
-        $user->gender = request("gender");
-        $user->birthdate = request("birthdate");
-        $user->mobile_number = request("mobile_number");
-        $user->telephone_number = request("telephone_number");
-        $user->address = request("address");
-        $user->username = request("username");
-        $user->email = request("email");
-        $user->type = request("type");
-
-        $user->password = $user->password;
-        $user->fund = $user->fund;
-        $user->remaining_fund = $user->remaining_fund;
-        $user->is_admin = request("is_admin");
-        $user->is_superadmin = request("is_superadmin");
-        $user->job_id = request("job_id");
-
+        $user = User::findOrFail($id);
+        $user->fill($validated);
+        $user->code = $validated["code"] ?? $user->code;
+        $user->job()->associate($job);
         $user->save();
 
-        return $this->successResponse(null, $message, 201);
+        $message = "User updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
 
     /**
@@ -259,25 +264,16 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $message = "User deleted successfully";
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (request()->has("ids")) {
-            foreach (request("ids") as $id) {
-                $user = User::withTrashed()->findOrFail($id);
+        $data = DB::transaction(function () use ($id) {
+            $data = User::findOrFail(explode(",", $id));
+            $data->each->delete();
+            return $data;
+        });
 
-                if (!($user->hasRole('Administrator'))) {
-                    $user->delete();
-                }
-            }
-        } else {
-            $user = User::withTrashed()->findOrFail($id);
-
-            if (!($user->hasRole('Administrator'))) {
-                $user->delete();
-            }
-        }
-
-        return $this->successResponse(null, $message, 200);
+        $message = "User(s) deleted successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /*
@@ -288,36 +284,24 @@ class UserController extends Controller
 
     public function restore(Request $request, $id)
     {
-        $message = "User restored successfully";
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (request()->has("ids")) {
-            foreach (request("ids") as $id) {
-                $user = User::withTrashed()->findOrFail($id);
-                $user->disableLogging();
-                $user->restore();
-            }
-        } else {
-            $user = User::withTrashed()->findOrFail($id);
-            $user->disableLogging();
-            $user->restore();
-        }
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = User::onlyTrashed()->findOrFail($ids);
+            $data->each->restore();
+            return $data;
+        });
 
-        activity('user')
-            ->performedOn($user)
-            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-            ->log("restored user");
-
-        return $this->successResponse(null, $message, 200);
-
-        // $user = User::withTrashed()
-        //     ->whereIn('id', request("")ids)
-        //     ->restore();
+        $message = "User(s) restored successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_settings(Request $request, $id)
     {
-        $message = "User settings updated successfully";
-        $user = User::withTrashed()->findOrFail($id);
+        abort_if(!auth()->user()->is_admin, 403);
+
+        $user = User::findOrFail($id);
 
         if (request()->has("expense_types")) {
             $user->expense_types()->sync(request("expense_types"));
@@ -328,18 +312,15 @@ class UserController extends Controller
             ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
             ->log("updated user settings");
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User settings updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
 
     public function update_fund(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('edit users fund')) {
-            abort(403);
-        }
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $message = "User fund updated successfully";
-
-        $user = User::withTrashed()->findOrFail($id);
+        $user = User::findOrFail($id);
         $user->fund = request("fund");
         $user->remaining_fund = request("remaining_fund");
         $user->disableLogging();
@@ -350,108 +331,90 @@ class UserController extends Controller
             ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
             ->log("updated user fund");
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User fund updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
 
     public function reset_password(Request $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('reset user passwords')) {
-            abort(403);
-        }
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $message = "User password resetted successfully";
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = User::findOrFail($ids);
+            $data->each(function ($item) {
+                activity()->disableLogging();
+                $item->password = bcrypt('password');
+                $item->save();
 
-        if (request()->has("ids")) {
-            foreach (request("ids") as $id) {
-                $user = User::withTrashed()->findOrFail($id);
-                $user->password = Hash::make('password');
-                $user->disableLogging();
-                $user->save();
-            }
-        } else {
-            $user = User::withTrashed()->findOrFail($id);
-            $user->password = Hash::make('password');
-            $user->disableLogging();
-            $user->save();
-        }
+                activity()->enableLogging();
+                activity('user')
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->full_name], 'custom' => ['link' => null]])
+                    ->log("resetted user password");
+            });
+            return $data;
+        });
 
-        activity('user')
-            ->performedOn($user)
-            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-            ->log("resetted user password");
-
-        return $this->successResponse(null, $message, 200);
+        $message = "User(s) password resetted successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     public function verify_email(Request $request, $id)
     {
-        $message = "User email verified successfully";
+        abort_if(!auth()->user()->is_admin, 403);
 
-        if (request()->has("ids")) {
-            // $user = User::whereIn('id', request("ids"))
-            //     ->update(array('email_verified_at' => now()));
-        
-            foreach (request("ids") as $id) {
-                $user = User::withTrashed()->findOrFail($id);
-                $user->email_verified_at = now();
-                $user->disableLogging();
-                $user->save();
-            }
-        } else {
-            $user = User::withTrashed()->findOrFail($id);
-            $user->email_verified_at = now();
-            $user->disableLogging();
-            $user->save();
-        }
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $data = User::findOrFail($ids);
+            $data->each(function ($item) {
+                activity()->disableLogging();
+                $item->email_verified_at = now();
+                $item->save();
 
-        activity('user')
-            ->performedOn($user)
-            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-            ->log("verified user email");
+                activity()->enableLogging();
+                activity('user')
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->full_name], 'custom' => ['link' => null]])
+                    ->log("verified user email");
+            });
+            return $data;
+        });
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User(s) email verified successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_password(UserUpdatePasswordRequest $request, $id)
     {
         $validated = $request->validated();
+        $data = DB::transaction(function () use ($validated) {
+            $user = User::findOrFail(auth()->user()->id);
+            $user->disableLogging();
+            $user->update(['password' => bcrypt($validated["password"])]);
+
+            activity('user')
+                ->performedOn($user)
+                ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
+                ->log("updated user password");
+
+            return $user;
+        });
+
         $message = "User password updated successfully";
-
-        $user = User::withTrashed()->findOrFail(auth()->user()->id);
-        $user->disableLogging();
-        $user->update(['password' => Hash::make(request("password"))]);
-
-        activity('user')
-            ->performedOn($user)
-            ->withProperties(['attributes' => ["id" => $user->id, "code" => $user->code, "name" => $user->full_name], 'custom' => ['link' => null]])
-            ->log("updated user password");
-
-        return $this->successResponse(null, $message, 200);
-
-        // User::withTrashed()->findOrFail(auth()->user()->id)->update(['password' => Hash::make(request("")password)]);
+        return $this->successResponse($data, $message, 200);
     }
 
     public function update_profile(UserProfileUpdateRequest $request, $id)
     {
         $validated = $request->validated(); // check validation
-        $message = "User profile updated successfully"; // return message
 
-        $user = User::withTrashed()->findOrFail($id);
-        $user->first_name = request("first_name");
-        $user->middle_name = request("middle_name");
-        $user->last_name = request("last_name");
-        $user->suffix = request("suffix");
-        $user->gender = request("gender");
-        $user->birthdate = request("birthdate");
-        $user->mobile_number = request("mobile_number");
-        $user->telephone_number = request("telephone_number");
-        $user->address = request("address");
-        $user->username = request("username");
-        $user->email = request("email");
-        $user->type = request("type");
+        $user = User::findOrFail($id);
+        $user->fill($validated);
         $user->save();
 
-        return $this->successResponse(null, $message, 200);
+        $message = "User profile updated successfully";
+        return $this->successResponse($user, $message, 200);
     }
         
     /**
@@ -463,24 +426,53 @@ class UserController extends Controller
      */
     public function update_permissions(UserPermissionUpdateRequest $request, $id)
     {
-        if (!app("auth")->user()->hasPermissionTo('edit permissions')) {
-            abort(403);
-        }
+        abort_if(!auth()->user()->is_admin, 403);
 
-        $user = User::findOrFail($id);
-        $user->can_login = request("can_login");
-        $user->is_admin = request("is_admin");
-        $user->save();
+        $validated = $request->validated();
+        $data = DB::transaction(function () use ($validated, $id) {
+            $user = User::findOrFail($id);
+            $user->fill($validated);
+            $user->save();
 
-        if (request()->has("permissions")) {
-            $user->syncPermissions([]);
-            $user->syncRoles([]);
-            foreach (request("permissions") as $permission) {
-                $user->givePermissionTo($permission["name"]);
+            if (request()->has("permissions")) {
+                $user->syncPermissions([]);
+                $user->syncRoles([]);
+                foreach (request("permissions") as $permission) {
+                    $user->givePermissionTo($permission["name"]);
+                }
             }
-        }
 
-        return $this->successResponse(null, "User permissions updated successfully.", 200);
+            return $user;
+        });
+
+        return $this->successResponse($data, "User permissions updated successfully.", 200);
+    }
+
+    public function update_activation(Request $request, $id)
+    {
+        abort_if(!auth()->user()->is_admin, 403);
+        
+        $activation = request("is_active") ? "activated" : "deactivated";
+
+        $data = DB::transaction(function () use ($activation, $id) {
+            $ids = explode(",", $id);
+            $data = User::findOrFail($ids);
+            $data->each(function ($item) use ($activation) {
+                activity()->disableLogging();
+                $item->is_active = request("is_active");
+                $item->save();
+
+                activity()->enableLogging();
+                activity('user')
+                    ->performedOn($item)
+                    ->withProperties(['attributes' => ["id" => $item->id, "code" => $item->code, "name" => $item->full_name], 'custom' => ['link' => null]])
+                    ->log("{$activation} user");
+            });
+            return $data;
+        });
+
+        $message = "User(s) {$activation} successfully";
+        return $this->successResponse($data, $message, 200);
     }
     
     /**
@@ -527,23 +519,17 @@ class UserController extends Controller
 
         if (request()->has('expense_ref')) {
             $user = User::with(['job' => function ($query) {
-                $query->withTrashed();
-                $query->with(['department' => function ($query2) {
-                    $query2->withTrashed();
-                }]);
+                $query->with('department');
             }])
             ->with(['expense_types' => function ($query) {
-                $query->withTrashed();
-                $query->with(['sub_types' => function ($query) {
-                    $query->withTrashed();
-                }]);
+                $query->with('sub_types');
             }])
             ->where("is_superadmin", false)
             ->findOrFail(request("user_id"));
     
             return response(
                 [
-                    'data' => new UserShowResource($user),
+                    'data' => new UserIndexResource($user),
     
                     'message' => 'Retrieved successfully'
                 ],
@@ -552,38 +538,22 @@ class UserController extends Controller
         }
 
         $user = User::with(['job' => function ($query) {
-            $query->withTrashed();
-            $query->with(['department' => function ($query2) {
-                $query2->withTrashed();
-            }]);
+            $query->with('department');
         }])
             ->with(['expense_types' => function ($query) {
-                $query->withTrashed();
-                $query->with(['sub_types' => function ($query2) {
-                    $query2->withTrashed();
-                }]);
+                $query->with('sub_types');
             }])
             ->where("is_superadmin", false)
             ->orderBy("last_name");
 
-        if (request()->has("no_user") && request()->has("user_id")) {
-            // $user->where("user_id", null)->orwhere("user_id", request("")user_id);
-        }
-
         if (request()->has("update_settings")) {
-            $user = User::with(['job' => function ($query) {
-                $query->withTrashed();
-            }])
-                ->with(['expense_types' => function ($query) {
-                    $query->withTrashed();
-                }])
+            $user = User::with('job')
+                ->with('expense_types')
                 ->orderBy("last_name")
                 ->where("is_superadmin", false)
                 ->get();
-
-            return UserShowResource::collection($user);
+            return UserIndexResource::collection($user);
         }
-
         return UserResource::collection($user->get());
     }
 
@@ -595,26 +565,48 @@ class UserController extends Controller
      */
     public function validateFund(Request $request)
     {
+        // $deduction = DB::table('expenses')
+        //     ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) -
+        //         CASE WHEN ((SUM(`expenses`.`amount`) - SUM(`expenses`.`reimbursable_amount`)) = 0)
+        //             THEN 0 ELSE SUM(`expense_report_payment`.`payment`) END AS deduction'))
+        //     ->leftJoin('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
+        //     ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
+        //     ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
+        //     ->where(DB::raw('expenses.user_id'), request("id"))
+        //     ->where(DB::raw('expenses.deleted_at'), null)
+        //     ->where(DB::raw('expense_reports.rejected_at'), null)
+        //     ->where(DB::raw('expense_reports.cancelled_at'), null)
+        //     ->where(DB::raw('expense_reports.deleted_at'), null)
+        //     ->first();
+
+        // $user = User::findOrFail(request("id"));
+
+        // if ($user->remaining_fund > $user->fund) {
+        //     // $user->remaining_fund = $user->fund;
+        // } else {
+        //     // $user->remaining_fund = $user->fund - $deduction->deduction;
+        // }
+
+        // $user->save();
+
         $deduction = DB::table('expenses')
-            ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) - 
-                CASE WHEN ((SUM(`expenses`.`amount`) - SUM(`expenses`.`reimbursable_amount`)) = 0) 
-                    THEN 0 ELSE SUM(`expense_report_payment`.`payment`) END AS deduction'))
-            ->leftJoin('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
-            ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
-            ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
+            ->select(DB::raw("CASE WHEN (((sum(expenses.amount) - sum(expense_report_payment.payment)) - sum(expenses.reimbursable_amount)) < 0)
+                THEN 0 ELSE ((sum(expenses.amount) - sum(expense_report_payment.payment)) - sum(expenses.reimbursable_amount)) END AS total"))
             ->where(DB::raw('expenses.user_id'), request("id"))
             ->where(DB::raw('expenses.deleted_at'), null)
             ->where(DB::raw('expense_reports.rejected_at'), null)
             ->where(DB::raw('expense_reports.cancelled_at'), null)
             ->where(DB::raw('expense_reports.deleted_at'), null)
-            ->first();
+            ->where(DB::raw('payments.deleted_at'), null)
+            ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
+            ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
+            ->first("total");
 
         $user = User::findOrFail(request("id"));
-
-        $user->remaining_fund = $user->fund - $deduction->deduction;
+        $user->remaining_fund = $user->fund - $deduction->total;
 
         $user->save();
-
-        return response("Validated User Remaining Fund", 200);
+        return $this->successResponse(["user" => $user, "deduction" => $deduction->total], "Validated User Remaining Fund", 200);
     }
 }
