@@ -156,7 +156,8 @@ class ExpenseReportController extends Controller
                 ->orderBy($sortBy, $sortType)
                 ->whereBetween("created_at", [$start_date, $end_date])
                 ->where("approved_at", "<>", null)
-                ->where("submitted_at", "<>", null)
+                // ->where("submitted_at", "<>", null)
+                ->where("rejected_at", null)
                 ->where("cancelled_at", null)
                 ->whereDoesntHave("payments");
         }
