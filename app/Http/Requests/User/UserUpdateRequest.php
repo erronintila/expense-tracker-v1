@@ -35,13 +35,8 @@ class UserUpdateRequest extends FormRequest
             'mobile_number' => ['required', 'max:50'],
             'telephone_number' => ['nullable', 'max:50'],
             'address' => ['required'],
-            'fund' => ['required'],
-            'remaining_fund' => ['required'],
             'username'  => ['required', Rule::unique('users', 'username')->ignore($this->user), 'max:150'],
             'email'     => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user), 'max:255'],
-            'password'  => ['required', 'min:8', 'max:255', 'confirmed'],
-            'is_admin' => [],
-            'is_superadmin' => [],
             'type' => [],
             'job_id' => ['required_if:is_superadmin,0'],
         ];

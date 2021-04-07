@@ -4,7 +4,7 @@
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
-                <v-btn @click="$router.go(-1)" class="mr-3" icon>
+                <v-btn @click="goBack()" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -433,20 +433,38 @@ export default {
         };
     },
     methods: {
+        goBack() {
+            if (
+                this.$route.params.isDeleted &&
+                this.$route.params.fromExpenseReport
+            ) {
+                this.$router.push({
+                    name: "admin.expense_reports.show",
+                    params: {
+                        id: this.form.expense_report.id,
+                        isDeleted: true,
+                        fromExpense: true
+                    }
+                });
+                return;
+            }
+            this.$router.go(-1);
+        },
         getData() {
             let data = {};
 
-            if(this.$route.params.isDeleted) {
+            if (this.$route.params.isDeleted) {
                 data = {
                     params: {
-                        isDeleted : true
+                        isDeleted: true
                     }
-                }
+                };
             }
 
             ExpenseDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
+                    console.log("response", response);
 
                     this.form.code = data.code;
                     this.form.description = data.description;
@@ -531,7 +549,10 @@ export default {
                 .catch(error => {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
-                    this.$router.push({ name: "admin.expenses.index" }, () => {});
+                    this.$router.push(
+                        { name: "admin.expenses.index" },
+                        () => {}
+                    );
                 });
         }
     },

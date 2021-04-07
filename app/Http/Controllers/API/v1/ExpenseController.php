@@ -53,7 +53,13 @@ class ExpenseController extends Controller
         $expense_type = request('expense_type_id');
         $expense_report = request('expense_report_id');
 
-        $expenses = Expense::whereBetween("date", [$start_date, $end_date])
+        $expenses = Expense::whereBetween("date", [$start_date, $end_date]);
+
+        if(request()->has("isDeleted") && request("isDeleted")) {
+            $expenses = $expenses->withTrashed();
+        }
+
+        $expenses = $expenses
             ->with(['user' => function ($query) use ($status) {
                 if ($status === "Cancelled Expenses") {
                     $query->withTrashed();
@@ -171,6 +177,26 @@ class ExpenseController extends Controller
             $query->orWhere("receipt_number", "like", "%" . $search . "%");
             $query->orWhere("date", "like", "%" . $search . "%");
         });
+
+        if (request()->has("update_report")) {
+            $expenses = Expense::with('user')
+                ->with('expense_type')
+                ->with('expense_report')
+                ->with('sub_type')
+                ->with('vendor')
+                ->orderBy($sortBy, $sortType)
+                ->where(function ($q) use ($request) {
+                    $q->where("expense_report_id", request("expense_report_id"));
+                    $q->orWhere("expense_report_id", null);
+                })
+                ->where(function ($q) use ($request) {
+                    $q->whereBetween("date", [request("start_date"), request("end_date")]);
+                    $q->orWhere("expense_report_id", request("expense_report_id"));
+                })
+                ->where("user_id", request("user_id"));
+
+            $expenses = $expenses->whereBetween("date", [$start_date, $end_date]);
+        }
 
 
         $expenses = $expenses->paginate($itemsPerPage);

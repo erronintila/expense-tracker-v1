@@ -81,7 +81,7 @@ class ExpenseReportController extends Controller
                     break;
                 case 'Rejected Expense Reports':
                     $expense_reports = $expense_reports->where([
-                        ["submitted_at", "<>", null],
+                        // ["submitted_at", "<>", null],
                         // ["approved_at", "=", null],
                         ["rejected_at", "<>", null],
                         // ["cancelled_at", "=", null],

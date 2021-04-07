@@ -408,8 +408,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -632,6 +630,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           doc.save("".concat(pdfName, ".pdf"));
         } //end of print or export record
 
+      });
+    },
+    goBack: function goBack() {
+      if (this.$route.params.fromExpense) {
+        this.$router.push({
+          name: "user.expense_reports.index"
+        });
+        return;
+      }
+
+      this.$router.go(-1);
+    },
+    onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
+
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true,
+          fromExpenseReport: true
+        };
+      }
+
+      this.$router.push({
+        name: "user.expenses.show",
+        params: params
       });
     },
     generateReport: function generateReport(action) {
@@ -1094,7 +1120,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage = _this5$options.itemsPerPage;
         var range = [_this5.form.from, _this5.form.to];
         var expense_report_id = _this5.router_params_id;
-        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].getAll({
+        var data = {
           params: {
             page: page,
             itemsPerPage: itemsPerPage,
@@ -1104,7 +1130,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             sortBy: "date",
             sortType: "asc"
           }
-        }).then(function (response) {
+        };
+
+        if (_this5.$route.params.isDeleted) {
+          data.params.isDeleted = true;
+        }
+
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
           _this5.loading = false;
@@ -1214,7 +1246,7 @@ var render = function() {
                       attrs: { icon: "" },
                       on: {
                         click: function($event) {
-                          return _vm.$router.go(-1)
+                          return _vm.goBack()
                         }
                       }
                     },
@@ -1633,9 +1665,7 @@ var render = function() {
                                               attrs: { small: "" },
                                               on: {
                                                 click: function($event) {
-                                                  return _vm.$router.push(
-                                                    "/expenses/" + item.id
-                                                  )
+                                                  return _vm.onShow(item)
                                                 }
                                               }
                                             },

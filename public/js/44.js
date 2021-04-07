@@ -465,6 +465,21 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    goBack: function goBack() {
+      if (this.$route.params.isDeleted && this.$route.params.fromExpenseReport) {
+        this.$router.push({
+          name: "admin.expense_reports.show",
+          params: {
+            id: this.form.expense_report.id,
+            isDeleted: true,
+            fromExpense: true
+          }
+        });
+        return;
+      }
+
+      this.$router.go(-1);
+    },
     getData: function getData() {
       var _this = this;
 
@@ -480,6 +495,7 @@ __webpack_require__.r(__webpack_exports__);
 
       _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(this.$route.params.id, data).then(function (response) {
         var data = response.data.data;
+        console.log("response", response);
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.receipt_number = data.receipt_number;
@@ -695,7 +711,7 @@ var render = function() {
                       attrs: { icon: "" },
                       on: {
                         click: function($event) {
-                          return _vm.$router.go(-1)
+                          return _vm.goBack()
                         }
                       }
                     },

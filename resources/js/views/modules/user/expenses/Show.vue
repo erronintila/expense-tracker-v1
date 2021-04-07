@@ -4,7 +4,7 @@
         <v-card v-else class="elevation-0 pt-0">
             <!-- <v-card class="elevation-0 pt-0"> -->
             <v-card-title class="pt-0">
-                <v-btn @click="$router.go(-1)" class="mr-3" icon>
+                <v-btn @click="goBack()" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -431,6 +431,20 @@ export default {
         };
     },
     methods: {
+        goBack() {
+            if(this.$route.params.isDeleted && this.$route.params.fromExpenseReport) {
+                this.$router.push({
+                    name: "user.expense_reports.show",
+                    params: {
+                        id: this.form.expense_report.id,
+                        isDeleted : true,
+                        fromExpense: true
+                    }
+                });
+                return;
+            }
+            this.$router.go(-1);
+        },
         getData() {
             let data = {};
 

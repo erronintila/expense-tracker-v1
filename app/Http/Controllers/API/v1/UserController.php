@@ -20,6 +20,7 @@ use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Requests\User\UserProfileUpdateRequest;
 use App\Http\Requests\User\UserUpdatePasswordRequest;
 use App\Http\Requests\User\UserPermissionUpdateRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -248,9 +249,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->fill($validated);
         $user->code = $validated["code"] ?? $user->code;
-        $user->password = $user->password;
-        $user->fund = $user->fund;
-        $user->remaining_fund = $user->remaining_fund;
         $user->job()->associate($job);
         $user->save();
 

@@ -463,6 +463,21 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    goBack: function goBack() {
+      if (this.$route.params.isDeleted && this.$route.params.fromExpenseReport) {
+        this.$router.push({
+          name: "user.expense_reports.show",
+          params: {
+            id: this.form.expense_report.id,
+            isDeleted: true,
+            fromExpense: true
+          }
+        });
+        return;
+      }
+
+      this.$router.go(-1);
+    },
     getData: function getData() {
       var _this = this;
 
@@ -694,7 +709,7 @@ var render = function() {
                       attrs: { icon: "" },
                       on: {
                         click: function($event) {
-                          return _vm.$router.go(-1)
+                          return _vm.goBack()
                         }
                       }
                     },

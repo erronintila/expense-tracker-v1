@@ -3,7 +3,7 @@
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
             <v-card-title class="pt-0">
-                <v-btn @click="$router.go(-1)" class="mr-3" icon>
+                <v-btn @click="goBack()" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
 
@@ -191,11 +191,7 @@
                                     <v-icon
                                         small
                                         class="mr-2"
-                                        @click="
-                                            $router.push(
-                                                `/admin/expenses/${item.id}`
-                                            )
-                                        "
+                                        @click="onShow(item)"
                                     >
                                         mdi-eye
                                     </v-icon>
@@ -638,6 +634,25 @@ export default {
                     doc.save(`${pdfName}.pdf`);
                 }
                 //end of print or export record
+            });
+        },
+        goBack() {
+            if(this.$route.params.fromExpense) {
+                this.$router.push({name: "admin.expense_reports.index"});
+                return;
+            }
+            this.$router.go(-1);
+        },
+        onShow(item) {
+            let params = { id: item.id };
+
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true, fromExpenseReport: true };
+            }
+
+            this.$router.push({
+                name: "admin.expenses.show",
+                params: params
             });
         },
         generateReport(action) {
@@ -1243,8 +1258,7 @@ export default {
 
                 let range = [this.form.from, this.form.to];
                 let expense_report_id = this.router_params_id;
-
-                ExpenseDataService.getAll({
+                let data = {
                     params: {
                         page: page,
                         itemsPerPage: itemsPerPage,
@@ -1254,7 +1268,13 @@ export default {
                         sortBy: "date",
                         sortType: "asc"
                     }
-                })
+                };
+
+                if(this.$route.params.isDeleted) {
+                    data.params.isDeleted = true;
+                }
+
+                ExpenseDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
