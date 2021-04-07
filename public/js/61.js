@@ -194,7 +194,6 @@ __webpack_require__.r(__webpack_exports__);
           var _data$details;
 
           var data = response.data.data;
-          console.log("data", data);
           _this.form.code = data.code;
           _this.form.description = data.description;
           _this.form.receipt_number = data.receipt_number;

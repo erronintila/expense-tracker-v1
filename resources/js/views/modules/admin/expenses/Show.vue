@@ -464,11 +464,8 @@ export default {
             ExpenseDataService.show(this.$route.params.id, data)
                 .then(response => {
                     let data = response.data.data;
-                    console.log("response", response);
-
                     this.form.code = data.code;
                     this.form.description = data.description;
-
                     this.form.receipt_number = data.receipt_number;
                     this.form.date = data.date;
                     this.form.remarks = data.remarks;

@@ -495,7 +495,6 @@ __webpack_require__.r(__webpack_exports__);
 
       _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_1__["default"].show(this.$route.params.id, data).then(function (response) {
         var data = response.data.data;
-        console.log("response", response);
         _this.form.code = data.code;
         _this.form.description = data.description;
         _this.form.receipt_number = data.receipt_number;

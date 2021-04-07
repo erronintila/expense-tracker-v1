@@ -1263,8 +1263,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.assign(this.$data, this.$options.data.apply(this));
     },
     onSave: function onSave() {
-      console.log(this.form);
-      return;
       var expense_type_limit = this.form.expense_type ? this.form.expense_type.limit : null;
       var sub_type_limit = this.form.sub_type ? this.form.sub_type.limit : null;
       var expense_limit = sub_type_limit ? sub_type_limit : expense_type_limit;
@@ -1497,15 +1495,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
           index === -1 ? this.expense_types.push(newValue.expense_type) : null;
         }
-
-        console.log("expenseForm", newValue);
       }
     },
     itemizeExpenses: {
       immediate: true,
       handler: function handler(newValue, oldValue) {
         this.itemize = newValue;
-        console.log("itemizeExpenses", newValue);
       }
     },
     "form.details": function formDetails() {
