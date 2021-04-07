@@ -13,7 +13,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/views/modules/admin/expense_reports/Form.vue");
 /* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
-/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
 //
 //
 //
@@ -88,13 +89,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_3__["default"],
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_4__["default"],
     Form: _Form__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
@@ -166,7 +168,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       return new Promise(function (resolve, reject) {
-        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].get({
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].get({
           params: {
             update_report: true,
             user_id: reportData.user ? reportData.user.id : null,
@@ -216,18 +218,16 @@ __webpack_require__.r(__webpack_exports__);
         _this4.formDataLoaded = true;
       });
     });
-  },
-  activated: function activated() {
-    var _this5 = this;
+  } // activated() {
+  //     this.getData().then(data => {
+  //         this.loadExpenses(data).then(expenses => {
+  //             this.form = data;
+  //             this.form.expenses = expenses;
+  //             this.formDataLoaded = true;
+  //         });
+  //     });
+  // }
 
-    this.getData().then(function (data) {
-      _this5.loadExpenses(data).then(function (expenses) {
-        _this5.form = data;
-        _this5.form.expenses = expenses;
-        _this5.formDataLoaded = true;
-      });
-    });
-  }
 });
 
 /***/ }),

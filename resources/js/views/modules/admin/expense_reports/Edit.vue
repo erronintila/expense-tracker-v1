@@ -76,6 +76,7 @@
 import moment from "moment";
 import Form from "./Form";
 import ExpenseReportDataService from "../../../../services/ExpenseReportDataService";
+import ExpenseDataService from "../../../../services/ExpenseDataService";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 
 export default {
@@ -137,14 +138,17 @@ export default {
                     .catch(error => {
                         this.mixin_showErrors(error);
                         this.loader = false;
-                        this.$router.push({ name: "admin.expense_reports.index" }, () => {});
+                        this.$router.push(
+                            { name: "admin.expense_reports.index" },
+                            () => {}
+                        );
                         reject();
                     });
             });
         },
         loadExpenses(reportData) {
             return new Promise((resolve, reject) => {
-                ExpenseReportDataService.get({
+                ExpenseDataService.get({
                     params: {
                         update_report: true,
                         user_id: reportData.user ? reportData.user.id : null,
@@ -195,15 +199,15 @@ export default {
                 this.formDataLoaded = true;
             });
         });
-    },
-    activated() {
-        this.getData().then(data => {
-            this.loadExpenses(data).then(expenses => {
-                this.form = data;
-                this.form.expenses = expenses;
-                this.formDataLoaded = true;
-            });
-        });
     }
+    // activated() {
+    //     this.getData().then(data => {
+    //         this.loadExpenses(data).then(expenses => {
+    //             this.form = data;
+    //             this.form.expenses = expenses;
+    //             this.formDataLoaded = true;
+    //         });
+    //     });
+    // }
 };
 </script>

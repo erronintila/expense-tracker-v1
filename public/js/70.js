@@ -156,18 +156,16 @@ __webpack_require__.r(__webpack_exports__);
         _this4.formDataLoaded = true;
       });
     });
-  },
-  activated: function activated() {
-    var _this5 = this;
+  } // activated() {
+  //     this.getData().then(data => {
+  //         this.loadExpenses(data).then(expenses => {
+  //             this.form = data;
+  //             this.form.expenses = expenses;
+  //             this.formDataLoaded = true;
+  //         });
+  //     });
+  // }
 
-    this.getData().then(function (data) {
-      _this5.loadExpenses(data).then(function (expenses) {
-        _this5.form = data;
-        _this5.form.expenses = expenses;
-        _this5.formDataLoaded = true;
-      });
-    });
-  }
 });
 
 /***/ }),
