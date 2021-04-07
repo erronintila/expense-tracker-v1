@@ -666,6 +666,8 @@ export default {
             Object.assign(this.$data, this.$options.data.apply(this));
         },
         onSave() {
+            console.log(this.form);
+            return;
             let expense_type_limit = this.form.expense_type
                 ? this.form.expense_type.limit
                 : null;
@@ -968,12 +970,15 @@ export default {
                     let index = this.expense_types.findIndex(item => item.id == newValue.expense_type.id ); 
                     index === -1 ? this.expense_types.push(newValue.expense_type) : null
                 }
+
+                console.log("expenseForm", newValue);
             }
         },
         itemizeExpenses: {
             immediate: true,
             handler(newValue, oldValue) {
                 this.itemize = newValue;
+                console.log("itemizeExpenses", newValue);
             }
         },
         "form.details": function() {

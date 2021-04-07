@@ -174,6 +174,7 @@ export default {
                 ExpenseDataService.show(this.$route.params.id)
                     .then(response => {
                         let data = response.data.data;
+                        console.log("data", data);
                         this.form.code = data.code;
                         this.form.description = data.description;
                         this.form.receipt_number = data.receipt_number;
@@ -218,13 +219,11 @@ export default {
                             data.reimbursable_amount;
                         this.form.user.remaining_fund +=
                             data.amount - data.reimbursable_amount;
-                        this.loading = false;
                         this.formDataLoaded = true;
                         resolve();
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.loading = false;
                         this.formDataLoaded = true;
                         this.$router.push({ name: "admin.expenses.index" }, () => {});
                         reject();
@@ -266,22 +265,19 @@ export default {
                         response.data.message
                     );
                     this.$router.go(-1);
-                    this.loading = false;
+                    this.formDataLoaded = true;
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
                     if (error.response.data.data !== null) {
                         this.errors = error.response.data.errors;
                     }
-                    this.loading = false;
+                    this.formDataLoaded = true;
                 });
         }
     },
     created() {
-        this.getData();
+        this.getData().then((this.formDataLoaded = true));
     },
-    activated() {
-        this.getData();
-    }
 };
 </script>

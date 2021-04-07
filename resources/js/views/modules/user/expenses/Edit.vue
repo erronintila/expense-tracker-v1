@@ -218,8 +218,5 @@ export default {
     created() {
         this.getData().then((this.formDataLoaded = true));
     },
-    activated() {
-        this.getData().then((this.formDataLoaded = true));
-    }
 };
 </script>

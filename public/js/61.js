@@ -194,6 +194,7 @@ __webpack_require__.r(__webpack_exports__);
           var _data$details;
 
           var data = response.data.data;
+          console.log("data", data);
           _this.form.code = data.code;
           _this.form.description = data.description;
           _this.form.receipt_number = data.receipt_number;
@@ -240,13 +241,11 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.form.reimbursable_amount = data.reimbursable_amount;
           _this.form.user.remaining_fund += data.amount - data.reimbursable_amount;
-          _this.loading = false;
           _this.formDataLoaded = true;
           resolve();
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
 
-          _this.loading = false;
           _this.formDataLoaded = true;
 
           _this.$router.push({
@@ -291,7 +290,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.$router.go(-1);
 
-        _this2.loading = false;
+        _this2.formDataLoaded = true;
       })["catch"](function (error) {
         _this2.mixin_showErrors(error);
 
@@ -299,15 +298,12 @@ __webpack_require__.r(__webpack_exports__);
           _this2.errors = error.response.data.errors;
         }
 
-        _this2.loading = false;
+        _this2.formDataLoaded = true;
       });
     }
   },
   created: function created() {
-    this.getData();
-  },
-  activated: function activated() {
-    this.getData();
+    this.getData().then(this.formDataLoaded = true);
   }
 });
 

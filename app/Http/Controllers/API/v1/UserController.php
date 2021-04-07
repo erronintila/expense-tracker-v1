@@ -565,30 +565,48 @@ class UserController extends Controller
      */
     public function validateFund(Request $request)
     {
+        // $deduction = DB::table('expenses')
+        //     ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) -
+        //         CASE WHEN ((SUM(`expenses`.`amount`) - SUM(`expenses`.`reimbursable_amount`)) = 0)
+        //             THEN 0 ELSE SUM(`expense_report_payment`.`payment`) END AS deduction'))
+        //     ->leftJoin('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
+        //     ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
+        //     ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
+        //     ->where(DB::raw('expenses.user_id'), request("id"))
+        //     ->where(DB::raw('expenses.deleted_at'), null)
+        //     ->where(DB::raw('expense_reports.rejected_at'), null)
+        //     ->where(DB::raw('expense_reports.cancelled_at'), null)
+        //     ->where(DB::raw('expense_reports.deleted_at'), null)
+        //     ->first();
+
+        // $user = User::findOrFail(request("id"));
+
+        // if ($user->remaining_fund > $user->fund) {
+        //     // $user->remaining_fund = $user->fund;
+        // } else {
+        //     // $user->remaining_fund = $user->fund - $deduction->deduction;
+        // }
+
+        // $user->save();
+
         $deduction = DB::table('expenses')
-            ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) - 
-                CASE WHEN ((SUM(`expenses`.`amount`) - SUM(`expenses`.`reimbursable_amount`)) = 0) 
-                    THEN 0 ELSE SUM(`expense_report_payment`.`payment`) END AS deduction'))
-            ->leftJoin('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
-            ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
-            ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
+            ->select(DB::raw("CASE WHEN (((sum(expenses.amount) - sum(expense_report_payment.payment)) - sum(expenses.reimbursable_amount)) < 0)
+                THEN 0 ELSE ((sum(expenses.amount) - sum(expense_report_payment.payment)) - sum(expenses.reimbursable_amount)) END AS total"))
             ->where(DB::raw('expenses.user_id'), request("id"))
             ->where(DB::raw('expenses.deleted_at'), null)
             ->where(DB::raw('expense_reports.rejected_at'), null)
             ->where(DB::raw('expense_reports.cancelled_at'), null)
             ->where(DB::raw('expense_reports.deleted_at'), null)
-            ->first();
+            ->where(DB::raw('payments.deleted_at'), null)
+            ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
+            ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
+            ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
+            ->first("total");
 
         $user = User::findOrFail(request("id"));
-
-        if ($user->remaining_fund > $user->fund) {
-            $user->remaining_fund = $user->fund;
-        } else {
-            $user->remaining_fund = $user->fund - $deduction->deduction;
-        }
+        $user->remaining_fund = $user->fund - $deduction->total;
 
         $user->save();
-
-        return $this->successResponse($user, "Validated User Remaining Fund", 200);
+        return $this->successResponse(["user" => $user, "deduction" => $deduction->total], "Validated User Remaining Fund", 200);
     }
 }
