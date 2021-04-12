@@ -340,7 +340,7 @@ export default {
                 link: { name: "user.expense_reports.index" }
             },
             {
-                icon: "mdi-currency-usd",
+                icon: "mdi-plus-circle-multiple",
                 text: "Payments",
                 link: { name: "user.payments.index" }
             },

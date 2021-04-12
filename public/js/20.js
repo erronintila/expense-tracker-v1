@@ -358,7 +358,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "user.expense_reports.index"
         }
       }, {
-        icon: "mdi-currency-usd",
+        icon: "mdi-plus-circle-multiple",
         text: "Payments",
         link: {
           name: "user.payments.index"

@@ -204,7 +204,7 @@ class User extends Authenticatable
      */
     public function advance_payments()
     {
-        return $this->belongsToMany(AdvancePayment::class)->withPivot('amount')->withTimestamps();
+        return $this->hasMany(AdvancePayment::class);
     }
 
     /** ========================================================================================================================================

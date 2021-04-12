@@ -20,7 +20,7 @@ class AdvancePayment extends Model
     use SoftDeletes, LogsActivity;
     use EagerLoadPivotTrait;
 
-     /*
+    /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LARAVEL MODEL CONFIGURATION
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ class AdvancePayment extends Model
         ]);
     }
 
-     /*
+    /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | RELATIONSHIPS
     |------------------------------------------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ class AdvancePayment extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('amount')->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 
     /**

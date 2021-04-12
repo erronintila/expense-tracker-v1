@@ -404,7 +404,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "admin.payments.index"
         }
       }, {
-        icon: "mdi-currency-usd",
+        icon: "mdi-plus-circle-multiple",
         text: "Advance Payments",
         link: {
           name: "admin.advance_payments.index"

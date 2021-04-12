@@ -22,12 +22,16 @@ class CreateAdvancePaymentsTable extends Migration
             $table->double('amount', 10, 2);
             $table->text('remarks')->nullable();
 
+            $table->unsignedBigInteger('user_id');
+
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();
             $table->timestamp('returned_at')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
