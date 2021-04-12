@@ -86,6 +86,25 @@ class ExpenseController extends Controller
             case 'Cancelled Expenses':
                 $expenses = $expenses->onlyTrashed();
                 break;
+            case 'Released Payment':
+                $expenses = $expenses->whereHas("expense_report", function ($query) {
+                    $query->where([
+                        ["submitted_at", "<>", null],
+                        ["approved_at", "<>", null],
+                        ["rejected_at", "=", null],
+                        ["cancelled_at", "=", null]
+                    ]);
+                    $query->whereHas("payments", function ($query) {
+                        $query->where([
+                            ["approved_at", "<>", null],
+                            ["released_at", "<>", null],
+                            ["received_at", "=", null],
+                            ["cancelled_at", "=", null],
+                            ["deleted_at", "=", null],
+                        ]);
+                    });
+                });
+                break;
             case 'Reimbursed Expenses':
                 $expenses = $expenses->whereHas("expense_report", function ($query) {
                     $query->where([

@@ -575,7 +575,8 @@ export default {
                 "Approved Expenses",
                 "Rejected Expenses",
                 "Cancelled Expenses",
-                "Reimbursed Expenses"
+                "Released Payment",
+                "Reimbursed Expenses",
                 // "Archived Expenses"
             ],
             selected: [],

@@ -549,6 +549,7 @@ export default {
                 "Submitted Expense Reports",
                 "Approved Expense Reports",
                 "Rejected Expense Reports",
+                "Released Payment",
                 "Reimbursed Expense Reports",
                 // "Overdue Expense Reports",
                 "Cancelled Expense Reports"

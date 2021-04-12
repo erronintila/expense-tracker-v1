@@ -582,7 +582,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       expense_types: [],
       status: "All Expenses",
-      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Reimbursed Expenses" // "Archived Expenses"
+      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Released Payment", "Reimbursed Expenses" // "Archived Expenses"
       ],
       selected: [],
       search: "",

@@ -660,7 +660,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       totalUnsubmitted: 0,
       totalUnapproved: 0,
       status: "All Expense Reports",
-      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Reimbursed Expense Reports", // "Overdue Expense Reports",
+      statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Released Payment", "Reimbursed Expense Reports", // "Overdue Expense Reports",
       "Cancelled Expense Reports" // "Archived Expense Reports"
       ],
       selected: [],
