@@ -912,9 +912,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  // created() {
-  //     this.loadExpenseTypes();
-  // },
+  created: function created() {
+    consolee.log("HELLO WORLD");
+  },
   activated: function activated() {
     var _this6 = this;
 
