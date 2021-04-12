@@ -40,6 +40,17 @@
             >
             </v-combobox>
 
+            <v-row>
+                <v-col>
+                    <v-text-field label="Advance Payment" value="N/A" readonly>
+                    </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-text-field label="Amount" value="0" type="number">
+                    </v-text-field>
+                </v-col>
+            </v-row>
+
             <div class="overline green--text">
                 Expenses
             </div>

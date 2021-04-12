@@ -571,6 +571,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1352,7 +1380,7 @@ var render = function() {
                 [
                   _c(
                     "v-col",
-                    { attrs: { cols: "12", md: "4" } },
+                    { attrs: { cols: "12", md: "3" } },
                     [
                       _c("v-hover", {
                         scopedSlots: _vm._u([
@@ -1422,7 +1450,7 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-col",
-                    { attrs: { cols: "12", md: "4" } },
+                    { attrs: { cols: "12", md: "3" } },
                     [
                       _c("v-hover", {
                         scopedSlots: _vm._u([
@@ -1518,7 +1546,70 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-col",
-                    { attrs: { cols: "12", md: "4" } },
+                    { attrs: { cols: "12", md: "3" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto",
+                                    attrs: {
+                                      elevation: hover ? 5 : 2,
+                                      to: {
+                                        name: "admin.advance_payments.index"
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-card-text", [
+                                      _c("div", [
+                                        _vm._v(
+                                          "\n                                Advance Payments\n                            "
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          class:
+                                            parseFloat(100) > parseFloat(0)
+                                              ? "display-1 red--text"
+                                              : "display-1 text--primary"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                100.00\n                            "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("div", [
+                                        _vm._v(
+                                          "\n                                0 Record(s)\n                            "
+                                        )
+                                      ])
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "3" } },
                     [
                       _c("v-hover", {
                         scopedSlots: _vm._u([

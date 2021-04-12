@@ -67,7 +67,6 @@
             </v-card-title>
             <v-card-subtitle>
                 <!-- {{ formattedDateRange }} -->
-                
 
                 <DateRangePicker
                     ref="dateRangePicker"
@@ -93,7 +92,7 @@
             </v-card-subtitle>
 
             <v-row>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card
                             class="mx-auto"
@@ -120,7 +119,7 @@
                     </v-hover>
                 </v-col>
 
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card class="mx-auto" :elevation="hover ? 5 : 2">
                             <v-card-text>
@@ -165,7 +164,36 @@
                     </v-hover>
                 </v-col>
 
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            class="mx-auto"
+                            :elevation="hover ? 5 : 2"
+                            :to="{ name: 'admin.advance_payments.index' }"
+                        >
+                            <v-card-text>
+                                <div>
+                                    Advance Payments
+                                </div>
+                                <div
+                                    :class="
+                                        parseFloat(100) >
+                                        parseFloat(0)
+                                            ? 'display-1 red--text'
+                                            : 'display-1 text--primary'
+                                    "
+                                >
+                                    100.00
+                                </div>
+                                <div>
+                                    0 Record(s)
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </v-hover>
+                </v-col>
+
+                <v-col cols="12" md="3">
                     <v-hover v-slot:default="{ hover }">
                         <v-card class="mx-auto" :elevation="hover ? 5 : 2">
                             <v-card-text>
@@ -1160,13 +1188,13 @@ export default {
             this.onTimeUnitChange();
             this.getExpenseStats(
                 this.date_range[0],
-                this.date_range[1],  
+                this.date_range[1],
                 this.user ? this.user.id : null
             );
         }
     },
     created() {
-         this.$store.dispatch("AUTH_NOTIFICATIONS");
+        this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.load_pie_chart();
         this.load_bar_chart();
         this.load_line_chart();
@@ -1178,6 +1206,6 @@ export default {
         );
 
         // this.loadStatistics();
-    },
+    }
 };
 </script>

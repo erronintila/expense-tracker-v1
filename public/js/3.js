@@ -250,6 +250,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -618,6 +629,36 @@ var render = function() {
                   expression: "form.description"
                 }
               }),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Advance Payment",
+                          value: "N/A",
+                          readonly: ""
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Amount", value: "0", type: "number" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
               _c("div", { staticClass: "overline green--text" }, [
                 _vm._v("\n            Expenses\n        ")

@@ -293,11 +293,11 @@ const userRoutes = [
              *
              */
             {
-                path: "/admin/advance_payments",
-                name: "admin.advance_payments.index",
+                path: "/advance_payments",
+                name: "user.advance_payments.index",
                 component: () =>
                     import(
-                        "../../views/modules/admin/advance_payments/Index.vue"
+                        "../../views/modules/user/advance_payments/Index.vue"
                     ),
                 // beforeEnter: (to, from, next) => {
                 //     let permissions = store.getters.user.permissions;
@@ -314,11 +314,11 @@ const userRoutes = [
                 }
             },
             {
-                path: "/admin/advance_payments",
-                name: "admin.advance_payments.create",
+                path: "/advance_payments/create",
+                name: "user.advance_payments.create",
                 component: () =>
                     import(
-                        "../../views/modules/admin/advance_payments/Create.vue"
+                        "../../views/modules/user/advance_payments/Create.vue"
                     ),
                 // beforeEnter: (to, from, next) => {
                 //     let permissions = store.getters.user.permissions;
@@ -335,11 +335,11 @@ const userRoutes = [
                 }
             },
             {
-                path: "/admin/advance_payments",
-                name: "admin.advance_payments.edit",
+                path: "/advance_payments/:id/edit",
+                name: "user.advance_payments.edit",
                 component: () =>
                     import(
-                        "../../views/modules/admin/advance_payments/Edit.vue"
+                        "../../views/modules/user/advance_payments/Edit.vue"
                     ),
                 // beforeEnter: (to, from, next) => {
                 //     let permissions = store.getters.user.permissions;
@@ -356,11 +356,11 @@ const userRoutes = [
                 }
             },
             {
-                path: "/admin/advance_payments",
-                name: "admin.advance_payments.show",
+                path: "/advance_payments/:id",
+                name: "user.advance_payments.show",
                 component: () =>
                     import(
-                        "../../views/modules/admin/advance_payments/Show.vue"
+                        "../../views/modules/user/advance_payments/Show.vue"
                     ),
                 // beforeEnter: (to, from, next) => {
                 //     let permissions = store.getters.user.permissions;

@@ -1058,7 +1058,7 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/advance_payments",
+                path: "/admin/advance_payments/create",
                 name: "admin.advance_payments.create",
                 component: () =>
                     import("../../views/modules/admin/advance_payments/Create.vue"),
@@ -1077,7 +1077,7 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/advance_payments",
+                path: "/admin/advance_payments/:id/edit",
                 name: "admin.advance_payments.edit",
                 component: () =>
                     import("../../views/modules/admin/advance_payments/Edit.vue"),
@@ -1096,7 +1096,7 @@ const adminRoutes = [
                 }
             },
             {
-                path: "/admin/advance_payments",
+                path: "/admin/advance_payments/:id",
                 name: "admin.advance_payments.show",
                 component: () =>
                     import("../../views/modules/admin/advance_payments/Show.vue"),
