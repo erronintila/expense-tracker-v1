@@ -343,7 +343,12 @@ export default {
                 icon: "mdi-currency-usd",
                 text: "Payments",
                 link: { name: "user.payments.index" }
-            }
+            },
+            {
+                icon: "mdi-currency-usd",
+                text: "Advance Payments",
+                link: { name: "admin.advance_payments.index" }
+            },
         ]
     }),
     methods: {

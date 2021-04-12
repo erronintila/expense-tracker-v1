@@ -284,6 +284,97 @@ const userRoutes = [
                 meta: {
                     keepAlive: true
                 }
+            },
+            /**
+             *
+             *
+             * Advance Payments
+             *
+             *
+             */
+            {
+                path: "/admin/advance_payments",
+                name: "admin.advance_payments.index",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/advance_payments/Index.vue"
+                    ),
+                // beforeEnter: (to, from, next) => {
+                //     let permissions = store.getters.user.permissions;
+                //     permissions = permissions.map(item => item.name);
+
+                //     if (permissions.includes("view all advance payments")) {
+                //         next();
+                //     } else {
+                //         next({ name: "error_403" });
+                //     }
+                // },
+                meta: {
+                    keepAlive: true
+                }
+            },
+            {
+                path: "/admin/advance_payments",
+                name: "admin.advance_payments.create",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/advance_payments/Create.vue"
+                    ),
+                // beforeEnter: (to, from, next) => {
+                //     let permissions = store.getters.user.permissions;
+                //     permissions = permissions.map(item => item.name);
+
+                //     if (permissions.includes("add advance payments")) {
+                //         next();
+                //     } else {
+                //         next({ name: "error_403" });
+                //     }
+                // },
+                meta: {
+                    keepAlive: false
+                }
+            },
+            {
+                path: "/admin/advance_payments",
+                name: "admin.advance_payments.edit",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/advance_payments/Edit.vue"
+                    ),
+                // beforeEnter: (to, from, next) => {
+                //     let permissions = store.getters.user.permissions;
+                //     permissions = permissions.map(item => item.name);
+
+                //     if (permissions.includes("edit advance payments")) {
+                //         next();
+                //     } else {
+                //         next({ name: "error_403" });
+                //     }
+                // },
+                meta: {
+                    keepAlive: false
+                }
+            },
+            {
+                path: "/admin/advance_payments",
+                name: "admin.advance_payments.show",
+                component: () =>
+                    import(
+                        "../../views/modules/admin/advance_payments/Show.vue"
+                    ),
+                // beforeEnter: (to, from, next) => {
+                //     let permissions = store.getters.user.permissions;
+                //     permissions = permissions.map(item => item.name);
+
+                //     if (permissions.includes("view advance payments")) {
+                //         next();
+                //     } else {
+                //         next({ name: "error_403" });
+                //     }
+                // },
+                meta: {
+                    keepAlive: true
+                }
             }
         ]
     }

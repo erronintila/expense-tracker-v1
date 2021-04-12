@@ -363,6 +363,12 @@ __webpack_require__.r(__webpack_exports__);
         link: {
           name: "user.payments.index"
         }
+      }, {
+        icon: "mdi-currency-usd",
+        text: "Advance Payments",
+        link: {
+          name: "admin.advance_payments.index"
+        }
       }]
     };
   },

@@ -173,6 +173,17 @@ class ExpenseReport extends Model
     }
 
     /**
+     * Displays the advance payments associated with expense report.
+     * Many-To-Many Relationship
+     *
+     * @return mixed
+     */
+    public function advance_payments()
+    {
+        return $this->belongsToMany(AdvancePayment::class)->withPivot('amount')->withTimestamps();
+    }
+
+    /**
      * Displays the user associated with Expense Report.
      *
      * @return mixed

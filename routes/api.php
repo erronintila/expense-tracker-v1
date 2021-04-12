@@ -39,7 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
             'vendors' => 'API\v1\VendorController',
             'taxes' => 'API\v1\TaxController',
             'settings' => 'API\v1\SettingController',
-            'notifications' => 'API\v1\NotificationController'
+            'notifications' => 'API\v1\NotificationController',
+            'advance_payments' => 'API\v1\AdvancePaymentController'
         ]
     );
 

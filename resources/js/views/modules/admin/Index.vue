@@ -385,6 +385,11 @@ export default {
                 link: { name: "admin.payments.index" }
             },
             {
+                icon: "mdi-currency-usd",
+                text: "Advance Payments",
+                link: { name: "admin.advance_payments.index" }
+            },
+            {
                 icon: "mdi-chevron-up",
                 "icon-alt": "mdi-chevron-down",
                 text: "More",

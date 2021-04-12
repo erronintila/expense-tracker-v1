@@ -30,6 +30,7 @@ class UserSeeder extends Seeder
             "jobs",
             "vendors",
             "expense types",
+            "advance payments",
             "payments",
             "expense reports",
             "expenses",
@@ -113,6 +114,11 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
 
                 // Permission::create(['name' => 'add expense report notes', 'category' => $model]);
+            }
+
+            if ($model == "advance payments") {
+                Permission::create(['name' => 'approve advance payments', 'category' => $model]);
+                Permission::create(['name' => 'cancel advance payments', 'category' => $model]);
             }
 
             if ($model == "payments") {

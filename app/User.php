@@ -196,6 +196,17 @@ class User extends Authenticatable
         return $this->belongsToMany(ExpenseType::class)->withPivot('limit')->withTimestamps();
     }
 
+    /**
+     * Displays the advance payments associated with user.
+     * Many-To-Many Relationship
+     *
+     * @return mixed
+     */
+    public function advance_payments()
+    {
+        return $this->belongsToMany(AdvancePayment::class)->withPivot('amount')->withTimestamps();
+    }
+
     /** ========================================================================================================================================
         LARAVEL ACCESSORS
     ============================================================================================================================================ */
