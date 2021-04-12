@@ -916,7 +916,7 @@ export default {
         }
     },
     created() {
-        consolee.log("HELLO WORLD");
+        console.log("HELLO WORLD");
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
