@@ -381,7 +381,7 @@ export default {
             },
             {
                 icon: "mdi-currency-usd",
-                text: "Payment Records",
+                text: "Payment Vouchers",
                 link: { name: "admin.payments.index" }
             },
             {

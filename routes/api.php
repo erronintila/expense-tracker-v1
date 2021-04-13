@@ -107,6 +107,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
+    | ADVANCE PAYMENT CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    Route::put('/advance_payments/restore/{id}', 'API\v1\AdvancePaymentController@restore');
+    Route::put('/advance_payments/approve_payment/{id}', 'API\v1\AdvancePaymentController@approve_payment');
+    Route::put('/advance_payments/cancel_payment/{id}', 'API\v1\AdvancePaymentController@cancel_payment');
+    Route::put('/advance_payments/return_payment/{id}', 'API\v1\AdvancePaymentController@return_payment');
+    
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
     | VENDOR CONTROLLER CUSTOM ROUTES
     |------------------------------------------------------------------------------------------------------------------------------------
     */

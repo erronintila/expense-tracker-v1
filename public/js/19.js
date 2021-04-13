@@ -399,7 +399,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }, {
         icon: "mdi-currency-usd",
-        text: "Payment Records",
+        text: "Payment Vouchers",
         link: {
           name: "admin.payments.index"
         }

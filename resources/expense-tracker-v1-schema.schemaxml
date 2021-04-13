@@ -6,10 +6,10 @@
 <canvas zoom="100">
 <tables>
 <table name="departments" view="colnames">
-<left>158</left>
-<top>152</top>
+<left>151</left>
+<top>31</top>
 <width>118</width>
-<height>175</height>
+<height>179</height>
 <sql_create_table>CREATE TABLE `departments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -26,7 +26,7 @@
 <left>659</left>
 <top>683</top>
 <width>168</width>
-<height>495</height>
+<height>503</height>
 <sql_create_table>CREATE TABLE `expense_reports` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -57,7 +57,7 @@
   UNIQUE KEY `expense_reports_code_unique` (`code`),
   KEY `expense_reports_user_id_foreign` (`user_id`),
   CONSTRAINT `expense_reports_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_types" view="colnames">
 <left>1223</left>
@@ -78,7 +78,7 @@
   UNIQUE KEY `expense_types_code_unique` (`code`),
   KEY `expense_types_expense_type_id_foreign` (`expense_type_id`),
   CONSTRAINT `expense_types_expense_type_id_foreign` FOREIGN KEY (`expense_type_id`) REFERENCES `expense_types` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expenses" view="colnames">
 <left>861</left>
@@ -116,6 +116,7 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `is_paid_in_advance` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `expenses_code_unique` (`code`),
   KEY `expenses_expense_type_id_foreign` (`expense_type_id`),
@@ -132,12 +133,12 @@
   CONSTRAINT `expenses_tax_id_foreign` FOREIGN KEY (`tax_id`) REFERENCES `taxes` (`id`),
   CONSTRAINT `expenses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `expenses_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="payments" view="colnames">
-<left>236</left>
-<top>684</top>
-<width>148</width>
+<left>214</left>
+<top>1021</top>
+<width>159</width>
 <height>591</height>
 <sql_create_table>CREATE TABLE `payments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -209,13 +210,14 @@
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `job_id` bigint(20) unsigned DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_code_unique` (`code`),
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `users_job_id_foreign` (`job_id`),
   CONSTRAINT `users_job_id_foreign` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="vendors" view="colnames">
 <left>1057</left>
@@ -238,17 +240,18 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `vendors_code_unique` (`code`),
   UNIQUE KEY `vendors_email_unique` (`email`),
   UNIQUE KEY `vendors_tin_unique` (`tin`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="jobs" view="colnames">
-<left>299</left>
-<top>217</top>
+<left>298</left>
+<top>31</top>
 <width>129</width>
-<height>192</height>
+<height>181</height>
 <sql_create_table>CREATE TABLE `jobs` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -265,9 +268,9 @@
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_type_user" view="colnames">
-<left>1224</left>
-<top>547</top>
-<width>143</width>
+<left>481</left>
+<top>8</top>
+<width>152</width>
 <height>175</height>
 <sql_create_table>CREATE TABLE `expense_type_user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -277,13 +280,13 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_report_payment" view="colnames">
-<left>442</left>
-<top>801</top>
+<left>434</left>
+<top>964</top>
 <width>163</width>
-<height>175</height>
+<height>212</height>
 <sql_create_table>CREATE TABLE `expense_report_payment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `expense_report_id` bigint(20) unsigned NOT NULL,
@@ -318,7 +321,7 @@
   KEY `subject` (`subject_type`,`subject_id`),
   KEY `causer` (`causer_type`,`causer_id`),
   KEY `activity_log_log_name_index` (`log_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=699 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="model_has_permissions" view="colnames">
 <left>1147</left>
@@ -361,12 +364,12 @@
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="role_has_permissions" view="colnames">
 <left>1086</left>
 <top>930</top>
-<width>125</width>
+<width>157</width>
 <height>107</height>
 <sql_create_table>CREATE TABLE `role_has_permissions` (
   `permission_id` bigint(20) unsigned NOT NULL,
@@ -402,7 +405,7 @@
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `settings_key_index` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 <table name="expense_type_vendor" view="colnames">
 <left>1226</left>
@@ -435,6 +438,52 @@
   PRIMARY KEY (`id`),
   KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+</table>
+<table name="advance_payment_expense_report" view="colnames">
+<left>197</left>
+<top>728</top>
+<width>214</width>
+<height>196</height>
+<sql_create_table>CREATE TABLE `advance_payment_expense_report` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `advance_payment_id` bigint(20) unsigned NOT NULL,
+  `expense_report_id` bigint(20) unsigned NOT NULL,
+  `amount` double(10,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `advance_payment_expense_report_advance_payment_id_foreign` (`advance_payment_id`),
+  KEY `advance_payment_expense_report_expense_report_id_foreign` (`expense_report_id`),
+  CONSTRAINT `advance_payment_expense_report_advance_payment_id_foreign` FOREIGN KEY (`advance_payment_id`) REFERENCES `advance_payments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `advance_payment_expense_report_expense_report_id_foreign` FOREIGN KEY (`expense_report_id`) REFERENCES `expense_reports` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
+</table>
+<table name="advance_payments" view="colnames">
+<left>19</left>
+<top>432</top>
+<width>152</width>
+<height>331</height>
+<sql_create_table>CREATE TABLE `advance_payments` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cal_no` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `description` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` double(10,2) NOT NULL,
+  `remarks` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `cancelled_at` timestamp NULL DEFAULT NULL,
+  `returned_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `advance_payments_cal_no_unique` (`cal_no`),
+  UNIQUE KEY `advance_payments_code_unique` (`code`),
+  KEY `advance_payments_user_id_foreign` (`user_id`),
+  CONSTRAINT `advance_payments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci</sql_create_table>
 </table>
 </tables>
 </canvas>

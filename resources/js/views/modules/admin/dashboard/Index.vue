@@ -177,16 +177,22 @@
                                 </div>
                                 <div
                                     :class="
-                                        parseFloat(100) >
-                                        parseFloat(0)
+                                        parseFloat(100) > parseFloat(0)
                                             ? 'display-1 red--text'
                                             : 'display-1 text--primary'
                                     "
                                 >
-                                    100.00
+                                    {{
+                                        mixin_formatNumber(
+                                            total.advance_payments
+                                        )
+                                    }}
                                 </div>
                                 <div>
-                                    0 Record(s)
+                                    {{
+                                        count.advance_payments
+                                    }}
+                                    Record(s)
                                 </div>
                             </v-card-text>
                         </v-card>

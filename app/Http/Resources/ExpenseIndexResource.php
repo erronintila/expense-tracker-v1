@@ -37,6 +37,7 @@ class ExpenseIndexResource extends JsonResource
             "remarks" => $this->remarks,
             "notes" => $this->notes,
             "encoding_period" => $this->encoding_period,
+            "is_paid_in_advance" => $this->is_paid_in_advance ? true : false,
 
             // -------------------------------------------------------------------
             // Additional Fields

@@ -1045,6 +1045,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1070,6 +1077,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           receipt_number: null,
           date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
           details: [],
+          is_paid_in_advance: false,
           // details: {
           //     description: "",
           //     quantity: 1,
@@ -1502,6 +1510,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       handler: function handler(newValue, oldValue) {
         this.itemize = newValue;
       }
+    },
+    "form.is_paid_in_advance": function formIs_paid_in_advance() {
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
+
+      if (this.form.is_paid_in_advance) {
+        if (this.amount_to_reimburse == 0 && this.form.amount > remaining_fund) {
+          this.form.reimbursable_amount = this.form.amount - remaining_fund;
+        }
+
+        return;
+      }
+
+      this.form.reimbursable_amount = 0;
+    },
+    "form.amount": function formAmount() {
+      this.form.reimbursable_amount = 0;
+      this.is_paid_in_advance = false;
     },
     "form.details": function formDetails() {
       if (this.form.details && this.form.details.length) {
@@ -2708,6 +2733,24 @@ var render = function() {
                     }
                   })
                 : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { attrs: { cols: "12", md: "4" } },
+            [
+              _c("v-checkbox", {
+                attrs: { label: "Paid through Advance Payment" },
+                model: {
+                  value: _vm.form.is_paid_in_advance,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "is_paid_in_advance", $$v)
+                  },
+                  expression: "form.is_paid_in_advance"
+                }
+              })
             ],
             1
           )

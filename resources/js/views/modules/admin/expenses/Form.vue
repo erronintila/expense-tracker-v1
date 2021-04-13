@@ -198,6 +198,13 @@
                 >
                 </v-text-field>
             </v-col>
+
+            <v-col cols="12" md="4">
+                <v-checkbox
+                    v-model="form.is_paid_in_advance"
+                    label="Paid through Advance Payment"
+                ></v-checkbox>
+            </v-col>
         </v-row>
 
         <v-row v-if="isVendorTaxInclusive">
@@ -485,6 +492,7 @@ export default {
                     receipt_number: null,
                     date: moment().format("YYYY-MM-DD"),
                     details: [],
+                    is_paid_in_advance: false,
                     // details: {
                     //     description: "",
                     //     quantity: 1,
@@ -962,11 +970,17 @@ export default {
                     this.expense_types = newValue.user.expense_types;
                 }
 
-                if(newValue.expense_type) {
-                    this.sub_types = newValue.expense_type ? newValue.expense_type.sub_types : null;
+                if (newValue.expense_type) {
+                    this.sub_types = newValue.expense_type
+                        ? newValue.expense_type.sub_types
+                        : null;
 
-                    let index = this.expense_types.findIndex(item => item.id == newValue.expense_type.id ); 
-                    index === -1 ? this.expense_types.push(newValue.expense_type) : null
+                    let index = this.expense_types.findIndex(
+                        item => item.id == newValue.expense_type.id
+                    );
+                    index === -1
+                        ? this.expense_types.push(newValue.expense_type)
+                        : null;
                 }
             }
         },
@@ -975,6 +989,28 @@ export default {
             handler(newValue, oldValue) {
                 this.itemize = newValue;
             }
+        },
+        "form.is_paid_in_advance": function() {
+            let remaining_fund = this.mixin_convertToNumber(
+                this.form.user ? this.form.user.remaining_fund : 0
+            );
+
+            if (this.form.is_paid_in_advance) {
+                if (
+                    this.amount_to_reimburse == 0 &&
+                    this.form.amount > remaining_fund
+                ) {
+                    this.form.reimbursable_amount =
+                        this.form.amount - remaining_fund;
+                }
+                return;
+            }
+
+            this.form.reimbursable_amount = 0;
+        },
+        "form.amount": function() {
+            this.form.reimbursable_amount = 0;
+            this.is_paid_in_advance = false;
         },
         "form.details": function() {
             if (this.form.details && this.form.details.length) {

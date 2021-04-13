@@ -696,7 +696,7 @@ var render = function() {
                   _c("v-spacer"),
                   _vm._v(" "),
                   _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("New Payment Record")
+                    _vm._v("New Payment Voucher")
                   ])
                 ],
                 1

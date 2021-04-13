@@ -66,7 +66,8 @@ class AdvancePayment extends Model
      * @var array
      */
     protected $appends = [
-        
+        "status",
+        "remaining_amount"
     ];
 
     /*
@@ -135,9 +136,9 @@ class AdvancePayment extends Model
      *
      * @return mixed
      */
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo('App\User');
     }
 
     /**
@@ -148,5 +149,86 @@ class AdvancePayment extends Model
     public function expense_reports()
     {
         return $this->belongsToMany(ExpenseReport::class)->withPivot('amount')->withTimestamps();
+    }
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | LARAVEL ACCESSORS
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    public function getRemainingAmountAttribute() {
+        if(!is_null($this->returned_at)) {
+            return 0;
+        }
+
+        return 1;
+    }
+
+    /**
+     * Displays the current status of expense.
+     *
+     * @return mixed
+     */
+    public function getStatusAttribute()
+    {
+        $arr = [
+            'color' => 'red',
+            'remarks' => 'Status is unindentified',
+            'status' => 'Error',
+        ];
+
+        $approved = is_null($this->approved_at);
+        $cancelled = is_null($this->cancelled_at);
+        $deleted = is_null($this->deleted_at);
+        $returned = is_null($this->returned_at);
+
+        if (!$deleted) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Advance Payment was deleted',
+                'status' => 'Deleted',
+            ];
+            return $arr;
+        }
+
+        if (!$cancelled) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Advance Payment was cancelled',
+                'status' => 'Cancelled',
+            ];
+
+            return $arr;
+        }
+
+        if (!$returned) {
+            $arr = [
+                'color' => 'green',
+                'remarks' => 'Advance Payment was returned',
+                'status' => 'Returned',
+            ];
+            return $arr;
+        }
+
+        if (!$approved) {
+            $arr = [
+                'color' => 'blue',
+                'remarks' => 'Advance Payment was approved',
+                'status' => 'Approved',
+            ];
+            return $arr;
+        }
+
+        if ($approved && $deleted && $cancelled && $returned) {
+            $arr = [
+                'color' => 'gray',
+                'remarks' => 'Advance Payment is pending',
+                'status' => 'Pending',
+            ];
+            return $arr;
+        }
+
+        return $arr;
     }
 }

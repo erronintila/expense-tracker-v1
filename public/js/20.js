@@ -359,7 +359,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }, {
         icon: "mdi-plus-circle-multiple",
-        text: "Payments",
+        text: "Payment Vouchers",
         link: {
           name: "user.payments.index"
         }
@@ -367,7 +367,7 @@ __webpack_require__.r(__webpack_exports__);
         icon: "mdi-currency-usd",
         text: "Advance Payments",
         link: {
-          name: "admin.advance_payments.index"
+          name: "user.advance_payments.index"
         }
       }]
     };

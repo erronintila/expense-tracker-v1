@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[81],{
 
-/***/ "./resources/js/views/modules/user/advance_payments/Edit.vue":
-/*!*******************************************************************!*\
-  !*** ./resources/js/views/modules/user/advance_payments/Edit.vue ***!
-  \*******************************************************************/
+/***/ "./resources/js/views/modules/user/advance_payments/Index.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/views/modules/user/advance_payments/Index.vue ***!
+  \********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -27,7 +27,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   
 )
 
-component.options.__file = "resources/js/views/modules/user/advance_payments/Edit.vue"
+component.options.__file = "resources/js/views/modules/user/advance_payments/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ })

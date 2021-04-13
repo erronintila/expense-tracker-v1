@@ -50,7 +50,8 @@ class ExpenseStoreRequest extends FormRequest
             'vendor_id' => ['nullable'],
             'expense_report_id' => ['nullable'],
             'tax_id' => ['nullable'],
-            'expense_header_id' => ['nullable']
+            'expense_header_id' => ['nullable'],
+            'is_paid_in_advance' => ['nullable']
         ];
     }
 

@@ -107,6 +107,7 @@ export default {
                 receipt_number: null,
                 date: moment().format("YYYY-MM-DD"),
                 details: [],
+                is_paid_in_advance: false,
                 // details: {
                 //     description: "",
                 //     quantity: 1,

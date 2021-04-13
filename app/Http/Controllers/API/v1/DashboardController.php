@@ -10,6 +10,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdvancePaymentStoreRequest;
+use App\Models\AdvancePayment;
 
 class DashboardController extends Controller
 {
@@ -417,6 +419,10 @@ class DashboardController extends Controller
         $reimbursements = $total_expenses->sum("reimbursable_amount");
         $total_expenses = $total_expenses->sum("amount");
 
+        // $advance_payments = DB::table('advance_payments')
+        //     ->select(DB::raw('sum(advance_payments.amount) as remaining_amount'))
+        //     ->sum("remaining_amount");
+
         $stats = [
             "summary" => [
                 "unsub" => $unsubmitted_reports,
@@ -429,6 +435,7 @@ class DashboardController extends Controller
             "total" => [
                 "expenses_by_date" => $expenses_by_date->sum("amount"),
                 "remaining_fund" => $users->sum("remaining_fund"),
+                "advance_payments" => 0,
                 "total_fund" => $users->sum("fund"),
                 "unreported_expenses" => $all_expenses->where("expense_report_id", null)->sum("amount"),
                 "unsubmitted_reports" => $unsubmitted_reports->sum("amount"),
@@ -443,6 +450,7 @@ class DashboardController extends Controller
                 "pending_for_approval_reports" => $submitted_reports->groupBy('expense_report_id')->count(),
                 "awaiting_for_reimbursement_reports" => $approved_reports->groupBy('expense_report_id')->count(),
                 "payment_to_receive" => $payment_to_receive->groupBy('expense_report_id')->count(),
+                "advance_payments" => 1
             ],
         ];
 

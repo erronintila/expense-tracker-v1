@@ -139,6 +139,7 @@ export default {
                 revolving_fund: 0,
                 reimbursable_amount: 0,
                 details: [],
+                is_paid_in_advance: false,
                 // details: {
                 //     description: "",
                 //     amount: 0
@@ -190,6 +191,7 @@ export default {
                         this.form.tax_rate = data.tax_rate;
                         this.form.tax_amount = data.tax_amount;
                         this.form.details = data.details ?? [];
+                        this.form.is_paid_in_advance = data.is_paid_in_advance;
 
                         if (data.details && data.details.length) {
                             this.itemize = true;

@@ -9,7 +9,7 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">Payment Details</h4>
+                <h4 class="title green--text">Payment Voucher Details</h4>
             </v-card-title>
 
             <v-form ref="form" v-model="valid">

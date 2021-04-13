@@ -341,13 +341,13 @@ export default {
             },
             {
                 icon: "mdi-plus-circle-multiple",
-                text: "Payments",
+                text: "Payment Vouchers",
                 link: { name: "user.payments.index" }
             },
             {
                 icon: "mdi-currency-usd",
                 text: "Advance Payments",
-                link: { name: "admin.advance_payments.index" }
+                link: { name: "user.advance_payments.index" }
             },
         ]
     }),
