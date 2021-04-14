@@ -86,7 +86,6 @@ class UserController extends Controller
                 });
                 break;
             case 'department':
-                // $users = $users;
                 $users = $users->whereHas("job", function ($query) use ($sortType) {
                     $query->whereHas("department", function ($query2) use ($sortType) {
                         $query2->orderBy("name", $sortType);
