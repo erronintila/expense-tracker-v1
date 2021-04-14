@@ -144,7 +144,7 @@
                     <v-icon
                         small
                         class="mr-2"
-                        @click="$router.push(`/admin/expenses/${item.id}`)"
+                        @click="$router.push(`/user/expenses/${item.id}`)"
                     >
                         mdi-eye
                     </v-icon>

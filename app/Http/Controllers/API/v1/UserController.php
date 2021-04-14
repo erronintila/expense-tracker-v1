@@ -81,6 +81,8 @@ class UserController extends Controller
                 $users = $users->orderBy("first_name", $sortType);
                 break;
             case 'job':
+                // $users = $users->leftJoin('jobs', 'jobs.id', '=', 'users.job_id')
+                //     ->orderBy("jobs.name", $sortType)->select("users.*");
                 $users = $users->whereHas("job", function ($query) use ($sortType) {
                     $query->orderBy("name", $sortType);
                 });

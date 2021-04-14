@@ -99,8 +99,8 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                user: null,
-                expenses: [],
+                user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+                expenses: [ ],
                 status: null,
                 from: "",
                 to: ""
@@ -139,7 +139,7 @@ export default {
                         this.mixin_showErrors(error);
                         this.loader = false;
                         this.$router.push(
-                            { name: "admin.expense_reports.index" },
+                            { name: "user.expense_reports.index" },
                             () => {}
                         );
                         reject();
@@ -180,7 +180,7 @@ export default {
                         response.data.message
                     );
                     this.$router.push({
-                        name: "admin.expense_reports.index"
+                        name: "user.expense_reports.index"
                     });
                     this.loader = false;
                 })

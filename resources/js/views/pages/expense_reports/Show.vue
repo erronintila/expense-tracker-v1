@@ -22,7 +22,7 @@
                                     text
                                     color="green"
                                     :to="
-                                        `/admin/expense_reports/${router_params_id}/edit`
+                                        `/user/expense_reports/${router_params_id}/edit`
                                     "
                                 >
                                     Edit
@@ -290,7 +290,7 @@
                                     color="green"
                                     dark
                                     :to="{
-                                        name: 'admin.expense_reports.detailed'
+                                        name: 'user.expense_reports.detailed'
                                     }"
                                 >
                                     View Detailed
@@ -300,7 +300,7 @@
                                     color="green"
                                     dark
                                     :to="{
-                                        name: 'admin.expense_reports.summary'
+                                        name: 'user.expense_reports.summary'
                                     }"
                                 >
                                     View Summary
@@ -361,7 +361,7 @@
                         <v-btn
                             color="green"
                             dark
-                            :to="{ name: 'admin.expense_reports.detailed' }"
+                            :to="{ name: 'user.expense_reports.detailed' }"
                         >
                             View Detailed
                         </v-btn>
@@ -369,7 +369,7 @@
                         <v-btn
                             color="green"
                             dark
-                            :to="{ name: 'admin.expense_reports.summary' }"
+                            :to="{ name: 'user.expense_reports.summary' }"
                         >
                             View Summary
                         </v-btn>
@@ -638,7 +638,7 @@ export default {
         },
         goBack() {
             if(this.$route.params.fromExpense) {
-                this.$router.push({name: "admin.expense_reports.index"});
+                this.$router.push({name: "user.expense_reports.index"});
                 return;
             }
             this.$router.go(-1);
@@ -651,7 +651,7 @@ export default {
             }
 
             this.$router.push({
-                name: "admin.expenses.show",
+                name: "user.expenses.show",
                 params: params
             });
         },
@@ -1245,7 +1245,7 @@ export default {
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
-                        this.$router.push({ name: "admin.expense_reports.index" }, () => {});
+                        this.$router.push({ name: "user.expense_reports.index" }, () => {});
                         reject();
                     });
             });

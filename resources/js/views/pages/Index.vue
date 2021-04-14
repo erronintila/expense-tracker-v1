@@ -484,7 +484,7 @@ export default {
                     this.$store.dispatch("AUTH_NOTIFICATIONS");
 
                     window.location.replace(
-                        `/admin/${item.data.data.model}/${item.data.data.id}`
+                        `/${item.data.data.model}/${item.data.data.id}`
                     );
 
                     // this.$router.replace(
@@ -497,7 +497,7 @@ export default {
         },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
-            this.$router.push({ name: "admin.profile.index" }, () => {});
+            this.$router.push({ name: "user.profile.index" }, () => {});
         },
         onLogout() {
             this.$confirm("Do you want to log out?").then(res => {

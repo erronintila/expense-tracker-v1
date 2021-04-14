@@ -15,7 +15,7 @@
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
-                            :to="{ name: 'admin.expense_reports.create' }"
+                            :to="{ name: 'user.expense_reports.create' }"
                             dark
                             fab
                             x-small
@@ -586,7 +586,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: null,
+            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
             users: [],
             date_range: [
                 moment()
@@ -1246,7 +1246,7 @@ export default {
             }
 
             this.$router.push({
-                name: "admin.expense_reports.show",
+                name: "user.expense_reports.show",
                 params: params
             });
         },
@@ -1270,7 +1270,7 @@ export default {
             }
 
             this.$router.push({
-                name: "admin.expense_reports.edit",
+                name: "user.expense_reports.edit",
                 params: { id: item.id }
             });
         },

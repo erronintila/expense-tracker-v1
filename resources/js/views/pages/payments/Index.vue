@@ -15,7 +15,7 @@
                         <v-btn
                             class="elevation-3 mr-2"
                             color="green"
-                            :to="{ name: 'admin.payments.create' }"
+                            :to="{ name: 'user.payments.create' }"
                             dark
                             fab
                             x-small
@@ -97,6 +97,7 @@
                 </v-menu>
 
                 <UserDialogSelector
+                    v-if="$store.getters.user.is_admin"
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -348,7 +349,7 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            user: null,
+            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -461,13 +462,13 @@ export default {
             }
 
             this.$router.push({
-                name: "admin.payments.show",
+                name: "user.payments.show",
                 params: params
             });
         },
         onEdit(item) {
             this.$router.push({
-                name: "admin.payments.edit",
+                name: "user.payments.edit",
                 params: { id: item.id }
             });
         },
@@ -637,10 +638,11 @@ export default {
     //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
     // },
     activated() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.getDataFromApi().then(data => {
-            this.items = data.items;
-            this.totalItems = data.total;
+        this.$store.dispatch("AUTH_USER").then(response => {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
         });
     }
 };

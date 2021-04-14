@@ -1,528 +1,2775 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
 
-/***/ "./node_modules/randomcolor/randomColor.js":
-/*!*************************************************!*\
-  !*** ./node_modules/randomcolor/randomColor.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/DoughnutChart.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/chart/DoughnutChart.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {// randomColor by David Merfield under the CC0 license
-// https://github.com/davidmerfield/randomColor/
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+/* harmony import */ var chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chartjs-plugin-datalabels */ "./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js");
+/* harmony import */ var chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1__);
 
-;(function(root, factory) {
 
-  // Support CommonJS
-  if (true) {
-    var randomColor = factory();
-
-    // Support NodeJS & Component, which allow module.exports to be a function
-    if ( true && module && module.exports) {
-      exports = module.exports = randomColor;
+/* harmony default export */ __webpack_exports__["default"] = ({
+  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Doughnut"],
+  props: ["data", "options"],
+  methods: {
+    update: function update() {
+      this.$data._chart.update();
     }
-
-    // Support CommonJS 1.1.1 spec
-    exports.randomColor = randomColor;
-
-  // Support AMD
-  } else {}
-
-}(this, function() {
-
-  // Seed to get repeatable colors
-  var seed = null;
-
-  // Shared color dictionary
-  var colorDictionary = {};
-
-  // Populate the color dictionary
-  loadColorBounds();
-
-  // check if a range is taken
-  var colorRanges = [];
-
-  var randomColor = function (options) {
-
-    options = options || {};
-
-    // Check if there is a seed and ensure it's an
-    // integer. Otherwise, reset the seed value.
-    if (options.seed !== undefined && options.seed !== null && options.seed === parseInt(options.seed, 10)) {
-      seed = options.seed;
-
-    // A string was passed as a seed
-    } else if (typeof options.seed === 'string') {
-      seed = stringToInteger(options.seed);
-
-    // Something was passed as a seed but it wasn't an integer or string
-    } else if (options.seed !== undefined && options.seed !== null) {
-      throw new TypeError('The seed value must be an integer or string');
-
-    // No seed, reset the value outside.
-    } else {
-      seed = null;
-    }
-
-    var H,S,B;
-
-    // Check if we need to generate multiple colors
-    if (options.count !== null && options.count !== undefined) {
-
-      var totalColors = options.count,
-          colors = [];
-      // Value false at index i means the range i is not taken yet.
-      for (var i = 0; i < options.count; i++) {
-        colorRanges.push(false)
-        }
-      options.count = null;
-
-      while (totalColors > colors.length) {
-
-        var color = randomColor(options);
-
-        if (seed !== null) {
-          options.seed = seed;
-        }
-
-        colors.push(color);
-      }
-
-      options.count = totalColors;
-
-      return colors;
-    }
-
-    // First we pick a hue (H)
-    H = pickHue(options);
-
-    // Then use H to determine saturation (S)
-    S = pickSaturation(H, options);
-
-    // Then use S and H to determine brightness (B).
-    B = pickBrightness(H, S, options);
-
-    // Then we return the HSB color in the desired format
-    return setFormat([H,S,B], options);
-  };
-
-  function pickHue(options) {
-    if (colorRanges.length > 0) {
-      var hueRange = getRealHueRange(options.hue)
-
-      var hue = randomWithin(hueRange)
-
-      //Each of colorRanges.length ranges has a length equal approximatelly one step
-      var step = (hueRange[1] - hueRange[0]) / colorRanges.length
-
-      var j = parseInt((hue - hueRange[0]) / step)
-
-      //Check if the range j is taken
-      if (colorRanges[j] === true) {
-        j = (j + 2) % colorRanges.length
-      }
-      else {
-        colorRanges[j] = true
-           }
-
-      var min = (hueRange[0] + j * step) % 359,
-          max = (hueRange[0] + (j + 1) * step) % 359;
-
-      hueRange = [min, max]
-
-      hue = randomWithin(hueRange)
-
-      if (hue < 0) {hue = 360 + hue;}
-      return hue
-    }
-    else {
-      var hueRange = getHueRange(options.hue)
-
-      hue = randomWithin(hueRange);
-      // Instead of storing red as two seperate ranges,
-      // we group them, using negative numbers
-      if (hue < 0) {
-        hue = 360 + hue;
-      }
-
-      return hue;
-    }
+  },
+  mounted: function mounted() {
+    this.addPlugin(chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1___default.a);
+    this.renderChart(this.data, this.options);
+    this.$emit("updateChart");
   }
+});
 
-  function pickSaturation (hue, options) {
+/***/ }),
 
-    if (options.hue === 'monochrome') {
-      return 0;
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/HorizontalBarChart.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/chart/HorizontalBarChart.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+/* harmony import */ var chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chartjs-plugin-datalabels */ "./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js");
+/* harmony import */ var chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["HorizontalBar"],
+  props: ["data", "options"],
+  methods: {
+    update: function update() {
+      this.$data._chart.update();
     }
+  },
+  mounted: function mounted() {
+    this.addPlugin(chartjs_plugin_datalabels__WEBPACK_IMPORTED_MODULE_1___default.a);
+    this.renderChart(this.data, this.options);
+  }
+});
 
-    if (options.luminosity === 'random') {
-      return randomWithin([0,100]);
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/LineChart.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/chart/LineChart.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Line"],
+  props: ["data", "options"],
+  methods: {
+    update: function update() {
+      this.$data._chart.update();
     }
-
-    var saturationRange = getSaturationRange(hue);
-
-    var sMin = saturationRange[0],
-        sMax = saturationRange[1];
-
-    switch (options.luminosity) {
-
-      case 'bright':
-        sMin = 55;
-        break;
-
-      case 'dark':
-        sMin = sMax - 10;
-        break;
-
-      case 'light':
-        sMax = 55;
-        break;
-   }
-
-    return randomWithin([sMin, sMax]);
-
+  },
+  mounted: function mounted() {
+    this.renderChart(this.data, {
+      maintainAspectRatio: false
+    });
   }
+});
 
-  function pickBrightness (H, S, options) {
+/***/ }),
 
-    var bMin = getMinimumBrightness(H, S),
-        bMax = 100;
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/dashboard/Index.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/dashboard/Index.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-    switch (options.luminosity) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! randomcolor */ "./node_modules/randomcolor/randomColor.js");
+/* harmony import */ var randomcolor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(randomcolor__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
+/* harmony import */ var _components_chart_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../components/chart/DoughnutChart */ "./resources/js/components/chart/DoughnutChart.vue");
+/* harmony import */ var _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../components/chart/HorizontalBarChart */ "./resources/js/components/chart/HorizontalBarChart.vue");
+/* harmony import */ var _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/chart/LineChart */ "./resources/js/components/chart/LineChart.vue");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-      case 'dark':
-        bMax = bMin + 20;
-        break;
 
-      case 'light':
-        bMin = (bMax + bMin)/2;
-        break;
 
-      case 'random':
-        bMin = 0;
-        bMax = 100;
-        break;
-    }
 
-    return randomWithin([bMin, bMax]);
-  }
 
-  function setFormat (hsv, options) {
 
-    switch (options.format) {
 
-      case 'hsvArray':
-        return hsv;
 
-      case 'hslArray':
-        return HSVtoHSL(hsv);
-
-      case 'hsl':
-        var hsl = HSVtoHSL(hsv);
-        return 'hsl('+hsl[0]+', '+hsl[1]+'%, '+hsl[2]+'%)';
-
-      case 'hsla':
-        var hslColor = HSVtoHSL(hsv);
-        var alpha = options.alpha || Math.random();
-        return 'hsla('+hslColor[0]+', '+hslColor[1]+'%, '+hslColor[2]+'%, ' + alpha + ')';
-
-      case 'rgbArray':
-        return HSVtoRGB(hsv);
-
-      case 'rgb':
-        var rgb = HSVtoRGB(hsv);
-        return 'rgb(' + rgb.join(', ') + ')';
-
-      case 'rgba':
-        var rgbColor = HSVtoRGB(hsv);
-        var alpha = options.alpha || Math.random();
-        return 'rgba(' + rgbColor.join(', ') + ', ' + alpha + ')';
-
-      default:
-        return HSVtoHex(hsv);
-    }
-
-  }
-
-  function getMinimumBrightness(H, S) {
-
-    var lowerBounds = getColorInfo(H).lowerBounds;
-
-    for (var i = 0; i < lowerBounds.length - 1; i++) {
-
-      var s1 = lowerBounds[i][0],
-          v1 = lowerBounds[i][1];
-
-      var s2 = lowerBounds[i+1][0],
-          v2 = lowerBounds[i+1][1];
-
-      if (S >= s1 && S <= s2) {
-
-         var m = (v2 - v1)/(s2 - s1),
-             b = v1 - m*s1;
-
-         return m*S + b;
-      }
-
-    }
-
-    return 0;
-  }
-
-  function getHueRange (colorInput) {
-
-    if (typeof parseInt(colorInput) === 'number') {
-
-      var number = parseInt(colorInput);
-
-      if (number < 360 && number > 0) {
-        return [number, number];
-      }
-
-    }
-
-    if (typeof colorInput === 'string') {
-
-      if (colorDictionary[colorInput]) {
-        var color = colorDictionary[colorInput];
-        if (color.hueRange) {return color.hueRange;}
-      } else if (colorInput.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
-        var hue = HexToHSB(colorInput)[0];
-        return [ hue, hue ];
-      }
-    }
-
-    return [0,360];
-
-  }
-
-  function getSaturationRange (hue) {
-    return getColorInfo(hue).saturationRange;
-  }
-
-  function getColorInfo (hue) {
-
-    // Maps red colors to make picking hue easier
-    if (hue >= 334 && hue <= 360) {
-      hue-= 360;
-    }
-
-    for (var colorName in colorDictionary) {
-       var color = colorDictionary[colorName];
-       if (color.hueRange &&
-           hue >= color.hueRange[0] &&
-           hue <= color.hueRange[1]) {
-          return colorDictionary[colorName];
-       }
-    } return 'Color not found';
-  }
-
-  function randomWithin (range) {
-    if (seed === null) {
-      //generate random evenly destinct number from : https://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
-      var golden_ratio = 0.618033988749895
-      var r=Math.random()
-      r += golden_ratio
-      r %= 1
-      return Math.floor(range[0] + r*(range[1] + 1 - range[0]));
-    } else {
-      //Seeded random algorithm from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
-      var max = range[1] || 1;
-      var min = range[0] || 0;
-      seed = (seed * 9301 + 49297) % 233280;
-      var rnd = seed / 233280.0;
-      return Math.floor(min + rnd * (max - min));
-}
-  }
-
-  function HSVtoHex (hsv){
-
-    var rgb = HSVtoRGB(hsv);
-
-    function componentToHex(c) {
-        var hex = c.toString(16);
-        return hex.length == 1 ? '0' + hex : hex;
-    }
-
-    var hex = '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
-
-    return hex;
-
-  }
-
-  function defineColor (name, hueRange, lowerBounds) {
-
-    var sMin = lowerBounds[0][0],
-        sMax = lowerBounds[lowerBounds.length - 1][0],
-
-        bMin = lowerBounds[lowerBounds.length - 1][1],
-        bMax = lowerBounds[0][1];
-
-    colorDictionary[name] = {
-      hueRange: hueRange,
-      lowerBounds: lowerBounds,
-      saturationRange: [sMin, sMax],
-      brightnessRange: [bMin, bMax]
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    DoughnutChart: _components_chart_DoughnutChart__WEBPACK_IMPORTED_MODULE_4__["default"],
+    // PieChart,
+    // BarChart,
+    HorizontalBarChart: _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_5__["default"],
+    LineChart: _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_6__["default"],
+    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_3__["default"],
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_7__["default"]
+  },
+  data: function data() {
+    return {
+      loader: true,
+      total: {
+        awaiting_for_reimbursement_reports: 0,
+        expenses_by_date: 0,
+        pending_for_approval_reports: 0,
+        remaining_fund: 0,
+        total_fund: 0,
+        unreported_expenses: 0,
+        unsubmitted_reports: 0,
+        payment_to_receive: 0
+      },
+      count: {
+        awaiting_for_reimbursement_reports: 0,
+        expenses_by_date: 0,
+        pending_for_approval_reports: 0,
+        unreported_expenses: 0,
+        unsubmitted_reports: 0,
+        payment_to_receive: 0
+      },
+      backgroundColors: ["#36a2eb", "#ff6384", "#ff9f40", "#4bc0c0", "#ffcd56"],
+      horizontalBarChartOptions: {},
+      horizontalBarChartData: {},
+      doughnutChartOptions: {},
+      doughnutChartData: {},
+      lineChartOptions: {},
+      lineChartData: {},
+      filter: {
+        text: "Expenses by type",
+        value: "expense_type"
+      },
+      filterItems: [{
+        text: "Expenses by type",
+        value: "expense_type"
+      }, {
+        text: "Expenses per user",
+        value: "user"
+      }, {
+        text: "Expenses per department",
+        value: "department"
+      }],
+      groupBy: "month",
+      groupByItems: [{
+        text: "Day",
+        value: "day"
+      }, {
+        text: "Week",
+        value: "week"
+      }, {
+        text: "Month",
+        value: "month"
+      }, {
+        text: "Quarter",
+        value: "quarter"
+      }, {
+        text: "Year",
+        value: "year"
+      }],
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
+      headers: [{
+        text: "Dessert (100g serving)",
+        align: "start",
+        sortable: false,
+        value: "name"
+      }, {
+        text: "Calories",
+        value: "calories"
+      }, {
+        text: "Fat (g)",
+        value: "fat"
+      }, {
+        text: "Carbs (g)",
+        value: "carbs"
+      }, {
+        text: "Protein (g)",
+        value: "protein"
+      }, {
+        text: "Iron (%)",
+        value: "iron"
+      }],
+      items: [],
+      user: this.$store.getters.user.is_admin ? null : this.$store.getters.user
     };
+  },
+  methods: {
+    selectUser: function selectUser(e) {
+      if (e == null || e == undefined) {
+        this.user = null;
+        return;
+      }
 
-  }
+      this.user = e;
+    },
+    resetUser: function resetUser() {
+      this.user = null;
+    },
+    load_department_expenses: function load_department_expenses(start, end, user) {
+      var _this = this;
 
-  function loadColorBounds () {
+      axios.get("/api/data/departments_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          user_id: user,
+          admin_page: true
+        }
+      }).then(function (response) {
+        _this.expenses_by_category = response.data;
+        var labels = response.data.map(function (item) {
+          return item.text;
+        });
+        var data = response.data.map(function (item) {
+          return item.value;
+        });
 
-    defineColor(
-      'monochrome',
-      null,
-      [[0,0],[100,0]]
-    );
+        var backgroundColors = _this.getBackgroundColors(data.length);
 
-    defineColor(
-      'red',
-      [-26,18],
-      [[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]
-    );
+        var sum = response.data.reduce(function (a, b) {
+          return a + b.value;
+        }, 0);
+        var percentages = response.data.map(function (item) {
+          return item.value / sum * 100;
+        });
 
-    defineColor(
-      'orange',
-      [18,46],
-      [[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]
-    );
+        _this.updatePieChartValues(labels, percentages, backgroundColors);
 
-    defineColor(
-      'yellow',
-      [46,62],
-      [[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]
-    );
+        _this.updateBarChartValues(labels, data, backgroundColors);
+      })["catch"](function (error) {
+        _this.mixin_showErrors(error);
+      });
+    },
+    load_expense_types_expenses: function load_expense_types_expenses(start, end, user) {
+      var _this2 = this;
 
-    defineColor(
-      'green',
-      [62,178],
-      [[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]
-    );
+      axios.get("/api/data/expense_types_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          user_id: user,
+          admin_page: true
+        }
+      }).then(function (response) {
+        _this2.expenses_by_category = response.data;
+        var labels = response.data.map(function (item) {
+          return item.text;
+        });
+        var data = response.data.map(function (item) {
+          return item.value;
+        });
 
-    defineColor(
-      'blue',
-      [178, 257],
-      [[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]
-    );
+        var backgroundColors = _this2.getBackgroundColors(data.length);
 
-    defineColor(
-      'purple',
-      [257, 282],
-      [[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]
-    );
+        var sum = response.data.reduce(function (a, b) {
+          return a + b.value;
+        }, 0);
+        var percentages = response.data.map(function (item) {
+          return item.value / sum * 100;
+        });
 
-    defineColor(
-      'pink',
-      [282, 334],
-      [[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]
-    );
+        _this2.updatePieChartValues(labels, percentages, backgroundColors);
 
-  }
+        _this2.updateBarChartValues(labels, data, backgroundColors);
+      })["catch"](function (error) {
+        _this2.mixin_showErrors(error);
+      });
+    },
+    load_users_expenses: function load_users_expenses(start, end, user) {
+      var _this3 = this;
 
-  function HSVtoRGB (hsv) {
+      axios.get("/api/data/users_expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          user_id: user,
+          admin_page: true
+        }
+      }).then(function (response) {
+        _this3.expenses_by_category = response.data;
+        var labels = response.data.map(function (item) {
+          return item.text;
+        });
+        var data = response.data.map(function (item) {
+          return item.value;
+        });
 
-    // this doesn't work for the values of 0 and 360
-    // here's the hacky fix
-    var h = hsv[0];
-    if (h === 0) {h = 1;}
-    if (h === 360) {h = 359;}
+        var backgroundColors = _this3.getBackgroundColors(data.length);
 
-    // Rebase the h,s,v values
-    h = h/360;
-    var s = hsv[1]/100,
-        v = hsv[2]/100;
+        var sum = response.data.reduce(function (a, b) {
+          return a + b.value;
+        }, 0);
+        var percentages = response.data.map(function (item) {
+          return item.value / sum * 100;
+        });
 
-    var h_i = Math.floor(h*6),
-      f = h * 6 - h_i,
-      p = v * (1 - s),
-      q = v * (1 - f*s),
-      t = v * (1 - (1 - f)*s),
-      r = 256,
-      g = 256,
-      b = 256;
+        _this3.updatePieChartValues(labels, percentages, backgroundColors);
 
-    switch(h_i) {
-      case 0: r = v; g = t; b = p;  break;
-      case 1: r = q; g = v; b = p;  break;
-      case 2: r = p; g = v; b = t;  break;
-      case 3: r = p; g = q; b = v;  break;
-      case 4: r = t; g = p; b = v;  break;
-      case 5: r = v; g = p; b = q;  break;
+        _this3.updateBarChartValues(labels, data, backgroundColors);
+      })["catch"](function (error) {
+        _this3.mixin_showErrors(error);
+      });
+    },
+    load_expenses_summary: function load_expenses_summary(start, end, time_unit, user) {
+      var _this4 = this;
+
+      axios.get("/api/data/expenses_summary", {
+        params: {
+          start_date: start,
+          end_date: end,
+          time_unit: time_unit,
+          user_id: user,
+          admin_page: true
+        }
+      }).then(function (response) {
+        switch (_this4.groupBy) {
+          case "day":
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return item.text;
+            });
+            break;
+
+          case "week":
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY-MM"), " W:").concat(_this4.getWeekInMonth(new Date(item.text)));
+            });
+            break;
+
+          case "month":
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("MMM YYYY");
+            });
+            break;
+
+          case "quarter":
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return "".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY"), " Q:").concat(moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("Q"));
+            });
+            break;
+
+          case "year":
+            _this4.lineChart_labels = response.data.map(function (item) {
+              return moment__WEBPACK_IMPORTED_MODULE_0___default()(item.text).format("YYYY");
+            });
+            break;
+
+          default:
+            break;
+        }
+
+        _this4.lineChart_data = response.data.map(function (item) {
+          return item.value;
+        });
+
+        _this4.updateLineChartValues(_this4.lineChart_labels, _this4.lineChart_data);
+      })["catch"](function (error) {
+        _this4.mixin_showErrors(error);
+      });
+    },
+    load_bar_chart: function load_bar_chart() {
+      this.horizontalBarChartOptions = {
+        maintainAspectRatio: false,
+        legend: false,
+        // scales: {
+        //     yAxes: [
+        //         {
+        //             maxBarThickness: 10
+        //         }
+        //     ]
+        // },
+        plugins: {
+          datalabels: {
+            display: function display(context) {
+              return context.dataset.data[context.dataIndex] !== 0; // or >= 1 or ...
+            },
+            borderWidth: 2,
+            borderColor: "white",
+            borderRadius: 20,
+            font: {
+              weight: "bold"
+            },
+            backgroundColor: "lightgray"
+          }
+        }
+      };
+      this.horizontalBarChartData = {
+        labels: [],
+        datasets: [{
+          label: "",
+          backgroundColor: [],
+          data: []
+        }]
+      };
+    },
+    load_pie_chart: function load_pie_chart() {
+      var _this5 = this;
+
+      this.doughnutChartOptions = {
+        hoverBorderWidth: 20,
+        legend: false,
+        plugins: {
+          datalabels: {
+            display: function display(context) {
+              return context.dataset.data[context.dataIndex] !== 0;
+            },
+            borderWidth: 2,
+            borderColor: "white",
+            borderRadius: 20,
+            // color: 0,
+            font: {
+              weight: "bold"
+            },
+            backgroundColor: "lightgray",
+            formatter: function formatter(value, ctx) {
+              return _this5.mixin_formatNumber(value) + " %";
+            }
+          }
+        }
+      };
+      this.doughnutChartData = {
+        labels: [],
+        datasets: [{
+          label: "",
+          backgroundColor: [],
+          data: []
+        }]
+      };
+    },
+    load_line_chart: function load_line_chart() {
+      var ticksStyle = {
+        fontColor: "#495057",
+        fontStyle: "bold",
+        maxRotation: 0,
+        minRotation: 0
+      };
+      this.lineChartOptions = {
+        // hoverBorderWidth: 20,
+        // legend: false,
+        maintainAspectRatio: false,
+        tooltips: {
+          mode: "index",
+          intersect: false,
+          position: "nearest"
+        },
+        hover: {
+          mode: "index",
+          intersect: true
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            // display: false,
+            gridLines: {
+              display: true,
+              lineWidth: "4px",
+              color: "rgba(0, 0, 0, .2)",
+              zeroLineColor: "transparent"
+            },
+            ticks: $.extend({
+              beginAtZero: true,
+              suggestedMax: 200
+            }, ticksStyle)
+          }],
+          xAxes: [{
+            display: true,
+            gridLines: {
+              display: false
+            },
+            ticks: ticksStyle
+          }]
+        }
+      };
+      this.lineChartData = {
+        labels: [],
+        datasets: [{
+          type: "line",
+          data: [],
+          backgroundColor: "#dbffe5",
+          borderColor: "#4caf50",
+          pointBorderColor: "#4caf50",
+          pointBackgroundColor: "#4caf50",
+          fill: true,
+          lineTension: 0
+        }]
+      };
+    },
+    getWeekInMonth: function getWeekInMonth(date) {
+      var adjustedDate = date.getDate() + date.getDay();
+      var prefixes = ["0", "1", "2", "3", "4", "5"];
+      return parseInt(prefixes[0 | adjustedDate / 7]) + 1;
+    },
+    getBackgroundColors: function getBackgroundColors(length) {
+      var backgroundColors = [];
+
+      for (var i = 0; i < length; i++) {
+        backgroundColors.push(randomcolor__WEBPACK_IMPORTED_MODULE_1___default()({
+          luminosity: "light",
+          hue: "random"
+        }));
+      }
+
+      return backgroundColors;
+    },
+    updateBarChartValues: function updateBarChartValues(labels, data, backgroundColors) {
+      this.horizontalBarChartData.labels = labels;
+      this.horizontalBarChartData.datasets = [{
+        label: "",
+        backgroundColor: backgroundColors,
+        data: data
+      }];
+      this.$refs.horizontalBar_chart.update();
+    },
+    updatePieChartValues: function updatePieChartValues(labels, data, backgroundColors) {
+      this.doughnutChartData.labels = labels;
+      this.doughnutChartData.datasets = [{
+        label: "",
+        backgroundColor: backgroundColors,
+        data: data
+      }];
+      this.$refs.donut_chart.update();
+    },
+    updateLineChartValues: function updateLineChartValues(labels, data) {
+      this.lineChartData.labels = labels;
+      this.lineChartData.datasets[0].data = data;
+      this.$refs.line_chart.update();
+    },
+    onDateChange: function onDateChange(start, end) {
+      this.expenses_by_category = [];
+      this.start_date = start;
+      this.end_date = end;
+      this.onCategoryChange();
+      this.load_expense_reports(this.start_date.format("YYYY-MM-DD"), this.end_date.format("YYYY-MM-DD"));
+      this.onTimeUnitChange();
+    },
+    onCategoryChange: function onCategoryChange() {
+      var start = this.date_range[0];
+      var end = this.date_range[1];
+
+      switch (this.filter) {
+        case "expense_type":
+          this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
+          break;
+
+        case "department":
+          this.load_department_expenses(start, end, this.user ? this.user.id : null);
+          break;
+
+        case "user":
+          this.load_users_expenses(start, end, this.user ? this.user.id : null);
+          break;
+
+        default:
+          this.load_expense_types_expenses(start, end, this.user ? this.user.id : null);
+          break;
+      }
+    },
+    onTimeUnitChange: function onTimeUnitChange() {
+      this.load_expenses_summary(this.date_range[0], this.date_range[1], this.groupBy, this.user ? this.user.id : null);
+    },
+    updateDates: function updateDates(e) {
+      this.date_range = e;
+      this.expenses_by_category = []; // this.onCategoryChange();
+
+      this.onTimeUnitChange();
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null);
+    },
+    getExpenseStats: function getExpenseStats(start, end, emp) {
+      var _this6 = this;
+
+      axios.get("/api/data/expense_stats?start_date=".concat(start, "&end_date=").concat(end, "&user_id=").concat(emp)).then(function (response) {
+        _this6.total = response.data.total;
+        _this6.count = response.data.count;
+
+        _this6.load_expense_types_expenses(_this6.date_range[0], _this6.date_range[1], _this6.user ? _this6.user.id : null);
+
+        _this6.load_expenses_summary(_this6.date_range[0], _this6.date_range[1], _this6.groupBy, _this6.user ? _this6.user.id : null);
+
+        _this6.loader = false;
+      })["catch"](function (error) {
+        _this6.mixin_showErrors(error);
+
+        _this6.loader = false;
+      });
+    } // loadStatistics(start, end, user_id) {
+    //     axios.get(`/api/data/statistics?start_date=${start}&end_date=${end}&user_id=${user_id}`)
+    //     .then(response => {
+    //     }).catch(error => {
+    //         this.mixin_showErrors(error);
+    //     });
+    // }
+
+  },
+  computed: {
+    formattedDateRange: function formattedDateRange() {
+      var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
+      var end_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[1]).format("MMM DD, YYYY");
+
+      if (JSON.stringify(start_date) == JSON.stringify(end_date)) {
+        return start_date;
+      }
+
+      if (JSON.stringify(end_date) == null) {
+        return start_date;
+      }
+
+      return "".concat(start_date, " ~ ").concat(end_date);
     }
-
-    var result = [Math.floor(r*255), Math.floor(g*255), Math.floor(b*255)];
-    return result;
-  }
-
-  function HexToHSB (hex) {
-    hex = hex.replace(/^#/, '');
-    hex = hex.length === 3 ? hex.replace(/(.)/g, '$1$1') : hex;
-
-    var red = parseInt(hex.substr(0, 2), 16) / 255,
-          green = parseInt(hex.substr(2, 2), 16) / 255,
-          blue = parseInt(hex.substr(4, 2), 16) / 255;
-
-    var cMax = Math.max(red, green, blue),
-          delta = cMax - Math.min(red, green, blue),
-          saturation = cMax ? (delta / cMax) : 0;
-
-    switch (cMax) {
-      case red: return [ 60 * (((green - blue) / delta) % 6) || 0, saturation, cMax ];
-      case green: return [ 60 * (((blue - red) / delta) + 2) || 0, saturation, cMax ];
-      case blue: return [ 60 * (((red - green) / delta) + 4) || 0, saturation, cMax ];
+  },
+  watch: {
+    user: function user() {
+      this.onTimeUnitChange();
+      this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null);
     }
+  },
+  created: function created() {
+    this.$store.dispatch("AUTH_USER").then(function (response) {});
+    this.load_pie_chart();
+    this.load_bar_chart();
+    this.load_line_chart();
+    this.getExpenseStats(this.date_range[0], this.date_range[1], this.user ? this.user.id : null); // this.loadStatistics();
   }
+});
 
-  function HSVtoHSL (hsv) {
-    var h = hsv[0],
-      s = hsv[1]/100,
-      v = hsv[2]/100,
-      k = (2-s)*v;
+/***/ }),
 
-    return [
-      h,
-      Math.round(s*v / (k<1 ? k : 2-k) * 10000) / 100,
-      k/2 * 100
-    ];
-  }
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd& ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-  function stringToInteger (string) {
-    var total = 0
-    for (var i = 0; i !== string.length; i++) {
-      if (total >= Number.MAX_SAFE_INTEGER) break;
-      total += string.charCodeAt(i)
-    }
-    return total
-  }
-
-  // get The range of given hue when options.count!=0
-  function getRealHueRange(colorHue)
-  { if (!isNaN(colorHue)) {
-    var number = parseInt(colorHue);
-
-    if (number < 360 && number > 0) {
-      return getColorInfo(colorHue).hueRange
-    }
-  }
-    else if (typeof colorHue === 'string') {
-
-      if (colorDictionary[colorHue]) {
-        var color = colorDictionary[colorHue];
-
-        if (color.hueRange) {
-          return color.hueRange
-       }
-    } else if (colorHue.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
-        var hue = HexToHSB(colorHue)[0]
-        return getColorInfo(hue).hueRange
-    }
-  }
-
-    return [0,360]
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.loader
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Dashboard")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-menu",
+                    {
+                      attrs: {
+                        "close-on-content-click": false,
+                        "nudge-width": 200,
+                        "offset-y": "",
+                        left: "",
+                        bottom: ""
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var on = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-btn",
+                                _vm._g(
+                                  _vm._b(
+                                    { attrs: { icon: "" } },
+                                    "v-btn",
+                                    attrs,
+                                    false
+                                  ),
+                                  on
+                                ),
+                                [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
+                                1
+                              )
+                            ]
+                          }
+                        }
+                      ])
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-card",
+                        [
+                          _c(
+                            "v-list",
+                            [
+                              _c(
+                                "v-list-item",
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      value: _vm.user
+                                        ? _vm.user.full_name
+                                        : "All Employees",
+                                      label: "Employee",
+                                      readonly: ""
+                                    },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "append",
+                                        fn: function() {
+                                          return [
+                                            _c("UserDialogSelector", {
+                                              ref: "userDialogSelector",
+                                              attrs: {
+                                                selectedUser: _vm.user,
+                                                usersParameters: {
+                                                  params: {
+                                                    is_superadmin: false
+                                                  }
+                                                }
+                                              },
+                                              on: {
+                                                selectUser: _vm.selectUser,
+                                                onReset: _vm.resetUser
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "openDialog",
+                                                  fn: function(ref) {
+                                                    var bind = ref.bind
+                                                    var on = ref.on
+                                                    return [
+                                                      _c(
+                                                        "v-btn",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                fab: "",
+                                                                color:
+                                                                  "primary",
+                                                                text: "",
+                                                                "x-small": ""
+                                                              }
+                                                            },
+                                                            "v-btn",
+                                                            bind,
+                                                            false
+                                                          ),
+                                                          on
+                                                        ),
+                                                        [
+                                                          _c(
+                                                            "v-icon",
+                                                            {
+                                                              attrs: {
+                                                                dark: ""
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "mdi-magnify"
+                                                              )
+                                                            ]
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ])
+                                            })
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-subtitle",
+                [
+                  _c("DateRangePicker", {
+                    ref: "dateRangePicker",
+                    attrs: { dateRange: _vm.date_range },
+                    on: { "on-change": _vm.updateDates },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "openDialog",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          var dateRangeText = ref.dateRangeText
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-0 pl-0",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(dateRangeText) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _vm.user != null && _vm.user.id > 0
+                    ? _c("v-chip", { attrs: { small: "" } }, [
+                        _vm._v(_vm._s(_vm.user.full_name))
+                      ])
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto",
+                                    attrs: {
+                                      elevation: hover ? 5 : 2,
+                                      to: { name: "user.expenses.index" }
+                                    }
+                                  },
+                                  [
+                                    _c("v-card-text", [
+                                      _c(
+                                        "div",
+                                        { staticClass: "green--text" },
+                                        [
+                                          _vm._v(
+                                            "\n                                Total Expenses\n                            "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass: "display-1 text--primary"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  _vm.total.expenses_by_date
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("div", [
+                                        _vm._v(
+                                          "\n                                " +
+                                            _vm._s(_vm.count.expenses_by_date) +
+                                            "\n                                Expenses\n                            "
+                                        )
+                                      ])
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto",
+                                    attrs: { elevation: hover ? 5 : 2 }
+                                  },
+                                  [
+                                    _c(
+                                      "v-card-text",
+                                      [
+                                        _c("div", [
+                                          _vm._v(
+                                            "\n                                Remaining Fund\n                            "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            staticClass: "ml-0 pl-0",
+                                            attrs: {
+                                              text: "",
+                                              to: {
+                                                name: "admin.users.index"
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("span", [
+                                              _c(
+                                                "div",
+                                                {
+                                                  class:
+                                                    parseFloat(
+                                                      _vm.total.remaining_fund
+                                                    ) <=
+                                                    parseFloat(
+                                                      _vm.total.total_fund
+                                                    ) *
+                                                      0.1
+                                                      ? "display-1 red--text"
+                                                      : "display-1 text--primary"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                        " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.total
+                                                            .remaining_fund
+                                                        )
+                                                      ) +
+                                                      "\n                                    "
+                                                  )
+                                                ]
+                                              )
+                                            ])
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("div", [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                "Total Revolving Fund: " +
+                                                  _vm.total.total_fund
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto",
+                                    attrs: { elevation: hover ? 5 : 2 }
+                                  },
+                                  [
+                                    _c(
+                                      "v-card-text",
+                                      [
+                                        _c("div", [
+                                          _vm._v(
+                                            "\n                                Unreported Expenses\n                            "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-btn",
+                                          {
+                                            staticClass: "ml-0 pl-0",
+                                            attrs: {
+                                              text: "",
+                                              to: {
+                                                name: "user.expenses.index"
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("span", [
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "display-1 text--primary"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                        " +
+                                                      _vm._s(
+                                                        _vm.mixin_formatNumber(
+                                                          _vm.total
+                                                            .unreported_expenses
+                                                        )
+                                                      ) +
+                                                      "\n                                    "
+                                                  )
+                                                ]
+                                              )
+                                            ])
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("div", [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                "Total Unreported: " +
+                                                  _vm.count.unreported_expenses
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    { attrs: { cols: "12" } },
+                    [
+                      _c("v-hover", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function(ref) {
+                              var hover = ref.hover
+                              return [
+                                _c(
+                                  "v-card",
+                                  {
+                                    staticClass: "mx-auto",
+                                    staticStyle: { position: "relative" },
+                                    attrs: {
+                                      elevation: hover ? 5 : 2,
+                                      height: "100%"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "v-card-text",
+                                      [
+                                        _c(
+                                          "div",
+                                          [
+                                            _vm._v(
+                                              "\n                                Expense Reports Summary\n                                "
+                                            ),
+                                            _c(
+                                              "v-menu",
+                                              {
+                                                attrs: {
+                                                  "offset-y": "",
+                                                  "open-on-hover": ""
+                                                },
+                                                scopedSlots: _vm._u(
+                                                  [
+                                                    {
+                                                      key: "activator",
+                                                      fn: function(ref) {
+                                                        var on = ref.on
+                                                        var attrs = ref.attrs
+                                                        return [
+                                                          _c(
+                                                            "v-btn",
+                                                            _vm._g(
+                                                              _vm._b(
+                                                                {
+                                                                  attrs: {
+                                                                    "x-small":
+                                                                      "",
+                                                                    icon: "",
+                                                                    color:
+                                                                      "green"
+                                                                  }
+                                                                },
+                                                                "v-btn",
+                                                                attrs,
+                                                                false
+                                                              ),
+                                                              on
+                                                            ),
+                                                            [
+                                                              _c("v-icon", [
+                                                                _vm._v(
+                                                                  "mdi-information-outline"
+                                                                )
+                                                              ])
+                                                            ],
+                                                            1
+                                                          )
+                                                        ]
+                                                      }
+                                                    }
+                                                  ],
+                                                  null,
+                                                  true
+                                                )
+                                              },
+                                              [
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-card",
+                                                  [
+                                                    _c("v-card-text", [
+                                                      _c("div", [
+                                                        _vm._v(
+                                                          "\n                                                Unsubmitted: Created reports\n                                                that are not yet submitted\n                                            "
+                                                        )
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("div", [
+                                                        _vm._v(
+                                                          "\n                                                Pending for Approval:\n                                                Submitted reports waiting\n                                                for approval\n                                            "
+                                                        )
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("div", [
+                                                        _vm._v(
+                                                          "\n                                                Awaiting Reimbursement:\n                                                Approved reports waiting for\n                                                payment\n                                            "
+                                                        )
+                                                      ]),
+                                                      _vm._v(" "),
+                                                      _c("div", [
+                                                        _vm._v(
+                                                          "\n                                                Payment to Receive:\n                                                Reimbursed expenses waiting\n                                                to be received by the user\n                                            "
+                                                        )
+                                                      ])
+                                                    ])
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-row",
+                                          [
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  md: "3",
+                                                  align: "center",
+                                                  justify: "center"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    staticClass: "mt-4 mb-4",
+                                                    attrs: {
+                                                      text: "",
+                                                      to: {
+                                                        name:
+                                                          "user.expense_reports.index"
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("span", [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "orange--text text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Unsubmitted\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "display-1 text--primary"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.mixin_formatNumber(
+                                                                  _vm.total
+                                                                    .unsubmitted_reports
+                                                                )
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            " text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.count
+                                                                  .unsubmitted_reports
+                                                              ) +
+                                                              "\n                                                Reports\n                                            "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ])
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  md: "3",
+                                                  align: "center",
+                                                  justify: "center"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    staticClass: "mt-4 mb-4",
+                                                    attrs: {
+                                                      text: "",
+                                                      to: {
+                                                        name:
+                                                          "user.expense_reports.index"
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("div", [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          class:
+                                                            parseFloat(
+                                                              _vm.total
+                                                                .pending_for_approval_reports
+                                                            ) > 0
+                                                              ? "red--text text-capitalize"
+                                                              : "text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Pending for Approval\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          class:
+                                                            parseFloat(
+                                                              _vm.total
+                                                                .pending_for_approval_reports
+                                                            ) > 0
+                                                              ? "display-1 red--text"
+                                                              : "display-1 text--primary"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.mixin_formatNumber(
+                                                                  _vm.total
+                                                                    .pending_for_approval_reports
+                                                                )
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            " text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.count
+                                                                  .pending_for_approval_reports
+                                                              ) +
+                                                              "\n                                                Reports\n                                            "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ])
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  md: "3",
+                                                  align: "center",
+                                                  justify: "center"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    staticClass: "mt-4 mb-4",
+                                                    attrs: {
+                                                      text: "",
+                                                      to: {
+                                                        name:
+                                                          "user.expense_reports.index"
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("div", [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "green--text text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Awaiting Reimbursement\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "display-1 text--primary"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.mixin_formatNumber(
+                                                                  _vm.total
+                                                                    .awaiting_for_reimbursement_reports
+                                                                )
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            " text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.count
+                                                                  .awaiting_for_reimbursement_reports
+                                                              ) +
+                                                              "\n                                                Reports\n                                            "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ])
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-col",
+                                              {
+                                                attrs: {
+                                                  cols: "12",
+                                                  md: "3",
+                                                  align: "center",
+                                                  justify: "center"
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    staticClass: "mt-4 mb-4",
+                                                    attrs: {
+                                                      text: "",
+                                                      to: {
+                                                        name:
+                                                          "user.payments.index"
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("div", [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "orange--text text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Payment to Receive\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "display-1 text--primary"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.mixin_formatNumber(
+                                                                  _vm.total
+                                                                    .payment_to_receive
+                                                                )
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            " text-capitalize"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.count
+                                                                  .payment_to_receive
+                                                              ) +
+                                                              "\n                                                Reports\n                                            "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ])
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "mt-4" },
+                [
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c(
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                attrs: { elevation: hover ? 5 : 2 }
+                              },
+                              [
+                                _c(
+                                  "v-toolbar",
+                                  { attrs: { flat: "", dense: "" } },
+                                  [
+                                    _c(
+                                      "v-toolbar-title",
+                                      { staticClass: "green--text" },
+                                      [
+                                        _vm._v(
+                                          "\n                            Expenses by category\n                        "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-menu",
+                                      {
+                                        attrs: {
+                                          "close-on-content-click": false,
+                                          "nudge-width": 200,
+                                          "offset-y": "",
+                                          left: "",
+                                          bottom: ""
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "activator",
+                                              fn: function(ref) {
+                                                var on = ref.on
+                                                var attrs = ref.attrs
+                                                return [
+                                                  _c(
+                                                    "v-btn",
+                                                    _vm._g(
+                                                      _vm._b(
+                                                        { attrs: { icon: "" } },
+                                                        "v-btn",
+                                                        attrs,
+                                                        false
+                                                      ),
+                                                      on
+                                                    ),
+                                                    [
+                                                      _c("v-icon", [
+                                                        _vm._v(
+                                                          "mdi-dots-vertical"
+                                                        )
+                                                      ])
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        )
+                                      },
+                                      [
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-card",
+                                          [
+                                            _c(
+                                              "v-list",
+                                              [
+                                                _c(
+                                                  "v-list-item",
+                                                  [
+                                                    _c("v-select", {
+                                                      attrs: {
+                                                        label: "Filter",
+                                                        items: _vm.filterItems,
+                                                        "item-text": "text",
+                                                        "item-value": "value"
+                                                      },
+                                                      on: {
+                                                        change:
+                                                          _vm.onCategoryChange
+                                                      },
+                                                      model: {
+                                                        value: _vm.filter,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.filter = $$v
+                                                        },
+                                                        expression: "filter"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-row",
+                                  { staticClass: "ml-4 mb-4" },
+                                  [
+                                    _c(
+                                      "v-col",
+                                      {
+                                        staticClass: "mt-5",
+                                        attrs: { md: "4" }
+                                      },
+                                      [
+                                        _c("DoughnutChart", {
+                                          ref: "donut_chart",
+                                          attrs: {
+                                            data: _vm.doughnutChartData,
+                                            options: _vm.doughnutChartOptions
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "12", md: "8" } },
+                                      [
+                                        _c(
+                                          "v-card",
+                                          {
+                                            staticClass: "overflow-y-auto",
+                                            attrs: {
+                                              flat: "",
+                                              "max-height": "500"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "v-card-text",
+                                              [
+                                                _c("HorizontalBarChart", {
+                                                  ref: "horizontalBar_chart",
+                                                  attrs: {
+                                                    data:
+                                                      _vm.horizontalBarChartData,
+                                                    options:
+                                                      _vm.horizontalBarChartOptions
+                                                  }
+                                                })
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                [
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c(
+                              "v-card",
+                              {
+                                staticClass: "mx-auto",
+                                attrs: { elevation: hover ? 5 : 2 }
+                              },
+                              [
+                                _c(
+                                  "v-toolbar",
+                                  { attrs: { flat: "", dense: "" } },
+                                  [
+                                    _c(
+                                      "v-toolbar-title",
+                                      { staticClass: "green--text" },
+                                      [
+                                        _vm._v(
+                                          "\n                            Expenses by date\n                        "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-menu",
+                                      {
+                                        attrs: {
+                                          "close-on-content-click": false,
+                                          "nudge-width": 200,
+                                          "offset-y": "",
+                                          left: "",
+                                          bottom: ""
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "activator",
+                                              fn: function(ref) {
+                                                var on = ref.on
+                                                var attrs = ref.attrs
+                                                return [
+                                                  _c(
+                                                    "v-btn",
+                                                    _vm._g(
+                                                      _vm._b(
+                                                        { attrs: { icon: "" } },
+                                                        "v-btn",
+                                                        attrs,
+                                                        false
+                                                      ),
+                                                      on
+                                                    ),
+                                                    [
+                                                      _c("v-icon", [
+                                                        _vm._v(
+                                                          "mdi-dots-vertical"
+                                                        )
+                                                      ])
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        )
+                                      },
+                                      [
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-card",
+                                          [
+                                            _c(
+                                              "v-list",
+                                              [
+                                                _c(
+                                                  "v-list-item",
+                                                  [
+                                                    _c("v-select", {
+                                                      attrs: {
+                                                        label: "Group by",
+                                                        items: _vm.groupByItems,
+                                                        "item-text": "text",
+                                                        "item-value": "value"
+                                                      },
+                                                      on: {
+                                                        change:
+                                                          _vm.onTimeUnitChange
+                                                      },
+                                                      model: {
+                                                        value: _vm.groupBy,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.groupBy = $$v
+                                                        },
+                                                        expression: "groupBy"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-row",
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "12" } },
+                                      [
+                                        _c("LineChart", {
+                                          ref: "line_chart",
+                                          attrs: {
+                                            data: _vm.lineChartData,
+                                            options: _vm.lineChartOptions
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+    ],
+    1
+  )
 }
-  return randomColor;
-}));
+var staticRenderFns = []
+render._withStripped = true
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+
+/***/ }),
+
+/***/ "./resources/js/components/chart/DoughnutChart.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/chart/DoughnutChart.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DoughnutChart.vue?vue&type=script&lang=js& */ "./resources/js/components/chart/DoughnutChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  _DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/chart/DoughnutChart.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/chart/DoughnutChart.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/chart/DoughnutChart.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DoughnutChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/DoughnutChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DoughnutChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/chart/HorizontalBarChart.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/chart/HorizontalBarChart.vue ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _HorizontalBarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./HorizontalBarChart.vue?vue&type=script&lang=js& */ "./resources/js/components/chart/HorizontalBarChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  _HorizontalBarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/chart/HorizontalBarChart.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/chart/HorizontalBarChart.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/chart/HorizontalBarChart.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_HorizontalBarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./HorizontalBarChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/HorizontalBarChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_HorizontalBarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/chart/LineChart.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/chart/LineChart.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LineChart.vue?vue&type=script&lang=js& */ "./resources/js/components/chart/LineChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  _LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/chart/LineChart.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/chart/LineChart.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/chart/LineChart.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./LineChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/LineChart.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LineChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/pages/dashboard/Index.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/views/pages/dashboard/Index.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Index_vue_vue_type_template_id_397ecbbd___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=397ecbbd& */ "./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/dashboard/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_397ecbbd___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_397ecbbd___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/pages/dashboard/Index.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/pages/dashboard/Index.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/views/pages/dashboard/Index.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/dashboard/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd& ***!
+  \*************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_397ecbbd___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=397ecbbd& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_397ecbbd___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_397ecbbd___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ })
 

@@ -191,7 +191,7 @@
                                         class="mr-2"
                                         @click="
                                             $router.push(
-                                                `/admin/expense_reports/${item.id}`
+                                                `/user/expense_reports/${item.id}`
                                             )
                                         "
                                     >
@@ -555,7 +555,7 @@ export default {
                             response.data.message
                         );
                         this.$store.dispatch("AUTH_NOTIFICATIONS");
-                        this.$router.push({ name: "admin.payments.index" });
+                        this.$router.push({ name: "user.payments.index" });
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);

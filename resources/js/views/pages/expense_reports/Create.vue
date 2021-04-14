@@ -95,7 +95,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                user: null,
+                user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
                 expenses: [],
                 status: null,
                 from: moment()
@@ -143,7 +143,7 @@ export default {
                         response.data.message
                     );
                     this.$router.push({
-                        name: "admin.expense_reports.index"
+                        name: "user.expense_reports.index"
                     });
                     this.loader = false;
                 })

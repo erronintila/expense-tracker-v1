@@ -239,7 +239,7 @@
                                     class="mr-2"
                                     @click="
                                         $router.push(
-                                            `/admin/${item.data.data.model}/${item.data.data.id}`
+                                            `/user/${item.data.data.model}/${item.data.data.id}`
                                         )
                                     "
                                     v-bind="attrs"
@@ -387,7 +387,7 @@ export default {
         },
         onShow(item) {
             this.$router.push({
-                name: "admin.payments.show",
+                name: "user.payments.show",
                 params: { id: item.id }
             });
         },

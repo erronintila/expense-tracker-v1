@@ -1,17 +1,17 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[47],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/settings/User.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/settings/User.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/SettingDataService */ "./resources/js/services/SettingDataService.js");
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+/* harmony import */ var _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/ExpenseTypeDataService */ "./resources/js/services/ExpenseTypeDataService.js");
 //
 //
 //
@@ -113,382 +113,67 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   data: function data() {
     return {
       formDataLoaded: false,
-      validExpenses: false,
-      validExpenseReports: false,
-      validTaxes: false,
-      file_input: null,
-      rules: {
-        file_input: [function (value) {
-          return !value || value.size < 30000 || "Report logo size should be less than 30 KB";
-        }]
-      },
-      settings: {
-        company_name: "Twin-Circa Marketing",
-        currency: "Philippine Peso",
-        expiry_period: 1,
-        expense_encoding_period: 1,
-        submission_period: "Weekly",
-        approval_period: 1,
-        tax_rate: 0,
-        expense_report: {
-          report_no: {
-            prefix: "",
-            length: 1
-          },
-          print_format: {
-            pageSize: {
-              width: 0,
-              height: 0
-            },
-            pageOrientation: "landscape",
-            pageMargins: {
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0
-            },
-            defaultStyle: {
-              font: "Roboto"
-            },
-            background: {
-              alignment: "left",
-              width: 0,
-              height: 0,
-              image: "",
-              margin: {
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0
-              }
-            }
-          }
+      panel: [0],
+      valid: false,
+      usersParameters: {
+        params: {
+          is_superadmin: false,
+          with_expense_types: true
         }
       },
-      panel: [0, 1, 2, 3]
+      user: null,
+      headerExpenseTypes: [{
+        text: "Name",
+        value: "name"
+      }, {
+        text: "Limit",
+        value: "pivot.limit"
+      }],
+      sub_types: [],
+      all_expense_types: [],
+      allowed_expense_types: null,
+      expense_types: [],
+      expense_type: {
+        id: null,
+        sub_types: null,
+        pivot: {
+          limit: null
+        }
+      },
+      // expense_type_limit: null
+      pivot_expense_types: [],
+      pivot_sub_types: null,
+      collections: {},
+      filters: {}
     };
   },
   methods: {
-    onLoad: function onLoad() {
+    onChangeUser: function onChangeUser(e) {
+      this.user = e;
+    },
+    onResetUser: function onResetUser() {
+      this.user = null;
+    },
+    loadExpenseTypes: function loadExpenseTypes() {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].getAll().then(function (response) {
-          _this.file_input = null;
-          _this.settings = response.data;
+        _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll({
+          params: {
+            itemsPerPage: 100
+          }
+        }).then(function (response) {
+          _this.all_expense_types = response.data.data;
           _this.formDataLoaded = true;
           resolve();
         })["catch"](function (error) {
@@ -502,108 +187,81 @@ __webpack_require__.r(__webpack_exports__);
     onSave: function onSave() {
       var _this2 = this;
 
-      this.$refs.formExpenses.validate();
-      this.$refs.formExpenseReports.validate();
-      this.$refs.formTaxes.validate();
+      if (this.user == null) {
+        this.mixin_errorDialog("Error", "No user selected");
+        return;
+      }
 
-      if (this.$refs.formExpenses.validate() && this.$refs.formExpenseReports.validate() && this.$refs.formTaxes.validate()) {
+      this.$refs.form.validate();
+
+      if (this.$refs.form.validate()) {
+        this.loader = true;
         var data = {
-          settings: this.settings
+          expense_types: this.allowed_expense_types.map(function (item) {
+            return item.id;
+          })
         };
-        _services_SettingDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(data).then(function (response) {
-          _this2.mixin_successDialog("Success", "Saved settings successfully");
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateSettings(this.user.id, data).then(function (response) {
+          _this2.mixin_successDialog(response.data.status, response.data.message);
 
           _this2.$store.dispatch("AUTH_USER");
-
-          _this2.$store.dispatch("AUTH_SETTINGS");
-
-          window.location.replace("/admin/settings");
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);
-        });
-      }
-    }
-  },
-  computed: {
-    page_sizes: function page_sizes() {
-      return [{
-        name: "A4",
-        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
-        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
-      }, {
-        name: "Letter",
-        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
-        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
-      }, {
-        name: "Folio",
-        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
-        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
-      }, {
-        name: "Legal",
-        width: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9,
-        height: this.expense_report.print_format.pageOrientation == "portrait" ? 10 : 9
-      }, {
-        name: "Custom",
-        width: 0,
-        height: 0
-      }];
-    },
-    url: function url() {
-      if (this.file_input) {
-        return URL.createObjectURL(this.file_input);
-      }
 
-      return this.$store.getters.settings.expense_report.print_format.background.image;
-    },
-    report_no: {
-      get: function get() {
-        var prefix = this.settings.expense_report.report_no.prefix;
-        var num_length = this.settings.expense_report.report_no.num_length;
-        var report_no = "";
-        report_no = prefix + moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYYMM") + String(1).padStart(num_length, "0");
-        return report_no;
+          if (error.response) {
+            if (error.response.data) {
+              _this2.errors = error.response.data.errors;
+            }
+          }
+        });
+        return;
       }
     }
   },
   watch: {
-    file_input: function file_input() {
-      var _this3 = this;
+    user: function user(item) {
+      // this.expense_types = item.expense_types;
+      this.allowed_expense_types = item ? item.expense_types : null;
+      this.pivot_expense_types = item ? item.pivot_expense_types : null;
+    },
+    allowed_expense_types: function allowed_expense_types(items) {
+      this.expense_types = items;
+      this.sub_types = []; // this.expense_type_limit = null;
+    },
+    expense_type: function expense_type(item) {
+      var expense_type_id = item.id; // let subtypes = this.pivot_sub_types.filter(item =>
+      //     item.id.includes(expense_type_id)
+      // );
 
-      if (this.file_input) {
-        var reader = new FileReader();
-        reader.readAsDataURL(this.file_input);
-
-        reader.onload = function () {
-          _this3.settings.expense_report.print_format.background.image = reader.result;
-        };
-
-        reader.onerror = function (error) {
-          _this3.mixin_showErrors(error);
-        };
-      } else {
-        this.settings.expense_report.print_format.background.image = this.$store.getters.settings.expense_report.print_format.background.image;
+      this.sub_types = this.pivot_sub_types;
+    }
+  },
+  computed: {
+    expense_type_limit: {
+      get: function get() {
+        var limit = this.expense_type.pivot == null ? null : this.expense_type.pivot.limit;
+        return limit;
+      },
+      set: function set(newValue) {
+        return newValue;
       }
     }
   },
-  // created() {
-  //     // this.$store.dispatch("AUTH_USER");
-  //     this.$store.dispatch("AUTH_SETTINGS");
-  //     this.$store.dispatch("AUTH_NOTIFICATIONS");
-  //     this.onLoad();
-  // },
+  created: function created() {
+    // this.$store.dispatch("AUTH_USER");
+    this.loadExpenseTypes();
+  },
   activated: function activated() {
-    this.$store.dispatch("AUTH_SETTINGS");
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
-    this.onLoad();
+    this.loadExpenseTypes();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&":
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d& ***!
-  \**************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/settings/User.vue?vue&type=template&id=74712246&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/settings/User.vue?vue&type=template&id=74712246& ***!
+  \***********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -622,903 +280,246 @@ var render = function() {
         ? _c("loader-component")
         : _c(
             "v-card",
-            { staticClass: "elevation-0 pt-0" },
+            { staticClass: "elevation-0" },
             [
               _c(
                 "v-card-title",
                 { staticClass: "pt-0" },
                 [
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Settings")
-                  ]),
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
+                  _c("h4", { staticClass: "title success--text" }, [
+                    _vm._v("Employee Settings")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card",
+                { staticClass: "mb-4" },
+                [
                   _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-2",
-                      attrs: {
-                        color: "green",
-                        to: { name: "admin.settings.user" },
-                        outlined: "",
-                        dark: ""
-                      }
-                    },
+                    "v-card-text",
                     [
-                      _vm._v(
-                        "\n                Employee Settings\n            "
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "6" } },
+                            [
+                              _c("UserDialogSelector", {
+                                ref: "userDialogSelector",
+                                attrs: {
+                                  selectedUser: _vm.user,
+                                  usersParameters: _vm.usersParameters
+                                },
+                                on: {
+                                  selectUser: _vm.onChangeUser,
+                                  onReset: _vm.onResetUser
+                                },
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "openDialog",
+                                    fn: function(ref) {
+                                      var bind = ref.bind
+                                      var on = ref.on
+                                      var computedSelectedUser =
+                                        ref.computedSelectedUser
+                                      return [
+                                        _c(
+                                          "v-btn",
+                                          _vm._g(
+                                            _vm._b({}, "v-btn", bind, false),
+                                            on
+                                          ),
+                                          [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(
+                                                  computedSelectedUser
+                                                    ? computedSelectedUser.name
+                                                    : "Select Employee"
+                                                ) +
+                                                "\n                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ]),
+                                model: {
+                                  value: _vm.user,
+                                  callback: function($$v) {
+                                    _vm.user = $$v
+                                  },
+                                  expression: "user"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
                       )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green", dark: "" },
-                      on: { click: _vm.onSave }
-                    },
-                    [_vm._v("Save Changes")]
+                    ],
+                    1
                   )
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
-                "v-expansion-panels",
+                "v-form",
                 {
-                  attrs: { multiple: "" },
+                  ref: "form",
                   model: {
-                    value: _vm.panel,
+                    value: _vm.valid,
                     callback: function($$v) {
-                      _vm.panel = $$v
+                      _vm.valid = $$v
                     },
-                    expression: "panel"
+                    expression: "valid"
                   }
                 },
                 [
                   _c(
-                    "v-expansion-panel",
+                    "v-expansion-panels",
+                    {
+                      attrs: { multiple: "" },
+                      model: {
+                        value: _vm.panel,
+                        callback: function($$v) {
+                          _vm.panel = $$v
+                        },
+                        expression: "panel"
+                      }
+                    },
                     [
-                      _c("v-expansion-panel-header", [
-                        _c("div", { staticClass: "green--text" }, [
-                          _vm._v(
-                            "\n                        Expenses\n                    "
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
                       _c(
-                        "v-expansion-panel-content",
+                        "v-expansion-panel",
                         [
+                          _c("v-expansion-panel-header", [
+                            _c("div", { staticClass: "green--text" }, [
+                              _vm._v(
+                                "\n                            Expense Types\n                        "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
                           _c(
-                            "v-container",
+                            "v-expansion-panel-content",
                             [
                               _c(
-                                "v-form",
-                                {
-                                  ref: "formExpenses",
-                                  model: {
-                                    value: _vm.validExpenses,
-                                    callback: function($$v) {
-                                      _vm.validExpenses = $$v
-                                    },
-                                    expression: "validExpenses"
-                                  }
-                                },
+                                "v-row",
                                 [
                                   _c(
-                                    "v-row",
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
                                     [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              label: "Expense Encoding Period",
-                                              suffix: "days",
-                                              rules: _vm.mixin_validation.required.concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  1
-                                                )
-                                              ),
-                                              hint:
-                                                "Allowed period for expenses to be encoded based on date",
-                                              "persistent-hint": "",
-                                              type: "number"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings
-                                                  .expense_encoding_period,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings,
-                                                  "expense_encoding_period",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_encoding_period\n                                        "
+                                      _c("v-select", {
+                                        attrs: {
+                                          items: _vm.all_expense_types,
+                                          "item-text": "name",
+                                          "item-value": "id",
+                                          "return-object": "",
+                                          label: "Allowed Expense Types",
+                                          multiple: ""
+                                        },
+                                        scopedSlots: _vm._u([
+                                          {
+                                            key: "selection",
+                                            fn: function(ref) {
+                                              var item = ref.item
+                                              var index = ref.index
+                                              return [
+                                                index === 0
+                                                  ? _c(
+                                                      "v-chip",
+                                                      { attrs: { small: "" } },
+                                                      [
+                                                        _c("span", [
+                                                          _vm._v(
+                                                            _vm._s(item.name)
+                                                          )
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                index === 1
+                                                  ? _c(
+                                                      "span",
+                                                      {
+                                                        staticClass:
+                                                          "grey--text caption"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "(+" +
+                                                            _vm._s(
+                                                              _vm
+                                                                .allowed_expense_types
+                                                                .length - 1
+                                                            ) +
+                                                            "\n                                            others)"
+                                                        )
+                                                      ]
+                                                    )
+                                                  : _vm._e()
+                                              ]
                                             }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                          }
+                                        ]),
+                                        model: {
+                                          value: _vm.allowed_expense_types,
+                                          callback: function($$v) {
+                                            _vm.allowed_expense_types = $$v
+                                          },
+                                          expression: "allowed_expense_types"
+                                        }
+                                      })
                                     ],
                                     1
                                   )
                                 ],
                                 1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-expansion-panel",
-                    [
-                      _c("v-expansion-panel-header", [
-                        _c("div", { staticClass: "green--text" }, [
-                          _vm._v(
-                            "\n                        Expense Reports\n                    "
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "v-expansion-panel-content",
-                        [
-                          _c(
-                            "v-container",
-                            [
+                              ),
+                              _vm._v(" "),
                               _c(
-                                "v-form",
-                                {
-                                  ref: "formExpenseReports",
-                                  model: {
-                                    value: _vm.validExpenseReports,
-                                    callback: function($$v) {
-                                      _vm.validExpenseReports = $$v
-                                    },
-                                    expression: "validExpenseReports"
-                                  }
-                                },
+                                "v-row",
                                 [
                                   _c(
-                                    "v-row",
-                                    [
-                                      _c("v-col", [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "overline green--text"
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                        General\n                                    "
-                                            )
-                                          ]
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
+                                    "v-col",
+                                    { attrs: { cols: "12", md: "4" } },
                                     [
                                       _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "green", dark: "" },
+                                          on: { click: _vm.onSave }
+                                        },
                                         [
-                                          _c("v-select", {
-                                            attrs: {
-                                              label: "Submission Date",
-                                              items: [
-                                                "Daily",
-                                                "Weekly",
-                                                "Monthly"
-                                              ],
-                                              hint:
-                                                "Due date for submission of expense reports",
-                                              "persistent-hint": ""
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.submission_period,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings,
-                                                  "submission_period",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "settings.submission_period"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              label: "Approval Period",
-                                              suffix: "days",
-                                              rules: _vm.mixin_validation.required.concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  1
-                                                )
-                                              ),
-                                              hint:
-                                                "Allowed period for expense reports to be approved based on submission date",
-                                              "persistent-hint": "",
-                                              type: "number"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.approval_period,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings,
-                                                  "approval_period",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "settings.approval_period"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c("v-divider"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c("v-col", [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "overline  green--text"
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                        Report No. Format:\n                                    "
-                                            )
-                                          ]
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "2" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: { label: "Prefix" },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .report_no.prefix,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .report_no,
-                                                  "prefix",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .report_no.prefix\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "2" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  0
-                                                )
-                                              ),
-                                              label: "Length",
-                                              type: "number"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .report_no.num_length,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .report_no,
-                                                  "num_length",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .report_no.num_length\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c(
-                                            "div",
-                                            { staticClass: "green--text" },
-                                            [
-                                              _vm._v(
-                                                "\n                                        e.g. " +
-                                                  _vm._s(_vm.report_no) +
-                                                  "\n                                    "
-                                              )
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("small", [
-                                            _vm._v(
-                                              "(Prefix + YYYYMM + (length + report\n                                        count))"
-                                            )
-                                          ])
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c("v-divider"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c("v-col", [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "overline green--text"
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                        Print Format\n                                    "
-                                            )
-                                          ]
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-select", {
-                                            attrs: {
-                                              label: "Page Orientation",
-                                              items: ["portrait", "landscape"]
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageOrientation,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format,
-                                                  "pageOrientation",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format\n                                                .pageOrientation\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  1
-                                                )
-                                              ),
-                                              label: "Page Size (width)",
-                                              type: "number"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageSize.width,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.pageSize,
-                                                  "width",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.pageSize.width\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  1
-                                                )
-                                              ),
-                                              label: "Page Size (height)",
-                                              type: "number"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageSize.height,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.pageSize,
-                                                  "height",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.pageSize\n                                                .height\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  0
-                                                )
-                                              ),
-                                              type: "number",
-                                              label: "Page Margin (Left)"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageMargins
-                                                  .left,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.pageMargins,
-                                                  "left",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .left\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  0
-                                                )
-                                              ),
-                                              type: "number",
-                                              label: "Page Margin (Top)"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageMargins.top,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.pageMargins,
-                                                  "top",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .top\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  0
-                                                )
-                                              ),
-                                              type: "number",
-                                              label: "Page Margin (Right)"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageMargins
-                                                  .right,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.pageMargins,
-                                                  "right",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .right\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  0
-                                                )
-                                              ),
-                                              type: "number",
-                                              label: "Page Margin (Bottom)"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.pageMargins
-                                                  .bottom,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.pageMargins,
-                                                  "bottom",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.pageMargins\n                                                .bottom\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-select", {
-                                            attrs: {
-                                              label: "Font",
-                                              items: ["Roboto"]
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.defaultStyle
-                                                  .font,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.defaultStyle,
-                                                  "font",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.defaultStyle\n                                                .font\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c("v-divider"),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c("v-col", [
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "overline green--text"
-                                          },
-                                          [
-                                            _vm._v(
-                                              "\n                                        Report Logo\n                                    "
-                                            )
-                                          ]
-                                        )
-                                      ])
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _vm.url
-                                        ? _c(
-                                            "v-col",
-                                            { attrs: { cols: "12", md: "3" } },
-                                            [
-                                              _c("v-img", {
-                                                attrs: {
-                                                  label: "Report Image Logo",
-                                                  src: _vm.url
-                                                }
-                                              })
-                                            ],
-                                            1
+                                          _vm._v(
+                                            "\n                                    Save Changes\n                                "
                                           )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-file-input", {
-                                            attrs: {
-                                              rules: _vm.rules.file_input,
-                                              "prepend-icon": "mdi-upload",
-                                              "show-size": "",
-                                              label: "Upload",
-                                              accept:
-                                                "image/png, image/jpeg, image/bmp"
-                                            },
-                                            model: {
-                                              value: _vm.file_input,
-                                              callback: function($$v) {
-                                                _vm.file_input = $$v
-                                              },
-                                              expression: "file_input"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  1
-                                                )
-                                              ),
-                                              label: "Logo Width"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.background
-                                                  .width,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.background,
-                                                  "width",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .width\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "3" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              rules: [].concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  1
-                                                )
-                                              ),
-                                              label: "Logo Height"
-                                            },
-                                            model: {
-                                              value:
-                                                _vm.settings.expense_report
-                                                  .print_format.background
-                                                  .height,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings.expense_report
-                                                    .print_format.background,
-                                                  "height",
-                                                  $$v
-                                                )
-                                              },
-                                              expression:
-                                                "\n                                            settings.expense_report\n                                                .print_format.background\n                                                .height\n                                        "
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-expansion-panel",
-                    [
-                      _c("v-expansion-panel-header", [
-                        _c("div", { staticClass: "green--text" }, [
-                          _vm._v(
-                            "\n                        Taxes\n                    "
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "v-expansion-panel-content",
-                        [
-                          _c(
-                            "v-container",
-                            [
-                              _c(
-                                "v-form",
-                                {
-                                  ref: "formTaxes",
-                                  model: {
-                                    value: _vm.validTaxes,
-                                    callback: function($$v) {
-                                      _vm.validTaxes = $$v
-                                    },
-                                    expression: "validTaxes"
-                                  }
-                                },
-                                [
-                                  _c(
-                                    "v-row",
-                                    [
-                                      _c(
-                                        "v-col",
-                                        { attrs: { cols: "12", md: "4" } },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: {
-                                              label: "Tax Rate",
-                                              suffix: "%",
-                                              rules: _vm.mixin_validation.required.concat(
-                                                _vm.mixin_validation.minNumberValue(
-                                                  0
-                                                )
-                                              ),
-                                              hint:
-                                                "Tax rate to be imposed on expenses.",
-                                              "persistent-hint": ""
-                                            },
-                                            model: {
-                                              value: _vm.settings.tax_rate,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.settings,
-                                                  "tax_rate",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "settings.tax_rate"
-                                            }
-                                          })
-                                        ],
-                                        1
+                                        ]
                                       )
                                     ],
                                     1
@@ -1552,10 +553,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/services/SettingDataService.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/services/SettingDataService.js ***!
-  \*****************************************************/
+/***/ "./resources/js/services/ExpenseTypeDataService.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/services/ExpenseTypeDataService.js ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1572,41 +573,66 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // import http from "../http-common";
 
 
-var SettingDataService = /*#__PURE__*/function () {
-  function SettingDataService() {
-    _classCallCheck(this, SettingDataService);
+var ExpenseTypeDataService = /*#__PURE__*/function () {
+  function ExpenseTypeDataService() {
+    _classCallCheck(this, ExpenseTypeDataService);
   }
 
-  _createClass(SettingDataService, [{
+  _createClass(ExpenseTypeDataService, [{
     key: "getAll",
     value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/settings", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_types", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types/".concat(id), data);
     }
   }, {
     key: "store",
     value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/settings", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_types", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/restore/".concat(id), data);
     }
   }]);
 
-  return SettingDataService;
+  return ExpenseTypeDataService;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new SettingDataService());
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseTypeDataService());
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/settings/Index.vue":
-/*!*************************************************************!*\
-  !*** ./resources/js/views/modules/admin/settings/Index.vue ***!
-  \*************************************************************/
+/***/ "./resources/js/views/pages/admin/settings/User.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/views/pages/admin/settings/User.vue ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=2bdf5f8d& */ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _User_vue_vue_type_template_id_74712246___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./User.vue?vue&type=template&id=74712246& */ "./resources/js/views/pages/admin/settings/User.vue?vue&type=template&id=74712246&");
+/* harmony import */ var _User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./User.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/settings/User.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1616,9 +642,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _User_vue_vue_type_template_id_74712246___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _User_vue_vue_type_template_id_74712246___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1628,38 +654,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/settings/Index.vue"
+component.options.__file = "resources/js/views/pages/admin/settings/User.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/views/pages/admin/settings/User.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/settings/User.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./User.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/settings/User.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d& ***!
-  \********************************************************************************************/
+/***/ "./resources/js/views/pages/admin/settings/User.vue?vue&type=template&id=74712246&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/settings/User.vue?vue&type=template&id=74712246& ***!
+  \*****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=2bdf5f8d& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/settings/Index.vue?vue&type=template&id=2bdf5f8d&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_74712246___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./User.vue?vue&type=template&id=74712246& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/settings/User.vue?vue&type=template&id=74712246&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_74712246___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_2bdf5f8d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_74712246___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -66,7 +66,7 @@
                                         class="mr-2"
                                         @click="
                                             $router.push(
-                                                `/admin/expense_reports/${item.id}`
+                                                `/user/expense_reports/${item.id}`
                                             )
                                         "
                                     >
@@ -137,7 +137,7 @@
                                         class="mr-2"
                                         @click="
                                             $router.push(
-                                                `/admin/expense_reports/${item.id}`
+                                                `/user/expense_reports/${item.id}`
                                             )
                                         "
                                     >
@@ -557,7 +557,7 @@ export default {
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);
-                    this.$router.push({ name: "admin.payments.index" }, () => {});
+                    this.$router.push({ name: "user.payments.index" }, () => {});
                 });
         },
         getDataFromApi() {
@@ -611,7 +611,7 @@ export default {
                         .then(response => {
                             this.mixin_successDialog(response.data.status, response.data.message);
                             this.$router.push({
-                                name: "admin.payments.index"
+                                name: "user.payments.index"
                             });
                         })
                         .catch(error => {

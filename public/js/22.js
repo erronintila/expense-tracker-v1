@@ -1,2154 +1,813 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[22],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************************/
-/*! exports provided: default */
+/***/ "./node_modules/randomcolor/randomColor.js":
+/*!*************************************************!*\
+  !*** ./node_modules/randomcolor/randomColor.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {// randomColor by David Merfield under the CC0 license
+// https://github.com/davidmerfield/randomColor/
+
+;(function(root, factory) {
+
+  // Support CommonJS
+  if (true) {
+    var randomColor = factory();
+
+    // Support NodeJS & Component, which allow module.exports to be a function
+    if ( true && module && module.exports) {
+      exports = module.exports = randomColor;
+    }
+
+    // Support CommonJS 1.1.1 spec
+    exports.randomColor = randomColor;
+
+  // Support AMD
+  } else {}
+
+}(this, function() {
+
+  // Seed to get repeatable colors
+  var seed = null;
+
+  // Shared color dictionary
+  var colorDictionary = {};
+
+  // Populate the color dictionary
+  loadColorBounds();
+
+  // check if a range is taken
+  var colorRanges = [];
+
+  var randomColor = function (options) {
+
+    options = options || {};
+
+    // Check if there is a seed and ensure it's an
+    // integer. Otherwise, reset the seed value.
+    if (options.seed !== undefined && options.seed !== null && options.seed === parseInt(options.seed, 10)) {
+      seed = options.seed;
+
+    // A string was passed as a seed
+    } else if (typeof options.seed === 'string') {
+      seed = stringToInteger(options.seed);
+
+    // Something was passed as a seed but it wasn't an integer or string
+    } else if (options.seed !== undefined && options.seed !== null) {
+      throw new TypeError('The seed value must be an integer or string');
+
+    // No seed, reset the value outside.
+    } else {
+      seed = null;
+    }
+
+    var H,S,B;
+
+    // Check if we need to generate multiple colors
+    if (options.count !== null && options.count !== undefined) {
+
+      var totalColors = options.count,
+          colors = [];
+      // Value false at index i means the range i is not taken yet.
+      for (var i = 0; i < options.count; i++) {
+        colorRanges.push(false)
+        }
+      options.count = null;
+
+      while (totalColors > colors.length) {
+
+        var color = randomColor(options);
+
+        if (seed !== null) {
+          options.seed = seed;
+        }
+
+        colors.push(color);
+      }
+
+      options.count = totalColors;
+
+      return colors;
+    }
+
+    // First we pick a hue (H)
+    H = pickHue(options);
+
+    // Then use H to determine saturation (S)
+    S = pickSaturation(H, options);
+
+    // Then use S and H to determine brightness (B).
+    B = pickBrightness(H, S, options);
+
+    // Then we return the HSB color in the desired format
+    return setFormat([H,S,B], options);
+  };
+
+  function pickHue(options) {
+    if (colorRanges.length > 0) {
+      var hueRange = getRealHueRange(options.hue)
+
+      var hue = randomWithin(hueRange)
+
+      //Each of colorRanges.length ranges has a length equal approximatelly one step
+      var step = (hueRange[1] - hueRange[0]) / colorRanges.length
+
+      var j = parseInt((hue - hueRange[0]) / step)
+
+      //Check if the range j is taken
+      if (colorRanges[j] === true) {
+        j = (j + 2) % colorRanges.length
+      }
+      else {
+        colorRanges[j] = true
+           }
+
+      var min = (hueRange[0] + j * step) % 359,
+          max = (hueRange[0] + (j + 1) * step) % 359;
+
+      hueRange = [min, max]
+
+      hue = randomWithin(hueRange)
+
+      if (hue < 0) {hue = 360 + hue;}
+      return hue
+    }
+    else {
+      var hueRange = getHueRange(options.hue)
+
+      hue = randomWithin(hueRange);
+      // Instead of storing red as two seperate ranges,
+      // we group them, using negative numbers
+      if (hue < 0) {
+        hue = 360 + hue;
+      }
+
+      return hue;
+    }
+  }
+
+  function pickSaturation (hue, options) {
+
+    if (options.hue === 'monochrome') {
+      return 0;
+    }
+
+    if (options.luminosity === 'random') {
+      return randomWithin([0,100]);
+    }
+
+    var saturationRange = getSaturationRange(hue);
+
+    var sMin = saturationRange[0],
+        sMax = saturationRange[1];
+
+    switch (options.luminosity) {
+
+      case 'bright':
+        sMin = 55;
+        break;
+
+      case 'dark':
+        sMin = sMax - 10;
+        break;
+
+      case 'light':
+        sMax = 55;
+        break;
+   }
+
+    return randomWithin([sMin, sMax]);
+
+  }
+
+  function pickBrightness (H, S, options) {
+
+    var bMin = getMinimumBrightness(H, S),
+        bMax = 100;
+
+    switch (options.luminosity) {
+
+      case 'dark':
+        bMax = bMin + 20;
+        break;
+
+      case 'light':
+        bMin = (bMax + bMin)/2;
+        break;
+
+      case 'random':
+        bMin = 0;
+        bMax = 100;
+        break;
+    }
+
+    return randomWithin([bMin, bMax]);
+  }
+
+  function setFormat (hsv, options) {
+
+    switch (options.format) {
+
+      case 'hsvArray':
+        return hsv;
+
+      case 'hslArray':
+        return HSVtoHSL(hsv);
+
+      case 'hsl':
+        var hsl = HSVtoHSL(hsv);
+        return 'hsl('+hsl[0]+', '+hsl[1]+'%, '+hsl[2]+'%)';
+
+      case 'hsla':
+        var hslColor = HSVtoHSL(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'hsla('+hslColor[0]+', '+hslColor[1]+'%, '+hslColor[2]+'%, ' + alpha + ')';
+
+      case 'rgbArray':
+        return HSVtoRGB(hsv);
+
+      case 'rgb':
+        var rgb = HSVtoRGB(hsv);
+        return 'rgb(' + rgb.join(', ') + ')';
+
+      case 'rgba':
+        var rgbColor = HSVtoRGB(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'rgba(' + rgbColor.join(', ') + ', ' + alpha + ')';
+
+      default:
+        return HSVtoHex(hsv);
+    }
+
+  }
+
+  function getMinimumBrightness(H, S) {
+
+    var lowerBounds = getColorInfo(H).lowerBounds;
+
+    for (var i = 0; i < lowerBounds.length - 1; i++) {
+
+      var s1 = lowerBounds[i][0],
+          v1 = lowerBounds[i][1];
+
+      var s2 = lowerBounds[i+1][0],
+          v2 = lowerBounds[i+1][1];
+
+      if (S >= s1 && S <= s2) {
+
+         var m = (v2 - v1)/(s2 - s1),
+             b = v1 - m*s1;
+
+         return m*S + b;
+      }
+
+    }
+
+    return 0;
+  }
+
+  function getHueRange (colorInput) {
+
+    if (typeof parseInt(colorInput) === 'number') {
+
+      var number = parseInt(colorInput);
+
+      if (number < 360 && number > 0) {
+        return [number, number];
+      }
+
+    }
+
+    if (typeof colorInput === 'string') {
+
+      if (colorDictionary[colorInput]) {
+        var color = colorDictionary[colorInput];
+        if (color.hueRange) {return color.hueRange;}
+      } else if (colorInput.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorInput)[0];
+        return [ hue, hue ];
+      }
+    }
+
+    return [0,360];
+
+  }
+
+  function getSaturationRange (hue) {
+    return getColorInfo(hue).saturationRange;
+  }
+
+  function getColorInfo (hue) {
+
+    // Maps red colors to make picking hue easier
+    if (hue >= 334 && hue <= 360) {
+      hue-= 360;
+    }
+
+    for (var colorName in colorDictionary) {
+       var color = colorDictionary[colorName];
+       if (color.hueRange &&
+           hue >= color.hueRange[0] &&
+           hue <= color.hueRange[1]) {
+          return colorDictionary[colorName];
+       }
+    } return 'Color not found';
+  }
+
+  function randomWithin (range) {
+    if (seed === null) {
+      //generate random evenly destinct number from : https://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+      var golden_ratio = 0.618033988749895
+      var r=Math.random()
+      r += golden_ratio
+      r %= 1
+      return Math.floor(range[0] + r*(range[1] + 1 - range[0]));
+    } else {
+      //Seeded random algorithm from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+      var max = range[1] || 1;
+      var min = range[0] || 0;
+      seed = (seed * 9301 + 49297) % 233280;
+      var rnd = seed / 233280.0;
+      return Math.floor(min + rnd * (max - min));
+}
+  }
+
+  function HSVtoHex (hsv){
+
+    var rgb = HSVtoRGB(hsv);
+
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? '0' + hex : hex;
+    }
+
+    var hex = '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+
+    return hex;
+
+  }
+
+  function defineColor (name, hueRange, lowerBounds) {
+
+    var sMin = lowerBounds[0][0],
+        sMax = lowerBounds[lowerBounds.length - 1][0],
+
+        bMin = lowerBounds[lowerBounds.length - 1][1],
+        bMax = lowerBounds[0][1];
+
+    colorDictionary[name] = {
+      hueRange: hueRange,
+      lowerBounds: lowerBounds,
+      saturationRange: [sMin, sMax],
+      brightnessRange: [bMin, bMax]
+    };
+
+  }
+
+  function loadColorBounds () {
+
+    defineColor(
+      'monochrome',
+      null,
+      [[0,0],[100,0]]
+    );
+
+    defineColor(
+      'red',
+      [-26,18],
+      [[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]
+    );
+
+    defineColor(
+      'orange',
+      [18,46],
+      [[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]
+    );
+
+    defineColor(
+      'yellow',
+      [46,62],
+      [[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]
+    );
+
+    defineColor(
+      'green',
+      [62,178],
+      [[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]
+    );
+
+    defineColor(
+      'blue',
+      [178, 257],
+      [[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]
+    );
+
+    defineColor(
+      'purple',
+      [257, 282],
+      [[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]
+    );
+
+    defineColor(
+      'pink',
+      [282, 334],
+      [[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]
+    );
+
+  }
+
+  function HSVtoRGB (hsv) {
+
+    // this doesn't work for the values of 0 and 360
+    // here's the hacky fix
+    var h = hsv[0];
+    if (h === 0) {h = 1;}
+    if (h === 360) {h = 359;}
+
+    // Rebase the h,s,v values
+    h = h/360;
+    var s = hsv[1]/100,
+        v = hsv[2]/100;
+
+    var h_i = Math.floor(h*6),
+      f = h * 6 - h_i,
+      p = v * (1 - s),
+      q = v * (1 - f*s),
+      t = v * (1 - (1 - f)*s),
+      r = 256,
+      g = 256,
+      b = 256;
+
+    switch(h_i) {
+      case 0: r = v; g = t; b = p;  break;
+      case 1: r = q; g = v; b = p;  break;
+      case 2: r = p; g = v; b = t;  break;
+      case 3: r = p; g = q; b = v;  break;
+      case 4: r = t; g = p; b = v;  break;
+      case 5: r = v; g = p; b = q;  break;
+    }
+
+    var result = [Math.floor(r*255), Math.floor(g*255), Math.floor(b*255)];
+    return result;
+  }
+
+  function HexToHSB (hex) {
+    hex = hex.replace(/^#/, '');
+    hex = hex.length === 3 ? hex.replace(/(.)/g, '$1$1') : hex;
+
+    var red = parseInt(hex.substr(0, 2), 16) / 255,
+          green = parseInt(hex.substr(2, 2), 16) / 255,
+          blue = parseInt(hex.substr(4, 2), 16) / 255;
+
+    var cMax = Math.max(red, green, blue),
+          delta = cMax - Math.min(red, green, blue),
+          saturation = cMax ? (delta / cMax) : 0;
+
+    switch (cMax) {
+      case red: return [ 60 * (((green - blue) / delta) % 6) || 0, saturation, cMax ];
+      case green: return [ 60 * (((blue - red) / delta) + 2) || 0, saturation, cMax ];
+      case blue: return [ 60 * (((red - green) / delta) + 4) || 0, saturation, cMax ];
+    }
+  }
+
+  function HSVtoHSL (hsv) {
+    var h = hsv[0],
+      s = hsv[1]/100,
+      v = hsv[2]/100,
+      k = (2-s)*v;
+
+    return [
+      h,
+      Math.round(s*v / (k<1 ? k : 2-k) * 10000) / 100,
+      k/2 * 100
+    ];
+  }
+
+  function stringToInteger (string) {
+    var total = 0
+    for (var i = 0; i !== string.length; i++) {
+      if (total >= Number.MAX_SAFE_INTEGER) break;
+      total += string.charCodeAt(i)
+    }
+    return total
+  }
+
+  // get The range of given hue when options.count!=0
+  function getRealHueRange(colorHue)
+  { if (!isNaN(colorHue)) {
+    var number = parseInt(colorHue);
+
+    if (number < 360 && number > 0) {
+      return getColorInfo(colorHue).hueRange
+    }
+  }
+    else if (typeof colorHue === 'string') {
+
+      if (colorDictionary[colorHue]) {
+        var color = colorDictionary[colorHue];
+
+        if (color.hueRange) {
+          return color.hueRange
+       }
+    } else if (colorHue.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorHue)[0]
+        return getColorInfo(hue).hueRange
+    }
+  }
+
+    return [0,360]
+}
+  return randomColor;
+}));
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./node_modules/vue-chartjs/es/BaseCharts.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vue-chartjs/es/BaseCharts.js ***!
+  \***************************************************/
+/*! exports provided: generateChart, Bar, HorizontalBar, Doughnut, Line, Pie, PolarArea, Radar, Bubble, Scatter, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jspdf */ "./node_modules/jspdf/dist/jspdf.es.min.js");
-/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jspdf-autotable */ "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js");
-/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
-/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateChart", function() { return generateChart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Bar", function() { return Bar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HorizontalBar", function() { return HorizontalBar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Doughnut", function() { return Doughnut; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Line", function() { return Line; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Pie", function() { return Pie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolarArea", function() { return PolarArea; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Radar", function() { return Radar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Bubble", function() { return Bubble; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Scatter", function() { return Scatter; });
+/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js");
+/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(chart_js__WEBPACK_IMPORTED_MODULE_0__);
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      formDataLoaded: false,
-      loading: true,
-      loader: true,
-      headers: [{
-        text: "Date",
-        value: "date",
-        sortable: false
-      }, {
-        text: "Type",
-        value: "expense_type.name",
-        sortable: false
-      }, {
-        text: "Receipt",
-        value: "receipt_number",
-        sortable: false
-      }, {
-        text: "Vendor",
-        value: "vendor.name",
-        sortable: false
-      }, {
-        text: "Amount",
-        value: "amount",
-        sortable: false
-      }, {
-        text: "Actions",
-        value: "actions",
-        sortable: false
-      }, {
-        text: "",
-        value: "data-table-expand"
-      }],
-      total: 0,
-      totalItems: 0,
-      date_range: [],
-      expense_report_id: this.router_params_id,
-      search: "",
-      options: {
-        sortBy: ["created_at"],
-        sortDesc: [true],
-        page: 1,
-        itemsPerPage: 10
+function generateChart(chartId, chartType) {
+  return {
+    render: function render(createElement) {
+      return createElement('div', {
+        style: this.styles,
+        class: this.cssClasses
+      }, [createElement('canvas', {
+        attrs: {
+          id: this.chartId,
+          width: this.width,
+          height: this.height
+        },
+        ref: 'canvas'
+      })]);
+    },
+    props: {
+      chartId: {
+        default: chartId,
+        type: String
       },
-      form: {
-        code: "",
-        reference_no: "",
-        description: "",
-        remarks: "",
-        notes: "",
-        submission_period: "",
-        approval_period: "",
-        from: "",
-        to: "",
-        status: {
-          color: "",
-          status: "",
-          remarks: ""
-        },
-        is_late_submitted: false,
-        is_late_approved: false,
-        total: 0,
-        total_reimbursable: 0,
-        paid: 0,
-        payments: [],
-        payment_id: null,
-        balance: 0,
-        user: {
-          id: null,
-          name: ""
-        },
-        payment: {
-          id: null
-        },
-        expenses: [],
-        // created: { created_at: null, created_by: { name: "" } },
-        // updated: { updated_at: null, updated_by: { name: "" } },
-        // deleted: { deleted_at: null, deleted_by: { name: "" } },
-        // submitted: { submitted_at: null, submitted_by: { name: "" } },
-        // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
-        // approved: { approved_at: null, approved_by: { name: "" } },
-        // rejected: { rejected_at: null, rejected_by: { name: "" } },
-        // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
-        created_at: null,
-        updated_at: null,
-        deleted_at: null,
-        submitted_at: null,
-        reviewed_at: null,
-        approved_at: null,
-        rejected_at: null,
-        cancelled_at: null,
-        logs: []
+      width: {
+        default: 400,
+        type: Number
+      },
+      height: {
+        default: 400,
+        type: Number
+      },
+      cssClasses: {
+        type: String,
+        default: ''
+      },
+      styles: {
+        type: Object
+      },
+      plugins: {
+        type: Array,
+        default: function _default() {
+          return [];
+        }
       }
-    };
-  },
-  methods: {
-    generatePDF: function generatePDF(action) {
-      var _this = this;
-
-      this.loadExpenses().then(function (data) {
-        // var source = this.$refs["myTable"];
-        var pdfName = "Expense Report";
-        var table_columns = ["Date", "Type", "Receipt", "Vendor", "Amount"];
-        var table_rows = [];
-        var table_footer = [];
-        data.items.forEach(function (element) {
-          var temp = [];
-          temp.push(element.date);
-          temp.push(element.expense_type.name);
-          temp.push(element.receipt_number);
-          temp.push(element.vendor.name);
-          temp.push(_this.mixin_formatNumber(element.amount));
-          table_rows.push(temp);
-        }); // table_footer = [
-        //     "Total",
-        //     "",
-        //     "",
-        //     "",
-        //     this.mixin_formatNumber(this.form.total)
-        // ];
-        // table_rows.push(table_footer);
-        // basic config
-
-        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
-          orientation: "portrait",
-          unit: "in",
-          format: action == "print" ? "letter" : [13, 8.5]
-        }); // header details
-        // 1st row
-
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this.form.user.full_name), 0.5, 0.7);
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this.form.code), 6.0, 0.7); // end of 1st row
-        // 2nd row
-
-        doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(_this.mixin_formatNumber(_this.form.total)), 0.5, 1.0);
-        doc.setFontSize(11).setTextColor(76, 175, 10).text(_this.form.status.status, 6.0, 1.0); // end of 2nd row
-        // 3rd row
-
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(_this.form.from, " ~ ").concat(_this.form.to), 0.5, 1.2); // end of 3rd row
-        // 4th row
-
-        doc.setLineWidth(0.01);
-        doc.line(0.5, 1.35, 8.0, 1.35); //end of 4th row
-        // 5th row
-
-        doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(_this.form.description), 0.5, 1.6); // end of 5th row
-        // 6th row
-
-        doc.autoTable({
-          columns: table_columns,
-          body: table_rows,
-          margin: {
-            left: 0.5
-          },
-          startY: 1.8,
-          showHead: "everyPage",
-          headStyles: {
-            halign: "center",
-            fillColor: [76, 175, 10]
-          },
-          columnStyles: {
-            4: {
-              halign: "right"
-            }
-          } // didParseCell: (data) => {
-          //     var rows = data.table.body;
-          //     if (data.row.index === rows.length - 1) {
-          //         data.cell.styles.fillColor = [76, 175, 10];
-          //     }
-          // },
-
-        });
-        doc.autoTable({
-          body: [["No. of Expenses", data.items.length], ["Total Expenses Amount", _this.mixin_formatNumber(_this.form.total)], ["Paid Amount", _this.mixin_formatNumber(_this.form.paid)], ["Amount to be reimbursed", _this.mixin_formatNumber(_this.form.balance)]],
-          margin: {
-            left: 0.5
-          },
-          columnStyles: {
-            1: {
-              halign: "right"
-            }
-          },
-          theme: "plain"
-        }); // end of 6th row
-        // page footer
-
-        doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")), 0.5, doc.internal.pageSize.height - 0.5); // end of page footer
-        // page number
-
-        var pages = doc.internal.getNumberOfPages();
-        var pageWidth = doc.internal.pageSize.width; //Optional
-
-        var pageHeight = doc.internal.pageSize.height; //Optional
-
-        doc.setFontSize(8); //Optional
-
-        for (var j = 1; j < pages + 1; j++) {
-          var horizontalPos = pageWidth - 0.5; //Can be fixed number
-
-          var verticalPos = pageHeight - 0.5; //Can be fixed number
-
-          doc.setPage(j);
-          doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
-            align: "right"
-          }); //Optional text styling});
-        } // end of page number
-        // print or export record
-
-
-        if (action == "print") {
-          doc.autoPrint();
-          doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
-        } else {
-          doc.save("".concat(pdfName, ".pdf"));
-        } //end of print or export record
-
-      });
     },
-    goBack: function goBack() {
-      if (this.$route.params.fromExpense) {
-        this.$router.push({
-          name: "admin.expense_reports.index"
-        });
-        return;
-      }
-
-      this.$router.go(-1);
-    },
-    onShow: function onShow(item) {
-      var params = {
-        id: item.id
+    data: function data() {
+      return {
+        _chart: null,
+        _plugins: this.plugins
       };
-
-      if (item.deleted_at) {
-        params = {
-          id: item.id,
-          isDeleted: true,
-          fromExpenseReport: true
-        };
-      }
-
-      this.$router.push({
-        name: "admin.expenses.show",
-        params: params
-      });
     },
-    generateReport: function generateReport(action) {
-      this.loadExpenses().then(function (data) {
-        // var source = this.$refs["myTable"];
-        var pdfName = "Expense Summary Report";
-        var table_columns = ["Date", "Particulars", "Delivery Expense", "Gas & Oil", "Meal & Lodging", "Postage, Telephone, & Fax", "Repairs & Maintenance", "Representation", "Supplies", "Transportation", "Miscellaneous", "Total"];
-        var table_rows = [];
-        var table_footer = []; // data.items.forEach(element => {
-        //     let temp = [];
-        //     temp.push(element.date);
-        //     temp.push(element.expense_type.name);
-        //     temp.push(element.receipt_number);
-        //     temp.push(element.vendor.name);
-        //     temp.push(this.mixin_formatNumber(element.amount));
-        //     table_rows.push(temp);
-        // });
-        // table_footer = [
-        //     "Total",
-        //     "",
-        //     "",
-        //     "",
-        //     this.mixin_formatNumber(this.form.total)
-        // ];
-        // table_rows.push(table_footer);
-        // basic config
-
-        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
-          orientation: "landscape",
-          unit: "in",
-          format: [13, 8.5]
-        }); // header details
-        // 1st row
-
-        doc.setFontSize(14).setTextColor(0, 0, 0).text("Expense Summary Report", 6.75, 0.7, "center"); // end of 1st row
-
-        doc.autoTable({
-          styles: {
-            fontSize: 10
-          },
-          columns: table_columns,
-          body: [["Total", "Polomolok to Davao", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
-          showHead: "everyPage",
-          headStyles: {
-            halign: "center",
-            fillColor: [76, 175, 10]
-          },
-          startY: 0.9,
-          margin: {
-            left: 0.5
-          },
-          columnStyles: {
-            1: {
-              halign: "right"
-            }
-          }
-        }); // end of 6th row
-        //
-
-        doc.setFontSize(10).setTextColor(0, 0, 0).text("Submitted by", 0.5, doc.lastAutoTable.finalY + 0.4);
-        doc.setLineWidth(0.01);
-        doc.line(0.5, doc.lastAutoTable.finalY + 0.8, 3.0, doc.lastAutoTable.finalY + 0.8);
-        doc.setFontSize(10).setTextColor(0, 0, 0).text("Recommended by", 3.5, doc.lastAutoTable.finalY + 0.4);
-        doc.setLineWidth(0.01);
-        doc.line(3.5, doc.lastAutoTable.finalY + 0.8, 6.0, doc.lastAutoTable.finalY + 0.8);
-        doc.setFontSize(10).setTextColor(0, 0, 0).text("Checked by", 6.5, doc.lastAutoTable.finalY + 0.4);
-        doc.setLineWidth(0.01);
-        doc.line(6.5, doc.lastAutoTable.finalY + 0.8, 9.0, doc.lastAutoTable.finalY + 0.8);
-        doc.setFontSize(10).setTextColor(0, 0, 0).text("Approved by", 9.5, doc.lastAutoTable.finalY + 0.4);
-        doc.setLineWidth(0.01);
-        doc.line(9.5, doc.lastAutoTable.finalY + 0.8, 12.0, doc.lastAutoTable.finalY + 0.8); //
-        // page footer
-
-        doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")), 0.5, doc.internal.pageSize.height - 0.5); // end of page footer
-        // page number
-
-        var pages = doc.internal.getNumberOfPages();
-        var pageWidth = doc.internal.pageSize.width; //Optional
-
-        var pageHeight = doc.internal.pageSize.height; //Optional
-
-        doc.setFontSize(8); //Optional
-
-        for (var j = 1; j < pages + 1; j++) {
-          var horizontalPos = pageWidth - 0.5; //Can be fixed number
-
-          var verticalPos = pageHeight - 0.5; //Can be fixed number
-
-          doc.setPage(j);
-          doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
-            align: "right"
-          }); //Optional text styling});
-        } // end of page number
-        // print or export record
-
-
-        if (action == "print") {
-          // doc.autoPrint();
-          doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
-        } else {
-          doc.save("".concat(pdfName, ".pdf"));
-        } //end of print or export record
-
-      });
-    },
-    generateExpenseReport: function generateExpenseReport(action) {
-      var _this2 = this;
-
-      this.loadExpenses().then(function (data) {
-        var table_columns = [];
-        var table_footer = [];
-        var table_rows = [];
-        table_rows.push([{
-          text: "Date",
-          style: "tableOfExpensesHeader"
-        }, {
-          text: "Type",
-          style: "tableOfExpensesHeader"
-        }, {
-          text: "Receipt",
-          style: "tableOfExpensesHeader"
-        }, {
-          text: "Vendor",
-          style: "tableOfExpensesHeader"
-        }, {
-          text: "Amount",
-          style: "tableOfExpensesHeader"
-        }]);
-        data.items.forEach(function (element) {
-          var temp = [];
-          temp.push({
-            text: element.date,
-            style: "tableOfExpensesBody"
-          });
-          temp.push({
-            text: element.expense_type.name,
-            style: "tableOfExpensesBody"
-          });
-          temp.push({
-            text: element.receipt_number,
-            style: "tableOfExpensesBody"
-          });
-          temp.push({
-            text: element.vendor == null ? "" : element.vendor.name,
-            style: "tableOfExpensesBody"
-          });
-          temp.push({
-            text: _this2.mixin_formatNumber(element.amount),
-            style: {
-              fontSize: 9,
-              alignment: "right"
-            }
-          });
-          table_rows.push(temp);
-        });
-
-        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
-
-        if (pdfMake.vfs == undefined) {
-          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
-
-          pdfMake.vfs = pdfFonts.pdfMake.vfs;
-        }
-
-        pdfMake.fonts = {
-          Roboto: {
-            normal: "Roboto-Regular.ttf",
-            bold: "Roboto-Medium.ttf",
-            italics: "Roboto-Italic.ttf",
-            bolditalics: "Roboto-MediumItalic.ttf"
-          }
-        };
-        var docDefinition = {
-          // pageSize: 'legal',
-          pageSize: {
-            width: 8.5 * 72,
-            height: 13 * 72
-          },
-          pageOrientation: "portrait",
-          pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
-          defaultStyle: {
-            font: "Roboto"
-          },
-          footer: function footer(currentPage, pageCount) {
-            return {
-              columns: [{
-                text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
-                width: 500,
-                margin: [0.5 * 72, 0, 0.5 * 72, 0],
-                style: "pageFooter"
-              }, {
-                text: "Page " + currentPage.toString() + " of " + pageCount,
-                alignment: "right",
-                style: "pageFooter",
-                margin: [0, 0, 0.5 * 72, 0]
-              }]
-            };
-          },
-          content: [{
-            columns: [{
-              text: _this2.form.user.full_name,
-              style: "pageStyle"
-            }, {
-              text: _this2.form.code,
-              alignment: "right",
-              style: "pageStyle"
-            }]
-          }, {
-            columns: [{
-              text: "PHP ".concat(_this2.mixin_formatNumber(_this2.form.total)),
-              style: {
-                fontSize: 18,
-                color: "#4caf50"
-              }
-            }, {
-              text: _this2.form.status.status,
-              alignment: "right",
-              style: {
-                fontSize: 11,
-                color: "#4caf50"
-              }
-            }]
-          }, {
-            text: "Period: ".concat(_this2.form.from, " ~ ").concat(_this2.form.to),
-            style: "pageStyle"
-          }, {
-            canvas: [{
-              type: "line",
-              x1: 0,
-              y1: 0,
-              x2: 7.5 * 72,
-              y2: 0,
-              lineWidth: 0.5
-            }],
-            margin: [0, 0.1 * 72, 0, 0.1 * 72]
-          }, {
-            text: _this2.form.description,
-            style: "pageStyle"
-          }, {
-            canvas: [{
-              type: "line",
-              x1: 0,
-              y1: 0,
-              x2: 7.5 * 72,
-              y2: 0,
-              lineWidth: 0.5
-            }],
-            margin: [0, 0.1 * 72, 0, 0.1 * 72]
-          }, {
-            style: "tableOfExpenses",
-            table: {
-              headerRows: 1,
-              widths: ["*", "*", "*", "*", "*"],
-              body: table_rows
-            },
-            layout: {
-              hLineWidth: function hLineWidth(i, node) {
-                return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
-              },
-              vLineWidth: function vLineWidth(i, node) {
-                return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
-              },
-              hLineColor: function hLineColor(i, node) {
-                return i === 0 || i === node.table.body.length ? "gray" : "gray";
-              },
-              vLineColor: function vLineColor(i, node) {
-                return i === 0 || i === node.table.widths.length ? "gray" : "gray";
-              },
-              fillColor: function fillColor(rowIndex, node, columnIndex) {
-                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
-              }
-            }
-          }, {
-            columns: [{
-              text: "No. of Expenses",
-              style: "pageStyle"
-            }, {
-              text: data.items.length,
-              alignment: "right",
-              style: "pageStyle"
-            }],
-            margin: [0, 0, 0, 0.1 * 72]
-          }, {
-            columns: [{
-              text: "Total Expenses Amount",
-              style: "pageStyle"
-            }, {
-              text: _this2.mixin_formatNumber(_this2.form.total),
-              alignment: "right",
-              style: "pageStyle"
-            }],
-            margin: [0, 0, 0, 0.1 * 72]
-          }, {
-            columns: [{
-              text: "Paid Amount",
-              style: "pageStyle"
-            }, {
-              text: _this2.mixin_formatNumber(_this2.form.paid),
-              alignment: "right",
-              style: "pageStyle"
-            }],
-            margin: [0, 0, 0, 0.1 * 72]
-          }, {
-            columns: [{
-              text: "Amount to be reimbursed",
-              style: "pageStyle"
-            }, {
-              text: _this2.mixin_formatNumber(_this2.form.balance),
-              alignment: "right",
-              style: "pageStyle"
-            }],
-            margin: [0, 0, 0, 0.1 * 72]
-          }],
-          styles: {
-            pageStyle: {
-              fontSize: 11
-            },
-            header: {
-              fontSize: 13,
-              bold: false,
-              alignment: "center"
-            },
-            tableSignatures: {
-              margin: [0, 5, 0, 15]
-            },
-            tableSignaturesBody: {
-              fontSize: 10
-            },
-            tableOfExpenses: {
-              margin: [0, 5, 0, 15]
-            },
-            tableOfExpensesHeader: {
-              bold: true,
-              fontSize: 9,
-              color: "white",
-              fillColor: "#4caf50",
-              alignment: "center"
-            },
-            tableOfExpensesBody: {
-              fontSize: 9
-            },
-            signatures: {
-              margin: [0, 5, 0, 15],
-              fontSize: 10
-            },
-            pageFooter: {
-              fontSize: 8
-            }
-          }
-        };
-
-        if (action == "print") {
-          // pdfMake.createPdf(docDefinition).print();
-          pdfMake.createPdf(docDefinition).open();
-        } else {
-          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
-        }
-      });
-    },
-    loadExpenses: function loadExpenses() {
-      var _this3 = this;
-
-      return new Promise(function (resolve, reject) {
-        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].get({
-          params: {
-            expense_report_id: _this3.router_params_id,
-            only: true,
-            sortBy: "date",
-            sortType: "asc"
-          }
-        }).then(function (response) {
-          var items = response.data.data;
-          resolve({
-            items: items
-          });
-        })["catch"](function (error) {
-          _this3.mixin_showErrors(error);
-
-          reject();
-        });
-      });
-    },
-    getData: function getData() {
-      var _this4 = this;
-
-      var data = {};
-
-      if (this.$route.params.isDeleted) {
-        data = {
-          params: {
-            isDeleted: true
-          }
-        };
-      }
-
-      this.formDataLoaded = false;
-      return new Promise(function (resolve, reject) {
-        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_4__["default"].show(_this4.router_params_id, data).then(function (response) {
-          var data = response.data.data;
-          _this4.form.code = data.code;
-          _this4.form.reference_no = data.reference_no;
-          _this4.form.description = data.description;
-          _this4.form.remarks = data.remarks;
-          _this4.form.notes = data.notes;
-          _this4.form.submission_period = data.submission_period;
-          _this4.form.approval_period = data.approval_period;
-          _this4.form.from = data.from;
-          _this4.form.to = data.to;
-          _this4.form.status = data.status;
-          _this4.form.is_late_submitted = data.is_late_submitted;
-          _this4.form.is_late_approved = data.is_late_approved;
-          _this4.form.total = data.total;
-          _this4.form.total_reimbursable = data.total_reimbursable;
-          _this4.form.paid = data.paid;
-          _this4.form.payments = data.payments;
-          _this4.form.payment_id = data.payment_id;
-          _this4.form.balance = data.balance;
-          _this4.form.user = data.user;
-          _this4.form.payment = data.payment; // this.form.expenses = data.expenses;
-          // this.form.created = data.created;
-          // this.form.updated = data.updated;
-          // this.form.deleted = data.deleted;
-          // this.form.submitted = data.submitted;
-          // this.form.approved = data.approved;
-          // this.form.rejected = data.rejected;
-          // this.form.cancelled = data.cancelled;
-
-          _this4.form.created_at = data.created_at;
-          _this4.form.updated_at = data.updated_at;
-          _this4.form.deleted_at = data.deleted_at;
-          _this4.form.submitted_at = data.submitted_at;
-          _this4.form.approved_at = data.approved_at;
-          _this4.form.rejected_at = data.rejected_at;
-          _this4.form.cancelled_at = data.cancelled_at;
-          _this4.form.logs = data.logs; // this.loadExpenses();
-
-          resolve();
-        })["catch"](function (error) {
-          _this4.mixin_showErrors(error);
-
-          _this4.$router.push({
-            name: "admin.expense_reports.index"
-          }, function () {});
-
-          reject();
-        });
-      });
-    },
-    getDataFromApi: function getDataFromApi() {
-      var _this5 = this;
-
-      this.loading = true;
-      return new Promise(function (resolve, reject) {
-        var _this5$options = _this5.options,
-            sortBy = _this5$options.sortBy,
-            sortDesc = _this5$options.sortDesc,
-            page = _this5$options.page,
-            itemsPerPage = _this5$options.itemsPerPage;
-        var range = [_this5.form.from, _this5.form.to];
-        var expense_report_id = _this5.router_params_id;
-        var data = {
-          params: {
-            page: page,
-            itemsPerPage: itemsPerPage,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
-            expense_report_id: expense_report_id,
-            sortBy: "date",
-            sortType: "asc"
-          }
-        };
-
-        if (_this5.$route.params.isDeleted) {
-          data.params.isDeleted = true;
-        }
-
-        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].getAll(data).then(function (response) {
-          var items = response.data.data;
-          var total = response.data.meta.total;
-          _this5.loading = false;
-          resolve({
-            items: items,
-            total: total
-          });
-        })["catch"](function (error) {
-          _this5.mixin_showErrors(error);
-
-          _this5.loading = false;
-          reject();
-        });
-      });
-    }
-  },
-  watch: {
-    params: {
-      handler: function handler() {
-        var _this6 = this;
-
-        this.getDataFromApi().then(function (data) {
-          _this6.form.expenses = data.items;
-          _this6.totalItems = data.total;
-          _this6.formDataLoaded = true;
-        });
+    methods: {
+      addPlugin: function addPlugin(plugin) {
+        this.$data._plugins.push(plugin);
       },
-      deep: true
-    }
-  },
-  computed: {
-    params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
-        query: this.date_range
-      }, "query", this.expense_report_id));
-    },
-    canEdit: function canEdit() {
-      if (this.form.approved_at !== null || this.form.cancelled_at !== null || this.form.deleted_at !== null || this.form.rejected_at !== null) {
-        return false;
-      }
-
-      return true;
-    },
-    router_params_id: {
-      get: function get() {
-        // return this.$route == null ? 0 : this.$route.params.id;
-        if (this.$route) {
-          if (this.$route.params) {
-            return this.$route.params.id == null ? 0 : this.$route.params.id;
-          }
-
-          return 0;
+      generateLegend: function generateLegend() {
+        if (this.$data._chart) {
+          return this.$data._chart.generateLegend();
         }
-
-        return 0;
       },
-      set: function set(value) {
-        return value;
+      renderChart: function renderChart(data, options) {
+        if (this.$data._chart) this.$data._chart.destroy();
+        if (!this.$refs.canvas) throw new Error('Please remove the <template></template> tags from your chart component. See https://vue-chartjs.org/guide/#vue-single-file-components');
+        this.$data._chart = new chart_js__WEBPACK_IMPORTED_MODULE_0___default.a(this.$refs.canvas.getContext('2d'), {
+          type: chartType,
+          data: data,
+          options: options,
+          plugins: this.$data._plugins
+        });
+      }
+    },
+    beforeDestroy: function beforeDestroy() {
+      if (this.$data._chart) {
+        this.$data._chart.destroy();
       }
     }
-  },
-  mounted: function mounted() {
-    var _this7 = this;
-
-    // this.$store.dispatch("AUTH_USER");
-    this.getData().then(function () {
-      _this7.getDataFromApi().then(function (data) {
-        _this7.form.expenses = data.items;
-        _this7.totalItems = data.total;
-        _this7.formDataLoaded = true;
-      });
-    });
-  },
-  activated: function activated() {
-    var _this8 = this;
-
-    this.getData().then(function () {
-      _this8.getDataFromApi().then(function (data) {
-        _this8.form.expenses = data.items;
-        _this8.totalItems = data.total;
-        _this8.formDataLoaded = true;
-      });
-    });
-  },
-  deactivated: function deactivated() {
-    this.form.expenses = [];
-    Object.assign(this.$data.form, this.$options.data());
-  }
+  };
+}
+var Bar = generateChart('bar-chart', 'bar');
+var HorizontalBar = generateChart('horizontalbar-chart', 'horizontalBar');
+var Doughnut = generateChart('doughnut-chart', 'doughnut');
+var Line = generateChart('line-chart', 'line');
+var Pie = generateChart('pie-chart', 'pie');
+var PolarArea = generateChart('polar-chart', 'polarArea');
+var Radar = generateChart('radar-chart', 'radar');
+var Bubble = generateChart('bubble-chart', 'bubble');
+var Scatter = generateChart('scatter-chart', 'scatter');
+/* harmony default export */ __webpack_exports__["default"] = ({
+  Bar: Bar,
+  HorizontalBar: HorizontalBar,
+  Doughnut: Doughnut,
+  Line: Line,
+  Pie: Pie,
+  PolarArea: PolarArea,
+  Radar: Radar,
+  Bubble: Bubble,
+  Scatter: Scatter
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=template&id=1aa1b90a&":
-/*!********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=template&id=1aa1b90a& ***!
-  \********************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
+/***/ "./node_modules/vue-chartjs/es/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/vue-chartjs/es/index.js ***!
+  \**********************************************/
+/*! exports provided: default, VueCharts, Bar, HorizontalBar, Doughnut, Line, Pie, PolarArea, Radar, Bubble, Scatter, mixins, generateChart */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      !_vm.formDataLoaded
-        ? _c("loader-component")
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0 pt-0" },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.goBack()
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Expense Report Details")
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-form",
-                { ref: "form" },
-                [
-                  _c(
-                    "v-container",
-                    [
-                      _c(
-                        "v-row",
-                        [
-                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                            _c(
-                              "div",
-                              [
-                                _vm._v(
-                                  "\n                            " +
-                                    _vm._s(_vm.form.user.full_name) +
-                                    "\n                            "
-                                ),
-                                _vm.canEdit
-                                  ? _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          text: "",
-                                          color: "green",
-                                          to:
-                                            "/admin/expense_reports/" +
-                                            _vm.router_params_id +
-                                            "/edit"
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                Edit\n                            "
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "display-1 green--text" },
-                              [
-                                _vm._v(
-                                  "\n                            PHP " +
-                                    _vm._s(
-                                      _vm.mixin_formatNumber(_vm.form.total)
-                                    ) +
-                                    "\n                        "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c("div", [
-                              _vm._v(
-                                "\n                            Period:\n                            " +
-                                  _vm._s(
-                                    _vm.form.from == _vm.form.to
-                                      ? _vm.form.from
-                                      : _vm.form.from + " ~ " + _vm.form.to
-                                  ) +
-                                  "\n                        "
-                              )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                            _c("div", { staticClass: "headline green--text" }, [
-                              _vm._v(
-                                "\n                            #" +
-                                  _vm._s(_vm.form.code) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              [
-                                _vm._v(
-                                  "\n                            Status:\n                            "
-                                ),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: {
-                                      color: _vm.form.status.color,
-                                      "x-small": "",
-                                      dark: ""
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                " +
-                                        _vm._s(_vm.form.status.status) +
-                                        "\n                            "
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              [
-                                _vm.form.is_late_submitted
-                                  ? _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "red",
-                                          "x-small": "",
-                                          dark: ""
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                Late Submitted\n                            "
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _vm.form.is_late_approved
-                                  ? _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "red",
-                                          "x-small": "",
-                                          dark: ""
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                                Late Approved\n                            "
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ],
-                              1
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c("v-col", [
-                            _vm._v(
-                              "Description: " +
-                                _vm._s(_vm.form.description) +
-                                " "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
-                            [
-                              _c("v-data-table", {
-                                staticClass: "elevation-0",
-                                attrs: {
-                                  headers: _vm.headers,
-                                  items: _vm.form.expenses,
-                                  loading: _vm.loading,
-                                  options: _vm.options,
-                                  "server-items-length": _vm.totalItems,
-                                  "footer-props": {
-                                    itemsPerPageOptions: [10, 20, 50, 100],
-                                    showFirstLastPage: true,
-                                    firstIcon: "mdi-page-first",
-                                    lastIcon: "mdi-page-last",
-                                    prevIcon: "mdi-chevron-left",
-                                    nextIcon: "mdi-chevron-right"
-                                  },
-                                  "show-expand": "",
-                                  "single-expand": "",
-                                  "item-key": "id"
-                                },
-                                on: {
-                                  "update:options": function($event) {
-                                    _vm.options = $event
-                                  }
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "expanded-item",
-                                      fn: function(ref) {
-                                        var headers = ref.headers
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "td",
-                                            {
-                                              attrs: { colspan: headers.length }
-                                            },
-                                            [
-                                              _c("v-container", [
-                                                _c("table", [
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Code")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(_vm._s(item.code))
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Description")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(
-                                                        "\n                                                    " +
-                                                          _vm._s(
-                                                            item.description
-                                                          ) +
-                                                          "\n                                                "
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Receipt")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(
-                                                        "\n                                                    " +
-                                                          _vm._s(
-                                                            item.receipt_number
-                                                          ) +
-                                                          "\n                                                "
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("tr", [
-                                                    _c("td", [
-                                                      _c("strong", [
-                                                        _vm._v("Vendor")
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("td", [_vm._v(":")]),
-                                                    _vm._v(" "),
-                                                    _c("td", [
-                                                      _vm._v(
-                                                        "\n                                                    " +
-                                                          _vm._s(
-                                                            item.vendor == null
-                                                              ? ""
-                                                              : item.vendor.name
-                                                          ) +
-                                                          "\n                                                "
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  item.remarks
-                                                    ? _c("tr", [
-                                                        _c("td", [
-                                                          _c("strong", [
-                                                            _vm._v("Remarks")
-                                                          ])
-                                                        ]),
-                                                        _vm._v(" "),
-                                                        _c("td", [_vm._v(":")]),
-                                                        _vm._v(" "),
-                                                        _c("td", [
-                                                          _vm._v(
-                                                            _vm._s(item.remarks)
-                                                          )
-                                                        ])
-                                                      ])
-                                                    : _vm._e()
-                                                ])
-                                              ])
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.updated_at",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_getHumanDate(
-                                                  item.updated_at
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.amount",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  item.amount
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.replenishment",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(
-                                                _vm.mixin_formatNumber(
-                                                  item.amount -
-                                                    item.reimbursable_amount
-                                                )
-                                              ) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.status.status",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "v-chip",
-                                            {
-                                              attrs: {
-                                                color: item.status.color,
-                                                dark: "",
-                                                small: ""
-                                              }
-                                            },
-                                            [_vm._v(_vm._s(item.status.status))]
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item.actions",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          _c(
-                                            "v-icon",
-                                            {
-                                              staticClass: "mr-2",
-                                              attrs: { small: "" },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.onShow(item)
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    mdi-eye\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                            _c("div", [
-                              _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                            _c("table", { attrs: { width: "100%" } }, [
-                              _c("tbody", [
-                                _c("tr", [
-                                  _c("td", [
-                                    _vm._v(
-                                      "\n                                        Total Expense Amount\n                                    "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(":")]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass:
-                                        "green--text text--darken-4 text-right"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.form.total
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c("td", [
-                                    _vm._v(
-                                      "\n                                        Paid Amount\n                                    "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(":")]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass:
-                                        "green--text text--darken-4 text-right"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                        (-)\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.form.paid
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c(
-                                    "td",
-                                    { attrs: { colspan: "3" } },
-                                    [_c("v-divider")],
-                                    1
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c("th", { staticClass: "text-left" }, [
-                                    _vm._v(
-                                      "\n                                        Amount to be reimbursed\n                                    "
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v(":")]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "td",
-                                    {
-                                      staticClass:
-                                        "green--text text--darken-4 text-right"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(
-                                            _vm.mixin_formatNumber(
-                                              _vm.form.balance
-                                            )
-                                          ) +
-                                          "\n                                    "
-                                      )
-                                    ]
-                                  )
-                                ])
-                              ])
-                            ])
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider", { staticClass: "mb-4" }),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        [
-                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                            _vm._v(
-                              "\n                        Notes : " +
-                                _vm._s(_vm.form.notes) +
-                                "\n                    "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                            _c("div", { staticClass: "text-right" })
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider", { staticClass: "mb-4" }),
-                      _vm._v(" "),
-                      _c(
-                        "v-row",
-                        { staticClass: "text--secondary text-caption" },
-                        [
-                          _c("v-col", { attrs: { cols: "12", md: "12" } }, [
-                            _c("div", [_vm._v("History :")]),
-                            _vm._v(" "),
-                            _c("div", [
-                              _c(
-                                "table",
-                                {
-                                  staticClass: "table",
-                                  attrs: { width: "100%" }
-                                },
-                                [
-                                  _c(
-                                    "tbody",
-                                    _vm._l(_vm.form.logs, function(item) {
-                                      return _c("tr", { key: item.id }, [
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                            " +
-                                              _vm._s(
-                                                _vm.mixin_formatDate(
-                                                  item.created_at,
-                                                  "YYYY-MM-DD HH:mm:ss"
-                                                )
-                                              ) +
-                                              "\n                                        "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v("-")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n                                            " +
-                                              _vm._s(
-                                                item.causer == null
-                                                  ? "System"
-                                                  : item.causer.name
-                                              ) +
-                                              "\n                                        "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [_vm._v("-")]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(_vm._s(item.description))
-                                        ])
-                                      ])
-                                    }),
-                                    0
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VueCharts", function() { return VueCharts; });
+/* harmony import */ var _mixins_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mixins/index.js */ "./node_modules/vue-chartjs/es/mixins/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "mixins", function() { return _mixins_index_js__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
+/* harmony import */ var _BaseCharts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BaseCharts */ "./node_modules/vue-chartjs/es/BaseCharts.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Bar", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Bar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HorizontalBar", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["HorizontalBar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Doughnut", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Doughnut"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Line", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Line"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Pie", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Pie"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PolarArea", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["PolarArea"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Radar", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Radar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Bubble", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Bubble"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Scatter", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Scatter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "generateChart", function() { return _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["generateChart"]; });
+
+
+
+var VueCharts = {
+  Bar: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Bar"],
+  HorizontalBar: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["HorizontalBar"],
+  Doughnut: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Doughnut"],
+  Line: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Line"],
+  Pie: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Pie"],
+  PolarArea: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["PolarArea"],
+  Radar: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Radar"],
+  Bubble: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Bubble"],
+  Scatter: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["Scatter"],
+  mixins: _mixins_index_js__WEBPACK_IMPORTED_MODULE_0__["default"],
+  generateChart: _BaseCharts__WEBPACK_IMPORTED_MODULE_1__["generateChart"],
+  render: function render() {
+    return console.error('[vue-chartjs]: This is not a vue component. It is the whole object containing all vue components. Please import the named export or access the components over the dot notation. For more info visit https://vue-chartjs.org/#/home?id=quick-start');
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (VueCharts);
 
 
 /***/ }),
 
-/***/ "./resources/js/services/ExpenseDataService.js":
+/***/ "./node_modules/vue-chartjs/es/mixins/index.js":
 /*!*****************************************************!*\
-  !*** ./resources/js/services/ExpenseDataService.js ***!
+  !*** ./node_modules/vue-chartjs/es/mixins/index.js ***!
   \*****************************************************/
-/*! exports provided: default */
+/*! exports provided: reactiveData, reactiveProp, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reactiveData", function() { return reactiveData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reactiveProp", function() { return reactiveProp; });
+function dataHandler(newData, oldData) {
+  if (oldData) {
+    var chart = this.$data._chart;
+    var newDatasetLabels = newData.datasets.map(function (dataset) {
+      return dataset.label;
+    });
+    var oldDatasetLabels = oldData.datasets.map(function (dataset) {
+      return dataset.label;
+    });
+    var oldLabels = JSON.stringify(oldDatasetLabels);
+    var newLabels = JSON.stringify(newDatasetLabels);
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+    if (newLabels === oldLabels && oldData.datasets.length === newData.datasets.length) {
+      newData.datasets.forEach(function (dataset, i) {
+        var oldDatasetKeys = Object.keys(oldData.datasets[i]);
+        var newDatasetKeys = Object.keys(dataset);
+        var deletionKeys = oldDatasetKeys.filter(function (key) {
+          return key !== '_meta' && newDatasetKeys.indexOf(key) === -1;
+        });
+        deletionKeys.forEach(function (deletionKey) {
+          delete chart.data.datasets[i][deletionKey];
+        });
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+        for (var attribute in dataset) {
+          if (dataset.hasOwnProperty(attribute)) {
+            chart.data.datasets[i][attribute] = dataset[attribute];
+          }
+        }
+      });
 
-// import http from "../http-common";
+      if (newData.hasOwnProperty('labels')) {
+        chart.data.labels = newData.labels;
+        this.$emit('labels:update');
+      }
 
+      if (newData.hasOwnProperty('xLabels')) {
+        chart.data.xLabels = newData.xLabels;
+        this.$emit('xlabels:update');
+      }
 
-var ExpenseDataService = /*#__PURE__*/function () {
-  function ExpenseDataService() {
-    _classCallCheck(this, ExpenseDataService);
+      if (newData.hasOwnProperty('yLabels')) {
+        chart.data.yLabels = newData.yLabels;
+        this.$emit('ylabels:update');
+      }
+
+      chart.update();
+      this.$emit('chart:update');
+    } else {
+      if (chart) {
+        chart.destroy();
+        this.$emit('chart:destroy');
+      }
+
+      this.renderChart(this.chartData, this.options);
+      this.$emit('chart:render');
+    }
+  } else {
+    if (this.$data._chart) {
+      this.$data._chart.destroy();
+
+      this.$emit('chart:destroy');
+    }
+
+    this.renderChart(this.chartData, this.options);
+    this.$emit('chart:render');
   }
+}
 
-  _createClass(ExpenseDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses", data);
-    }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expenses", data);
-    }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expenses", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expenses/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
-    }
-  }]);
-
-  return ExpenseDataService;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (new ExpenseDataService());
-
-/***/ }),
-
-/***/ "./resources/js/services/ExpenseReportDataService.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/services/ExpenseReportDataService.js ***!
-  \***********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// import http from "../http-common";
-
-
-var ExpenseReportDataService = /*#__PURE__*/function () {
-  function ExpenseReportDataService() {
-    _classCallCheck(this, ExpenseReportDataService);
+var reactiveData = {
+  data: function data() {
+    return {
+      chartData: null
+    };
+  },
+  watch: {
+    'chartData': dataHandler
   }
-
-  _createClass(ExpenseReportDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports", data);
+};
+var reactiveProp = {
+  props: {
+    chartData: {
+      type: Object,
+      required: true,
+      default: function _default() {}
     }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_reports", data);
-    }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_reports", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_reports/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/restore/".concat(id), data);
-    }
-  }, {
-    key: "submit",
-    value: function submit(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/submit/".concat(id), data);
-    }
-  }, {
-    key: "approve",
-    value: function approve(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/approve/".concat(id), data);
-    }
-  }, {
-    key: "reject",
-    value: function reject(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/reject/".concat(id), data);
-    }
-  }, {
-    key: "duplicate",
-    value: function duplicate(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/duplicate/".concat(id), data);
-    }
-  }]);
-
-  return ExpenseReportDataService;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (new ExpenseReportDataService());
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/expense_reports/Show.vue":
-/*!*******************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expense_reports/Show.vue ***!
-  \*******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Show_vue_vue_type_template_id_1aa1b90a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Show.vue?vue&type=template&id=1aa1b90a& */ "./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=template&id=1aa1b90a&");
-/* harmony import */ var _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Show.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Show_vue_vue_type_template_id_1aa1b90a___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Show_vue_vue_type_template_id_1aa1b90a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/expense_reports/Show.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=template&id=1aa1b90a&":
-/*!**************************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=template&id=1aa1b90a& ***!
-  \**************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_1aa1b90a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=template&id=1aa1b90a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expense_reports/Show.vue?vue&type=template&id=1aa1b90a&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_1aa1b90a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_1aa1b90a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
+  },
+  watch: {
+    'chartData': dataHandler
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  reactiveData: reactiveData,
+  reactiveProp: reactiveProp
+});
 
 /***/ })
 

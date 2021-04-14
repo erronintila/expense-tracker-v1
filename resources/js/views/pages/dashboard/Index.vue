@@ -98,7 +98,7 @@
                         <v-card
                             class="mx-auto"
                             :elevation="hover ? 5 : 2"
-                            :to="{ name: 'admin.expenses.index' }"
+                            :to="{ name: 'user.expenses.index' }"
                         >
                             <v-card-text>
                                 <div class="green--text">
@@ -176,7 +176,7 @@
                                     class="ml-0 pl-0"
                                     text
                                     :to="{
-                                        name: 'admin.expenses.index'
+                                        name: 'user.expenses.index'
                                     }"
                                 >
                                     <span>
@@ -266,7 +266,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'user.expense_reports.index'
                                             }"
                                         >
                                             <span>
@@ -304,7 +304,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'user.expense_reports.index'
                                             }"
                                         >
                                             <div>
@@ -355,7 +355,7 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'admin.expense_reports.index'
+                                                    'user.expense_reports.index'
                                             }"
                                         >
                                             <div>
@@ -393,7 +393,7 @@
                                             text
                                             class="mt-4 mb-4"
                                             :to="{
-                                                name: 'admin.payments.index'
+                                                name: 'user.payments.index'
                                             }"
                                         >
                                             <div>
@@ -665,7 +665,7 @@ export default {
             ],
             items: [],
 
-            user: null
+            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
         };
     },
     methods: {

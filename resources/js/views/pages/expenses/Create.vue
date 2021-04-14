@@ -126,7 +126,7 @@ export default {
                 expense_type: null,
                 sub_type: null,
                 // sub_type: { id: null, name: "", limit: null },
-                user: null,
+                user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
                 vendor: null,
                 expense_report_id: null,
                 tax_id: null,

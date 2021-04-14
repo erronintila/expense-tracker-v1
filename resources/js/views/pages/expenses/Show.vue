@@ -24,7 +24,7 @@
                                     text
                                     color="green"
                                     :to="
-                                        `/admin/expenses/${$route.params.id}/edit`
+                                        `/user/expenses/${$route.params.id}/edit`
                                     "
                                 >
                                     Edit
@@ -439,7 +439,7 @@ export default {
                 this.$route.params.fromExpenseReport
             ) {
                 this.$router.push({
-                    name: "admin.expense_reports.show",
+                    name: "user.expense_reports.show",
                     params: {
                         id: this.form.expense_report.id,
                         isDeleted: true,
@@ -547,7 +547,7 @@ export default {
                     this.mixin_showErrors(error);
                     this.formDataLoaded = true;
                     this.$router.push(
-                        { name: "admin.expenses.index" },
+                        { name: "user.expenses.index" },
                         () => {}
                     );
                 });
