@@ -365,6 +365,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -920,7 +921,8 @@ var render = function() {
                                   ),
                                   counter: 100,
                                   label: "Voucher No.",
-                                  required: ""
+                                  required: "",
+                                  type: "number"
                                 },
                                 model: {
                                   value: _vm.form.voucher_no,

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\PaymentStoreRequest;
+use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentIndexResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PaymentResource;
@@ -208,7 +209,7 @@ class PaymentController extends Controller
 
         return response(
             [
-                'data' => new PaymentResource($payment),
+                'data' => new PaymentShowResource($payment),
                 'message' => 'Retrieved successfully'
             ],
             200
