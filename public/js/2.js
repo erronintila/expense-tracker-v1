@@ -376,6 +376,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -427,18 +428,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
-    getDataFromApi: function getDataFromApi() {
+    onSearch: function onSearch() {
       var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.collections.items = data.data;
+        _this.meta = data.meta;
+      });
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this2 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this.filters.search.trim().toLowerCase();
+        var search = _this2.filters.search.trim().toLowerCase();
 
         var params = {
           search: search,
@@ -451,10 +460,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         var data = {};
 
-        if (_this.vendorsParameters) {
-          if (_this.vendorsParameters.params) {
+        if (_this2.vendorsParameters) {
+          if (_this2.vendorsParameters.params) {
             data = {
-              params: _objectSpread(_objectSpread({}, params), _this.vendorsParameters.params)
+              params: _objectSpread(_objectSpread({}, params), _this2.vendorsParameters.params)
             };
           } else {
             data = {
@@ -469,12 +478,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
         _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
-          _this.loading = false;
+          _this2.loading = false;
           resolve(response.data);
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          _this2.mixin_showErrors(error);
 
-          _this.loading = false;
+          _this2.loading = false;
           reject();
         });
       });
@@ -509,31 +518,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   watch: {
+    "filters.search": function filtersSearch() {
+      var _this3 = this;
+
+      if (this.filters.search == "") {
+        this.getDataFromApi().then(function (data) {
+          _this3.collections.items = data.data;
+          _this3.meta = data.meta;
+        });
+      }
+    },
     params: {
       handler: function handler() {
-        var _this2 = this;
+        var _this4 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this2.collections.items = data.data;
-          _this2.meta = data.meta;
+          _this4.collections.items = data.data;
+          _this4.meta = data.meta;
         });
       },
       deep: true
     },
     dialog: function dialog() {
-      var _this3 = this;
+      var _this5 = this;
 
       this.getDataFromApi().then(function (data) {
-        _this3.collections.items = data.data;
-        _this3.meta = data.meta;
+        _this5.collections.items = data.data;
+        _this5.meta = data.meta;
       });
     }
   },
   computed: {
     params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, {
-        query: this.filters.search
-      });
+      return _objectSpread({}, this.options);
     },
     computedSelectedVendor: {
       get: function get() {
@@ -549,11 +566,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this6 = this;
 
     this.getDataFromApi().then(function (data) {
-      _this4.collections.items = data.data;
-      _this4.meta = data.meta;
+      _this6.collections.items = data.data;
+      _this6.meta = data.meta;
     });
   }
 });
@@ -2068,6 +2085,23 @@ var render = function() {
                       label: "Search",
                       "single-line": "",
                       "hide-details": ""
+                    },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.onSearch($event)
+                      }
                     },
                     model: {
                       value: _vm.filters.search,

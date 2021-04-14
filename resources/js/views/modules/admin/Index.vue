@@ -365,11 +365,6 @@ export default {
                 link: { name: "admin.dashboard.index" }
             },
             {
-                icon: "mdi-clipboard-account",
-                text: "Employees",
-                link: { name: "admin.users.index" }
-            },
-            {
                 icon: "mdi-cash-multiple",
                 text: "Expenses",
                 link: { name: "admin.expenses.index" }
@@ -390,6 +385,11 @@ export default {
                 text: "More",
                 model: false,
                 children: [
+                    {
+                        icon: "mdi-clipboard-account",
+                        text: "Employees",
+                        link: { name: "admin.users.index" }
+                    },
                     {
                         icon: "mdi-account-group",
                         text: "Vendors",

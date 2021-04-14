@@ -192,9 +192,25 @@ class ExpenseController extends Controller
 
         $expenses = $expenses->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-            $query->orWhere("description", "like", "%" . $search . "%");
-            $query->orWhere("receipt_number", "like", "%" . $search . "%");
             $query->orWhere("date", "like", "%" . $search . "%");
+            $query->orWhere("description", "like", "%" . $search . "%");
+            $query->orWhere("amount", "like", "%" . $search . "%");
+            $query->orWhere("receipt_number", "like", "%" . $search . "%");
+            $query->orWhereHas('user', function ($q) use ($search) {
+                $q->where('first_name', "like", "%" . $search . "%");
+                $q->orWhere('middle_name', "like", "%" . $search . "%");
+                $q->orWhere('last_name', "like", "%" . $search . "%");
+            });
+            $query->orWhereHas('vendor', function ($q) use ($search) {
+                $q->where('name', "like", "%" . $search . "%");
+            });
+            $query->orWhereHas('expense_type', function ($q) use ($search) {
+                $q->where('name', "like", "%" . $search . "%");
+            });
+            $query->orWhereHas('expense_report', function ($q) use ($search) {
+                $q->where('description', "like", "%" . $search . "%");
+                $q->orWhere('code', "like", "%" . $search . "%");
+            });
         });
 
         if (request()->has("update_report")) {

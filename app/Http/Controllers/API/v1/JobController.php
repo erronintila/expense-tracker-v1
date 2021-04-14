@@ -45,8 +45,8 @@ class JobController extends Controller
         // if($sortBy == "department.name") {
         //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
         // } else {
-        $jobs = Job::with(['department' => function($query) {
-            if(request()->has("isDeleted") && request("isDeleted")) {
+        $jobs = Job::with(['department' => function ($query) {
+            if (request()->has("isDeleted") && request("isDeleted")) {
                 $query->withTrashed();
             }
         }])->orderBy($sortBy, $sortType);
@@ -69,7 +69,11 @@ class JobController extends Controller
             }
         }
 
-        $jobs = $jobs->where('name', "like", "%" . $search . "%");
+        $jobs = $jobs->where('name', "like", "%" . $search . "%")
+            ->orWhereHas('department', function ($q) use ($search) {
+                $q->where('name', "like", "%" . $search . "%");
+            });
+
         $jobs = $jobs->paginate($itemsPerPage);
 
         return JobResource::collection($jobs);

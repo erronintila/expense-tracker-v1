@@ -50,7 +50,7 @@ class UserController extends Controller
         }
         
         $search = request("search") ?? "";
-        $sortBy = request("sortBy") ?? "last_name";
+        $sortBy = request("sortBy") ?? "first_name";
         $sortType = request("sortType") ?? "asc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
         $status = request("status") ?? "";
@@ -78,13 +78,20 @@ class UserController extends Controller
 
         switch ($sortBy) {
             case 'full_name':
-                $users = $users->orderBy("last_name", $sortType);
+                $users = $users->orderBy("first_name", $sortType);
                 break;
-            case 'job.name':
-                $users = $users->orderBy("last_name", $sortType);
+            case 'job':
+                $users = $users->whereHas("job", function ($query) use ($sortType) {
+                    $query->orderBy("name", $sortType);
+                });
                 break;
-            case 'department.name':
-                $users = $users->orderBy("last_name", $sortType);
+            case 'department':
+                // $users = $users;
+                $users = $users->whereHas("job", function ($query) use ($sortType) {
+                    $query->whereHas("department", function ($query2) use ($sortType) {
+                        $query2->orderBy("name", $sortType);
+                    });
+                });
                 break;
             case 'revolving_fund':
                 $users = $users->orderBy("fund", $sortType);
@@ -148,8 +155,14 @@ class UserController extends Controller
             $query->orWhere("gender", "like", "%" . $search . "%");
             $query->orWhere("birthdate", "like", "%" . $search . "%");
             $query->orWhere("mobile_number", "like", "%" . $search . "%");
-            $query->orWhere("username", "like", "%" . $search . "%");
+            $query->orWhere("telephone_number", "like", "%" . $search . "%");
             $query->orWhere("email", "like", "%" . $search . "%");
+            $query->orWhereHas('job', function ($q) use ($search) {
+                $q->where('name', "like", "%" . $search . "%");
+                $q->orWhereHas('department', function ($q) use ($search) {
+                    $q->where('name', "like", "%" . $search . "%");
+                });
+            });
         });
 
         $users = $users->paginate($itemsPerPage);

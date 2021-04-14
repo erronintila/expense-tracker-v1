@@ -605,6 +605,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -679,6 +691,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    onSearch: function onSearch() {
+      var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.items;
+        _this.totalItems = data.total;
+        _this.formDataLoaded = true;
+      });
+    },
     selectUser: function selectUser(e) {
       this.selected = [];
 
@@ -704,7 +725,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.updateDates([moment__WEBPACK_IMPORTED_MODULE_1___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD")]);
     },
     loadTotalCountReportStatus: function loadTotalCountReportStatus() {
-      var _this = this;
+      var _this2 = this;
 
       _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"].get({
         params: {
@@ -714,30 +735,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var _response$data, _total$data$total_uns, _total$data$total_una;
 
         var total = (_response$data = response.data) !== null && _response$data !== void 0 ? _response$data : 0;
-        _this.totalUnsubmitted = (_total$data$total_uns = total.data.total_unsubmitted) !== null && _total$data$total_uns !== void 0 ? _total$data$total_uns : 0;
-        _this.totalUnapproved = (_total$data$total_una = total.data.total_unapproved) !== null && _total$data$total_una !== void 0 ? _total$data$total_una : 0;
+        _this2.totalUnsubmitted = (_total$data$total_uns = total.data.total_unsubmitted) !== null && _total$data$total_uns !== void 0 ? _total$data$total_uns : 0;
+        _this2.totalUnapproved = (_total$data$total_una = total.data.total_unapproved) !== null && _total$data$total_una !== void 0 ? _total$data$total_una : 0;
       })["catch"](function (error) {
-        _this.mixin_showErrors(error);
+        _this2.mixin_showErrors(error);
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {
-      var _this2 = this;
+      var _this3 = this;
 
       _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_6__["default"].get({
         params: {
           only: true
         }
       }).then(function (response) {
-        _this2.expense_types = response.data.data;
+        _this3.expense_types = response.data.data;
       })["catch"](function (error) {
-        _this2.mixin_showErrors(error);
+        _this3.mixin_showErrors(error);
       });
     },
     loadReportData: function loadReportData(report_type) {
-      var _this3 = this;
+      var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        var ids = _this3.selected == null ? [] : _this3.selected.map(function (item) {
+        var ids = _this4.selected == null ? [] : _this4.selected.map(function (item) {
           return item.id;
         });
         var url = "";
@@ -763,14 +784,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var item = response.data.data;
           resolve(item);
         })["catch"](function (error) {
-          _this3.mixin_showErrors(error);
+          _this4.mixin_showErrors(error);
 
           reject();
         });
       });
     },
     printReport: function printReport(action, report_type, export_as_pdf) {
-      var _this4 = this;
+      var _this5 = this;
 
       var table_columns = [];
       var table_rows = [];
@@ -807,7 +828,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               style: "tableOfExpensesHeader"
             });
             temp_table_body = {};
-            subheader = "Report No. : " + _this4.selected.map(function (item) {
+            subheader = "Report No. : " + _this5.selected.map(function (item) {
               return item.code;
             });
             break;
@@ -838,7 +859,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         } // ADD ALL EXPENSE TYPES AS PART OF TABLE COLUMNS
 
 
-        _this4.expense_types.forEach(function (element) {
+        _this5.expense_types.forEach(function (element) {
           table_columns.push({
             text: element.name,
             style: "tableOfExpensesHeader"
@@ -869,7 +890,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             expense_date = element.expense_date;
             expense_id = element.expense_id; // SET ALL EXPENSE TYPES WITH A VALUE OF ZERO
 
-            _this4.expense_types.forEach(function (expense_type) {
+            _this5.expense_types.forEach(function (expense_type) {
               temp_expense_types[expense_type.name] = 0;
             }); // SET DEFAULT VALUES FOR CURRENT ROW
 
@@ -917,7 +938,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if ("Total" in temp_table_body) {
             var total = 0;
 
-            _this4.expense_types.forEach(function (item) {
+            _this5.expense_types.forEach(function (item) {
               total += temp_table_body[item.name];
             });
 
@@ -925,8 +946,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }); // sum total amount per expense type
 
-        _this4.expense_types.forEach(function (expense_type) {
-          temp_expense_types[expense_type.name] = _this4.mixin_formatNumber(table_rows.reduce(function (total, item) {
+        _this5.expense_types.forEach(function (expense_type) {
+          temp_expense_types[expense_type.name] = _this5.mixin_formatNumber(table_rows.reduce(function (total, item) {
             return total + item[expense_type.name];
           }, 0));
         });
@@ -937,7 +958,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             Total: "Total",
             Particulars: ""
           }, temp_expense_types), {}, {
-            TotalAmount: _this4.mixin_formatNumber(table_rows.reduce(function (total, item) {
+            TotalAmount: _this5.mixin_formatNumber(table_rows.reduce(function (total, item) {
               return total + item["Total"];
             }, 0))
           }));
@@ -946,7 +967,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           table_rows.push(_objectSpread(_objectSpread({
             Total: "Total"
           }, temp_expense_types), {}, {
-            TotalAmount: _this4.mixin_formatNumber(table_rows.reduce(function (total, item) {
+            TotalAmount: _this5.mixin_formatNumber(table_rows.reduce(function (total, item) {
               return total + item["Total"];
             }, 0))
           }));
@@ -1006,7 +1027,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           };
         }); // SET PRINT FORMAT
 
-        var docDefinition = _this4.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
+        var docDefinition = _this5.printFormat(subheader, table_columns, body, signatures); // PRINT OR EXPORT REPORT
 
 
         if (export_as_pdf) {
@@ -1134,21 +1155,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.date_range = e;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this5$options = _this5.options,
-            sortBy = _this5$options.sortBy,
-            sortDesc = _this5$options.sortDesc,
-            page = _this5$options.page,
-            itemsPerPage = _this5$options.itemsPerPage;
+        var _this6$options = _this6.options,
+            sortBy = _this6$options.sortBy,
+            sortDesc = _this6$options.sortDesc,
+            page = _this6$options.page,
+            itemsPerPage = _this6$options.itemsPerPage;
 
-        var search = _this5.search.trim().toLowerCase();
+        var search = _this6.search.trim().toLowerCase();
 
-        var status = _this5.status;
-        var user_id = _this5.user ? _this5.user.id : null;
-        var range = _this5.date_range;
+        var status = _this6.status;
+        var user_id = _this6.user ? _this6.user.id : null;
+        var range = _this6.date_range;
         _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"].getAll({
           params: {
             search: search,
@@ -1165,15 +1186,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this5.loading = false;
+          _this6.loading = false;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          _this5.mixin_showErrors(error);
+          _this6.mixin_showErrors(error);
 
-          _this5.loading = false;
+          _this6.loading = false;
           reject();
         });
       });
@@ -1227,7 +1248,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.selected.map(function (item) {
         return item.status.status;
@@ -1250,24 +1271,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to cancel expense report(s)?").then(function (res) {
         if (res) {
-          var ids = _this6.selected.map(function (item) {
+          var ids = _this7.selected.map(function (item) {
             return item.id;
           });
 
           _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"](ids).then(function (response) {
-            _this6.mixin_successDialog(response.data.status, response.data.message);
+            _this7.mixin_successDialog(response.data.status, response.data.message);
 
-            _this6.getDataFromApi().then(function (data) {
-              _this6.items = data.items;
-              _this6.totalItems = data.total;
-              _this6.formDataLoaded = true;
+            _this7.getDataFromApi().then(function (data) {
+              _this7.items = data.items;
+              _this7.totalItems = data.total;
+              _this7.formDataLoaded = true;
             });
 
-            _this6.loadTotalCountReportStatus();
+            _this7.loadTotalCountReportStatus();
 
-            _this6.selected = [];
+            _this7.selected = [];
           })["catch"](function (error) {
-            _this6.mixin_showErrors(error);
+            _this7.mixin_showErrors(error);
           });
         }
       });
@@ -1505,7 +1526,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //
     // ------------------------------------------------------------------------------------------------------------------
     onUpdate: function onUpdate(action, method) {
-      var _this7 = this;
+      var _this8 = this;
 
       var url = "";
       var ids = this.selected.map(function (item) {
@@ -1540,21 +1561,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             method: method,
             url: url
           }).then(function (response) {
-            _this7.mixin_successDialog(response.data.status, response.data.message);
+            _this8.mixin_successDialog(response.data.status, response.data.message);
 
-            _this7.getDataFromApi().then(function (data) {
-              _this7.items = data.items;
-              _this7.totalItems = data.total;
-              _this7.formDataLoaded = true;
+            _this8.getDataFromApi().then(function (data) {
+              _this8.items = data.items;
+              _this8.totalItems = data.total;
+              _this8.formDataLoaded = true;
             });
 
-            _this7.selected = [];
+            _this8.selected = [];
 
-            _this7.loadTotalCountReportStatus();
+            _this8.loadTotalCountReportStatus();
 
-            _this7.$store.dispatch("AUTH_NOTIFICATIONS");
+            _this8.$store.dispatch("AUTH_NOTIFICATIONS");
           })["catch"](function (error) {
-            _this7.mixin_showErrors(error);
+            _this8.mixin_showErrors(error);
           });
         }
       });
@@ -1610,7 +1631,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.onUpdate("approve", "put");
     },
     onReject: function onReject() {
-      var _this8 = this;
+      var _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var notes, ids;
@@ -1619,7 +1640,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this8.$dialog.prompt({
+                return _this9.$dialog.prompt({
                   text: "Please specify an appropriate reason for rejection",
                   title: "Do you want to reject expense report(s)?"
                 });
@@ -1628,25 +1649,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 notes = _context.sent;
 
                 if (notes) {
-                  ids = _this8.selected.map(function (item) {
+                  ids = _this9.selected.map(function (item) {
                     return item.id;
                   });
                   _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_5__["default"].reject(ids, {
                     notes: notes
                   }).then(function (response) {
-                    _this8.mixin_successDialog("Success", response.data.message);
+                    _this9.mixin_successDialog("Success", response.data.message);
 
-                    _this8.getDataFromApi().then(function (data) {
-                      _this8.items = data.items;
-                      _this8.totalItems = data.total;
-                      _this8.formDataLoaded = true;
+                    _this9.getDataFromApi().then(function (data) {
+                      _this9.items = data.items;
+                      _this9.totalItems = data.total;
+                      _this9.formDataLoaded = true;
                     });
 
-                    _this8.$store.dispatch("AUTH_NOTIFICATIONS");
+                    _this9.$store.dispatch("AUTH_NOTIFICATIONS");
 
-                    _this8.selected = [];
+                    _this9.selected = [];
                   })["catch"](function (error) {
-                    _this8.mixin_showErrors(error);
+                    _this9.mixin_showErrors(error);
                   });
                 }
 
@@ -1681,16 +1702,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   watch: {
+    search: function search() {
+      var _this10 = this;
+
+      if (this.search == "") {
+        this.getDataFromApi().then(function (data) {
+          _this10.items = data.items;
+          _this10.totalItems = data.total;
+          _this10.formDataLoaded = true;
+        });
+      }
+    },
     params: {
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this9 = this;
+        var _this11 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this9.items = data.items;
-          _this9.totalItems = data.total;
-          _this9.formDataLoaded = true;
+          _this11.items = data.items;
+          _this11.totalItems = data.total;
+          _this11.formDataLoaded = true;
         });
       }
     },
@@ -1743,8 +1775,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _objectSpread2;
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+        // query: this.search,
+        query: this.status
+      }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
     minDate: function minDate() {
       var settings = this.$store.getters.settings;
@@ -1942,16 +1975,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     // this.loadExpenseTypes();
   // },
   activated: function activated() {
-    var _this10 = this;
+    var _this12 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.$store.dispatch("AUTH_SETTINGS");
     this.loadTotalCountReportStatus();
     this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
-      _this10.items = data.items;
-      _this10.totalItems = data.total;
-      _this10.formDataLoaded = true;
+      _this12.items = data.items;
+      _this12.totalItems = data.total;
+      _this12.formDataLoaded = true;
     });
   }
 });
@@ -2435,6 +2468,23 @@ var render = function() {
                       "single-line": "",
                       "hide-details": ""
                     },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.onSearch($event)
+                      }
+                    },
                     model: {
                       value: _vm.search,
                       callback: function($$v) {
@@ -2526,6 +2576,24 @@ var render = function() {
                                   [
                                     _c("v-container", [
                                       _c("table", [
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Description")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(item.description) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
                                         _c("tr", [
                                           _c("td", [
                                             _c("strong", [

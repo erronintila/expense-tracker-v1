@@ -197,6 +197,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -226,6 +227,13 @@
                         <td :colspan="headers.length">
                             <v-container>
                                 <table>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.code }}
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td><strong>Expense Report</strong></td>
                                         <td>:</td>
@@ -576,7 +584,7 @@ export default {
                 "Rejected Expenses",
                 "Cancelled Expenses",
                 "Released Payment",
-                "Reimbursed Expenses",
+                "Reimbursed Expenses"
                 // "Archived Expenses"
             ],
             selected: [],
@@ -593,6 +601,12 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
+        },
         updateDates(e) {
             this.date_range = e;
         },
@@ -631,7 +645,7 @@ export default {
                         user_id: user_id,
                         expense_type_id: expense_type_id,
                         start_date: range[0],
-                        end_date: range[1] ? range[1] : range[0],
+                        end_date: range[1] ? range[1] : range[0]
                     }
                 })
                     .then(response => {
@@ -834,6 +848,14 @@ export default {
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,
@@ -862,7 +884,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.user,
                 query: this.expense_type,

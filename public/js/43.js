@@ -223,6 +223,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
@@ -255,20 +256,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
-    getDataFromApi: function getDataFromApi() {
+    onSearch: function onSearch() {
       var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.items;
+        _this.totalItems = data.total;
+      });
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this2 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this.search.trim().toLowerCase();
+        var search = _this2.search.trim().toLowerCase();
 
-        var status = _this.status;
+        var status = _this2.status;
         var data = {
           params: {
             search: search,
@@ -282,17 +291,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          _this2.mixin_showErrors(error);
 
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           reject();
         });
       });
@@ -327,7 +336,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
@@ -336,40 +345,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          var ids = _this2.selected.map(function (item) {
-            return item.id;
-          });
-
-          _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
-            _this2.mixin_successDialog(response.data.status, response.data.message);
-
-            _this2.getDataFromApi().then(function (data) {
-              _this2.items = data.items;
-              _this2.totalItems = data.total;
-            });
-
-            _this2.selected = [];
-          })["catch"](function (error) {
-            _this2.mixin_showErrors(error);
-          });
-        }
-      });
-    },
-    onRestore: function onRestore() {
-      var _this3 = this;
-
-      if (this.selected.length == 0) {
-        this.mixin_errorDialog("Error", "No item(s) selected");
-        return;
-      }
-
-      this.$confirm("Do you want to restore account(s)?").then(function (res) {
-        if (res) {
           var ids = _this3.selected.map(function (item) {
             return item.id;
           });
 
-          _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+          _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -383,25 +363,65 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    onRestore: function onRestore() {
+      var _this4 = this;
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to restore account(s)?").then(function (res) {
+        if (res) {
+          var ids = _this4.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+            _this4.mixin_successDialog(response.data.status, response.data.message);
+
+            _this4.getDataFromApi().then(function (data) {
+              _this4.items = data.items;
+              _this4.totalItems = data.total;
+            });
+
+            _this4.selected = [];
+          })["catch"](function (error) {
+            _this4.mixin_showErrors(error);
+          });
+        }
+      });
     }
   },
   computed: {
     params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
-        query: this.search
-      }, "query", this.status));
+      return _objectSpread(_objectSpread({}, this.options), {}, {
+        // query: this.search,
+        query: this.status
+      });
     }
   },
   watch: {
+    search: function search() {
+      var _this5 = this;
+
+      if (this.search == '') {
+        this.getDataFromApi().then(function (data) {
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
+        });
+      }
+    },
     params: {
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this4 = this;
+        var _this6 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this4.items = data.items;
-          _this4.totalItems = data.total;
+          _this6.items = data.items;
+          _this6.totalItems = data.total;
         });
       }
     }
@@ -410,12 +430,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this5 = this;
+    var _this7 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this5.items = data.items;
-      _this5.totalItems = data.total;
+      _this7.items = data.items;
+      _this7.totalItems = data.total;
     });
   }
 });
@@ -708,6 +728,23 @@ var render = function() {
                       label: "Search",
                       "single-line": "",
                       "hide-details": ""
+                    },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.onSearch($event)
+                      }
                     },
                     model: {
                       value: _vm.search,

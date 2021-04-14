@@ -203,6 +203,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -294,6 +295,12 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.collections.items = data.data;
+                this.meta = data.meta;
+            });
+        },
         onChangeDepartment(value) {
             this.filters.department = value;
         },
@@ -425,13 +432,21 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.filters.search,
+                // query: this.filters.search,
                 query: this.filters.status,
                 query: this.filters.department
             };
         }
     },
     watch: {
+        "filters.search": function() {
+            if (this.filters.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.collections.items = data.data;
+                    this.meta = data.meta;
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,

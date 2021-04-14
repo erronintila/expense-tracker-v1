@@ -156,8 +156,12 @@ class ExpenseReportController extends Controller
 
         $expense_reports = $expense_reports->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
-
             $query->orWhere('description', "like", "%" . $search . "%");
+            $query->orWhereHas('user', function ($q) use ($search) {
+                $q->where('first_name', "like", "%" . $search . "%");
+                $q->orWhere('middle_name', "like", "%" . $search . "%");
+                $q->orWhere('last_name', "like", "%" . $search . "%");
+            });
         });
 
         if (request()->has("create_payment")) {

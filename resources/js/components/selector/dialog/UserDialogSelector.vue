@@ -18,6 +18,7 @@
                         label="Search"
                         single-line
                         hide-details
+                        @keydown.enter="onSearch"
                     ></v-text-field>
                 </v-card-title>
                 <v-list class="overflow-y-auto" max-height="400" two-line>
@@ -122,6 +123,12 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.collections.items = data.data;
+                this.meta = data.meta;
+            });
+        },
         getDataFromApi() {
             this.loading = true;
 
@@ -136,7 +143,7 @@ export default {
                     page: page,
                     itemsPerPage: itemsPerPage,
                     isSelection: true,
-                    is_active: true,
+                    is_active: true
                 };
 
                 let data = {};
@@ -213,6 +220,14 @@ export default {
         }
     },
     watch: {
+        "filters.search": function() {
+            if (this.filters.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.collections.items = data.data;
+                    this.meta = data.meta;
+                });
+            }
+        },
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
@@ -233,7 +248,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.filters.search
+                // query: this.filters.search
             };
         },
         computedSelectedUser: {

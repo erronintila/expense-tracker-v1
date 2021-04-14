@@ -915,7 +915,9 @@ var render = function() {
                               _vm._v(" "),
                               _c("v-text-field", {
                                 attrs: {
-                                  rules: [],
+                                  rules: [].concat(
+                                    _vm.mixin_validation.required
+                                  ),
                                   counter: 100,
                                   label: "Voucher No.",
                                   required: ""
