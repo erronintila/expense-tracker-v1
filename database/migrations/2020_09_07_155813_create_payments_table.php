@@ -17,7 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->string('code')->unique()->nullable();
             $table->string('reference_no')->unique()->nullable();
-            $table->string('voucher_no')->nullable();
+            $table->string('voucher_no')->unique();
             $table->date('date');
             $table->string('description');
             $table->string('cheque_no')->nullable();

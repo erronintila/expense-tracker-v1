@@ -26,7 +26,7 @@ class PaymentStoreRequest extends FormRequest
         return [
             "code" => ['nullable', 'string', 'unique:payments', 'max:255'],
             "reference_no" => ['nullable', 'max:255'],
-            "voucher_no" => ['nullable', 'max:255'],
+            "voucher_no" => ['required', 'unique:payments', 'max:255'],
             "description" => ['required', 'string', 'max:255'],
             "date" => ['required'],
             "cheque_no" => ['nullable', 'max:255'],

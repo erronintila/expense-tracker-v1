@@ -915,9 +915,6 @@ export default {
             return `${start_date} ~ ${end_date}`;
         }
     },
-    created() {
-        console.log("HELLO WORLD");
-    },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.loadExpenseTypes();
