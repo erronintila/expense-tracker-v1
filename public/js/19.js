@@ -380,12 +380,6 @@ __webpack_require__.r(__webpack_exports__);
           name: "admin.dashboard.index"
         }
       }, {
-        icon: "mdi-clipboard-account",
-        text: "Employees",
-        link: {
-          name: "admin.users.index"
-        }
-      }, {
         icon: "mdi-cash-multiple",
         text: "Expenses",
         link: {
@@ -415,6 +409,12 @@ __webpack_require__.r(__webpack_exports__);
         text: "More",
         model: false,
         children: [{
+          icon: "mdi-clipboard-account",
+          text: "Employees",
+          link: {
+            name: "admin.users.index"
+          }
+        }, {
           icon: "mdi-account-group",
           text: "Vendors",
           link: {

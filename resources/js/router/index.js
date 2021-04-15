@@ -5,6 +5,7 @@ Vue.use(VueRouter);
 import authRoutes from "./modules/auth";
 import adminRoutes from "./modules/admin";
 import userRoutes from "./modules/user";
+// import pageRoutes from "./modules/pages";
 import errorRoutes from "../router/modules/errors";
 
 import { store } from "../store/index";
@@ -14,7 +15,8 @@ const routes = baseRoutes.concat(
     authRoutes,
     adminRoutes,
     userRoutes,
-    errorRoutes
+    errorRoutes,
+    // pageRoutes
 );
 
 export const router = new VueRouter({

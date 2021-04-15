@@ -226,6 +226,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -263,6 +264,17 @@
                         <td :colspan="headers.length">
                             <v-container>
                                 <table>
+                                    <tr>
+                                        <td>
+                                            <strong>Description</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td>
+                                            {{
+                                                item.description
+                                            }}
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             <strong>Reimbursable Amount</strong>
@@ -644,6 +656,13 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+                this.formDataLoaded = true;
+            });
+        },
         selectUser(e) {
             this.selected = [];
             if (e == null || e == undefined) {
@@ -1764,6 +1783,15 @@ export default {
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                    this.formDataLoaded = true;
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,
@@ -1835,7 +1863,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.user,
                 query: this.date_range

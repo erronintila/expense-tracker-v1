@@ -67,10 +67,12 @@ class VendorController extends Controller
         $vendors = $vendors->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
             $query->orWhere("name", "like", "%" . $search . "%");
+            $query->orWhere("address", "like", "%" . $search . "%");
             $query->orWhere("email", "like", "%" . $search . "%");
             $query->orWhere("tin", "like", "%" . $search . "%");
             $query->orWhere("mobile_number", "like", "%" . $search . "%");
             $query->orWhere("telephone_number", "like", "%" . $search . "%");
+            $query->orWhere("website", "like", "%" . $search . "%");
         });
 
         $vendors = $vendors->paginate($itemsPerPage);

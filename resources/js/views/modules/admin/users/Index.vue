@@ -322,6 +322,7 @@
                         label="Search"
                         single-line
                         hide-details
+                        @keydown.enter="onSearch"
                     ></v-text-field>
                 </v-hover>
             </v-card-subtitle>
@@ -352,6 +353,11 @@
                         <td :colspan="headers.length">
                             <v-container>
                                 <table>
+                                    <tr>
+                                        <td><strong>Code</strong></td>
+                                        <td>:</td>
+                                        <td>{{ item.code }}</td>
+                                    </tr>
                                     <tr>
                                         <td><strong>Gender</strong></td>
                                         <td>:</td>
@@ -470,15 +476,14 @@ export default {
 
             headers: [
                 { text: "Name", value: "full_name" },
-                { text: "Job Designation", value: "job", sortable: false },
+                { text: "Job Designation", value: "job" },
                 {
                     text: "Department",
                     value: "department",
-                    sortable: false
                 },
                 { text: "Revolving Fund", value: "revolving_fund" },
                 { text: "Actions", value: "actions", sortable: false },
-                { text: "", value: "data-table-expand" }
+                { text: "", value: "data-table-expand", sortable: false }
             ],
             items: [],
             department: null,
@@ -518,7 +523,7 @@ export default {
                 status: "Active"
             },
             options: {
-                sortBy: ["last_name"],
+                sortBy: ["first_name"],
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
@@ -545,6 +550,12 @@ export default {
             this.$router.push({
                 name: "admin.users.show",
                 params: params
+            });
+        },
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.items = data.data;
+                this.meta = data.meta;
             });
         },
         changeStatus() {},
@@ -779,13 +790,21 @@ export default {
                     );
                 });
             }
+        },
+        search() {
+            if(this.search == '') {
+                this.getDataFromApi().then(data => {
+                    this.items = data.data;
+                    this.meta = data.meta;
+                });
+            }
         }
     },
     computed: {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.department,
                 query: this.job

@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // factory(\App\User::class, 1000)->create();
+        factory(\App\User::class, 10)->create();
 
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();

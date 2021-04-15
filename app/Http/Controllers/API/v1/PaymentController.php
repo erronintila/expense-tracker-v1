@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\PaymentStoreRequest;
+use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentIndexResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PaymentResource;
@@ -106,12 +107,18 @@ class PaymentController extends Controller
 
         $payments = $payments->where(function ($query) use ($search) {
             $query->where('code', "like", "%" . $search . "%");
+            $query->orWhere('date', "like", "%" . $search . "%");
             $query->orWhere('reference_no', "like", "%" . $search . "%");
             $query->orWhere('voucher_no', "like", "%" . $search . "%");
             $query->orWhere('description', "like", "%" . $search . "%");
             $query->orWhere('cheque_no', "like", "%" . $search . "%");
             $query->orWhere('amount', "like", "%" . $search . "%");
             $query->orWhere('payee', "like", "%" . $search . "%");
+            $query->orWhereHas('user', function ($q) use ($search) {
+                $q->where('first_name', "like", "%" . $search . "%");
+                $q->orWhere('middle_name', "like", "%" . $search . "%");
+                $q->orWhere('last_name', "like", "%" . $search . "%");
+            });
         });
 
         $payments = $payments->paginate($itemsPerPage);
@@ -202,7 +209,7 @@ class PaymentController extends Controller
 
         return response(
             [
-                'data' => new PaymentResource($payment),
+                'data' => new PaymentShowResource($payment),
                 'message' => 'Retrieved successfully'
             ],
             200
