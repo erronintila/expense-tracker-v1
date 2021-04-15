@@ -378,75 +378,8 @@ export default {
                 icon: "mdi-currency-usd",
                 text: "Payment Records",
                 link: { name: "user.payments.index" }
-            },
-            {
-                icon: "mdi-chevron-up",
-                "icon-alt": "mdi-chevron-down",
-                text: "More",
-                model: false,
-                children: [
-                    {
-                        icon: "mdi-clipboard-account",
-                        text: "Employees",
-                        link: { name: "admin.users.index" }
-                    },
-                    {
-                        icon: "mdi-account-group",
-                        text: "Vendors",
-                        link: { name: "admin.vendors.index" }
-                    },
-                    {
-                        icon: "mdi-clipboard-file",
-                        text: "Departments",
-                        link: { name: "admin.departments.index" }
-                    },
-                    {
-                        icon: "mdi-briefcase",
-                        text: "Job Designations",
-                        link: { name: "admin.jobs.index" }
-                    },
-                    {
-                        icon: "mdi-file-cog-outline",
-                        text: "Expense Types",
-                        link: { name: "admin.expense_types.index" }
-                    },
-                    // {
-                    //     icon: "mdi-text-box-plus-outline",
-                    //     text: "Adjustments",
-                    //     link: { name: "admin.adjustments.index" }
-                    // },
-                    // {
-                    //     icon: "mdi-circle-medium",
-                    //     text: "Users",
-                    //     link: { name: "admin.users.index" }
-                    // },
-                    {
-                        icon: "mdi-format-list-numbered",
-                        text: "Activity Logs",
-                        link: { name: "admin.activity_logs.index" }
-                    },
-                    {
-                        icon: "mdi-cog",
-                        text: "Settings",
-                        link: { name: "admin.settings.index" }
-                    }
-                    // {
-                    //     icon: "mdi-circle-medium",
-                    //     text: "Roles",
-                    //     // link: { name: "admin.roles.index" }
-                    // },
-                    // {
-                    //     icon: "mdi-circle-medium",
-                    //     text: "Permissions",
-                    //     // link: { name: "admin.permissions.index" }
-                    // },
-                    // {
-                    //     icon: "mdi-circle-medium",
-                    //     text: "Vendors",
-                    //     link: { name: "admin.vendors.index" }
-                    // },
-                ]
             }
+
             // {
             //     icon: "mdi-chevron-up",
             //     "icon-alt": "mdi-chevron-down",
@@ -504,6 +437,112 @@ export default {
                 if (res) {
                     this.$router.push({ name: "logout" });
                 }
+            });
+        }
+    },
+    beforeMount() {
+        if (this.$store.getters.user.is_admin) {
+            let children = [];
+
+            if (this.mixin_can("view all users")) {
+                children.push({
+                    icon: "mdi-clipboard-account",
+                    text: "Employees",
+                    link: { name: "admin.users.index" }
+                });
+            }
+
+            if (this.mixin_can("view all vendors")) {
+                children.push({
+                    icon: "mdi-account-group",
+                    text: "Vendors",
+                    link: { name: "admin.vendors.index" }
+                });
+            }
+
+            if (this.mixin_can("view all departments")) {
+                children.push({
+                    icon: "mdi-clipboard-file",
+                    text: "Departments",
+                    link: { name: "admin.departments.index" }
+                });
+            }
+
+            if (this.mixin_can("view all jobs")) {
+                children.push({
+                    icon: "mdi-briefcase",
+                    text: "Job Designations",
+                    link: { name: "admin.jobs.index" }
+                });
+            }
+
+            if (this.mixin_can("view all expense types")) {
+                children.push({
+                    icon: "mdi-file-cog-outline",
+                    text: "Expense Types",
+                    link: { name: "admin.expense_types.index" }
+                });
+            }
+
+            if (this.mixin_can("view all activity logs")) {
+                children.push({
+                    icon: "mdi-format-list-numbered",
+                    text: "Activity Logs",
+                    link: { name: "admin.activity_logs.index" }
+                });
+            }
+
+            if (this.mixin_can("manage settings")) {
+                children.push({
+                    icon: "mdi-cog",
+                    text: "Settings",
+                    link: { name: "admin.settings.index" }
+                });
+            }
+
+            this.items.push({
+                icon: "mdi-chevron-up",
+                "icon-alt": "mdi-chevron-down",
+                text: "More",
+                model: false,
+                children: children
+                // children: [
+                // {
+                //     icon: "mdi-clipboard-account",
+                //     text: "Employees",
+                //     link: { name: "admin.users.index" }
+                // },
+                // {
+                //     icon: "mdi-account-group",
+                //     text: "Vendors",
+                //     link: { name: "admin.vendors.index" }
+                // },
+                // {
+                //     icon: "mdi-clipboard-file",
+                //     text: "Departments",
+                //     link: { name: "admin.departments.index" }
+                // },
+                // {
+                //     icon: "mdi-briefcase",
+                //     text: "Job Designations",
+                //     link: { name: "admin.jobs.index" }
+                // },
+                // {
+                //     icon: "mdi-file-cog-outline",
+                //     text: "Expense Types",
+                //     link: { name: "admin.expense_types.index" }
+                // },
+                // {
+                //     icon: "mdi-format-list-numbered",
+                //     text: "Activity Logs",
+                //     link: { name: "admin.activity_logs.index" }
+                // },
+                // {
+                //     icon: "mdi-cog",
+                //     text: "Settings",
+                //     link: { name: "admin.settings.index" }
+                // }
+                // ]
             });
         }
     },

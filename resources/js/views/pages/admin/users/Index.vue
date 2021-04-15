@@ -617,7 +617,7 @@ export default {
                 this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
-            this.$router.push(`/admin/users/${this.selected[0].id}/edit/fund`);
+            this.$router.push(`/users/${this.selected[0].id}/edit/fund`);
         },
         onEditPermissions() {
             if (this.selected.length == 0) {
@@ -625,7 +625,7 @@ export default {
                 return;
             }
             this.$router.push(
-                `/admin/users/${this.selected[0].id}/edit/permissions`
+                `/users/${this.selected[0].id}/edit/permissions`
             );
         },
         onPasswordReset() {

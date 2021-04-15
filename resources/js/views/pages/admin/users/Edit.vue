@@ -125,7 +125,7 @@ export default {
                         response.data.message
                     );
                     this.loader = false;
-                    window.location.replace("/admin/users");
+                    window.location.replace("/users");
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);

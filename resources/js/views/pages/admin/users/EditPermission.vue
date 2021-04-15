@@ -165,7 +165,7 @@ export default {
                             response.data.message
                         );
                         this.formDataLoaded = true;
-                        window.location.replace("/admin/users");
+                        window.location.replace("/users");
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);
