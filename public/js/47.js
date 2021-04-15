@@ -1,8 +1,8 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[47],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Index.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Index.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/payments/Index.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Index.vue?vue&type=script&lang=js& ***!
   \**********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -15,7 +15,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
-/* harmony import */ var _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/PaymentDataService */ "./resources/js/services/PaymentDataService.js");
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
+/* harmony import */ var _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/ExpenseTypeDataService */ "./resources/js/services/ExpenseTypeDataService.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -347,6 +348,182 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -361,24 +538,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       formDataLoaded: false,
       loading: true,
+      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
+      preset: "",
+      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"],
       headers: [{
         text: "Date",
         value: "date"
       }, {
-        text: "User",
-        value: "user"
+        text: "Expense",
+        value: "expense_type.name",
+        sortable: false
       }, {
-        text: "Description",
-        value: "description"
+        text: "Employee",
+        value: "user.full_name",
+        sortable: false
       }, {
         text: "Amount",
         value: "amount"
+      }, {
+        text: "To replenish",
+        value: "replenishment",
+        sortable: false
       }, {
         text: "Last Updated",
         value: "updated_at"
       }, {
         text: "Status",
-        value: "status.status"
+        value: "status.status",
+        sortable: false
       }, {
         text: "Actions",
         value: "actions",
@@ -387,26 +574,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "",
         value: "data-table-expand"
       }],
-      totalAmount: 0,
       items: [],
       user: null,
-      status: "All Payments",
-      statuses: ["All Payments", // "All Advance Payments",
-      // "Reported Advance Payments",
-      // "Unreported Advance Payments",
-      "Released Payments", "Completed Payments", "Cancelled Payments"],
+      expense_type: {
+        id: 0,
+        name: "All Expense Types"
+      },
+      expense_types: [],
+      status: "All Expenses",
+      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Released Payment", "Reimbursed Expenses" // "Archived Expenses"
+      ],
       selected: [],
       search: "",
       totalItems: 0,
+      totalAmount: 0,
+      totalReplenishment: 0,
       options: {
-        sortBy: ["updated_at"],
+        sortBy: ["created_at"],
         sortDesc: [true],
         page: 1,
         itemsPerPage: 10
-      },
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
-      preset: "",
-      presets: ["Today", "Yesterday", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Quarter", "This Year", "Last Week", "Last Month", "Last Quarter", "Last Year", "Last 5 Years"]
+      }
     };
   },
   methods: {
@@ -441,9 +629,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var search = _this.search.trim().toLowerCase();
 
         var status = _this.status;
-        var range = _this.date_range;
         var user_id = _this.user ? _this.user.id : null;
-        _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_4__["default"].getAll({
+        var expense_type_id = _this.expense_type.id;
+        var range = _this.date_range;
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"].getAll({
           params: {
             search: search,
             sortBy: sortBy[0],
@@ -451,9 +640,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page: page,
             itemsPerPage: itemsPerPage,
             status: status,
+            user_id: user_id,
+            expense_type_id: expense_type_id,
             start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
-            user_id: user_id
+            end_date: range[1] ? range[1] : range[0]
           }
         }).then(function (response) {
           var items = response.data.data;
@@ -473,8 +663,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+    loadExpenseTypes: function loadExpenseTypes() {
+      var _this2 = this;
+
+      _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_5__["default"].get({
+        params: {
+          only: true
+        }
+      }).then(function (response) {
+        _this2.expense_types = response.data.data;
+
+        _this2.expense_types.unshift({
+          id: 0,
+          name: "All Expense Types"
+        });
+      })["catch"](function (error) {
+        _this2.mixin_showErrors(error);
+      });
+    },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
+      this.status = "All Expenses";
+      this.loadExpenseTypes();
       this.selected = [];
     },
     onShow: function onShow(item) {
@@ -490,122 +700,168 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.$router.push({
-        name: "admin.payments.show",
+        name: "admin.expenses.show",
         params: params
       });
     },
     onEdit: function onEdit(item) {
+      if (item.expense_report) {
+        if (item.expense_report.approved_at) {
+          this.mixin_errorDialog("Error", "Expense with an approved report can't be edited");
+          return;
+        }
+
+        if (item.expense_report.deleted_at) {
+          this.mixin_errorDialog("Error", "Expense with a deleted report can't be edited");
+          return;
+        }
+      }
+
+      if (this.status == "Cancelled") {
+        this.mixin_errorDialog("Error", "Expense has been deleted.");
+        return;
+      }
+
       this.$router.push({
-        name: "admin.payments.edit",
+        name: "admin.expenses.edit",
         params: {
           id: item.id
         }
       });
     },
-    // onDelete() {
-    //     if (this.selected.length == 0) {
-    //         this.mixin_errorDialog("Error", "No item(s) selected");
-    //         return;
-    //     }
-    //     this.$confirm("do you want to cancel payment?").then(res => {
-    //         if (res) {
-    //             axios
-    //                 .delete(`/api/payments/${this.selected[0].id}`, {
-    //                     params: {
-    //                         ids: this.selected.map(item => {
-    //                             return item.id;
-    //                         })
-    //                     }
-    //                 })
-    //                 .then(response => {
-    //                      this.mixin_successDialog(response.data.status, response.data.message);
-    //                     this.getDataFromApi().then(data => {
-    //                         this.items = data.items;
-    //                         this.totalItems = data.total;
-    //                     });
-    //                 })
-    //                 .catch(error => {
-    //                     this.mixin_showErrors(error);
-    //                 });
-    //         }
-    //     });
-    // },
-    onUpdate: function onUpdate(action, method) {
-      var _this2 = this;
+    onDelete: function onDelete() {
+      var _this3 = this;
 
-      if (action == "receive" && !this.mixin_can("receive payments")) {
-        this.mixin_errorDialog("Error", "Not allowed");
+      var arr = this.selected.map(function (item) {
+        return item.expense_report === null;
+      }); // this.mixin_is_empty(
+      //     this.selected.length,
+      //     "No item(s) selected bitch"
+      // );
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
         return;
-      }
+      } // this.mixin_check_if_error(
+      //     arr.includes(false),
+      //     "Expense(s) can't be cancelled"
+      // );
+      // if (arr.includes(false)) {
+      //     this.mixin_errorDialog(
+      //         "Error",
+      //         "Expense(s) can't be cancelled"
+      //     );
+      //     return;
+      // }
+
+
+      this.$confirm("Do you want to cancel expense(s)?").then(function (res) {
+        if (res) {
+          var ids = _this3.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"](ids).then(function (response) {
+            _this3.mixin_successDialog(response.data.status, response.data.message);
+
+            _this3.getDataFromApi().then(function (data) {
+              _this3.items = data.items;
+              _this3.totalItems = data.total;
+            });
+
+            _this3.selected = [];
+          })["catch"](function (error) {
+            _this3.mixin_showErrors(error);
+          });
+        }
+      });
+    },
+    onRestore: function onRestore() {
+      var _this4 = this;
+
+      var arr = this.selected.map(function (item) {
+        return item.expense_report === null;
+      });
 
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
-      if (action == "receive" && this.selected.map(function (item) {
-        return item.status.status;
-      }).includes("Completed")) {
-        this.mixin_errorDialog("Error", "Payment has already been received");
+      if (!this.mixin_can("restore expenses")) {
+        this.mixin_errorDialog("Error", "Not allowed");
         return;
       }
 
-      this.$confirm("Do you want to ".concat(action, " payment(s)?")).then(function (res) {
+      if (arr.includes(false)) {
+        this.mixin_errorDialog("Error", "Expense(s) with report(s) can't be restored");
+        return;
+      }
+
+      this.$confirm("Do you want to restore expenses(s)?").then(function (res) {
         if (res) {
-          var ids = _this2.selected.map(function (item) {
+          var ids = _this4.selected.map(function (item) {
             return item.id;
           });
 
-          var url = "";
+          _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"].restore(ids).then(function (response) {
+            _this4.mixin_successDialog(response.data.status, response.data.message);
 
-          switch (action) {
-            // case "release":
-            //     url = `/api/payments/release_payment/${ids}`;
-            //     break;
-            case "receive":
-              url = "/api/payments/receive_payment/".concat(ids);
-              break;
+            _this4.getDataFromApi().then(function (data) {
+              _this4.items = data.items;
+              _this4.totalItems = data.total;
+            }); // this.$store.dispatch("AUTH_USER");
 
-            case "complete":
-              url = "/api/payments/complete_payment/".concat(ids);
-              break;
-            // case "update":
-            //     url = `/api/payments/${this.selected[0].id}`;
-            //     break;
 
-            case "cancel":
-              url = "/api/payments/".concat(ids);
-              break;
-
-            default:
-              _this2.mixin_errorDialog("Error", "Action can't be processed.");
-
-              return;
-              break;
-          }
-
-          axios({
-            method: method,
-            url: url // data: {
-            //     ids: ids
-            // }
-
-          }).then(function (response) {
-            _this2.mixin_successDialog(response.data.status, response.data.message);
-
-            _this2.getDataFromApi().then(function (data) {
-              _this2.items = data.items;
-              _this2.totalItems = data.total;
-            });
-
-            _this2.$store.dispatch("AUTH_NOTIFICATIONS");
-
-            _this2.selected = [];
+            _this4.selected = [];
           })["catch"](function (error) {
-            _this2.mixin_showErrors(error);
+            _this4.mixin_showErrors(error);
           });
         }
       });
+    },
+    show_edit: function show_edit(item) {
+      if (!this.mixin_can("edit expenses")) {
+        return false;
+      }
+
+      if (item) {
+        if (item.expense_report_id) {
+          if (!item.expense_report.approved_at) {
+            return false;
+          } else if (!item.expense_report.rejected_at) {
+            return false;
+          } else if (!item.expense_report.cancelled_at) {
+            return false;
+          } else if (!item.expense_report.deleted_at) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+  },
+  watch: {
+    params: {
+      immediate: true,
+      deep: true,
+      handler: function handler() {
+        var _this5 = this;
+
+        this.getDataFromApi().then(function (data) {
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
+        });
+      }
+    },
+    items: function items() {
+      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
+        return total + item.amount;
+      }, 0));
+      this.totalReplenishment = this.mixin_formatNumber(this.items.reduce(function (total, item) {
+        return total + (item.amount - item.reimbursable_amount);
+      }, 0));
     }
   },
   computed: {
@@ -614,7 +870,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
         query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.user), _objectSpread2));
+      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+    },
+    maxDate: function maxDate() {
+      var settings = this.$store.getters.settings;
+      var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+      var maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+
+      if (settings) {
+        switch (settings.submission_period) {
+          case "Weekly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD");
+            break;
+
+          case "Monthly":
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD");
+            break;
+
+          default:
+            maxDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("day").format("YYYY-MM-DD");
+            break;
+        }
+
+        return moment__WEBPACK_IMPORTED_MODULE_0___default()(today).isSameOrBefore(maxDate) ? today : maxDate;
+      }
+
+      return today;
     },
     formattedDateRange: function formattedDateRange() {
       var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
@@ -631,51 +912,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "".concat(start_date, " ~ ").concat(end_date);
     }
   },
-  watch: {
-    params: {
-      immediate: true,
-      deep: true,
-      handler: function handler() {
-        var _this3 = this;
-
-        this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
-        });
-      }
-    },
-    items: function items() {
-      this.totalAmount = this.mixin_formatNumber(this.items.reduce(function (total, item) {
-        return total + item.amount;
-      }, 0));
-    }
+  created: function created() {
+    console.log("HELLO WORLD");
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
-  // created() {
-  //     // this.$store.dispatch("AUTH_USER");
-  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-  // },
   activated: function activated() {
-    var _this4 = this;
+    var _this6 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
-      _this4.items = data.items;
-      _this4.totalItems = data.total;
+      _this6.items = data.items;
+      _this6.totalItems = data.total;
     });
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Index.vue?vue&type=template&id=6ae9ee17&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Index.vue?vue&type=template&id=be42def6&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/payments/Index.vue?vue&type=template&id=6ae9ee17& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Index.vue?vue&type=template&id=be42def6& ***!
   \**************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -702,7 +958,7 @@ var render = function() {
                 { staticClass: "pt-0" },
                 [
                   _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Payment Vouchers")
+                    _vm._v("Expenses")
                   ]),
                   _vm._v(" "),
                   _c("v-spacer"),
@@ -713,7 +969,7 @@ var render = function() {
                       attrs: { bottom: "" },
                       scopedSlots: _vm._u(
                         [
-                          _vm.mixin_can("add payments")
+                          _vm.mixin_can("add expenses")
                             ? {
                                 key: "activator",
                                 fn: function(ref) {
@@ -729,7 +985,7 @@ var render = function() {
                                             attrs: {
                                               color: "green",
                                               to: {
-                                                name: "admin.payments.create"
+                                                name: "admin.expenses.create"
                                               },
                                               dark: "",
                                               fab: "",
@@ -972,6 +1228,91 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c(
+                    "v-menu",
+                    {
+                      attrs: {
+                        transition: "scale-transition",
+                        "close-on-content-click": false,
+                        "nudge-width": 200,
+                        "offset-y": "",
+                        right: "",
+                        bottom: ""
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var menu = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-chip",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "mr-2",
+                                      attrs: { small: "" }
+                                    },
+                                    "v-chip",
+                                    attrs,
+                                    false
+                                  ),
+                                  menu
+                                ),
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(_vm.expense_type.name) +
+                                      "\n                    "
+                                  )
+                                ]
+                              )
+                            ]
+                          }
+                        }
+                      ])
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-card",
+                        [
+                          _c(
+                            "v-list",
+                            [
+                              _c(
+                                "v-list-item",
+                                [
+                                  _c("v-select", {
+                                    attrs: {
+                                      items: _vm.expense_types,
+                                      "item-text": "name",
+                                      "item-value": "id",
+                                      label: "Expense Types",
+                                      "return-object": ""
+                                    },
+                                    model: {
+                                      value: _vm.expense_type,
+                                      callback: function($$v) {
+                                        _vm.expense_type = $$v
+                                      },
+                                      expression: "expense_type"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
                     "v-chip",
                     {
                       staticClass: "mr-2",
@@ -994,28 +1335,22 @@ var render = function() {
                           rawName: "v-show",
                           value:
                             _vm.selected.length > 0 &&
-                            _vm.selected.filter(function(item) {
-                              return item.received_at == null
-                            }).length > 0,
+                            _vm.status == "Cancelled Expenses",
                           expression:
-                            "\n                    selected.length > 0 &&\n                        selected.filter(item => item.received_at == null)\n                            .length > 0\n                "
+                            "\n                    selected.length > 0 && status == 'Cancelled Expenses'\n                "
                         }
                       ],
-                      staticClass: "mr-2",
+                      staticClass: "mr-2 mb-2",
                       attrs: {
                         close: "",
                         small: "",
-                        "close-icon": "mdi-download",
-                        color: "orange",
+                        "close-icon": "mdi-history",
+                        color: "green",
                         dark: ""
                       },
-                      on: {
-                        "click:close": function($event) {
-                          return _vm.onUpdate("receive", "put")
-                        }
-                      }
+                      on: { "click:close": _vm.onRestore }
                     },
-                    [_vm._v("\n                Mark as received\n            ")]
+                    [_vm._v("\n                Restore\n            ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -1027,30 +1362,24 @@ var render = function() {
                           rawName: "v-show",
                           value:
                             _vm.selected.length > 0 &&
-                            _vm.selected.filter(function(item) {
-                              return item.deleted_at == null
-                            }).length > 0,
+                            _vm.status !== "Cancelled Expenses",
                           expression:
-                            "\n                    selected.length > 0 &&\n                        selected.filter(item => item.deleted_at == null)\n                            .length > 0\n                "
+                            "\n                    selected.length > 0 && status !== 'Cancelled Expenses'\n                "
                         }
                       ],
-                      staticClass: "mr-2",
+                      staticClass: "mr-2 mb-2",
                       attrs: {
                         close: "",
                         small: "",
-                        "close-icon": "mdi-close",
+                        "close-icon": "mdi-trash-can-outline",
                         color: "red",
                         dark: ""
                       },
-                      on: {
-                        "click:close": function($event) {
-                          return _vm.onUpdate("cancel", "delete")
-                        }
-                      }
+                      on: { "click:close": _vm.onDelete }
                     },
                     [
                       _vm._v(
-                        "\n                Cancel Payment(s)\n            "
+                        "\n                Cancel Expense(s)\n            "
                       )
                     ]
                   )
@@ -1101,9 +1430,9 @@ var render = function() {
                           prevIcon: "mdi-chevron-left",
                           nextIcon: "mdi-chevron-right"
                         },
-                        "show-select": "",
                         "show-expand": "",
                         "single-expand": "",
+                        "show-select": "",
                         "item-key": "id"
                       },
                       on: {
@@ -1127,6 +1456,174 @@ var render = function() {
                                       _c("table", [
                                         _c("tr", [
                                           _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Expense Report")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  item.expense_report == null
+                                                    ? ""
+                                                    : item.expense_report
+                                                        .description +
+                                                        " (Code:" +
+                                                        item.expense_report
+                                                          .code +
+                                                        ")"
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("To Replenish")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    item.amount -
+                                                      item.reimbursable_amount
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("To Reimburse")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    item.reimbursable_amount
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Tax")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    item.tax_amount
+                                                  )
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Tax rate")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  _vm.mixin_formatNumber(
+                                                    item.tax_rate
+                                                  )
+                                                ) +
+                                                "\n                                        %\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Code")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(_vm._s(item.code))])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Description")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.description))
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Receipt")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.receipt_number))
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Vendor")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(
+                                                  item.vendor == null
+                                                    ? ""
+                                                    : item.vendor.name
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
                                             _c("strong", [_vm._v("Created")])
                                           ]),
                                           _vm._v(" "),
@@ -1148,57 +1645,84 @@ var render = function() {
                                         _vm._v(" "),
                                         _c("tr", [
                                           _c("td", [
-                                            _c("strong", [_vm._v("Code")])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(_vm._s(item.code))])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
                                             _c("strong", [
-                                              _vm._v("Reference No.")
+                                              _vm._v("Late Encoded")
                                             ])
                                           ]),
                                           _vm._v(" "),
                                           _c("td", [_vm._v(":")]),
                                           _vm._v(" "),
                                           _c("td", [
-                                            _vm._v(_vm._s(item.reference_no))
+                                            _vm._v(_vm._s(item.is_late_encoded))
                                           ])
                                         ]),
                                         _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _c("strong", [
-                                              _vm._v("Voucher No.")
+                                        item.remarks
+                                          ? _c("tr", [
+                                              _c("td", [
+                                                _c("strong", [
+                                                  _vm._v("Remarks")
+                                                ])
+                                              ]),
+                                              _vm._v(" "),
+                                              _c("td", [_vm._v(":")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(_vm._s(item.remarks))
+                                              ])
                                             ])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(_vm._s(item.voucher_no))
-                                          ])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
-                                            _c("strong", [_vm._v("Remarks")])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(_vm._s(item.remarks))
-                                          ])
-                                        ])
+                                          : _vm._e()
                                       ])
                                     ])
                                   ],
                                   1
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.updated_at",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(
+                                      _vm.mixin_getHumanDate(item.updated_at)
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.amount",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(
+                                      _vm.mixin_formatNumber(item.amount)
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.replenishment",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(
+                                      _vm.mixin_formatNumber(
+                                        item.amount - item.reimbursable_amount
+                                      )
+                                    ) +
+                                    "\n                "
                                 )
                               ]
                             }
@@ -1223,49 +1747,6 @@ var render = function() {
                             }
                           },
                           {
-                            key: "item.user",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _vm._v(
-                                  "\n                    " +
-                                    _vm._s("" + item.user.full_name) +
-                                    "\n                "
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.created_at",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _vm._v(
-                                  "\n                    " +
-                                    _vm._s(
-                                      _vm.mixin_getHumanDate(item.created_at)
-                                    ) +
-                                    "\n                "
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.updated_at",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _vm._v(
-                                  "\n                    " +
-                                    _vm._s(
-                                      _vm.mixin_getHumanDate(item.updated_at)
-                                    ) +
-                                    "\n                "
-                                )
-                              ]
-                            }
-                          },
-                          {
                             key: "item.actions",
                             fn: function(ref) {
                               var item = ref.item
@@ -1273,14 +1754,6 @@ var render = function() {
                                 _c(
                                   "v-icon",
                                   {
-                                    directives: [
-                                      {
-                                        name: "show",
-                                        rawName: "v-show",
-                                        value: item.deleted_at == null,
-                                        expression: "item.deleted_at == null"
-                                      }
-                                    ],
                                     staticClass: "mr-2",
                                     attrs: { small: "" },
                                     on: {
@@ -1294,22 +1767,77 @@ var render = function() {
                                       "\n                        mdi-eye\n                    "
                                     )
                                   ]
-                                )
-                              ]
-                            }
-                          },
-                          {
-                            key: "item.amount",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _vm._v(
-                                  "\n                    " +
-                                    _vm._s(
-                                      _vm.mixin_formatNumber(item.amount)
-                                    ) +
-                                    "\n                "
-                                )
+                                ),
+                                _vm._v(" "),
+                                _vm.show_edit(item) && item.deleted_at == null
+                                  ? _c(
+                                      "v-icon",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: { small: "" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.onEdit(item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                        mdi-pencil\n                    "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.is_late_encoded
+                                  ? _c(
+                                      "v-tooltip",
+                                      {
+                                        attrs: { bottom: "" },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "activator",
+                                              fn: function(ref) {
+                                                var on = ref.on
+                                                var attrs = ref.attrs
+                                                return [
+                                                  _c(
+                                                    "v-icon",
+                                                    _vm._g(
+                                                      _vm._b(
+                                                        {
+                                                          attrs: {
+                                                            color: "red",
+                                                            dark: ""
+                                                          }
+                                                        },
+                                                        "v-icon",
+                                                        attrs,
+                                                        false
+                                                      ),
+                                                      on
+                                                    ),
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                mdi-alert-circle-outline\n                            "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        )
+                                      },
+                                      [
+                                        _vm._v(" "),
+                                        _c("span", [_vm._v("Late Encoded")])
+                                      ]
+                                    )
+                                  : _vm._e()
                               ]
                             }
                           }
@@ -1326,7 +1854,6 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._v(" "),
                       _vm._v(" "),
                       _vm._v(" "),
                       _vm._v(" "),
@@ -1370,6 +1897,12 @@ var render = function() {
                                   ])
                                 ]),
                                 _vm._v(" "),
+                                _c("td", [
+                                  _c("strong", [
+                                    _vm._v(_vm._s(_vm.totalReplenishment))
+                                  ])
+                                ]),
+                                _vm._v(" "),
                                 _c("td"),
                                 _vm._v(" "),
                                 _c("td"),
@@ -1383,6 +1916,33 @@ var render = function() {
                         : _vm._e()
                     ],
                     2
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c("v-col", [
+                        _c("div", [
+                          _c("h4", { staticClass: "green--text" }, [
+                            _vm._v(
+                              "\n                            Note:\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("h4", { staticClass: "grey--text" }, [
+                            _vm._v(
+                              "\n                            Due of encoding expenses :\n                            "
+                            ),
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm.maxDate) +
+                                "\n                        "
+                            )
+                          ])
+                        ])
+                      ])
+                    ],
+                    1
                   )
                 ],
                 1
@@ -1401,9 +1961,9 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/services/PaymentDataService.js":
+/***/ "./resources/js/services/ExpenseDataService.js":
 /*!*****************************************************!*\
-  !*** ./resources/js/services/PaymentDataService.js ***!
+  !*** ./resources/js/services/ExpenseDataService.js ***!
   \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1421,66 +1981,135 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // import http from "../http-common";
 
 
-var PaymentDataService = /*#__PURE__*/function () {
-  function PaymentDataService() {
-    _classCallCheck(this, PaymentDataService);
+var ExpenseDataService = /*#__PURE__*/function () {
+  function ExpenseDataService() {
+    _classCallCheck(this, ExpenseDataService);
   }
 
-  _createClass(PaymentDataService, [{
+  _createClass(ExpenseDataService, [{
     key: "getAll",
     value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/payments", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses", data);
     }
   }, {
     key: "get",
     value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/payments", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expenses", data);
     }
   }, {
     key: "show",
     value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/payments/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/".concat(id), data);
     }
   }, {
     key: "store",
     value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/payments", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expenses", data);
     }
   }, {
     key: "update",
     value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/payments/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/".concat(id), data);
     }
   }, {
     key: "delete",
     value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/payments/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expenses/".concat(id), data);
     }
   }, {
     key: "restore",
     value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/payments/restore/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
     }
   }]);
 
-  return PaymentDataService;
+  return ExpenseDataService;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new PaymentDataService());
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseDataService());
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/payments/Index.vue":
+/***/ "./resources/js/services/ExpenseTypeDataService.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/services/ExpenseTypeDataService.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var ExpenseTypeDataService = /*#__PURE__*/function () {
+  function ExpenseTypeDataService() {
+    _classCallCheck(this, ExpenseTypeDataService);
+  }
+
+  _createClass(ExpenseTypeDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_types", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_types", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_types/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/restore/".concat(id), data);
+    }
+  }]);
+
+  return ExpenseTypeDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseTypeDataService());
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/admin/expenses/Index.vue":
 /*!*************************************************************!*\
-  !*** ./resources/js/views/modules/admin/payments/Index.vue ***!
+  !*** ./resources/js/views/modules/admin/expenses/Index.vue ***!
   \*************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_6ae9ee17___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=6ae9ee17& */ "./resources/js/views/modules/admin/payments/Index.vue?vue&type=template&id=6ae9ee17&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/payments/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_be42def6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=be42def6& */ "./resources/js/views/modules/admin/expenses/Index.vue?vue&type=template&id=be42def6&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1491,8 +2120,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_6ae9ee17___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_6ae9ee17___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_be42def6___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_be42def6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1502,38 +2131,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/payments/Index.vue"
+component.options.__file = "resources/js/views/modules/admin/expenses/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/payments/Index.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/views/modules/admin/expenses/Index.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/payments/Index.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/views/modules/admin/expenses/Index.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/payments/Index.vue?vue&type=template&id=6ae9ee17&":
+/***/ "./resources/js/views/modules/admin/expenses/Index.vue?vue&type=template&id=be42def6&":
 /*!********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/payments/Index.vue?vue&type=template&id=6ae9ee17& ***!
+  !*** ./resources/js/views/modules/admin/expenses/Index.vue?vue&type=template&id=be42def6& ***!
   \********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_6ae9ee17___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=6ae9ee17& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Index.vue?vue&type=template&id=6ae9ee17&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_6ae9ee17___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_be42def6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=be42def6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Index.vue?vue&type=template&id=be42def6&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_be42def6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_6ae9ee17___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_be42def6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
