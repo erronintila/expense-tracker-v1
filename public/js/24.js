@@ -575,7 +575,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+      user: this.$store.getters.user.is_admin && this.mixin_can("view all users expenses") ? null : this.$store.getters.user,
       expense_type: {
         id: 0,
         name: "All Expense Types"
@@ -911,9 +911,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return "".concat(start_date, " ~ ").concat(end_date);
     }
-  },
-  created: function created() {
-    console.log("HELLO WORLD");
   },
   activated: function activated() {
     var _this6 = this;

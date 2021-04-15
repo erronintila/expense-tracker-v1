@@ -871,7 +871,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         status: "Active"
       },
       options: {
-        sortBy: ["last_name"],
+        sortBy: ["first_name"],
         sortDesc: [false],
         page: 1,
         itemsPerPage: 10

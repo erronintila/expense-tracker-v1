@@ -651,7 +651,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "data-table-expand"
       }],
       items: [],
-      user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+      user: this.$store.getters.user.is_admin && this.mixin_can("view all users expense reports") ? null : this.$store.getters.user,
       users: [],
       date_range: [moment__WEBPACK_IMPORTED_MODULE_1___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().endOf("month").format("YYYY-MM-DD")],
       preset: "",

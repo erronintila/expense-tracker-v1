@@ -563,7 +563,7 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+            user: (this.$store.getters.user.is_admin && this.mixin_can("view all users expenses")) ? null : this.$store.getters.user,
             expense_type: { id: 0, name: "All Expense Types" },
             expense_types: [],
             status: "All Expenses",
@@ -914,9 +914,6 @@ export default {
 
             return `${start_date} ~ ${end_date}`;
         }
-    },
-    created() {
-        console.log("HELLO WORLD");
     },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");

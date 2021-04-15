@@ -390,7 +390,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       totalAmount: 0,
       items: [],
-      user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+      user: this.$store.getters.user.is_admin && this.mixin_can("view all users payments") ? null : this.$store.getters.user,
       status: "All Payments",
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
