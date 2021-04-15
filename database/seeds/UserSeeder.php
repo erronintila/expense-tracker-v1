@@ -92,6 +92,7 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
                 Permission::create(['name' => 'restore expenses', 'category' => $model]);
                 Permission::create(['name' => 'select specific users on expenses', 'category' => $model]);
+                Permission::create(['name' => 'view all users expenses', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
@@ -103,11 +104,13 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'reject expense reports', 'category' => $model]);
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
                 Permission::create(['name' => 'select specific users on expense reports', 'category' => $model]);
+                Permission::create(['name' => 'view all users expense reports', 'category' => $model]);
                 // Permission::create(['name' => 'add expense report notes', 'category' => $model]);
             }
 
             if ($model == "payments") {
                 Permission::create(['name' => 'receive payments', 'category' => $model]);
+                Permission::create(['name' => 'view all users payments', 'category' => $model]);
                 // Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
                 // Permission::create(['name' => 'approve payments', 'category' => $model]);
             }
