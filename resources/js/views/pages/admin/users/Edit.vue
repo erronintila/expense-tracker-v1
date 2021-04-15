@@ -125,7 +125,8 @@ export default {
                         response.data.message
                     );
                     this.loader = false;
-                    window.location.replace("/users");
+                    this.$router.push({ name: admin.users.index });
+                    // window.location.replace("/users");
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);

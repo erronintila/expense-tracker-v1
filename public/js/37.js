@@ -517,6 +517,10 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.$store.dispatch("AUTH_SETTINGS");
 
+          _this2.$router.push({
+            name: admin.users.index
+          });
+
           window.location.replace("/settings");
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);

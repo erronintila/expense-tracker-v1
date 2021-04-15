@@ -117,7 +117,8 @@ export default {
                         };
 
                         this.$store.dispatch("AUTH_USER").then(response => {
-                            window.location.replace("/");
+                            this.$router.push("/");
+                            // window.location.replace("/");
                             // if (this.$store.getters.admin) {
                             //     window.location.replace("/admin");
                             // } else {

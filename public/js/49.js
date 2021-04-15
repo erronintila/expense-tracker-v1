@@ -84,7 +84,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.mixin_successDialog(response.data.status, response.data.message);
 
         _this.formDataLoaded = true;
-        window.location.replace("/users");
+
+        _this.$router.push({
+          name: admin.users.index
+        }); // window.location.replace("/users");
+
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
 

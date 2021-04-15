@@ -128,11 +128,13 @@ __webpack_require__.r(__webpack_exports__);
           };
 
           _this.$store.dispatch("AUTH_USER").then(function (response) {
-            window.location.replace("/"); // if (this.$store.getters.admin) {
+            _this.$router.push("/"); // window.location.replace("/");
+            // if (this.$store.getters.admin) {
             //     window.location.replace("/admin");
             // } else {
             //     window.location.replace("/");
             // }
+
           });
         })["catch"](function (error) {
           _this.mixin_showErrors(error);
