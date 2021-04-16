@@ -660,6 +660,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -762,7 +776,7 @@ __webpack_require__.r(__webpack_exports__);
         value: "iron"
       }],
       items: [],
-      user: this.$store.getters.user.is_admin ? null : this.$store.getters.user
+      user: this.$store.getters.user.is_admin && this.mixin_can("view all users expenses") ? null : this.$store.getters.user
     };
   },
   methods: {
@@ -1525,134 +1539,161 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
-                  _c(
-                    "v-menu",
-                    {
-                      attrs: {
-                        "close-on-content-click": false,
-                        "nudge-width": 200,
-                        "offset-y": "",
-                        left: "",
-                        bottom: ""
-                      },
-                      scopedSlots: _vm._u([
+                  _vm.$store.getters.user.is_admin &&
+                  _vm.mixin_can("view all users expenses")
+                    ? _c(
+                        "v-menu",
                         {
-                          key: "activator",
-                          fn: function(ref) {
-                            var on = ref.on
-                            var attrs = ref.attrs
-                            return [
-                              _c(
-                                "v-btn",
-                                _vm._g(
-                                  _vm._b(
-                                    { attrs: { icon: "" } },
-                                    "v-btn",
-                                    attrs,
-                                    false
-                                  ),
-                                  on
-                                ),
-                                [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
-                                1
-                              )
-                            ]
-                          }
-                        }
-                      ])
-                    },
-                    [
-                      _vm._v(" "),
-                      _c(
-                        "v-card",
+                          attrs: {
+                            "close-on-content-click": false,
+                            "nudge-width": 200,
+                            "offset-y": "",
+                            left: "",
+                            bottom: ""
+                          },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "activator",
+                                fn: function(ref) {
+                                  var on = ref.on
+                                  var attrs = ref.attrs
+                                  return [
+                                    _c(
+                                      "v-btn",
+                                      _vm._g(
+                                        _vm._b(
+                                          { attrs: { icon: "" } },
+                                          "v-btn",
+                                          attrs,
+                                          false
+                                        ),
+                                        on
+                                      ),
+                                      [
+                                        _c("v-icon", [
+                                          _vm._v("mdi-dots-vertical")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                }
+                              }
+                            ],
+                            null,
+                            false,
+                            3221905750
+                          )
+                        },
                         [
+                          _vm._v(" "),
                           _c(
-                            "v-list",
+                            "v-card",
                             [
                               _c(
-                                "v-list-item",
+                                "v-list",
                                 [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      value: _vm.user
-                                        ? _vm.user.full_name
-                                        : "All Employees",
-                                      label: "Employee",
-                                      readonly: ""
-                                    },
-                                    scopedSlots: _vm._u([
-                                      {
-                                        key: "append",
-                                        fn: function() {
-                                          return [
-                                            _c("UserDialogSelector", {
-                                              ref: "userDialogSelector",
-                                              attrs: {
-                                                selectedUser: _vm.user,
-                                                usersParameters: {
-                                                  params: {
-                                                    is_superadmin: false
-                                                  }
-                                                }
-                                              },
-                                              on: {
-                                                selectUser: _vm.selectUser,
-                                                onReset: _vm.resetUser
-                                              },
-                                              scopedSlots: _vm._u([
-                                                {
-                                                  key: "openDialog",
-                                                  fn: function(ref) {
-                                                    var bind = ref.bind
-                                                    var on = ref.on
-                                                    return [
-                                                      _c(
-                                                        "v-btn",
-                                                        _vm._g(
-                                                          _vm._b(
-                                                            {
-                                                              attrs: {
-                                                                fab: "",
-                                                                color:
-                                                                  "primary",
-                                                                text: "",
-                                                                "x-small": ""
-                                                              }
-                                                            },
-                                                            "v-btn",
-                                                            bind,
-                                                            false
-                                                          ),
-                                                          on
-                                                        ),
-                                                        [
-                                                          _c(
-                                                            "v-icon",
-                                                            {
-                                                              attrs: {
-                                                                dark: ""
-                                                              }
-                                                            },
-                                                            [
-                                                              _vm._v(
-                                                                "mdi-magnify"
+                                  _c(
+                                    "v-list-item",
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          value: _vm.user
+                                            ? _vm.user.full_name
+                                            : "All Employees",
+                                          label: "Employee",
+                                          readonly: ""
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "append",
+                                              fn: function() {
+                                                return [
+                                                  _c("UserDialogSelector", {
+                                                    ref: "userDialogSelector",
+                                                    attrs: {
+                                                      selectedUser: _vm.user,
+                                                      usersParameters: {
+                                                        params: {
+                                                          is_superadmin: false
+                                                        }
+                                                      }
+                                                    },
+                                                    on: {
+                                                      selectUser:
+                                                        _vm.selectUser,
+                                                      onReset: _vm.resetUser
+                                                    },
+                                                    scopedSlots: _vm._u(
+                                                      [
+                                                        {
+                                                          key: "openDialog",
+                                                          fn: function(ref) {
+                                                            var bind = ref.bind
+                                                            var on = ref.on
+                                                            return [
+                                                              _c(
+                                                                "v-btn",
+                                                                _vm._g(
+                                                                  _vm._b(
+                                                                    {
+                                                                      attrs: {
+                                                                        fab: "",
+                                                                        color:
+                                                                          "primary",
+                                                                        text:
+                                                                          "",
+                                                                        "x-small":
+                                                                          ""
+                                                                      }
+                                                                    },
+                                                                    "v-btn",
+                                                                    bind,
+                                                                    false
+                                                                  ),
+                                                                  on
+                                                                ),
+                                                                [
+                                                                  _c(
+                                                                    "v-icon",
+                                                                    {
+                                                                      attrs: {
+                                                                        dark: ""
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        "mdi-magnify"
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
                                                               )
                                                             ]
-                                                          )
-                                                        ],
-                                                        1
-                                                      )
-                                                    ]
-                                                  }
-                                                }
-                                              ])
-                                            })
-                                          ]
-                                        },
-                                        proxy: true
-                                      }
-                                    ])
-                                  })
+                                                          }
+                                                        }
+                                                      ],
+                                                      null,
+                                                      false,
+                                                      2729772431
+                                                    )
+                                                  })
+                                                ]
+                                              },
+                                              proxy: true
+                                            }
+                                          ],
+                                          null,
+                                          false,
+                                          2019087141
+                                        )
+                                      })
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               )
@@ -1662,9 +1703,7 @@ var render = function() {
                         ],
                         1
                       )
-                    ],
-                    1
-                  )
+                    : _vm._e()
                 ],
                 1
               ),
@@ -1712,7 +1751,10 @@ var render = function() {
                     ])
                   }),
                   _vm._v(" "),
-                  _vm.user != null && _vm.user.id > 0
+                  _vm.$store.getters.user.is_admin &&
+                  _vm.user != null &&
+                  _vm.user.id > 0 &&
+                  _vm.mixin_can("view all users expenses")
                     ? _c("v-chip", { attrs: { small: "" } }, [
                         _vm._v(_vm._s(_vm.user.full_name))
                       ])
@@ -2501,84 +2543,95 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("v-spacer"),
                                     _vm._v(" "),
-                                    _c(
-                                      "v-menu",
-                                      {
-                                        attrs: {
-                                          "close-on-content-click": false,
-                                          "nudge-width": 200,
-                                          "offset-y": "",
-                                          left: "",
-                                          bottom: ""
-                                        },
-                                        scopedSlots: _vm._u(
-                                          [
-                                            {
-                                              key: "activator",
-                                              fn: function(ref) {
-                                                var on = ref.on
-                                                var attrs = ref.attrs
-                                                return [
-                                                  _c(
-                                                    "v-btn",
-                                                    _vm._g(
-                                                      _vm._b(
-                                                        { attrs: { icon: "" } },
+                                    _vm.$store.getters.user.is_admin &&
+                                    _vm.mixin_can("view all users expenses")
+                                      ? _c(
+                                          "v-menu",
+                                          {
+                                            attrs: {
+                                              "close-on-content-click": false,
+                                              "nudge-width": 200,
+                                              "offset-y": "",
+                                              left: "",
+                                              bottom: ""
+                                            },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                {
+                                                  key: "activator",
+                                                  fn: function(ref) {
+                                                    var on = ref.on
+                                                    var attrs = ref.attrs
+                                                    return [
+                                                      _c(
                                                         "v-btn",
-                                                        attrs,
-                                                        false
-                                                      ),
-                                                      on
-                                                    ),
-                                                    [
-                                                      _c("v-icon", [
-                                                        _vm._v(
-                                                          "mdi-dots-vertical"
-                                                        )
-                                                      ])
-                                                    ],
-                                                    1
-                                                  )
-                                                ]
-                                              }
-                                            }
-                                          ],
-                                          null,
-                                          true
-                                        )
-                                      },
-                                      [
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-card",
+                                                        _vm._g(
+                                                          _vm._b(
+                                                            {
+                                                              attrs: {
+                                                                icon: ""
+                                                              }
+                                                            },
+                                                            "v-btn",
+                                                            attrs,
+                                                            false
+                                                          ),
+                                                          on
+                                                        ),
+                                                        [
+                                                          _c("v-icon", [
+                                                            _vm._v(
+                                                              "mdi-dots-vertical"
+                                                            )
+                                                          ])
+                                                        ],
+                                                        1
+                                                      )
+                                                    ]
+                                                  }
+                                                }
+                                              ],
+                                              null,
+                                              true
+                                            )
+                                          },
                                           [
+                                            _vm._v(" "),
                                             _c(
-                                              "v-list",
+                                              "v-card",
                                               [
                                                 _c(
-                                                  "v-list-item",
+                                                  "v-list",
                                                   [
-                                                    _c("v-select", {
-                                                      attrs: {
-                                                        label: "Filter",
-                                                        items: _vm.filterItems,
-                                                        "item-text": "text",
-                                                        "item-value": "value"
-                                                      },
-                                                      on: {
-                                                        change:
-                                                          _vm.onCategoryChange
-                                                      },
-                                                      model: {
-                                                        value: _vm.filter,
-                                                        callback: function(
-                                                          $$v
-                                                        ) {
-                                                          _vm.filter = $$v
-                                                        },
-                                                        expression: "filter"
-                                                      }
-                                                    })
+                                                    _c(
+                                                      "v-list-item",
+                                                      [
+                                                        _c("v-select", {
+                                                          attrs: {
+                                                            label: "Filter",
+                                                            items:
+                                                              _vm.filterItems,
+                                                            "item-text": "text",
+                                                            "item-value":
+                                                              "value"
+                                                          },
+                                                          on: {
+                                                            change:
+                                                              _vm.onCategoryChange
+                                                          },
+                                                          model: {
+                                                            value: _vm.filter,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.filter = $$v
+                                                            },
+                                                            expression: "filter"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
                                                   ],
                                                   1
                                                 )
@@ -2588,9 +2641,7 @@ var render = function() {
                                           ],
                                           1
                                         )
-                                      ],
-                                      1
-                                    )
+                                      : _vm._e()
                                   ],
                                   1
                                 ),

@@ -179,12 +179,10 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this3.mixin_successDialog(response.data.status, response.data.message);
 
-          _this3.formDataLoaded = true;
+          _this3.formDataLoaded = true; // this.$router.push({ name: admin.users.index });
+          // this.$router.push("/users");
 
-          _this3.$router.push({
-            name: admin.users.index
-          }); // window.location.replace("/users");
-
+          window.location.replace("/users");
         })["catch"](function (error) {
           _this3.mixin_showErrors(error);
 

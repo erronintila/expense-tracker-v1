@@ -1195,26 +1195,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  mounted: function mounted() {
+  activated: function activated() {
     var _this7 = this;
 
-    // this.$store.dispatch("AUTH_USER");
+    this.$store.dispatch("AUTH_USER");
     this.getData().then(function () {
       _this7.getDataFromApi().then(function (data) {
         _this7.form.expenses = data.items;
         _this7.totalItems = data.total;
         _this7.formDataLoaded = true;
-      });
-    });
-  },
-  activated: function activated() {
-    var _this8 = this;
-
-    this.getData().then(function () {
-      _this8.getDataFromApi().then(function (data) {
-        _this8.form.expenses = data.items;
-        _this8.totalItems = data.total;
-        _this8.formDataLoaded = true;
       });
     });
   },
@@ -1305,7 +1294,7 @@ var render = function() {
                                           text: "",
                                           color: "green",
                                           to:
-                                            "/user/expense_reports/" +
+                                            "/expense_reports/" +
                                             _vm.router_params_id +
                                             "/edit"
                                         }

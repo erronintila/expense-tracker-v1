@@ -1,1847 +1,528 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[60],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=script&lang=js&":
-/*!************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/JobDataService */ "./resources/js/services/JobDataService.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    selectedDepartment: {
-      type: Object,
-      "default": null
-    },
-    selectedJob: {
-      type: Object,
-      "default": null
-    },
-    parameters: {
-      type: Object,
-      "default": function _default() {}
-    },
-    rules: {
-      type: Array,
-      "default": function _default() {
-        return [];
-      }
-    },
-    errors: {
-      type: Array,
-      "default": function _default() {
-        return [];
-      }
-    },
-    showAll: {
-      type: Boolean,
-      "default": false
-    }
-  },
-  data: function data() {
-    return {
-      department: null,
-      jobs: [],
-      job: null
-    };
-  },
-  methods: {
-    getDataFromApi: function getDataFromApi() {
-      var _this = this;
-
-      var params = {
-        department_id: this.department ? this.department.id : null
-      };
-      var data = {
-        params: params
-      };
-      return new Promise(function (resolve, reject) {
-        _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll({
-          params: {
-            department_id: _this.department ? _this.department.id : null,
-            itemsPerPage: 200,
-            isSelection: true
-          }
-        }).then(function (response) {
-          resolve(response.data);
-        })["catch"](function (error) {
-          _this.mixin_showErrors(error);
-
-          reject();
-        });
-      });
-    },
-    onReset: function onReset() {
-      var _this2 = this;
-
-      this.job = null;
-      this.getDataFromApi().then(function (data) {
-        _this2.jobs = data.data;
-
-        if (_this2.showAll) {
-          _this2.jobs.unshift({
-            id: null,
-            name: "All Job Designations"
-          });
-        }
-      });
-      this.$emit("onReset");
-    },
-    onChange: function onChange(e) {
-      var _this3 = this;
-
-      this.job = e;
-      this.getDataFromApi().then(function (data) {
-        _this3.jobs = data.data;
-
-        if (_this3.showAll) {
-          _this3.jobs.unshift({
-            id: null,
-            name: "All Job Designations"
-          });
-        }
-      });
-      this.$emit("onChange", e);
-    }
-  },
-  created: function created() {
-    var _this4 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this4.jobs = data.data;
-
-      if (_this4.showAll) {
-        _this4.jobs.unshift({
-          id: null,
-          name: "All Job Designations"
-        });
-      }
-    });
-  },
-  activated: function activated() {
-    var _this5 = this;
-
-    this.getDataFromApi().then(function (data) {
-      _this5.jobs = data.data;
-
-      if (_this5.showAll) {
-        _this5.jobs.unshift({
-          id: null,
-          name: "All Job Designations"
-        });
-      }
-    });
-  },
-  watch: {
-    selectedJob: {
-      deep: true,
-      immediate: true,
-      handler: function handler(newValue, oldValue) {
-        this.job = newValue;
-      }
-    },
-    selectedDepartment: {
-      deep: true,
-      immediate: true,
-      handler: function handler(newValue, oldValue) {
-        this.department = newValue;
-        this.job = null;
-      }
-    },
-    department: function department() {
-      var _this6 = this;
-
-      this.getDataFromApi().then(function (data) {
-        _this6.jobs = data.data;
-
-        if (_this6.showAll) {
-          _this6.jobs.unshift({
-            id: null,
-            name: "All Job Designations"
-          });
-        }
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/dropdown/JobDropdownSelector */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue");
-/* harmony import */ var _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/PermissionDataService */ "./resources/js/services/PermissionDataService.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    JobDropdownSelector: _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__["default"]
-  },
-  props: {
-    userForm: {
-      type: Object,
-      "default": function _default() {
-        return {
-          code: null,
-          first_name: null,
-          middle_name: "",
-          last_name: null,
-          suffix: "",
-          gender: null,
-          birthdate: null,
-          mobile_number: null,
-          telephone_number: "",
-          address: null,
-          fund: 0,
-          remaining_fund: 0,
-          username: "",
-          email: null,
-          password: "password",
-          password_confirmation: "password",
-          is_admin: false,
-          is_superadmin: false,
-          can_login: true,
-          is_active: true,
-          type: "employee",
-          job: null,
-          permissions: [],
-          role: "Standard User"
-        };
-      }
-    },
-    errors: {
-      type: Object,
-      "default": function _default() {
-        return {
-          code: [],
-          first_name: [],
-          middle_name: [],
-          last_name: [],
-          suffix: [],
-          gender: [],
-          birthdate: [],
-          job: [],
-          mobile_number: [],
-          telephone_number: [],
-          email: [],
-          address: [],
-          username: [],
-          role: [],
-          can_login: [],
-          is_active: [],
-          has_fund: [],
-          fund: []
-        };
-      }
-    },
-    rules: {
-      type: Object,
-      "default": function _default() {
-        return {};
-      }
-    },
-    isEdit: {
-      type: Boolean,
-      "default": false
-    }
-  },
-  data: function data() {
-    return {
-      panel: [0, 1, 2],
-      valid: false,
-      menu: false,
-      collections: {
-        permissions: [],
-        headers: [{
-          text: "Permission",
-          value: "name",
-          sortable: false
-        }]
-      },
-      form: {
-        code: null,
-        first_name: null,
-        middle_name: "",
-        last_name: null,
-        suffix: "",
-        gender: null,
-        birthdate: null,
-        mobile_number: null,
-        telephone_number: "",
-        address: null,
-        fund: 0,
-        remaining_fund: 0,
-        username: "",
-        email: null,
-        password: "password",
-        password_confirmation: "password",
-        is_admin: false,
-        is_superadmin: false,
-        can_login: true,
-        is_active: true,
-        type: "employee",
-        job: null,
-        permissions: [],
-        role: "Standard User"
-      }
-    };
-  },
-  methods: {
-    onChangeJob: function onChangeJob(e) {
-      this.errors.job_id = [];
-      this.form.job = e;
-    },
-    onSave: function onSave() {
-      if (!this.$refs.form.validate()) {
-        return;
-      }
-
-      this.$emit("on-save", this.form);
-    },
-    loadPermissions: function loadPermissions() {
-      var _this = this;
-
-      _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_2__["default"].get({
-        params: {
-          role: this.form.role
-        }
-      }).then(function (response) {
-        _this.collections.permissions = response.data;
-        _this.form.permissions = response.data;
-      })["catch"](function (error) {
-        _this.mixin_showErrors(error);
-      });
-    }
-  },
-  computed: {
-    maxDate: function maxDate() {
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
-    }
-  },
-  watch: {
-    userForm: {
-      deep: true,
-      immediate: true,
-      handler: function handler(newValue, oldValue) {
-        this.form = newValue;
-      }
-    },
-    "form.role": function formRole() {
-      this.loadPermissions();
-    }
-  },
-  created: function created() {
-    this.loadPermissions();
-  },
-  activated: function activated() {
-    this.loadPermissions();
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=template&id=6cd62344&":
-/*!****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=template&id=6cd62344& ***!
-  \****************************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("v-autocomplete", {
-    attrs: {
-      label: "Job Designation",
-      "item-value": "id",
-      "item-text": "name",
-      "return-object": "",
-      items: _vm.jobs,
-      rules: _vm.rules,
-      "error-messages": _vm.errors
-    },
-    on: { change: _vm.onChange },
-    model: {
-      value: _vm.job,
-      callback: function($$v) {
-        _vm.job = $$v
-      },
-      expression: "job"
-    }
-  })
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216& ***!
-  \********************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "v-form",
-    {
-      ref: "form",
-      model: {
-        value: _vm.valid,
-        callback: function($$v) {
-          _vm.valid = $$v
-        },
-        expression: "valid"
-      }
-    },
-    [
-      _c(
-        "v-expansion-panels",
-        {
-          attrs: { flat: "", multiple: "" },
-          model: {
-            value: _vm.panel,
-            callback: function($$v) {
-              _vm.panel = $$v
-            },
-            expression: "panel"
-          }
-        },
-        [
-          _c(
-            "v-expansion-panel",
-            [
-              _c("v-expansion-panel-header", [
-                _c("div", { staticClass: "overline green--text" }, [
-                  _vm._v(
-                    "\n                    Basic Details\n                "
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-expansion-panel-content",
-                [
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("JobDropdownSelector", {
-                            ref: "jobSelector",
-                            attrs: {
-                              selectedJob: _vm.form.job,
-                              rules: _vm.mixin_validation.required,
-                              errors: _vm.errors.job_id
-                            },
-                            on: { onChange: _vm.onChangeJob },
-                            model: {
-                              value: _vm.form.job,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "job", $$v)
-                              },
-                              expression: "form.job"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(100)
-                              ),
-                              counter: 100,
-                              "error-messages": _vm.errors.code,
-                              label: "Code",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.code = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.code,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "code", $$v)
-                              },
-                              expression: "form.code"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(100)
-                              ),
-                              counter: 100,
-                              "error-messages": _vm.errors.first_name,
-                              label: "First Name",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.first_name = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.first_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "first_name", $$v)
-                              },
-                              expression: "form.first_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              counter: 100,
-                              "error-messages": _vm.errors.middle_name,
-                              label: "Middle Name"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.middle_name = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.middle_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "middle_name", $$v)
-                              },
-                              expression: "form.middle_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(100)
-                              ),
-                              counter: 100,
-                              "error-messages": _vm.errors.last_name,
-                              label: "Last Name",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.last_name = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.last_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "last_name", $$v)
-                              },
-                              expression: "form.last_name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-combobox", {
-                            attrs: {
-                              counter: 30,
-                              items: ["Jr", "Sr", "II", "III"],
-                              "error-messages": _vm.errors.suffix,
-                              label: "Suffix"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.suffix = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.suffix,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "suffix", $$v)
-                              },
-                              expression: "form.suffix"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-select", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required,
-                              items: ["Male", "Female"],
-                              "error-messages": _vm.errors.gender,
-                              label: "Gender",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.gender = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.gender,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "gender", $$v)
-                              },
-                              expression: "form.gender"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c(
-                            "v-menu",
-                            {
-                              ref: "menu",
-                              attrs: {
-                                "close-on-content-click": false,
-                                transition: "scale-transition",
-                                "offset-y": "",
-                                "min-width": "290px"
-                              },
-                              scopedSlots: _vm._u([
-                                {
-                                  key: "activator",
-                                  fn: function(ref) {
-                                    var on = ref.on
-                                    var attrs = ref.attrs
-                                    return [
-                                      _c(
-                                        "v-text-field",
-                                        _vm._g(
-                                          _vm._b(
-                                            {
-                                              attrs: {
-                                                rules:
-                                                  _vm.mixin_validation.required,
-                                                "error-messages":
-                                                  _vm.errors.birthdate,
-                                                label: "Birthdate",
-                                                readonly: ""
-                                              },
-                                              on: {
-                                                input: function($event) {
-                                                  _vm.errors.birthdate = []
-                                                }
-                                              },
-                                              model: {
-                                                value: _vm.form.birthdate,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.form,
-                                                    "birthdate",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "form.birthdate"
-                                              }
-                                            },
-                                            "v-text-field",
-                                            attrs,
-                                            false
-                                          ),
-                                          on
-                                        )
-                                      )
-                                    ]
-                                  }
-                                }
-                              ]),
-                              model: {
-                                value: _vm.menu,
-                                callback: function($$v) {
-                                  _vm.menu = $$v
-                                },
-                                expression: "menu"
-                              }
-                            },
-                            [
-                              _vm._v(" "),
-                              _c("v-date-picker", {
-                                attrs: {
-                                  "no-title": "",
-                                  scrollable: "",
-                                  color: "success",
-                                  max: _vm.maxDate
-                                },
-                                model: {
-                                  value: _vm.form.birthdate,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "birthdate", $$v)
-                                  },
-                                  expression: "form.birthdate"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required,
-                              counter: 30,
-                              "error-messages": _vm.errors.mobile_number,
-                              label: "Mobile Number",
-                              type: "number"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.mobile_number = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.mobile_number,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "mobile_number", $$v)
-                              },
-                              expression: "form.mobile_number"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              counter: 30,
-                              "error-messages": _vm.errors.telephone_number,
-                              label: "Telephone Number",
-                              type: "number"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.telephone_number = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.telephone_number,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "telephone_number", $$v)
-                              },
-                              expression: "form.telephone_number"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.email
-                              ),
-                              "error-messages": _vm.errors.email,
-                              label: "Email Address"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.email = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.email,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "email", $$v)
-                              },
-                              expression: "form.email"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12" } },
-                        [
-                          _c("v-textarea", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required,
-                              "error-messages": _vm.errors.address,
-                              label: "Address",
-                              rows: "1"
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.address = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.address,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "address", $$v)
-                              },
-                              expression: "form.address"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  !_vm.isEdit
-                    ? _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-checkbox", {
-                                attrs: {
-                                  label: "has Revolving Fund",
-                                  "error-messages": _vm.errors.has_fund
-                                },
-                                model: {
-                                  value: _vm.form.has_fund,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "has_fund", $$v)
-                                  },
-                                  expression: "form.has_fund"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.form.has_fund && !_vm.isEdit
-                    ? _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Revolving Fund",
-                                  "error-messages": _vm.errors.fund,
-                                  type: "number"
-                                },
-                                on: {
-                                  input: function($event) {
-                                    _vm.errors.fund = []
-                                  }
-                                },
-                                model: {
-                                  value: _vm.form.fund,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "fund", $$v)
-                                  },
-                                  expression: "form.fund"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e()
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-expansion-panel",
-            [
-              _c("v-expansion-panel-header", [
-                _c("div", { staticClass: "overline green--text" }, [
-                  _vm._v(
-                    "\n                    Account Details\n                "
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-expansion-panel-content",
-                [
-                  !_vm.isEdit
-                    ? _c("small", { staticClass: "text--secondary" }, [
-                        _vm._v(
-                          '\n                    Default Password: "password"\n                '
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "4" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              rules: _vm.mixin_validation.required.concat(
-                                _vm.mixin_validation.minLength(50)
-                              ),
-                              counter: 50,
-                              "error-messages": _vm.errors.username,
-                              label: "Username",
-                              required: ""
-                            },
-                            on: {
-                              input: function($event) {
-                                _vm.errors.username = []
-                              }
-                            },
-                            model: {
-                              value: _vm.form.username,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "username", $$v)
-                              },
-                              expression: "form.username"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      !_vm.isEdit
-                        ? _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-checkbox", {
-                                attrs: {
-                                  label: "Active Account",
-                                  "error-messages": _vm.errors.is_active
-                                },
-                                model: {
-                                  value: _vm.form.is_active,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "is_active", $$v)
-                                  },
-                                  expression: "form.is_active"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.isEdit
-                        ? _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c("v-checkbox", {
-                                attrs: {
-                                  label: "Allow Login",
-                                  "error-messages": _vm.errors.can_login
-                                },
-                                model: {
-                                  value: _vm.form.can_login,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "can_login", $$v)
-                                  },
-                                  expression: "form.can_login"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.isEdit
-                        ? _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c(
-                                "v-radio-group",
-                                {
-                                  attrs: { row: "", label: "Role" },
-                                  model: {
-                                    value: _vm.form.role,
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.form, "role", $$v)
-                                    },
-                                    expression: "form.role"
-                                  }
-                                },
-                                [
-                                  _c("v-radio", {
-                                    attrs: {
-                                      label: "Standard User",
-                                      value: "Standard User"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("v-radio", {
-                                    attrs: {
-                                      label: "Administrator",
-                                      value: "Administrator"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        : _vm._e()
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  !_vm.isEdit
-                    ? _c(
-                        "v-row",
-                        [
-                          _c(
-                            "v-col",
-                            [
-                              _c("v-data-table", {
-                                attrs: {
-                                  "show-select": "",
-                                  "items-per-page": -1,
-                                  headers: _vm.collections.headers,
-                                  items: _vm.collections.permissions,
-                                  "group-by": "category"
-                                },
-                                model: {
-                                  value: _vm.form.permissions,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "permissions", $$v)
-                                  },
-                                  expression: "form.permissions"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    : _vm._e()
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c(
-            "v-col",
-            { staticClass: "text-right" },
-            [
-              _c(
-                "v-btn",
-                {
-                  attrs: { color: "success", dark: "" },
-                  on: { click: _vm.onSave }
-                },
-                [_vm._v("Save")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  on: {
-                    click: function($event) {
-                      return _vm.$router.go(-1)
-                    }
-                  }
-                },
-                [_vm._v("Cancel")]
-              )
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue":
-/*!***************************************************************************!*\
-  !*** ./resources/js/components/selector/dropdown/JobDropdownSelector.vue ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _JobDropdownSelector_vue_vue_type_template_id_6cd62344___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./JobDropdownSelector.vue?vue&type=template&id=6cd62344& */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=template&id=6cd62344&");
-/* harmony import */ var _JobDropdownSelector_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./JobDropdownSelector.vue?vue&type=script&lang=js& */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _JobDropdownSelector_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _JobDropdownSelector_vue_vue_type_template_id_6cd62344___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _JobDropdownSelector_vue_vue_type_template_id_6cd62344___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/selector/dropdown/JobDropdownSelector.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************!*\
-  !*** ./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobDropdownSelector_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./JobDropdownSelector.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobDropdownSelector_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=template&id=6cd62344&":
-/*!**********************************************************************************************************!*\
-  !*** ./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=template&id=6cd62344& ***!
-  \**********************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_JobDropdownSelector_vue_vue_type_template_id_6cd62344___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./JobDropdownSelector.vue?vue&type=template&id=6cd62344& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/selector/dropdown/JobDropdownSelector.vue?vue&type=template&id=6cd62344&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_JobDropdownSelector_vue_vue_type_template_id_6cd62344___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_JobDropdownSelector_vue_vue_type_template_id_6cd62344___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/services/JobDataService.js":
+/***/ "./node_modules/randomcolor/randomColor.js":
 /*!*************************************************!*\
-  !*** ./resources/js/services/JobDataService.js ***!
+  !*** ./node_modules/randomcolor/randomColor.js ***!
   \*************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/* WEBPACK VAR INJECTION */(function(module) {// randomColor by David Merfield under the CC0 license
+// https://github.com/davidmerfield/randomColor/
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+;(function(root, factory) {
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  // Support CommonJS
+  if (true) {
+    var randomColor = factory();
 
-// import http from "../http-common";
+    // Support NodeJS & Component, which allow module.exports to be a function
+    if ( true && module && module.exports) {
+      exports = module.exports = randomColor;
+    }
 
+    // Support CommonJS 1.1.1 spec
+    exports.randomColor = randomColor;
 
-var JobDataService = /*#__PURE__*/function () {
-  function JobDataService() {
-    _classCallCheck(this, JobDataService);
+  // Support AMD
+  } else {}
+
+}(this, function() {
+
+  // Seed to get repeatable colors
+  var seed = null;
+
+  // Shared color dictionary
+  var colorDictionary = {};
+
+  // Populate the color dictionary
+  loadColorBounds();
+
+  // check if a range is taken
+  var colorRanges = [];
+
+  var randomColor = function (options) {
+
+    options = options || {};
+
+    // Check if there is a seed and ensure it's an
+    // integer. Otherwise, reset the seed value.
+    if (options.seed !== undefined && options.seed !== null && options.seed === parseInt(options.seed, 10)) {
+      seed = options.seed;
+
+    // A string was passed as a seed
+    } else if (typeof options.seed === 'string') {
+      seed = stringToInteger(options.seed);
+
+    // Something was passed as a seed but it wasn't an integer or string
+    } else if (options.seed !== undefined && options.seed !== null) {
+      throw new TypeError('The seed value must be an integer or string');
+
+    // No seed, reset the value outside.
+    } else {
+      seed = null;
+    }
+
+    var H,S,B;
+
+    // Check if we need to generate multiple colors
+    if (options.count !== null && options.count !== undefined) {
+
+      var totalColors = options.count,
+          colors = [];
+      // Value false at index i means the range i is not taken yet.
+      for (var i = 0; i < options.count; i++) {
+        colorRanges.push(false)
+        }
+      options.count = null;
+
+      while (totalColors > colors.length) {
+
+        var color = randomColor(options);
+
+        if (seed !== null) {
+          options.seed = seed;
+        }
+
+        colors.push(color);
+      }
+
+      options.count = totalColors;
+
+      return colors;
+    }
+
+    // First we pick a hue (H)
+    H = pickHue(options);
+
+    // Then use H to determine saturation (S)
+    S = pickSaturation(H, options);
+
+    // Then use S and H to determine brightness (B).
+    B = pickBrightness(H, S, options);
+
+    // Then we return the HSB color in the desired format
+    return setFormat([H,S,B], options);
+  };
+
+  function pickHue(options) {
+    if (colorRanges.length > 0) {
+      var hueRange = getRealHueRange(options.hue)
+
+      var hue = randomWithin(hueRange)
+
+      //Each of colorRanges.length ranges has a length equal approximatelly one step
+      var step = (hueRange[1] - hueRange[0]) / colorRanges.length
+
+      var j = parseInt((hue - hueRange[0]) / step)
+
+      //Check if the range j is taken
+      if (colorRanges[j] === true) {
+        j = (j + 2) % colorRanges.length
+      }
+      else {
+        colorRanges[j] = true
+           }
+
+      var min = (hueRange[0] + j * step) % 359,
+          max = (hueRange[0] + (j + 1) * step) % 359;
+
+      hueRange = [min, max]
+
+      hue = randomWithin(hueRange)
+
+      if (hue < 0) {hue = 360 + hue;}
+      return hue
+    }
+    else {
+      var hueRange = getHueRange(options.hue)
+
+      hue = randomWithin(hueRange);
+      // Instead of storing red as two seperate ranges,
+      // we group them, using negative numbers
+      if (hue < 0) {
+        hue = 360 + hue;
+      }
+
+      return hue;
+    }
   }
 
-  _createClass(JobDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/jobs", data);
+  function pickSaturation (hue, options) {
+
+    if (options.hue === 'monochrome') {
+      return 0;
     }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/jobs", data);
+
+    if (options.luminosity === 'random') {
+      return randomWithin([0,100]);
     }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/jobs/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/jobs", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/jobs/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/jobs/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/jobs/restore/".concat(id), data);
-    }
-  }]);
 
-  return JobDataService;
-}();
+    var saturationRange = getSaturationRange(hue);
 
-/* harmony default export */ __webpack_exports__["default"] = (new JobDataService());
+    var sMin = saturationRange[0],
+        sMax = saturationRange[1];
 
-/***/ }),
+    switch (options.luminosity) {
 
-/***/ "./resources/js/services/PermissionDataService.js":
-/*!********************************************************!*\
-  !*** ./resources/js/services/PermissionDataService.js ***!
-  \********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+      case 'bright':
+        sMin = 55;
+        break;
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+      case 'dark':
+        sMin = sMax - 10;
+        break;
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+      case 'light':
+        sMax = 55;
+        break;
+   }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+    return randomWithin([sMin, sMax]);
 
-// import http from "../http-common";
-
-
-var PermissionDataService = /*#__PURE__*/function () {
-  function PermissionDataService() {
-    _classCallCheck(this, PermissionDataService);
   }
 
-  _createClass(PermissionDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/permissions", data);
+  function pickBrightness (H, S, options) {
+
+    var bMin = getMinimumBrightness(H, S),
+        bMax = 100;
+
+    switch (options.luminosity) {
+
+      case 'dark':
+        bMax = bMin + 20;
+        break;
+
+      case 'light':
+        bMin = (bMax + bMin)/2;
+        break;
+
+      case 'random':
+        bMin = 0;
+        bMax = 100;
+        break;
     }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/permissions", data);
-    }
-  }]);
 
-  return PermissionDataService;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (new PermissionDataService());
-
-/***/ }),
-
-/***/ "./resources/js/services/UserDataService.js":
-/*!**************************************************!*\
-  !*** ./resources/js/services/UserDataService.js ***!
-  \**************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// import http from "../http-common";
-
-
-var UserDataService = /*#__PURE__*/function () {
-  function UserDataService() {
-    _classCallCheck(this, UserDataService);
+    return randomWithin([bMin, bMax]);
   }
 
-  _createClass(UserDataService, [{
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/users", data);
+  function setFormat (hsv, options) {
+
+    switch (options.format) {
+
+      case 'hsvArray':
+        return hsv;
+
+      case 'hslArray':
+        return HSVtoHSL(hsv);
+
+      case 'hsl':
+        var hsl = HSVtoHSL(hsv);
+        return 'hsl('+hsl[0]+', '+hsl[1]+'%, '+hsl[2]+'%)';
+
+      case 'hsla':
+        var hslColor = HSVtoHSL(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'hsla('+hslColor[0]+', '+hslColor[1]+'%, '+hslColor[2]+'%, ' + alpha + ')';
+
+      case 'rgbArray':
+        return HSVtoRGB(hsv);
+
+      case 'rgb':
+        var rgb = HSVtoRGB(hsv);
+        return 'rgb(' + rgb.join(', ') + ')';
+
+      case 'rgba':
+        var rgbColor = HSVtoRGB(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'rgba(' + rgbColor.join(', ') + ', ' + alpha + ')';
+
+      default:
+        return HSVtoHex(hsv);
     }
-  }, {
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
+
+  }
+
+  function getMinimumBrightness(H, S) {
+
+    var lowerBounds = getColorInfo(H).lowerBounds;
+
+    for (var i = 0; i < lowerBounds.length - 1; i++) {
+
+      var s1 = lowerBounds[i][0],
+          v1 = lowerBounds[i][1];
+
+      var s2 = lowerBounds[i+1][0],
+          v2 = lowerBounds[i+1][1];
+
+      if (S >= s1 && S <= s2) {
+
+         var m = (v2 - v1)/(s2 - s1),
+             b = v1 - m*s1;
+
+         return m*S + b;
+      }
+
     }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/".concat(id), data);
+
+    return 0;
+  }
+
+  function getHueRange (colorInput) {
+
+    if (typeof parseInt(colorInput) === 'number') {
+
+      var number = parseInt(colorInput);
+
+      if (number < 360 && number > 0) {
+        return [number, number];
+      }
+
     }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/users", data);
+
+    if (typeof colorInput === 'string') {
+
+      if (colorDictionary[colorInput]) {
+        var color = colorDictionary[colorInput];
+        if (color.hueRange) {return color.hueRange;}
+      } else if (colorInput.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorInput)[0];
+        return [ hue, hue ];
+      }
     }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
+
+    return [0,360];
+
+  }
+
+  function getSaturationRange (hue) {
+    return getColorInfo(hue).saturationRange;
+  }
+
+  function getColorInfo (hue) {
+
+    // Maps red colors to make picking hue easier
+    if (hue >= 334 && hue <= 360) {
+      hue-= 360;
     }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/users/".concat(id), data);
+
+    for (var colorName in colorDictionary) {
+       var color = colorDictionary[colorName];
+       if (color.hueRange &&
+           hue >= color.hueRange[0] &&
+           hue <= color.hueRange[1]) {
+          return colorDictionary[colorName];
+       }
+    } return 'Color not found';
+  }
+
+  function randomWithin (range) {
+    if (seed === null) {
+      //generate random evenly destinct number from : https://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+      var golden_ratio = 0.618033988749895
+      var r=Math.random()
+      r += golden_ratio
+      r %= 1
+      return Math.floor(range[0] + r*(range[1] + 1 - range[0]));
+    } else {
+      //Seeded random algorithm from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+      var max = range[1] || 1;
+      var min = range[0] || 0;
+      seed = (seed * 9301 + 49297) % 233280;
+      var rnd = seed / 233280.0;
+      return Math.floor(min + rnd * (max - min));
+}
+  }
+
+  function HSVtoHex (hsv){
+
+    var rgb = HSVtoRGB(hsv);
+
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? '0' + hex : hex;
     }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/restore/".concat(id), data);
+
+    var hex = '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+
+    return hex;
+
+  }
+
+  function defineColor (name, hueRange, lowerBounds) {
+
+    var sMin = lowerBounds[0][0],
+        sMax = lowerBounds[lowerBounds.length - 1][0],
+
+        bMin = lowerBounds[lowerBounds.length - 1][1],
+        bMax = lowerBounds[0][1];
+
+    colorDictionary[name] = {
+      hueRange: hueRange,
+      lowerBounds: lowerBounds,
+      saturationRange: [sMin, sMax],
+      brightnessRange: [bMin, bMax]
+    };
+
+  }
+
+  function loadColorBounds () {
+
+    defineColor(
+      'monochrome',
+      null,
+      [[0,0],[100,0]]
+    );
+
+    defineColor(
+      'red',
+      [-26,18],
+      [[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]
+    );
+
+    defineColor(
+      'orange',
+      [18,46],
+      [[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]
+    );
+
+    defineColor(
+      'yellow',
+      [46,62],
+      [[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]
+    );
+
+    defineColor(
+      'green',
+      [62,178],
+      [[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]
+    );
+
+    defineColor(
+      'blue',
+      [178, 257],
+      [[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]
+    );
+
+    defineColor(
+      'purple',
+      [257, 282],
+      [[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]
+    );
+
+    defineColor(
+      'pink',
+      [282, 334],
+      [[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]
+    );
+
+  }
+
+  function HSVtoRGB (hsv) {
+
+    // this doesn't work for the values of 0 and 360
+    // here's the hacky fix
+    var h = hsv[0];
+    if (h === 0) {h = 1;}
+    if (h === 360) {h = 359;}
+
+    // Rebase the h,s,v values
+    h = h/360;
+    var s = hsv[1]/100,
+        v = hsv[2]/100;
+
+    var h_i = Math.floor(h*6),
+      f = h * 6 - h_i,
+      p = v * (1 - s),
+      q = v * (1 - f*s),
+      t = v * (1 - (1 - f)*s),
+      r = 256,
+      g = 256,
+      b = 256;
+
+    switch(h_i) {
+      case 0: r = v; g = t; b = p;  break;
+      case 1: r = q; g = v; b = p;  break;
+      case 2: r = p; g = v; b = t;  break;
+      case 3: r = p; g = q; b = v;  break;
+      case 4: r = t; g = p; b = v;  break;
+      case 5: r = v; g = p; b = q;  break;
     }
-  }, {
-    key: "updatePassword",
-    value: function updatePassword(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_password/".concat(id), data);
+
+    var result = [Math.floor(r*255), Math.floor(g*255), Math.floor(b*255)];
+    return result;
+  }
+
+  function HexToHSB (hex) {
+    hex = hex.replace(/^#/, '');
+    hex = hex.length === 3 ? hex.replace(/(.)/g, '$1$1') : hex;
+
+    var red = parseInt(hex.substr(0, 2), 16) / 255,
+          green = parseInt(hex.substr(2, 2), 16) / 255,
+          blue = parseInt(hex.substr(4, 2), 16) / 255;
+
+    var cMax = Math.max(red, green, blue),
+          delta = cMax - Math.min(red, green, blue),
+          saturation = cMax ? (delta / cMax) : 0;
+
+    switch (cMax) {
+      case red: return [ 60 * (((green - blue) / delta) % 6) || 0, saturation, cMax ];
+      case green: return [ 60 * (((blue - red) / delta) + 2) || 0, saturation, cMax ];
+      case blue: return [ 60 * (((red - green) / delta) + 4) || 0, saturation, cMax ];
     }
-  }, {
-    key: "resetPassword",
-    value: function resetPassword(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/reset_password/".concat(id), data);
+  }
+
+  function HSVtoHSL (hsv) {
+    var h = hsv[0],
+      s = hsv[1]/100,
+      v = hsv[2]/100,
+      k = (2-s)*v;
+
+    return [
+      h,
+      Math.round(s*v / (k<1 ? k : 2-k) * 10000) / 100,
+      k/2 * 100
+    ];
+  }
+
+  function stringToInteger (string) {
+    var total = 0
+    for (var i = 0; i !== string.length; i++) {
+      if (total >= Number.MAX_SAFE_INTEGER) break;
+      total += string.charCodeAt(i)
     }
-  }, {
-    key: "verifyEmail",
-    value: function verifyEmail(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/verify_email/".concat(id), data);
+    return total
+  }
+
+  // get The range of given hue when options.count!=0
+  function getRealHueRange(colorHue)
+  { if (!isNaN(colorHue)) {
+    var number = parseInt(colorHue);
+
+    if (number < 360 && number > 0) {
+      return getColorInfo(colorHue).hueRange
     }
-  }, {
-    key: "updateFund",
-    value: function updateFund(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_fund/".concat(id), data);
+  }
+    else if (typeof colorHue === 'string') {
+
+      if (colorDictionary[colorHue]) {
+        var color = colorDictionary[colorHue];
+
+        if (color.hueRange) {
+          return color.hueRange
+       }
+    } else if (colorHue.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorHue)[0]
+        return getColorInfo(hue).hueRange
     }
-  }, {
-    key: "updateSettings",
-    value: function updateSettings(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
-    }
-  }, {
-    key: "updatePermissions",
-    value: function updatePermissions(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_permissions/".concat(id), data);
-    }
-  }, {
-    key: "updateProfile",
-    value: function updateProfile(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
-    }
-  }, {
-    key: "updateActivation",
-    value: function updateActivation(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
-    }
-  }, {
-    key: "export",
-    value: function _export() {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
-    }
-  }]);
+  }
 
-  return UserDataService;
-}();
+    return [0,360]
+}
+  return randomColor;
+}));
 
-/* harmony default export */ __webpack_exports__["default"] = (new UserDataService());
-
-/***/ }),
-
-/***/ "./resources/js/views/pages/admin/users/Form.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/views/pages/admin/users/Form.vue ***!
-  \*******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue?vue&type=template&id=fc079216& */ "./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&");
-/* harmony import */ var _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/views/pages/admin/users/Form.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216& ***!
-  \**************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=fc079216& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ })
 

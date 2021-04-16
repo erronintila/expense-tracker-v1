@@ -575,12 +575,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
+  beforeCreate: function beforeCreate() {
+    this.$store.dispatch('AUTH_USER');
+  },
   created: function created() {
     var _this3 = this;
 
-    console.log("new");
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this3.user = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this3.user = response;
     });
   },
   activated: function activated() {
@@ -588,7 +590,7 @@ __webpack_require__.r(__webpack_exports__);
 
     console.log("new");
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this4.user = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
+      _this4.user = response;
     });
   }
 });

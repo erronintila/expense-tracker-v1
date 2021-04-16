@@ -391,6 +391,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -444,25 +445,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    onSearch: function onSearch() {
+      var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.collections.items = data.data;
+        _this.meta = data.meta;
+      });
+    },
     onChangeDepartment: function onChangeDepartment(value) {
       this.filters.department = value;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this = this;
+      var _this2 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this.filters.search.trim().toLowerCase();
+        var search = _this2.filters.search.trim().toLowerCase();
 
-        var department_id = _this.filters.department.id;
-        var status = _this.filters.status;
-        var isDeleted = _this.filters.status == "Archived";
+        var department_id = _this2.filters.department.id;
+        var status = _this2.filters.status;
+        var isDeleted = _this2.filters.status == "Archived";
         var data = {
           params: {
             search: search,
@@ -476,14 +485,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         };
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           resolve(response.data);
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          _this2.mixin_showErrors(error);
 
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           reject();
         });
       });
@@ -518,7 +527,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.collections.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
@@ -527,40 +536,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
-          var ids = _this2.collections.selected.map(function (item) {
-            return item.id;
-          });
-
-          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
-            _this2.mixin_successDialog(response.data.status, response.data.message);
-
-            _this2.getDataFromApi().then(function (data) {
-              _this2.collections.items = data.data;
-              _this2.meta = data.meta;
-            });
-
-            _this2.collections.selected = [];
-          })["catch"](function (error) {
-            _this2.mixin_showErrors(error);
-          });
-        }
-      });
-    },
-    onRestore: function onRestore() {
-      var _this3 = this;
-
-      if (this.collections.selected.length == 0) {
-        this.mixin_errorDialog("Error", "No item(s) selected");
-        return;
-      }
-
-      this.$confirm("Do you want to restore account(s)?").then(function (res) {
-        if (res) {
           var ids = _this3.collections.selected.map(function (item) {
             return item.id;
           });
 
-          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -574,27 +554,65 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    onRestore: function onRestore() {
+      var _this4 = this;
+
+      if (this.collections.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to restore account(s)?").then(function (res) {
+        if (res) {
+          var ids = _this4.collections.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+            _this4.mixin_successDialog(response.data.status, response.data.message);
+
+            _this4.getDataFromApi().then(function (data) {
+              _this4.collections.items = data.data;
+              _this4.meta = data.meta;
+            });
+
+            _this4.collections.selected = [];
+          })["catch"](function (error) {
+            _this4.mixin_showErrors(error);
+          });
+        }
+      });
     }
   },
   computed: {
     params: function params(nv) {
-      var _objectSpread2;
-
-      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.filters.search
-      }, _defineProperty(_objectSpread2, "query", this.filters.status), _defineProperty(_objectSpread2, "query", this.filters.department), _objectSpread2));
+      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+        // query: this.filters.search,
+        query: this.filters.status
+      }, "query", this.filters.department));
     }
   },
   watch: {
+    "filters.search": function filtersSearch() {
+      var _this5 = this;
+
+      if (this.filters.search == "") {
+        this.getDataFromApi().then(function (data) {
+          _this5.collections.items = data.data;
+          _this5.meta = data.meta;
+        });
+      }
+    },
     params: {
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this4 = this;
+        var _this6 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this4.collections.items = data.data;
-          _this4.meta = data.meta;
+          _this6.collections.items = data.data;
+          _this6.meta = data.meta;
         });
       }
     }
@@ -603,12 +621,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this5 = this;
+    var _this7 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this5.collections.items = data.data;
-      _this5.meta = data.meta;
+      _this7.collections.items = data.data;
+      _this7.meta = data.meta;
     });
   }
 });
@@ -1022,6 +1040,23 @@ var render = function() {
                       label: "Search",
                       "single-line": "",
                       "hide-details": ""
+                    },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.onSearch($event)
+                      }
                     },
                     model: {
                       value: _vm.filters.search,

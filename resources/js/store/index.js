@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import SecureLS from "secure-ls";
+// import SecureLS from "secure-ls";
 
-const ls = new SecureLS({ isCompression: false });
+// const ls = new SecureLS({ isCompression: false });
 
 Vue.use(Vuex);
 
@@ -105,8 +105,8 @@ export const store = new Vuex.Store({
                 axios
                     .post("/logout")
                     .then(function(response) {
-                        localStorage.removeItem("authenticated");
-                        localStorage.removeItem("admin");
+                        // localStorage.removeItem("authenticated");
+                        // localStorage.removeItem("admin");
 
                         context.commit("SET_AUTHENTICATED", false);
                         context.commit("SET_USER", null);
@@ -115,7 +115,7 @@ export const store = new Vuex.Store({
                         resolve(response);
                     })
                     .catch(function(error) {
-                        localStorage.removeItem("authenticated");
+                        // localStorage.removeItem("authenticated");
 
                         console.log(error);
                         console.log(error.response);
@@ -137,11 +137,11 @@ export const store = new Vuex.Store({
                         context.dispatch("AUTH_SETTINGS");
                         context.dispatch("AUTH_NOTIFICATIONS");
 
-                        localStorage.setItem("authenticated", "true");
-                        localStorage.setItem(
-                            "admin",
-                            response.data.data.is_admin
-                        );
+                        // localStorage.setItem("authenticated", "true");
+                        // localStorage.setItem(
+                        //     "admin",
+                        //     response.data.data.is_admin
+                        // );
 
                         context.commit("SET_AUTHENTICATED", true);
                         context.commit("SET_USER", response.data.data);
@@ -152,8 +152,8 @@ export const store = new Vuex.Store({
                         console.log(error);
                         console.log(error.response);
 
-                        localStorage.removeItem("authenticated");
-                        localStorage.removeItem("admin");
+                        // localStorage.removeItem("authenticated");
+                        // localStorage.removeItem("admin");
 
                         context.commit("SET_AUTHENTICATED", false);
                         context.commit("SET_USER", null);

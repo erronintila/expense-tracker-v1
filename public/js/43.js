@@ -348,6 +348,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -411,6 +412,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    onSearch: function onSearch() {
+      var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.items;
+        _this.totalItems = data.total;
+      });
+    },
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
@@ -429,21 +438,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.user = null;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this = this;
+      var _this2 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this.search.trim().toLowerCase();
+        var search = _this2.search.trim().toLowerCase();
 
-        var status = _this.status;
-        var range = _this.date_range;
-        var user_id = _this.user ? _this.user.id : null;
+        var status = _this2.status;
+        var range = _this2.date_range;
+        var user_id = _this2.user ? _this2.user.id : null;
         _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_4__["default"].getAll({
           params: {
             search: search,
@@ -459,17 +468,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          _this2.mixin_showErrors(error);
 
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           reject();
         });
       });
@@ -532,7 +541,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //     });
     // },
     onUpdate: function onUpdate(action, method) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (action == "receive" && !this.mixin_can("receive payments")) {
         this.mixin_errorDialog("Error", "Not allowed");
@@ -553,7 +562,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to ".concat(action, " payment(s)?")).then(function (res) {
         if (res) {
-          var ids = _this2.selected.map(function (item) {
+          var ids = _this3.selected.map(function (item) {
             return item.id;
           });
 
@@ -579,7 +588,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               break;
 
             default:
-              _this2.mixin_errorDialog("Error", "Action can't be processed.");
+              _this3.mixin_errorDialog("Error", "Action can't be processed.");
 
               return;
               break;
@@ -592,18 +601,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             // }
 
           }).then(function (response) {
-            _this2.mixin_successDialog(response.data.status, response.data.message);
+            _this3.mixin_successDialog(response.data.status, response.data.message);
 
-            _this2.getDataFromApi().then(function (data) {
-              _this2.items = data.items;
-              _this2.totalItems = data.total;
+            _this3.getDataFromApi().then(function (data) {
+              _this3.items = data.items;
+              _this3.totalItems = data.total;
             });
 
-            _this2.$store.dispatch("AUTH_NOTIFICATIONS");
+            _this3.$store.dispatch("AUTH_NOTIFICATIONS");
 
-            _this2.selected = [];
+            _this3.selected = [];
           })["catch"](function (error) {
-            _this2.mixin_showErrors(error);
+            _this3.mixin_showErrors(error);
           });
         }
       });
@@ -614,8 +623,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _objectSpread2;
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.user), _objectSpread2));
+        // query: this.search,
+        query: this.status
+      }, _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.user), _objectSpread2));
     },
     formattedDateRange: function formattedDateRange() {
       var start_date = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.date_range[0]).format("MMM DD, YYYY");
@@ -633,15 +643,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   watch: {
+    search: function search() {
+      var _this4 = this;
+
+      if (this.search == "") {
+        this.getDataFromApi().then(function (data) {
+          _this4.items = data.items;
+          _this4.totalItems = data.total;
+        });
+      }
+    },
     params: {
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this3 = this;
+        var _this5 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this3.items = data.items;
-          _this3.totalItems = data.total;
+          _this5.items = data.items;
+          _this5.totalItems = data.total;
         });
       }
     },
@@ -662,12 +682,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this4 = this;
+    var _this6 = this;
 
     this.$store.dispatch("AUTH_USER").then(function (response) {
-      _this4.getDataFromApi().then(function (data) {
-        _this4.items = data.items;
-        _this4.totalItems = data.total;
+      _this6.getDataFromApi().then(function (data) {
+        _this6.items = data.items;
+        _this6.totalItems = data.total;
       });
     });
   }
@@ -926,7 +946,8 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _vm.$store.getters.user.is_admin
+                  _vm.$store.getters.user.is_admin &&
+                  _vm.mixin_can("view all users payments")
                     ? _c("UserDialogSelector", {
                         ref: "userDialogSelector",
                         attrs: {
@@ -1080,6 +1101,23 @@ var render = function() {
                       label: "Search",
                       "single-line": "",
                       "hide-details": ""
+                    },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.onSearch($event)
+                      }
                     },
                     model: {
                       value: _vm.search,

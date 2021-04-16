@@ -76,8 +76,8 @@ export default {
                         response.data.message
                     );
                     this.formDataLoaded = true;
-                    this.$router.push({ name: admin.users.index });
-                    // window.location.replace("/users");
+                    // this.$router.push({ name: admin.users.index });
+                    this.$router.push("/users");
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);

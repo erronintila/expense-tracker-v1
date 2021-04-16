@@ -103,6 +103,7 @@
                 </v-menu>
 
                 <UserDialogSelector
+                    v-if="$store.getters.user.is_admin && mixin_can('view all users expense reports')"
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -226,6 +227,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -648,6 +650,15 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                    this.formDataLoaded = true;
+                });
+            });
+        },
         selectUser(e) {
             this.selected = [];
             if (e == null || e == undefined) {
@@ -1291,6 +1302,18 @@ export default {
                 return;
             }
 
+            if (!this.$store.getters.user.is_admin && 
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
+                this.mixin_errorDialog(
+                    "Error",
+                    "Approved expense reports can't be cancelled"
+                );
+                return;
+            }
+
             if (
                 this.selected
                     .map(item => item.status.status)
@@ -1768,6 +1791,17 @@ export default {
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.getDataFromApi().then(data => {
+                        this.items = data.items;
+                        this.totalItems = data.total;
+                        this.formDataLoaded = true;
+                    });
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,
@@ -1839,7 +1873,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.user,
                 query: this.date_range
@@ -1992,6 +2026,10 @@ export default {
                 return false;
             }
 
+            if(!this.$store.getters.user.is_admin) {
+                return false;
+            }
+
             return true;
         },
         isValidReject() {
@@ -2008,6 +2046,10 @@ export default {
                 this.selectedCount.rejected > 0 ||
                 this.selectedCount.deleted > 0
             ) {
+                return false;
+            }
+
+            if(!this.$store.getters.user.is_admin) {
                 return false;
             }
 
@@ -2083,16 +2125,8 @@ export default {
             };
         }
     },
-    // created() {
-    //     // this.$store.dispatch("AUTH_USER");
-    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-    //     // this.$store.dispatch("AUTH_SETTINGS");
-    //     // this.loadTotalCountReportStatus();
-    //     // this.loadExpenseTypes();
-    // },
     activated() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.$store.dispatch("AUTH_SETTINGS");
+        this.$store.dispatch("AUTH_USER");
         this.loadTotalCountReportStatus();
         this.loadExpenseTypes();
         this.getDataFromApi().then(data => {

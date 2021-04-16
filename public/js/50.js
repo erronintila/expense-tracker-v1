@@ -109,9 +109,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.loader = false;
           _this.formDataLoaded = true;
 
-          _this.$router.push({
-            name: "admin.users.index"
-          }, function () {});
+          _this.$router.push("/users");
 
           reject();
         });
@@ -142,10 +140,7 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.loader = false;
 
-        _this3.$router.push({
-          name: admin.users.index
-        }); // window.location.replace("/users");
-
+        _this3.$router.push("/users");
       })["catch"](function (error) {
         _this3.mixin_showErrors(error);
 

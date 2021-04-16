@@ -763,7 +763,7 @@ var render = function() {
                                           text: "",
                                           color: "green",
                                           to:
-                                            "/user/expenses/" +
+                                            "/expenses/" +
                                             _vm.$route.params.id +
                                             "/edit"
                                         }

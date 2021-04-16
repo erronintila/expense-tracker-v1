@@ -26,6 +26,7 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     store.dispatch('CANCEL_PENDING_REQUESTS');
+    // store.dispatch('AUTH_USER');
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.authenticated) {
             next({ name: "login" });

@@ -101,6 +101,7 @@
                 </v-chip> -->
 
                 <UserDialogSelector
+                    v-if="$store.getters.user.is_admin && mixin_can('view all users expenses')"
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -197,6 +198,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -563,7 +565,11 @@ export default {
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: (this.$store.getters.user.is_admin && this.mixin_can("view all users expenses")) ? null : this.$store.getters.user,
+            user:
+                this.$store.getters.user.is_admin &&
+                this.mixin_can("view all users expenses")
+                    ? null
+                    : this.$store.getters.user,
             expense_type: { id: 0, name: "All Expense Types" },
             expense_types: [],
             status: "All Expenses",
@@ -576,7 +582,7 @@ export default {
                 "Rejected Expenses",
                 "Cancelled Expenses",
                 "Released Payment",
-                "Reimbursed Expenses",
+                "Reimbursed Expenses"
                 // "Archived Expenses"
             ],
             selected: [],
@@ -593,6 +599,12 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
+        },
         updateDates(e) {
             this.date_range = e;
         },
@@ -631,7 +643,7 @@ export default {
                         user_id: user_id,
                         expense_type_id: expense_type_id,
                         start_date: range[0],
-                        end_date: range[1] ? range[1] : range[0],
+                        end_date: range[1] ? range[1] : range[0]
                     }
                 })
                     .then(response => {
@@ -834,6 +846,14 @@ export default {
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,
@@ -862,7 +882,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.user,
                 query: this.expense_type,

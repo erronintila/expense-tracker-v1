@@ -513,9 +513,7 @@ export default {
                         this.$store.dispatch("AUTH_USER");
                         this.$store.dispatch("AUTH_SETTINGS");
 
-                        this.$router.push({ name: admin.users.index });
                         window.location.replace("/settings");
-
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);

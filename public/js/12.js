@@ -784,6 +784,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -803,12 +809,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: "full_name"
       }, {
         text: "Job Designation",
-        value: "job",
-        sortable: false
+        value: "job"
       }, {
         text: "Department",
-        value: "department",
-        sortable: false
+        value: "department"
       }, {
         text: "Revolving Fund",
         value: "revolving_fund"
@@ -818,7 +822,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         sortable: false
       }, {
         text: "",
-        value: "data-table-expand"
+        value: "data-table-expand",
+        sortable: false
       }],
       items: [],
       department: null,
@@ -905,6 +910,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         params: params
       });
     },
+    onSearch: function onSearch() {
+      var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.data;
+        _this.meta = data.meta;
+      });
+    },
     changeStatus: function changeStatus() {},
     onChangeDepartment: function onChangeDepartment(e) {
       this.department = e;
@@ -924,21 +937,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.job = e;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this = this;
+      var _this2 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this.search.trim().toLowerCase();
+        var search = _this2.search.trim().toLowerCase();
 
-        var department_id = _this.department == null ? null : _this.department.id;
-        var job_id = _this.job == null ? null : _this.job.id;
-        var status = _this.status;
+        var department_id = _this2.department == null ? null : _this2.department.id;
+        var job_id = _this2.job == null ? null : _this2.job.id;
+        var status = _this2.status;
         var data = {
           params: {
             search: search,
@@ -953,14 +966,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         };
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           resolve(response.data);
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          _this2.mixin_showErrors(error);
 
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           reject();
         });
       });
@@ -978,6 +991,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.$router.push("/users/".concat(this.selected[0].id, "/edit/fund"));
+      this.selected = [];
     },
     onEditPermissions: function onEditPermissions() {
       if (this.selected.length == 0) {
@@ -986,9 +1000,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.$router.push("/users/".concat(this.selected[0].id, "/edit/permissions"));
+      this.selected = [];
     },
     onPasswordReset: function onPasswordReset() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
@@ -997,40 +1012,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
-          var ids = _this2.selected.map(function (item) {
-            return item.id;
-          });
-
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].resetPassword(ids).then(function (response) {
-            _this2.mixin_successDialog(response.data.status, response.data.message);
-
-            _this2.getDataFromApi().then(function (data) {
-              _this2.items = data.data;
-              _this2.meta = data.meta;
-            });
-
-            _this2.selected = [];
-          })["catch"](function (error) {
-            _this2.mixin_showErrors(error);
-          });
-        }
-      });
-    },
-    onDelete: function onDelete() {
-      var _this3 = this;
-
-      if (this.selected.length == 0) {
-        this.mixin_errorDialog("Error", "No item(s) selected");
-        return;
-      }
-
-      this.$confirm("Move item(s) to archive?").then(function (res) {
-        if (res) {
           var ids = _this3.selected.map(function (item) {
             return item.id;
           });
 
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].resetPassword(ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -1045,7 +1031,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    onRestore: function onRestore() {
+    onDelete: function onDelete() {
       var _this4 = this;
 
       if (this.selected.length == 0) {
@@ -1053,13 +1039,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$confirm("Do you want to restore account(s)?").then(function (res) {
+      this.$confirm("Move item(s) to archive?").then(function (res) {
         if (res) {
           var ids = _this4.selected.map(function (item) {
             return item.id;
           });
 
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
             _this4.mixin_successDialog(response.data.status, response.data.message);
 
             _this4.getDataFromApi().then(function (data) {
@@ -1074,7 +1060,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    onSetActivation: function onSetActivation(is_active) {
+    onRestore: function onRestore() {
       var _this5 = this;
 
       if (this.selected.length == 0) {
@@ -1082,16 +1068,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$confirm("Do you want to ".concat(is_active ? "activate" : "deactivate", " account(s)?")).then(function (res) {
+      this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
           var ids = _this5.selected.map(function (item) {
             return item.id;
           });
 
-          var data = {
-            is_active: is_active
-          };
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(ids, data).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
             _this5.mixin_successDialog(response.data.status, response.data.message);
 
             _this5.getDataFromApi().then(function (data) {
@@ -1106,6 +1089,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
+    onSetActivation: function onSetActivation(is_active) {
+      var _this6 = this;
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to ".concat(is_active ? "activate" : "deactivate", " account(s)?")).then(function (res) {
+        if (res) {
+          var ids = _this6.selected.map(function (item) {
+            return item.id;
+          });
+
+          var data = {
+            is_active: is_active
+          };
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(ids, data).then(function (response) {
+            _this6.mixin_successDialog(response.data.status, response.data.message);
+
+            _this6.getDataFromApi().then(function (data) {
+              _this6.items = data.data;
+              _this6.meta = data.meta;
+            });
+
+            _this6.selected = [];
+          })["catch"](function (error) {
+            _this6.mixin_showErrors(error);
+          });
+        }
+      });
+    },
     onExport: function onExport() {
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["export"]();
     }
@@ -1115,17 +1130,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this6 = this;
+        var _this7 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this6.items = data.data;
-          _this6.meta = data.meta;
-          _this6.total_fund = _this6.mixin_formatNumber(data.data.reduce(function (total, item) {
+          _this7.items = data.data;
+          _this7.meta = data.meta;
+          _this7.total_fund = _this7.mixin_formatNumber(data.data.reduce(function (total, item) {
             return total + item.fund;
           }, 0));
-          _this6.total_remaining_fund = _this6.mixin_formatNumber(data.data.reduce(function (total, item) {
+          _this7.total_remaining_fund = _this7.mixin_formatNumber(data.data.reduce(function (total, item) {
             return total + item.remaining_fund;
           }, 0));
+        });
+      }
+    },
+    search: function search() {
+      var _this8 = this;
+
+      if (this.search == '') {
+        this.getDataFromApi().then(function (data) {
+          _this8.items = data.data;
+          _this8.meta = data.meta;
         });
       }
     }
@@ -1135,8 +1160,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _objectSpread2;
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
+        // query: this.search,
+        query: this.status
+      }, _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
     }
   },
   // created() {
@@ -1144,13 +1170,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this7 = this;
+    var _this9 = this;
 
     this.$store.dispatch("AUTH_USER"); // this.$store.dispatch("AUTH_NOTIFICATIONS");
 
     this.getDataFromApi().then(function (data) {
-      _this7.items = data.data;
-      _this7.meta = data.meta;
+      _this9.items = data.data;
+      _this9.meta = data.meta;
     });
   }
 });
@@ -1881,6 +1907,23 @@ var render = function() {
                                 "single-line": "",
                                 "hide-details": ""
                               },
+                              on: {
+                                keydown: function($event) {
+                                  if (
+                                    !$event.type.indexOf("key") &&
+                                    _vm._k(
+                                      $event.keyCode,
+                                      "enter",
+                                      13,
+                                      $event.key,
+                                      "Enter"
+                                    )
+                                  ) {
+                                    return null
+                                  }
+                                  return _vm.onSearch($event)
+                                }
+                              },
                               model: {
                                 value: _vm.search,
                                 callback: function($$v) {
@@ -1943,6 +1986,16 @@ var render = function() {
                                   [
                                     _c("v-container", [
                                       _c("table", [
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Code")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(_vm._s(item.code))])
+                                        ]),
+                                        _vm._v(" "),
                                         _c("tr", [
                                           _c("td", [
                                             _c("strong", [_vm._v("Gender")])

@@ -523,6 +523,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -598,6 +600,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    onSearch: function onSearch() {
+      var _this = this;
+
+      this.getDataFromApi().then(function (data) {
+        _this.items = data.items;
+        _this.totalItems = data.total;
+      });
+    },
     updateDates: function updateDates(e) {
       this.date_range = e;
     },
@@ -616,22 +626,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.user = null;
     },
     getDataFromApi: function getDataFromApi() {
-      var _this = this;
+      var _this2 = this;
 
       this.loading = true;
       return new Promise(function (resolve, reject) {
-        var _this$options = _this.options,
-            sortBy = _this$options.sortBy,
-            sortDesc = _this$options.sortDesc,
-            page = _this$options.page,
-            itemsPerPage = _this$options.itemsPerPage;
+        var _this2$options = _this2.options,
+            sortBy = _this2$options.sortBy,
+            sortDesc = _this2$options.sortDesc,
+            page = _this2$options.page,
+            itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this.search.trim().toLowerCase();
+        var search = _this2.search.trim().toLowerCase();
 
-        var status = _this.status;
-        var user_id = _this.user ? _this.user.id : null;
-        var expense_type_id = _this.expense_type.id;
-        var range = _this.date_range;
+        var status = _this2.status;
+        var user_id = _this2.user ? _this2.user.id : null;
+        var expense_type_id = _this2.expense_type.id;
+        var range = _this2.date_range;
         _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"].getAll({
           params: {
             search: search,
@@ -648,37 +658,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           resolve({
             items: items,
             total: total
           });
         })["catch"](function (error) {
-          _this.mixin_showErrors(error);
+          _this2.mixin_showErrors(error);
 
-          _this.loading = false;
-          _this.formDataLoaded = true;
+          _this2.loading = false;
+          _this2.formDataLoaded = true;
           reject();
         });
       });
     },
     loadExpenseTypes: function loadExpenseTypes() {
-      var _this2 = this;
+      var _this3 = this;
 
       _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_5__["default"].get({
         params: {
           only: true
         }
       }).then(function (response) {
-        _this2.expense_types = response.data.data;
+        _this3.expense_types = response.data.data;
 
-        _this2.expense_types.unshift({
+        _this3.expense_types.unshift({
           id: 0,
           name: "All Expense Types"
         });
       })["catch"](function (error) {
-        _this2.mixin_showErrors(error);
+        _this3.mixin_showErrors(error);
       });
     },
     onRefresh: function onRefresh() {
@@ -730,7 +740,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     onDelete: function onDelete() {
-      var _this3 = this;
+      var _this4 = this;
 
       var arr = this.selected.map(function (item) {
         return item.expense_report === null;
@@ -757,27 +767,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to cancel expense(s)?").then(function (res) {
         if (res) {
-          var ids = _this3.selected.map(function (item) {
+          var ids = _this4.selected.map(function (item) {
             return item.id;
           });
 
           _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"](ids).then(function (response) {
-            _this3.mixin_successDialog(response.data.status, response.data.message);
+            _this4.mixin_successDialog(response.data.status, response.data.message);
 
-            _this3.getDataFromApi().then(function (data) {
-              _this3.items = data.items;
-              _this3.totalItems = data.total;
+            _this4.getDataFromApi().then(function (data) {
+              _this4.items = data.items;
+              _this4.totalItems = data.total;
             });
 
-            _this3.selected = [];
+            _this4.selected = [];
           })["catch"](function (error) {
-            _this3.mixin_showErrors(error);
+            _this4.mixin_showErrors(error);
           });
         }
       });
     },
     onRestore: function onRestore() {
-      var _this4 = this;
+      var _this5 = this;
 
       var arr = this.selected.map(function (item) {
         return item.expense_report === null;
@@ -800,22 +810,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.$confirm("Do you want to restore expenses(s)?").then(function (res) {
         if (res) {
-          var ids = _this4.selected.map(function (item) {
+          var ids = _this5.selected.map(function (item) {
             return item.id;
           });
 
           _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_4__["default"].restore(ids).then(function (response) {
-            _this4.mixin_successDialog(response.data.status, response.data.message);
+            _this5.mixin_successDialog(response.data.status, response.data.message);
 
-            _this4.getDataFromApi().then(function (data) {
-              _this4.items = data.items;
-              _this4.totalItems = data.total;
+            _this5.getDataFromApi().then(function (data) {
+              _this5.items = data.items;
+              _this5.totalItems = data.total;
             }); // this.$store.dispatch("AUTH_USER");
 
 
-            _this4.selected = [];
+            _this5.selected = [];
           })["catch"](function (error) {
-            _this4.mixin_showErrors(error);
+            _this5.mixin_showErrors(error);
           });
         }
       });
@@ -843,15 +853,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   watch: {
+    search: function search() {
+      var _this6 = this;
+
+      if (this.search == "") {
+        this.getDataFromApi().then(function (data) {
+          _this6.items = data.items;
+          _this6.totalItems = data.total;
+        });
+      }
+    },
     params: {
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this5 = this;
+        var _this7 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this5.items = data.items;
-          _this5.totalItems = data.total;
+          _this7.items = data.items;
+          _this7.totalItems = data.total;
         });
       }
     },
@@ -869,8 +889,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _objectSpread2;
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.status), _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
+        // query: this.search,
+        query: this.status
+      }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.expense_type), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
     },
     maxDate: function maxDate() {
       var settings = this.$store.getters.settings;
@@ -913,13 +934,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   activated: function activated() {
-    var _this6 = this;
+    var _this8 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {
-      _this6.items = data.items;
-      _this6.totalItems = data.total;
+      _this8.items = data.items;
+      _this8.totalItems = data.total;
     });
   }
 });
@@ -1177,52 +1198,64 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("UserDialogSelector", {
-                    ref: "userDialogSelector",
-                    attrs: {
-                      selectedUser: _vm.user,
-                      usersParameters: { params: { is_superadmin: false } }
-                    },
-                    on: { selectUser: _vm.selectUser, onReset: _vm.resetUser },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "openDialog",
-                        fn: function(ref) {
-                          var bind = ref.bind
-                          var on = ref.on
-                          var computedSelectedUser = ref.computedSelectedUser
-                          return [
-                            _c(
-                              "v-chip",
-                              _vm._g(
-                                _vm._b(
-                                  {
-                                    staticClass: "mr-2 mb-2",
-                                    attrs: { small: "" }
-                                  },
-                                  "v-chip",
-                                  bind,
-                                  false
-                                ),
-                                on
-                              ),
-                              [
-                                _vm._v(
-                                  "\n                        " +
-                                    _vm._s(
-                                      computedSelectedUser
-                                        ? computedSelectedUser.name
-                                        : "All Employees"
-                                    ) +
-                                    "\n                    "
-                                )
-                              ]
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  }),
+                  _vm.$store.getters.user.is_admin &&
+                  _vm.mixin_can("view all users expenses")
+                    ? _c("UserDialogSelector", {
+                        ref: "userDialogSelector",
+                        attrs: {
+                          selectedUser: _vm.user,
+                          usersParameters: { params: { is_superadmin: false } }
+                        },
+                        on: {
+                          selectUser: _vm.selectUser,
+                          onReset: _vm.resetUser
+                        },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "openDialog",
+                              fn: function(ref) {
+                                var bind = ref.bind
+                                var on = ref.on
+                                var computedSelectedUser =
+                                  ref.computedSelectedUser
+                                return [
+                                  _c(
+                                    "v-chip",
+                                    _vm._g(
+                                      _vm._b(
+                                        {
+                                          staticClass: "mr-2 mb-2",
+                                          attrs: { small: "" }
+                                        },
+                                        "v-chip",
+                                        bind,
+                                        false
+                                      ),
+                                      on
+                                    ),
+                                    [
+                                      _vm._v(
+                                        "\n                        " +
+                                          _vm._s(
+                                            computedSelectedUser
+                                              ? computedSelectedUser.name
+                                              : "All Employees"
+                                          ) +
+                                          "\n                    "
+                                      )
+                                    ]
+                                  )
+                                ]
+                              }
+                            }
+                          ],
+                          null,
+                          false,
+                          2347878303
+                        )
+                      })
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "v-menu",
@@ -1393,6 +1426,23 @@ var render = function() {
                       label: "Search",
                       "single-line": "",
                       "hide-details": ""
+                    },
+                    on: {
+                      keydown: function($event) {
+                        if (
+                          !$event.type.indexOf("key") &&
+                          _vm._k(
+                            $event.keyCode,
+                            "enter",
+                            13,
+                            $event.key,
+                            "Enter"
+                          )
+                        ) {
+                          return null
+                        }
+                        return _vm.onSearch($event)
+                      }
                     },
                     model: {
                       value: _vm.search,

@@ -6,6 +6,10 @@
                 <h4 class="title green--text">Dashboard</h4>
                 <v-spacer></v-spacer>
                 <v-menu
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            mixin_can('view all users expenses')
+                    "
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-y
@@ -67,7 +71,6 @@
             </v-card-title>
             <v-card-subtitle>
                 <!-- {{ formattedDateRange }} -->
-                
 
                 <DateRangePicker
                     ref="dateRangePicker"
@@ -87,9 +90,16 @@
                     </template>
                 </DateRangePicker>
 
-                <v-chip v-if="user != null && user.id > 0" small>{{
-                    user.full_name
-                }}</v-chip>
+                <v-chip
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            user != null &&
+                            user.id > 0 &&
+                            mixin_can('view all users expenses')
+                    "
+                    small
+                    >{{ user.full_name }}</v-chip
+                >
             </v-card-subtitle>
 
             <v-row>
@@ -438,6 +448,10 @@
                             <v-spacer></v-spacer>
 
                             <v-menu
+                                v-if="
+                                    $store.getters.user.is_admin &&
+                                        mixin_can('view all users expenses')
+                                "
                                 :close-on-content-click="false"
                                 :nudge-width="200"
                                 offset-y
@@ -665,7 +679,11 @@ export default {
             ],
             items: [],
 
-            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+            user:
+                this.$store.getters.user.is_admin &&
+                this.mixin_can("view all users expenses")
+                    ? null
+                    : this.$store.getters.user
         };
     },
     methods: {
@@ -1160,15 +1178,13 @@ export default {
             this.onTimeUnitChange();
             this.getExpenseStats(
                 this.date_range[0],
-                this.date_range[1],  
+                this.date_range[1],
                 this.user ? this.user.id : null
             );
         }
     },
     created() {
-        this.$store.dispatch("AUTH_USER").then(response => {
-            
-        });
+        this.$store.dispatch("AUTH_USER").then(response => {});
 
         this.load_pie_chart();
         this.load_bar_chart();
@@ -1181,6 +1197,6 @@ export default {
         );
 
         // this.loadStatistics();
-    },
+    }
 };
 </script>

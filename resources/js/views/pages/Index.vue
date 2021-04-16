@@ -546,18 +546,18 @@ export default {
             });
         }
     },
+    beforeCreate() {
+        this.$store.dispatch('AUTH_USER');
+    },
     created() {
-        console.log("new");
         this.$store.dispatch("AUTH_USER").then(response => {
             this.user = response;
-            // this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     },
     activated() {
         console.log("new");
         this.$store.dispatch("AUTH_USER").then(response => {
             this.user = response;
-            // this.$store.dispatch("AUTH_NOTIFICATIONS");
         });
     }
 };

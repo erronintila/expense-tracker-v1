@@ -218,16 +218,7 @@ __webpack_require__.r(__webpack_exports__);
         _this4.formDataLoaded = true;
       });
     });
-  } // activated() {
-  //     this.getData().then(data => {
-  //         this.loadExpenses(data).then(expenses => {
-  //             this.form = data;
-  //             this.form.expenses = expenses;
-  //             this.formDataLoaded = true;
-  //         });
-  //     });
-  // }
-
+  }
 });
 
 /***/ }),

@@ -83,12 +83,9 @@ __webpack_require__.r(__webpack_exports__);
       _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].store(value).then(function (response) {
         _this.mixin_successDialog(response.data.status, response.data.message);
 
-        _this.formDataLoaded = true;
+        _this.formDataLoaded = true; // this.$router.push({ name: admin.users.index });
 
-        _this.$router.push({
-          name: admin.users.index
-        }); // window.location.replace("/users");
-
+        _this.$router.push("/users");
       })["catch"](function (error) {
         _this.mixin_showErrors(error);
 
