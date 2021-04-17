@@ -1598,7 +1598,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return item.status.status === "Unsubmitted";
       }).map(function (item2) {
         return moment__WEBPACK_IMPORTED_MODULE_1___default()(item2.from);
-      })).format("YYYY-MM-DD");
+      })).add(period !== null && period !== void 0 ? period : 0, "days").format("YYYY-MM-DD");
 
       switch (period) {
         case "Weekly":

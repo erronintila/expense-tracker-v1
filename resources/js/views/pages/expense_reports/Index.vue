@@ -1690,7 +1690,7 @@ export default {
                         .map(item2 => moment(item2.from))
                 )
                 .format("YYYY-MM-DD");
-
+                
             switch (period) {
                 case "Weekly":
                     last_submission_date = moment(submission_date)
