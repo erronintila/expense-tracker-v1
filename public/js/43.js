@@ -349,6 +349,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -1060,12 +1061,14 @@ var render = function() {
                           name: "show",
                           rawName: "v-show",
                           value:
+                            _vm.$store.getters.user.is_admin &&
+                            _vm.mixin_can("delete payments") &&
                             _vm.selected.length > 0 &&
                             _vm.selected.filter(function(item) {
                               return item.deleted_at == null
                             }).length > 0,
                           expression:
-                            "\n                    selected.length > 0 &&\n                        selected.filter(item => item.deleted_at == null)\n                            .length > 0\n                "
+                            "\n                    $store.getters.user.is_admin && mixin_can('delete payments') &&\n                    selected.length > 0 &&\n                        selected.filter(item => item.deleted_at == null)\n                            .length > 0\n                "
                         }
                       ],
                       staticClass: "mr-2",

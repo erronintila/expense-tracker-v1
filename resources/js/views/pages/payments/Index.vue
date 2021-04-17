@@ -146,6 +146,7 @@
 
                 <v-chip
                     v-show="
+                        $store.getters.user.is_admin && mixin_can('delete payments') &&
                         selected.length > 0 &&
                             selected.filter(item => item.deleted_at == null)
                                 .length > 0

@@ -140,9 +140,13 @@
                                 <v-btn
                                     class="ml-0 pl-0"
                                     text
-                                    :to="{
-                                        name: 'admin.users.index'
-                                    }"
+                                    :to="
+                                        $store.getters.user.is_admin
+                                            ? {
+                                                  name: 'admin.users.index'
+                                              }
+                                            : ''
+                                    "
                                 >
                                     <span>
                                         <div

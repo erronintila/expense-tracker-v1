@@ -674,6 +674,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -1869,9 +1873,12 @@ var render = function() {
                                             staticClass: "ml-0 pl-0",
                                             attrs: {
                                               text: "",
-                                              to: {
-                                                name: "admin.users.index"
-                                              }
+                                              to: _vm.$store.getters.user
+                                                .is_admin
+                                                ? {
+                                                    name: "admin.users.index"
+                                                  }
+                                                : ""
                                             }
                                           },
                                           [
@@ -3095,7 +3102,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************************************!*\
   !*** ./resources/js/views/pages/dashboard/Index.vue?vue&type=template&id=397ecbbd& ***!
   \*************************************************************************************/
-/*! exports provided: render, staticRenderFns */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
