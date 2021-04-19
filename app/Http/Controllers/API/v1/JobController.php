@@ -53,6 +53,9 @@ class JobController extends Controller
                 $jobs = $jobs->orderBy("name", $sortType);
                 break;
             case 'department.name':
+                $jobs = $jobs->leftJoin('departments', 'jobs.department_id', '=', 'departments.id')
+                    ->select('jobs.*')
+                    ->orderBy('departments.name', $sortType);
                 break;
             default:
                 break;
@@ -75,10 +78,12 @@ class JobController extends Controller
             }
         }
 
-        $jobs = $jobs->where('name', "like", "%" . $search . "%")
-            ->orWhereHas('department', function ($q) use ($search) {
+        $jobs = $jobs->where(function ($query) use ($search) {
+            $query->where('jobs.name', "like", "%" . $search . "%");
+            $query->orWhereHas('department', function ($q) use ($search) {
                 $q->where('name', "like", "%" . $search . "%");
             });
+        });
 
         $jobs = $jobs->paginate($itemsPerPage);
 
