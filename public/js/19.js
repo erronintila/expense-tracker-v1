@@ -610,6 +610,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -3158,28 +3160,30 @@ var render = function() {
                                           1
                                         ),
                                         _vm._v(" "),
-                                        _c(
-                                          "v-list-item",
-                                          {
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.printReport(
-                                                  "",
-                                                  "expenses_by_user",
-                                                  false
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("v-list-item-title", [
-                                              _vm._v(
-                                                "\n                                        Group by user\n                                    "
-                                              )
-                                            ])
-                                          ],
-                                          1
-                                        ),
+                                        _vm.$store.getters.user.is_admin
+                                          ? _c(
+                                              "v-list-item",
+                                              {
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.printReport(
+                                                      "",
+                                                      "expenses_by_user",
+                                                      false
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("v-list-item-title", [
+                                                  _vm._v(
+                                                    "\n                                        Group by user\n                                    "
+                                                  )
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
                                         _vm._v(" "),
                                         _c(
                                           "v-list-item",
@@ -3281,28 +3285,30 @@ var render = function() {
                                           1
                                         ),
                                         _vm._v(" "),
-                                        _c(
-                                          "v-list-item",
-                                          {
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.printReport(
-                                                  "",
-                                                  "expenses_by_user",
-                                                  true
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("v-list-item-title", [
-                                              _vm._v(
-                                                "\n                                        Group by user\n                                    "
-                                              )
-                                            ])
-                                          ],
-                                          1
-                                        ),
+                                        _vm.$store.getters.user.is_admin
+                                          ? _c(
+                                              "v-list-item",
+                                              {
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.printReport(
+                                                      "",
+                                                      "expenses_by_user",
+                                                      true
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("v-list-item-title", [
+                                                  _vm._v(
+                                                    "\n                                        Group by user\n                                    "
+                                                  )
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
                                         _vm._v(" "),
                                         _c(
                                           "v-list-item",

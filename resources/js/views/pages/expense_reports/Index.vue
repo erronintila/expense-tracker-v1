@@ -477,6 +477,7 @@
                                     </v-list-item>
 
                                     <v-list-item
+                                        v-if="$store.getters.user.is_admin"
                                         @click="
                                             printReport(
                                                 '',
@@ -530,6 +531,7 @@
                                         </v-list-item-title>
                                     </v-list-item>
                                     <v-list-item
+                                        v-if="$store.getters.user.is_admin"
                                         @click="
                                             printReport(
                                                 '',
@@ -1708,14 +1710,17 @@ export default {
                     break;
 
                 default:
-                    let encoding = this.$store.getters.settings.expense_encoding_period;
+                    let encoding = this.$store.getters.settings
+                        .expense_encoding_period;
                     let submission = moment
                         .min(
                             this.selected
                                 .filter(function(item) {
                                     return item.status.status === "Unsubmitted";
                                 })
-                                .map(item2 => moment(item2.from).add(encoding - 1, "days"))
+                                .map(item2 =>
+                                    moment(item2.from).add(encoding - 1, "days")
+                                )
                         )
                         .format("YYYY-MM-DD");
 
@@ -1858,9 +1863,14 @@ export default {
                         break;
 
                     default:
-                        let encoding = this.$store.getters.settings.expense_encoding_period;
+                        let encoding = this.$store.getters.settings
+                            .expense_encoding_period;
                         let submission = moment
-                            .min(this.selected.map(item => moment(item.from).add(encoding - 1, "days")))
+                            .min(
+                                this.selected.map(item =>
+                                    moment(item.from).add(encoding - 1, "days")
+                                )
+                            )
                             .format("YYYY-MM-DD");
 
                         last_submission_date = moment(submission).format(
@@ -2146,14 +2156,14 @@ export default {
         }
     },
     activated() {
-        if(this.$route.params.status) {
+        if (this.$route.params.status) {
             this.status = this.$route.params.status;
         }
 
-        if(this.$route.params.date_range) {
-            this.date_range = this.$route.params.date_range
+        if (this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range;
         }
-        
+
         this.$store.dispatch("AUTH_USER");
         this.loadTotalCountReportStatus();
         this.loadExpenseTypes();
