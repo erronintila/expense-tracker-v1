@@ -103,7 +103,10 @@
                 </v-menu>
 
                 <UserDialogSelector
-                    v-if="$store.getters.user.is_admin && mixin_can('view all users expense reports')"
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            mixin_can('view all users expense reports')
+                    "
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -1302,7 +1305,8 @@ export default {
                 return;
             }
 
-            if (!this.$store.getters.user.is_admin && 
+            if (
+                !this.$store.getters.user.is_admin &&
                 this.selected
                     .map(item => item.status.status)
                     .includes("Approved")
@@ -1690,7 +1694,7 @@ export default {
                         .map(item2 => moment(item2.from))
                 )
                 .format("YYYY-MM-DD");
-                
+
             switch (period) {
                 case "Weekly":
                     last_submission_date = moment(submission_date)
@@ -1704,7 +1708,18 @@ export default {
                     break;
 
                 default:
-                    last_submission_date = moment(submission_date).format(
+                    let encoding = this.$store.getters.settings.expense_encoding_period;
+                    let submission = moment
+                        .min(
+                            this.selected
+                                .filter(function(item) {
+                                    return item.status.status === "Unsubmitted";
+                                })
+                                .map(item2 => moment(item2.from).add(encoding - 1, "days"))
+                        )
+                        .format("YYYY-MM-DD");
+
+                    last_submission_date = moment(submission).format(
                         "YYYY-MM-DD"
                     );
                     break;
@@ -1843,7 +1858,12 @@ export default {
                         break;
 
                     default:
-                        last_submission_date = moment(submission_date).format(
+                        let encoding = this.$store.getters.settings.expense_encoding_period;
+                        let submission = moment
+                            .min(this.selected.map(item => moment(item.from).add(encoding - 1, "days")))
+                            .format("YYYY-MM-DD");
+
+                        last_submission_date = moment(submission).format(
                             "YYYY-MM-DD"
                         );
                         break;
@@ -2026,7 +2046,7 @@ export default {
                 return false;
             }
 
-            if(!this.$store.getters.user.is_admin) {
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 
@@ -2049,7 +2069,7 @@ export default {
                 return false;
             }
 
-            if(!this.$store.getters.user.is_admin) {
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 

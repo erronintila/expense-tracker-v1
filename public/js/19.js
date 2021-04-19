@@ -607,6 +607,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1598,7 +1601,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return item.status.status === "Unsubmitted";
       }).map(function (item2) {
         return moment__WEBPACK_IMPORTED_MODULE_1___default()(item2.from);
-      })).add(period !== null && period !== void 0 ? period : 0, "days").format("YYYY-MM-DD");
+      })).format("YYYY-MM-DD");
 
       switch (period) {
         case "Weekly":
@@ -1610,7 +1613,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           break;
 
         default:
-          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).format("YYYY-MM-DD");
+          var encoding = this.$store.getters.settings.expense_encoding_period;
+          var submission = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.filter(function (item) {
+            return item.status.status === "Unsubmitted";
+          }).map(function (item2) {
+            return moment__WEBPACK_IMPORTED_MODULE_1___default()(item2.from).add(encoding - 1, "days");
+          })).format("YYYY-MM-DD");
+          last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission).format("YYYY-MM-DD");
           break;
       }
 
@@ -1752,7 +1761,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             break;
 
           default:
-            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission_date).format("YYYY-MM-DD");
+            var encoding = this.$store.getters.settings.expense_encoding_period;
+            var submission = moment__WEBPACK_IMPORTED_MODULE_1___default.a.min(this.selected.map(function (item) {
+              return moment__WEBPACK_IMPORTED_MODULE_1___default()(item.from).add(encoding - 1, "days");
+            })).format("YYYY-MM-DD");
+            last_submission_date = moment__WEBPACK_IMPORTED_MODULE_1___default()(submission).format("YYYY-MM-DD");
             break;
         }
 
