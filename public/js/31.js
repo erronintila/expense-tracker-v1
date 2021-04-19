@@ -1,1178 +1,2138 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[31],{
 
-/***/ "./node_modules/dompurify/dist/purify.js":
-/*!***********************************************!*\
-  !*** ./node_modules/dompurify/dist/purify.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/*! @license DOMPurify | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.0.8/LICENSE */
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var jspdf__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jspdf */ "./node_modules/jspdf/dist/jspdf.es.min.js");
+/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jspdf-autotable */ "./node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js");
+/* harmony import */ var jspdf_autotable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jspdf_autotable__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-(function (global, factory) {
-   true ? module.exports = factory() :
-  undefined;
-}(this, function () { 'use strict';
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-  function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-  var hasOwnProperty = Object.hasOwnProperty,
-      setPrototypeOf = Object.setPrototypeOf,
-      isFrozen = Object.isFrozen;
-  var freeze = Object.freeze,
-      seal = Object.seal,
-      create = Object.create; // eslint-disable-line import/no-mutable-exports
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-  var _ref = typeof Reflect !== 'undefined' && Reflect,
-      apply = _ref.apply,
-      construct = _ref.construct;
 
-  if (!apply) {
-    apply = function apply(fun, thisValue, args) {
-      return fun.apply(thisValue, args);
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: true,
+      formDataLoaded: false,
+      headers: [{
+        text: "Date",
+        value: "date",
+        sortable: false
+      }, {
+        text: "Type",
+        value: "expense_type.name",
+        sortable: false
+      }, {
+        text: "Receipt",
+        value: "receipt_number",
+        sortable: false
+      }, {
+        text: "Vendor",
+        value: "vendor.name",
+        sortable: false
+      }, {
+        text: "Amount",
+        value: "amount",
+        sortable: false
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand"
+      }],
+      total: 0,
+      totalItems: 0,
+      date_range: [],
+      expense_report_id: this.router_params_id,
+      search: "",
+      options: {
+        sortBy: ["created_at"],
+        sortDesc: [true],
+        page: 1,
+        itemsPerPage: 10
+      },
+      form: {
+        code: "",
+        reference_no: "",
+        description: "",
+        remarks: "",
+        notes: "",
+        submission_period: "",
+        approval_period: "",
+        from: "",
+        to: "",
+        status: {
+          color: "",
+          status: "",
+          remarks: ""
+        },
+        is_late_submitted: false,
+        is_late_approved: false,
+        total: 0,
+        total_reimbursable: 0,
+        paid: 0,
+        payments: [],
+        payment_id: null,
+        balance: 0,
+        user: {
+          id: null,
+          name: ""
+        },
+        payment: {
+          id: null
+        },
+        expenses: [],
+        // created: { created_at: null, created_by: { name: "" } },
+        // updated: { updated_at: null, updated_by: { name: "" } },
+        // deleted: { deleted_at: null, deleted_by: { name: "" } },
+        // submitted: { submitted_at: null, submitted_by: { name: "" } },
+        // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
+        // approved: { approved_at: null, approved_by: { name: "" } },
+        // rejected: { rejected_at: null, rejected_by: { name: "" } },
+        // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
+        created_at: null,
+        updated_at: null,
+        deleted_at: null,
+        submitted_at: null,
+        reviewed_at: null,
+        approved_at: null,
+        rejected_at: null,
+        cancelled_at: null,
+        logs: []
+      }
     };
-  }
+  },
+  methods: {
+    generatePDF: function generatePDF(action) {
+      var _this = this;
 
-  if (!freeze) {
-    freeze = function freeze(x) {
-      return x;
-    };
-  }
+      this.loadExpenses().then(function (data) {
+        // var source = this.$refs["myTable"];
+        var pdfName = "Expense Report";
+        var table_columns = ["Date", "Type", "Receipt", "Vendor", "Amount"];
+        var table_rows = [];
+        var table_footer = [];
+        data.items.forEach(function (element) {
+          var temp = [];
+          temp.push(element.date);
+          temp.push(element.expense_type.name);
+          temp.push(element.receipt_number);
+          temp.push(element.vendor.name);
+          temp.push(_this.mixin_formatNumber(element.amount));
+          table_rows.push(temp);
+        }); // table_footer = [
+        //     "Total",
+        //     "",
+        //     "",
+        //     "",
+        //     this.mixin_formatNumber(this.form.total)
+        // ];
+        // table_rows.push(table_footer);
+        // basic config
 
-  if (!seal) {
-    seal = function seal(x) {
-      return x;
-    };
-  }
+        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
+          orientation: "portrait",
+          unit: "in",
+          format: action == "print" ? "letter" : [13, 8.5]
+        }); // header details
+        // 1st row
 
-  if (!construct) {
-    construct = function construct(Func, args) {
-      return new (Function.prototype.bind.apply(Func, [null].concat(_toConsumableArray(args))))();
-    };
-  }
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this.form.user.full_name), 0.5, 0.7);
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("".concat(_this.form.code), 6.0, 0.7); // end of 1st row
+        // 2nd row
 
-  var arrayForEach = unapply(Array.prototype.forEach);
-  var arrayPop = unapply(Array.prototype.pop);
-  var arrayPush = unapply(Array.prototype.push);
+        doc.setFontSize(20).setTextColor(76, 175, 10).text("PHP ".concat(_this.mixin_formatNumber(_this.form.total)), 0.5, 1.0);
+        doc.setFontSize(11).setTextColor(76, 175, 10).text(_this.form.status.status, 6.0, 1.0); // end of 2nd row
+        // 3rd row
 
-  var stringToLowerCase = unapply(String.prototype.toLowerCase);
-  var stringMatch = unapply(String.prototype.match);
-  var stringReplace = unapply(String.prototype.replace);
-  var stringIndexOf = unapply(String.prototype.indexOf);
-  var stringTrim = unapply(String.prototype.trim);
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("Period: ".concat(_this.form.from, " ~ ").concat(_this.form.to), 0.5, 1.2); // end of 3rd row
+        // 4th row
 
-  var regExpTest = unapply(RegExp.prototype.test);
+        doc.setLineWidth(0.01);
+        doc.line(0.5, 1.35, 8.0, 1.35); //end of 4th row
+        // 5th row
 
-  var typeErrorCreate = unconstruct(TypeError);
+        doc.setFontSize(11).setTextColor(0, 0, 0).text("Description: ".concat(_this.form.description), 0.5, 1.6); // end of 5th row
+        // 6th row
 
-  function unapply(func) {
-    return function (thisArg) {
-      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
+        doc.autoTable({
+          columns: table_columns,
+          body: table_rows,
+          margin: {
+            left: 0.5
+          },
+          startY: 1.8,
+          showHead: "everyPage",
+          headStyles: {
+            halign: "center",
+            fillColor: [76, 175, 10]
+          },
+          columnStyles: {
+            4: {
+              halign: "right"
+            }
+          } // didParseCell: function(data) {
+          //     var rows = data.table.body;
+          //     if (data.row.index === rows.length - 1) {
+          //         data.cell.styles.fillColor = [76, 175, 10];
+          //     }
+          // },
+
+        });
+        doc.autoTable({
+          body: [["No. of Expenses", data.items.length], ["Total Expenses Amount", _this.mixin_formatNumber(_this.form.total)], ["Paid Amount", _this.mixin_formatNumber(_this.form.paid)], ["Amount to be reimbursed", _this.mixin_formatNumber(_this.form.balance)]],
+          margin: {
+            left: 0.5
+          },
+          columnStyles: {
+            1: {
+              halign: "right"
+            }
+          },
+          theme: "plain"
+        }); // end of 6th row
+        // page footer
+
+        doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")), 0.5, doc.internal.pageSize.height - 0.5); // end of page footer
+        // page number
+
+        var pages = doc.internal.getNumberOfPages();
+        var pageWidth = doc.internal.pageSize.width; //Optional
+
+        var pageHeight = doc.internal.pageSize.height; //Optional
+
+        doc.setFontSize(8); //Optional
+
+        for (var j = 1; j < pages + 1; j++) {
+          var horizontalPos = pageWidth - 0.5; //Can be fixed number
+
+          var verticalPos = pageHeight - 0.5; //Can be fixed number
+
+          doc.setPage(j);
+          doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
+            align: "right"
+          }); //Optional text styling});
+        } // end of page number
+        // print or export record
+
+
+        if (action == "print") {
+          doc.autoPrint();
+          doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
+        } else {
+          doc.save("".concat(pdfName, ".pdf"));
+        } //end of print or export record
+
+      });
+    },
+    goBack: function goBack() {
+      if (this.$route.params.fromExpense) {
+        this.$router.push({
+          name: "user.expense_reports.index"
+        });
+        return;
       }
 
-      return apply(func, thisArg, args);
-    };
-  }
+      this.$router.go(-1);
+    },
+    onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
 
-  function unconstruct(func) {
-    return function () {
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true,
+          fromExpenseReport: true
+        };
       }
 
-      return construct(func, args);
-    };
-  }
+      this.$router.push({
+        name: "user.expenses.show",
+        params: params
+      });
+    },
+    generateReport: function generateReport(action) {
+      this.loadExpenses().then(function (data) {
+        // var source = this.$refs["myTable"];
+        var pdfName = "Expense Summary Report";
+        var table_columns = ["Date", "Particulars", "Delivery Expense", "Gas & Oil", "Meal & Lodging", "Postage, Telephone, & Fax", "Repairs & Maintenance", "Representation", "Supplies", "Transportation", "Miscellaneous", "Total"];
+        var table_rows = [];
+        var table_footer = []; // data.items.forEach(element => {
+        //     let temp = [];
+        //     temp.push(element.date);
+        //     temp.push(element.expense_type.name);
+        //     temp.push(element.receipt_number);
+        //     temp.push(element.vendor.name);
+        //     temp.push(this.mixin_formatNumber(element.amount));
+        //     table_rows.push(temp);
+        // });
+        // table_footer = [
+        //     "Total",
+        //     "",
+        //     "",
+        //     "",
+        //     this.mixin_formatNumber(this.form.total)
+        // ];
+        // table_rows.push(table_footer);
+        // basic config
 
-  /* Add properties to a lookup table */
-  function addToSet(set, array) {
-    if (setPrototypeOf) {
-      // Make 'in' and truthy checks like Boolean(set.constructor)
-      // independent of any properties defined on Object.prototype.
-      // Prevent prototype setters from intercepting set as a this value.
-      setPrototypeOf(set, null);
-    }
+        var doc = new jspdf__WEBPACK_IMPORTED_MODULE_2__["jsPDF"]({
+          orientation: "landscape",
+          unit: "in",
+          format: [13, 8.5]
+        }); // header details
+        // 1st row
 
-    var l = array.length;
-    while (l--) {
-      var element = array[l];
-      if (typeof element === 'string') {
-        var lcElement = stringToLowerCase(element);
-        if (lcElement !== element) {
-          // Config presets (e.g. tags.js, attrs.js) are immutable.
-          if (!isFrozen(array)) {
-            array[l] = lcElement;
+        doc.setFontSize(14).setTextColor(0, 0, 0).text("Expense Summary Report", 6.75, 0.7, "center"); // end of 1st row
+
+        doc.autoTable({
+          styles: {
+            fontSize: 10
+          },
+          columns: table_columns,
+          body: [["Total", "Polomolok to Davao", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+          showHead: "everyPage",
+          headStyles: {
+            halign: "center",
+            fillColor: [76, 175, 10]
+          },
+          startY: 0.9,
+          margin: {
+            left: 0.5
+          },
+          columnStyles: {
+            1: {
+              halign: "right"
+            }
           }
+        }); // end of 6th row
+        //
 
-          element = lcElement;
-        }
-      }
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Submitted by", 0.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(0.5, doc.lastAutoTable.finalY + 0.8, 3.0, doc.lastAutoTable.finalY + 0.8);
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Recommended by", 3.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(3.5, doc.lastAutoTable.finalY + 0.8, 6.0, doc.lastAutoTable.finalY + 0.8);
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Checked by", 6.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(6.5, doc.lastAutoTable.finalY + 0.8, 9.0, doc.lastAutoTable.finalY + 0.8);
+        doc.setFontSize(10).setTextColor(0, 0, 0).text("Approved by", 9.5, doc.lastAutoTable.finalY + 0.4);
+        doc.setLineWidth(0.01);
+        doc.line(9.5, doc.lastAutoTable.finalY + 0.8, 12.0, doc.lastAutoTable.finalY + 0.8); //
+        // page footer
 
-      set[element] = true;
-    }
+        doc.setFontSize(8).setTextColor(0, 0, 0).text("Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")), 0.5, doc.internal.pageSize.height - 0.5); // end of page footer
+        // page number
 
-    return set;
-  }
+        var pages = doc.internal.getNumberOfPages();
+        var pageWidth = doc.internal.pageSize.width; //Optional
 
-  /* Shallow clone an object */
-  function clone(object) {
-    var newObject = create(null);
+        var pageHeight = doc.internal.pageSize.height; //Optional
 
-    var property = void 0;
-    for (property in object) {
-      if (apply(hasOwnProperty, object, [property])) {
-        newObject[property] = object[property];
-      }
-    }
+        doc.setFontSize(8); //Optional
 
-    return newObject;
-  }
+        for (var j = 1; j < pages + 1; j++) {
+          var horizontalPos = pageWidth - 0.5; //Can be fixed number
 
-  var html = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'shadow', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
+          var verticalPos = pageHeight - 0.5; //Can be fixed number
 
-  // SVG
-  var svg = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'audio', 'canvas', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'video', 'view', 'vkern']);
+          doc.setPage(j);
+          doc.text("Page ".concat(j, " of ").concat(pages), horizontalPos, verticalPos, {
+            align: "right"
+          }); //Optional text styling});
+        } // end of page number
+        // print or export record
 
-  var svgFilters = freeze(['feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence']);
 
-  var mathMl = freeze(['math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mglyph', 'mi', 'mlabeledtr', 'mmultiscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow', 'ms', 'mspace', 'msqrt', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd', 'mtext', 'mtr', 'munder', 'munderover']);
+        if (action == "print") {
+          // doc.autoPrint();
+          doc.output("dataurlnewwindow"); // doc.autoPrint({ variant: "non-conform" });
+        } else {
+          doc.save("".concat(pdfName, ".pdf"));
+        } //end of print or export record
 
-  var text = freeze(['#text']);
-
-  var html$1 = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'pattern', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'xmlns']);
-
-  var svg$1 = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'targetx', 'targety', 'transform', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
-
-  var mathMl$1 = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnsalign', 'columnlines', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lspace', 'lquote', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
-
-  var xml = freeze(['xlink:href', 'xml:id', 'xlink:title', 'xml:space', 'xmlns:xlink']);
-
-  // eslint-disable-next-line unicorn/better-regex
-  var MUSTACHE_EXPR = seal(/\{\{[\s\S]*|[\s\S]*\}\}/gm); // Specify template detection regex for SAFE_FOR_TEMPLATES mode
-  var ERB_EXPR = seal(/<%[\s\S]*|[\s\S]*%>/gm);
-  var DATA_ATTR = seal(/^data-[\-\w.\u00B7-\uFFFF]/); // eslint-disable-line no-useless-escape
-  var ARIA_ATTR = seal(/^aria-[\-\w]+$/); // eslint-disable-line no-useless-escape
-  var IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // eslint-disable-line no-useless-escape
-  );
-  var IS_SCRIPT_OR_DATA = seal(/^(?:\w+script|data):/i);
-  var ATTR_WHITESPACE = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g // eslint-disable-line no-control-regex
-  );
-
-  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-  function _toConsumableArray$1(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-  var getGlobal = function getGlobal() {
-    return typeof window === 'undefined' ? null : window;
-  };
-
-  /**
-   * Creates a no-op policy for internal use only.
-   * Don't export this function outside this module!
-   * @param {?TrustedTypePolicyFactory} trustedTypes The policy factory.
-   * @param {Document} document The document object (to determine policy name suffix)
-   * @return {?TrustedTypePolicy} The policy created (or null, if Trusted Types
-   * are not supported).
-   */
-  var _createTrustedTypesPolicy = function _createTrustedTypesPolicy(trustedTypes, document) {
-    if ((typeof trustedTypes === 'undefined' ? 'undefined' : _typeof(trustedTypes)) !== 'object' || typeof trustedTypes.createPolicy !== 'function') {
-      return null;
-    }
-
-    // Allow the callers to control the unique policy name
-    // by adding a data-tt-policy-suffix to the script element with the DOMPurify.
-    // Policy creation with duplicate names throws in Trusted Types.
-    var suffix = null;
-    var ATTR_NAME = 'data-tt-policy-suffix';
-    if (document.currentScript && document.currentScript.hasAttribute(ATTR_NAME)) {
-      suffix = document.currentScript.getAttribute(ATTR_NAME);
-    }
-
-    var policyName = 'dompurify' + (suffix ? '#' + suffix : '');
-
-    try {
-      return trustedTypes.createPolicy(policyName, {
-        createHTML: function createHTML(html$$1) {
-          return html$$1;
-        }
       });
-    } catch (_) {
-      // Policy creation failed (most likely another DOMPurify script has
-      // already run). Skip creating the policy, as this will only cause errors
-      // if TT are enforced.
-      console.warn('TrustedTypes policy ' + policyName + ' could not be created.');
-      return null;
-    }
-  };
-
-  function createDOMPurify() {
-    var window = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : getGlobal();
-
-    var DOMPurify = function DOMPurify(root) {
-      return createDOMPurify(root);
-    };
-
-    /**
-     * Version label, exposed for easier checks
-     * if DOMPurify is up to date or not
-     */
-    DOMPurify.version = '2.2.0';
-
-    /**
-     * Array of elements that DOMPurify removed during sanitation.
-     * Empty if nothing was removed.
-     */
-    DOMPurify.removed = [];
-
-    if (!window || !window.document || window.document.nodeType !== 9) {
-      // Not running in a browser, provide a factory function
-      // so that you can pass your own Window
-      DOMPurify.isSupported = false;
-
-      return DOMPurify;
-    }
-
-    var originalDocument = window.document;
-
-    var document = window.document;
-    var DocumentFragment = window.DocumentFragment,
-        HTMLTemplateElement = window.HTMLTemplateElement,
-        Node = window.Node,
-        NodeFilter = window.NodeFilter,
-        _window$NamedNodeMap = window.NamedNodeMap,
-        NamedNodeMap = _window$NamedNodeMap === undefined ? window.NamedNodeMap || window.MozNamedAttrMap : _window$NamedNodeMap,
-        Text = window.Text,
-        Comment = window.Comment,
-        DOMParser = window.DOMParser,
-        trustedTypes = window.trustedTypes;
-
-    // As per issue #47, the web-components registry is inherited by a
-    // new document created via createHTMLDocument. As per the spec
-    // (http://w3c.github.io/webcomponents/spec/custom/#creating-and-passing-registries)
-    // a new empty registry is used when creating a template contents owner
-    // document, so we use that as our parent document to ensure nothing
-    // is inherited.
-
-    if (typeof HTMLTemplateElement === 'function') {
-      var template = document.createElement('template');
-      if (template.content && template.content.ownerDocument) {
-        document = template.content.ownerDocument;
-      }
-    }
-
-    var trustedTypesPolicy = _createTrustedTypesPolicy(trustedTypes, originalDocument);
-    var emptyHTML = trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML('') : '';
-
-    var _document = document,
-        implementation = _document.implementation,
-        createNodeIterator = _document.createNodeIterator,
-        getElementsByTagName = _document.getElementsByTagName,
-        createDocumentFragment = _document.createDocumentFragment;
-    var importNode = originalDocument.importNode;
-
-
-    var documentMode = {};
-    try {
-      documentMode = clone(document).documentMode ? document.documentMode : {};
-    } catch (_) {}
-
-    var hooks = {};
-
-    /**
-     * Expose whether this browser supports running the full DOMPurify.
-     */
-    DOMPurify.isSupported = implementation && typeof implementation.createHTMLDocument !== 'undefined' && documentMode !== 9;
-
-    var MUSTACHE_EXPR$$1 = MUSTACHE_EXPR,
-        ERB_EXPR$$1 = ERB_EXPR,
-        DATA_ATTR$$1 = DATA_ATTR,
-        ARIA_ATTR$$1 = ARIA_ATTR,
-        IS_SCRIPT_OR_DATA$$1 = IS_SCRIPT_OR_DATA,
-        ATTR_WHITESPACE$$1 = ATTR_WHITESPACE;
-    var IS_ALLOWED_URI$$1 = IS_ALLOWED_URI;
-
-    /**
-     * We consider the elements and attributes below to be safe. Ideally
-     * don't add any new ones but feel free to remove unwanted ones.
-     */
-
-    /* allowed element names */
-
-    var ALLOWED_TAGS = null;
-    var DEFAULT_ALLOWED_TAGS = addToSet({}, [].concat(_toConsumableArray$1(html), _toConsumableArray$1(svg), _toConsumableArray$1(svgFilters), _toConsumableArray$1(mathMl), _toConsumableArray$1(text)));
-
-    /* Allowed attribute names */
-    var ALLOWED_ATTR = null;
-    var DEFAULT_ALLOWED_ATTR = addToSet({}, [].concat(_toConsumableArray$1(html$1), _toConsumableArray$1(svg$1), _toConsumableArray$1(mathMl$1), _toConsumableArray$1(xml)));
-
-    /* Explicitly forbidden tags (overrides ALLOWED_TAGS/ADD_TAGS) */
-    var FORBID_TAGS = null;
-
-    /* Explicitly forbidden attributes (overrides ALLOWED_ATTR/ADD_ATTR) */
-    var FORBID_ATTR = null;
-
-    /* Decide if ARIA attributes are okay */
-    var ALLOW_ARIA_ATTR = true;
-
-    /* Decide if custom data attributes are okay */
-    var ALLOW_DATA_ATTR = true;
-
-    /* Decide if unknown protocols are okay */
-    var ALLOW_UNKNOWN_PROTOCOLS = false;
-
-    /* Output should be safe for common template engines.
-     * This means, DOMPurify removes data attributes, mustaches and ERB
-     */
-    var SAFE_FOR_TEMPLATES = false;
-
-    /* Decide if document with <html>... should be returned */
-    var WHOLE_DOCUMENT = false;
-
-    /* Track whether config is already set on this instance of DOMPurify. */
-    var SET_CONFIG = false;
-
-    /* Decide if all elements (e.g. style, script) must be children of
-     * document.body. By default, browsers might move them to document.head */
-    var FORCE_BODY = false;
-
-    /* Decide if a DOM `HTMLBodyElement` should be returned, instead of a html
-     * string (or a TrustedHTML object if Trusted Types are supported).
-     * If `WHOLE_DOCUMENT` is enabled a `HTMLHtmlElement` will be returned instead
-     */
-    var RETURN_DOM = false;
-
-    /* Decide if a DOM `DocumentFragment` should be returned, instead of a html
-     * string  (or a TrustedHTML object if Trusted Types are supported) */
-    var RETURN_DOM_FRAGMENT = false;
-
-    /* If `RETURN_DOM` or `RETURN_DOM_FRAGMENT` is enabled, decide if the returned DOM
-     * `Node` is imported into the current `Document`. If this flag is not enabled the
-     * `Node` will belong (its ownerDocument) to a fresh `HTMLDocument`, created by
-     * DOMPurify.
-     *
-     * This defaults to `true` starting DOMPurify 2.2.0. Note that setting it to `false`
-     * might cause XSS from attacks hidden in closed shadowroots in case the browser
-     * supports Declarative Shadow: DOM https://web.dev/declarative-shadow-dom/
-     */
-    var RETURN_DOM_IMPORT = true;
-
-    /* Try to return a Trusted Type object instead of a string, return a string in
-     * case Trusted Types are not supported  */
-    var RETURN_TRUSTED_TYPE = false;
-
-    /* Output should be free from DOM clobbering attacks? */
-    var SANITIZE_DOM = true;
-
-    /* Keep element content when removing element? */
-    var KEEP_CONTENT = true;
-
-    /* If a `Node` is passed to sanitize(), then performs sanitization in-place instead
-     * of importing it into a new Document and returning a sanitized copy */
-    var IN_PLACE = false;
-
-    /* Allow usage of profiles like html, svg and mathMl */
-    var USE_PROFILES = {};
-
-    /* Tags to ignore content of when KEEP_CONTENT is true */
-    var FORBID_CONTENTS = addToSet({}, ['annotation-xml', 'audio', 'colgroup', 'desc', 'foreignobject', 'head', 'iframe', 'math', 'mi', 'mn', 'mo', 'ms', 'mtext', 'noembed', 'noframes', 'plaintext', 'script', 'style', 'svg', 'template', 'thead', 'title', 'video', 'xmp']);
-
-    /* Tags that are safe for data: URIs */
-    var DATA_URI_TAGS = null;
-    var DEFAULT_DATA_URI_TAGS = addToSet({}, ['audio', 'video', 'img', 'source', 'image', 'track']);
-
-    /* Attributes safe for values like "javascript:" */
-    var URI_SAFE_ATTRIBUTES = null;
-    var DEFAULT_URI_SAFE_ATTRIBUTES = addToSet({}, ['alt', 'class', 'for', 'id', 'label', 'name', 'pattern', 'placeholder', 'summary', 'title', 'value', 'style', 'xmlns']);
-
-    /* Keep a reference to config to pass to hooks */
-    var CONFIG = null;
-
-    /* Ideally, do not touch anything below this line */
-    /* ______________________________________________ */
-
-    var formElement = document.createElement('form');
-
-    /**
-     * _parseConfig
-     *
-     * @param  {Object} cfg optional config literal
-     */
-    // eslint-disable-next-line complexity
-    var _parseConfig = function _parseConfig(cfg) {
-      if (CONFIG && CONFIG === cfg) {
-        return;
-      }
-
-      /* Shield configuration object from tampering */
-      if (!cfg || (typeof cfg === 'undefined' ? 'undefined' : _typeof(cfg)) !== 'object') {
-        cfg = {};
-      }
-
-      /* Shield configuration object from prototype pollution */
-      cfg = clone(cfg);
-
-      /* Set configuration parameters */
-      ALLOWED_TAGS = 'ALLOWED_TAGS' in cfg ? addToSet({}, cfg.ALLOWED_TAGS) : DEFAULT_ALLOWED_TAGS;
-      ALLOWED_ATTR = 'ALLOWED_ATTR' in cfg ? addToSet({}, cfg.ALLOWED_ATTR) : DEFAULT_ALLOWED_ATTR;
-      URI_SAFE_ATTRIBUTES = 'ADD_URI_SAFE_ATTR' in cfg ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), cfg.ADD_URI_SAFE_ATTR) : DEFAULT_URI_SAFE_ATTRIBUTES;
-      DATA_URI_TAGS = 'ADD_DATA_URI_TAGS' in cfg ? addToSet(clone(DEFAULT_DATA_URI_TAGS), cfg.ADD_DATA_URI_TAGS) : DEFAULT_DATA_URI_TAGS;
-      FORBID_TAGS = 'FORBID_TAGS' in cfg ? addToSet({}, cfg.FORBID_TAGS) : {};
-      FORBID_ATTR = 'FORBID_ATTR' in cfg ? addToSet({}, cfg.FORBID_ATTR) : {};
-      USE_PROFILES = 'USE_PROFILES' in cfg ? cfg.USE_PROFILES : false;
-      ALLOW_ARIA_ATTR = cfg.ALLOW_ARIA_ATTR !== false; // Default true
-      ALLOW_DATA_ATTR = cfg.ALLOW_DATA_ATTR !== false; // Default true
-      ALLOW_UNKNOWN_PROTOCOLS = cfg.ALLOW_UNKNOWN_PROTOCOLS || false; // Default false
-      SAFE_FOR_TEMPLATES = cfg.SAFE_FOR_TEMPLATES || false; // Default false
-      WHOLE_DOCUMENT = cfg.WHOLE_DOCUMENT || false; // Default false
-      RETURN_DOM = cfg.RETURN_DOM || false; // Default false
-      RETURN_DOM_FRAGMENT = cfg.RETURN_DOM_FRAGMENT || false; // Default false
-      RETURN_DOM_IMPORT = cfg.RETURN_DOM_IMPORT !== false; // Default true
-      RETURN_TRUSTED_TYPE = cfg.RETURN_TRUSTED_TYPE || false; // Default false
-      FORCE_BODY = cfg.FORCE_BODY || false; // Default false
-      SANITIZE_DOM = cfg.SANITIZE_DOM !== false; // Default true
-      KEEP_CONTENT = cfg.KEEP_CONTENT !== false; // Default true
-      IN_PLACE = cfg.IN_PLACE || false; // Default false
-      IS_ALLOWED_URI$$1 = cfg.ALLOWED_URI_REGEXP || IS_ALLOWED_URI$$1;
-      if (SAFE_FOR_TEMPLATES) {
-        ALLOW_DATA_ATTR = false;
-      }
-
-      if (RETURN_DOM_FRAGMENT) {
-        RETURN_DOM = true;
-      }
-
-      /* Parse profile info */
-      if (USE_PROFILES) {
-        ALLOWED_TAGS = addToSet({}, [].concat(_toConsumableArray$1(text)));
-        ALLOWED_ATTR = [];
-        if (USE_PROFILES.html === true) {
-          addToSet(ALLOWED_TAGS, html);
-          addToSet(ALLOWED_ATTR, html$1);
-        }
-
-        if (USE_PROFILES.svg === true) {
-          addToSet(ALLOWED_TAGS, svg);
-          addToSet(ALLOWED_ATTR, svg$1);
-          addToSet(ALLOWED_ATTR, xml);
-        }
-
-        if (USE_PROFILES.svgFilters === true) {
-          addToSet(ALLOWED_TAGS, svgFilters);
-          addToSet(ALLOWED_ATTR, svg$1);
-          addToSet(ALLOWED_ATTR, xml);
-        }
-
-        if (USE_PROFILES.mathMl === true) {
-          addToSet(ALLOWED_TAGS, mathMl);
-          addToSet(ALLOWED_ATTR, mathMl$1);
-          addToSet(ALLOWED_ATTR, xml);
-        }
-      }
-
-      /* Merge configuration parameters */
-      if (cfg.ADD_TAGS) {
-        if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
-          ALLOWED_TAGS = clone(ALLOWED_TAGS);
-        }
-
-        addToSet(ALLOWED_TAGS, cfg.ADD_TAGS);
-      }
-
-      if (cfg.ADD_ATTR) {
-        if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
-          ALLOWED_ATTR = clone(ALLOWED_ATTR);
-        }
-
-        addToSet(ALLOWED_ATTR, cfg.ADD_ATTR);
-      }
-
-      if (cfg.ADD_URI_SAFE_ATTR) {
-        addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR);
-      }
-
-      /* Add #text in case KEEP_CONTENT is set to true */
-      if (KEEP_CONTENT) {
-        ALLOWED_TAGS['#text'] = true;
-      }
-
-      /* Add html, head and body to ALLOWED_TAGS in case WHOLE_DOCUMENT is true */
-      if (WHOLE_DOCUMENT) {
-        addToSet(ALLOWED_TAGS, ['html', 'head', 'body']);
-      }
-
-      /* Add tbody to ALLOWED_TAGS in case tables are permitted, see #286, #365 */
-      if (ALLOWED_TAGS.table) {
-        addToSet(ALLOWED_TAGS, ['tbody']);
-        delete FORBID_TAGS.tbody;
-      }
-
-      // Prevent further manipulation of configuration.
-      // Not available in IE8, Safari 5, etc.
-      if (freeze) {
-        freeze(cfg);
-      }
-
-      CONFIG = cfg;
-    };
-
-    /**
-     * _forceRemove
-     *
-     * @param  {Node} node a DOM node
-     */
-    var _forceRemove = function _forceRemove(node) {
-      arrayPush(DOMPurify.removed, { element: node });
-      try {
-        node.parentNode.removeChild(node);
-      } catch (_) {
-        node.outerHTML = emptyHTML;
-      }
-    };
-
-    /**
-     * _removeAttribute
-     *
-     * @param  {String} name an Attribute name
-     * @param  {Node} node a DOM node
-     */
-    var _removeAttribute = function _removeAttribute(name, node) {
-      try {
-        arrayPush(DOMPurify.removed, {
-          attribute: node.getAttributeNode(name),
-          from: node
+    },
+    generateExpenseReport: function generateExpenseReport(action) {
+      var _this2 = this;
+
+      this.loadExpenses().then(function (data) {
+        var table_columns = [];
+        var table_footer = [];
+        var table_rows = [];
+        table_rows.push([{
+          text: "Date",
+          style: "tableOfExpensesHeader"
+        }, {
+          text: "Type",
+          style: "tableOfExpensesHeader"
+        }, {
+          text: "Receipt",
+          style: "tableOfExpensesHeader"
+        }, {
+          text: "Vendor",
+          style: "tableOfExpensesHeader"
+        }, {
+          text: "Amount",
+          style: "tableOfExpensesHeader"
+        }]);
+        data.items.forEach(function (element) {
+          var temp = [];
+          temp.push({
+            text: element.date,
+            style: "tableOfExpensesBody"
+          });
+          temp.push({
+            text: element.expense_type.name,
+            style: "tableOfExpensesBody"
+          });
+          temp.push({
+            text: element.receipt_number,
+            style: "tableOfExpensesBody"
+          });
+          temp.push({
+            text: element.vendor == null ? "" : element.vendor.name,
+            style: "tableOfExpensesBody"
+          });
+          temp.push({
+            text: _this2.mixin_formatNumber(element.amount),
+            style: {
+              fontSize: 9,
+              alignment: "right"
+            }
+          });
+          table_rows.push(temp);
         });
-      } catch (_) {
-        arrayPush(DOMPurify.removed, {
-          attribute: null,
-          from: node
+
+        var pdfMake = __webpack_require__(/*! pdfmake/build/pdfmake.js */ "./node_modules/pdfmake/build/pdfmake.js");
+
+        if (pdfMake.vfs == undefined) {
+          var pdfFonts = __webpack_require__(/*! pdfmake/build/vfs_fonts.js */ "./node_modules/pdfmake/build/vfs_fonts.js");
+
+          pdfMake.vfs = pdfFonts.pdfMake.vfs;
+        }
+
+        pdfMake.fonts = {
+          Roboto: {
+            normal: "Roboto-Regular.ttf",
+            bold: "Roboto-Medium.ttf",
+            italics: "Roboto-Italic.ttf",
+            bolditalics: "Roboto-MediumItalic.ttf"
+          }
+        };
+        var docDefinition = {
+          // pageSize: 'legal',
+          pageSize: {
+            width: 8.5 * 72,
+            height: 13 * 72
+          },
+          pageOrientation: "portrait",
+          pageMargins: [0.5 * 72, 0.5 * 72, 0.5 * 72, 0.5 * 72],
+          defaultStyle: {
+            font: "Roboto"
+          },
+          footer: function footer(currentPage, pageCount) {
+            return {
+              columns: [{
+                text: "Generated from Twin-Circa Marketing Expense Tracker ".concat(moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD HH:mm:ss")),
+                width: 500,
+                margin: [0.5 * 72, 0, 0.5 * 72, 0],
+                style: "pageFooter"
+              }, {
+                text: "Page " + currentPage.toString() + " of " + pageCount,
+                alignment: "right",
+                style: "pageFooter",
+                margin: [0, 0, 0.5 * 72, 0]
+              }]
+            };
+          },
+          content: [{
+            columns: [{
+              text: _this2.form.user.full_name,
+              style: "pageStyle"
+            }, {
+              text: _this2.form.code,
+              alignment: "right",
+              style: "pageStyle"
+            }]
+          }, {
+            columns: [{
+              text: "PHP ".concat(_this2.mixin_formatNumber(_this2.form.total)),
+              style: {
+                fontSize: 18,
+                color: "#4caf50"
+              }
+            }, {
+              text: _this2.form.status.status,
+              alignment: "right",
+              style: {
+                fontSize: 11,
+                color: "#4caf50"
+              }
+            }]
+          }, {
+            text: "Period: ".concat(_this2.form.from, " ~ ").concat(_this2.form.to),
+            style: "pageStyle"
+          }, {
+            canvas: [{
+              type: "line",
+              x1: 0,
+              y1: 0,
+              x2: 7.5 * 72,
+              y2: 0,
+              lineWidth: 0.5
+            }],
+            margin: [0, 0.1 * 72, 0, 0.1 * 72]
+          }, {
+            text: _this2.form.description,
+            style: "pageStyle"
+          }, {
+            canvas: [{
+              type: "line",
+              x1: 0,
+              y1: 0,
+              x2: 7.5 * 72,
+              y2: 0,
+              lineWidth: 0.5
+            }],
+            margin: [0, 0.1 * 72, 0, 0.1 * 72]
+          }, {
+            style: "tableOfExpenses",
+            table: {
+              headerRows: 1,
+              widths: ["*", "*", "*", "*", "*"],
+              body: table_rows
+            },
+            layout: {
+              hLineWidth: function hLineWidth(i, node) {
+                return i === 0 || i === node.table.body.length ? 0.5 : 0.5;
+              },
+              vLineWidth: function vLineWidth(i, node) {
+                return i === 0 || i === node.table.widths.length ? 0.5 : 0.5;
+              },
+              hLineColor: function hLineColor(i, node) {
+                return i === 0 || i === node.table.body.length ? "gray" : "gray";
+              },
+              vLineColor: function vLineColor(i, node) {
+                return i === 0 || i === node.table.widths.length ? "gray" : "gray";
+              },
+              fillColor: function fillColor(rowIndex, node, columnIndex) {
+                return rowIndex % 2 === 0 ? "#dbdbdb" : null;
+              }
+            }
+          }, {
+            columns: [{
+              text: "No. of Expenses",
+              style: "pageStyle"
+            }, {
+              text: data.items.length,
+              alignment: "right",
+              style: "pageStyle"
+            }],
+            margin: [0, 0, 0, 0.1 * 72]
+          }, {
+            columns: [{
+              text: "Total Expenses Amount",
+              style: "pageStyle"
+            }, {
+              text: _this2.mixin_formatNumber(_this2.form.total),
+              alignment: "right",
+              style: "pageStyle"
+            }],
+            margin: [0, 0, 0, 0.1 * 72]
+          }, {
+            columns: [{
+              text: "Paid Amount",
+              style: "pageStyle"
+            }, {
+              text: _this2.mixin_formatNumber(_this2.form.paid),
+              alignment: "right",
+              style: "pageStyle"
+            }],
+            margin: [0, 0, 0, 0.1 * 72]
+          }, {
+            columns: [{
+              text: "Amount to be reimbursed",
+              style: "pageStyle"
+            }, {
+              text: _this2.mixin_formatNumber(_this2.form.balance),
+              alignment: "right",
+              style: "pageStyle"
+            }],
+            margin: [0, 0, 0, 0.1 * 72]
+          }],
+          styles: {
+            pageStyle: {
+              fontSize: 11
+            },
+            header: {
+              fontSize: 13,
+              bold: false,
+              alignment: "center"
+            },
+            tableSignatures: {
+              margin: [0, 5, 0, 15]
+            },
+            tableSignaturesBody: {
+              fontSize: 10
+            },
+            tableOfExpenses: {
+              margin: [0, 5, 0, 15]
+            },
+            tableOfExpensesHeader: {
+              bold: true,
+              fontSize: 9,
+              color: "white",
+              fillColor: "#4caf50",
+              alignment: "center"
+            },
+            tableOfExpensesBody: {
+              fontSize: 9
+            },
+            signatures: {
+              margin: [0, 5, 0, 15],
+              fontSize: 10
+            },
+            pageFooter: {
+              fontSize: 8
+            }
+          }
+        };
+
+        if (action == "print") {
+          // pdfMake.createPdf(docDefinition).print();
+          pdfMake.createPdf(docDefinition).open();
+        } else {
+          pdfMake.createPdf(docDefinition).download("expense_report.pdf");
+        }
+      });
+    },
+    loadExpenses: function loadExpenses() {
+      var _this3 = this;
+
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].get({
+          params: {
+            expense_report_id: _this3.router_params_id,
+            only: true,
+            sortBy: "date",
+            sortType: "asc"
+          }
+        }).then(function (response) {
+          var items = response.data.data;
+          resolve({
+            items: items
+          });
+        })["catch"](function (error) {
+          _this3.mixin_showErrors(error);
+
+          reject();
         });
-      }
-
-      node.removeAttribute(name);
-    };
-
-    /**
-     * _initDocument
-     *
-     * @param  {String} dirty a string of dirty markup
-     * @return {Document} a DOM, filled with the dirty markup
-     */
-    var _initDocument = function _initDocument(dirty) {
-      /* Create a HTML document */
-      var doc = void 0;
-      var leadingWhitespace = void 0;
-
-      if (FORCE_BODY) {
-        dirty = '<remove></remove>' + dirty;
-      } else {
-        /* If FORCE_BODY isn't used, leading whitespace needs to be preserved manually */
-        var matches = stringMatch(dirty, /^[\r\n\t ]+/);
-        leadingWhitespace = matches && matches[0];
-      }
-
-      var dirtyPayload = trustedTypesPolicy ? trustedTypesPolicy.createHTML(dirty) : dirty;
-      /* Use the DOMParser API by default, fallback later if needs be */
-      try {
-        doc = new DOMParser().parseFromString(dirtyPayload, 'text/html');
-      } catch (_) {}
-
-      /* Use createHTMLDocument in case DOMParser is not available */
-      if (!doc || !doc.documentElement) {
-        doc = implementation.createHTMLDocument('');
-        var _doc = doc,
-            body = _doc.body;
-
-        body.parentNode.removeChild(body.parentNode.firstElementChild);
-        body.outerHTML = dirtyPayload;
-      }
-
-      if (dirty && leadingWhitespace) {
-        doc.body.insertBefore(document.createTextNode(leadingWhitespace), doc.body.childNodes[0] || null);
-      }
-
-      /* Work on whole document or just its body */
-      return getElementsByTagName.call(doc, WHOLE_DOCUMENT ? 'html' : 'body')[0];
-    };
-
-    /**
-     * _createIterator
-     *
-     * @param  {Document} root document/fragment to create iterator for
-     * @return {Iterator} iterator instance
-     */
-    var _createIterator = function _createIterator(root) {
-      return createNodeIterator.call(root.ownerDocument || root, root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT, function () {
-        return NodeFilter.FILTER_ACCEPT;
-      }, false);
-    };
-
-    /**
-     * _isClobbered
-     *
-     * @param  {Node} elm element to check for clobbering attacks
-     * @return {Boolean} true if clobbered, false if safe
-     */
-    var _isClobbered = function _isClobbered(elm) {
-      if (elm instanceof Text || elm instanceof Comment) {
-        return false;
-      }
-
-      if (typeof elm.nodeName !== 'string' || typeof elm.textContent !== 'string' || typeof elm.removeChild !== 'function' || !(elm.attributes instanceof NamedNodeMap) || typeof elm.removeAttribute !== 'function' || typeof elm.setAttribute !== 'function' || typeof elm.namespaceURI !== 'string') {
-        return true;
-      }
-
-      return false;
-    };
-
-    /**
-     * _isNode
-     *
-     * @param  {Node} obj object to check whether it's a DOM node
-     * @return {Boolean} true is object is a DOM node
-     */
-    var _isNode = function _isNode(object) {
-      return (typeof Node === 'undefined' ? 'undefined' : _typeof(Node)) === 'object' ? object instanceof Node : object && (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string';
-    };
-
-    /**
-     * _executeHook
-     * Execute user configurable hooks
-     *
-     * @param  {String} entryPoint  Name of the hook's entry point
-     * @param  {Node} currentNode node to work on with the hook
-     * @param  {Object} data additional hook parameters
-     */
-    var _executeHook = function _executeHook(entryPoint, currentNode, data) {
-      if (!hooks[entryPoint]) {
-        return;
-      }
-
-      arrayForEach(hooks[entryPoint], function (hook) {
-        hook.call(DOMPurify, currentNode, data, CONFIG);
       });
-    };
+    },
+    getData: function getData() {
+      var _this4 = this;
 
-    /**
-     * _sanitizeElements
-     *
-     * @protect nodeName
-     * @protect textContent
-     * @protect removeChild
-     *
-     * @param   {Node} currentNode to check for permission to exist
-     * @return  {Boolean} true if node was killed, false if left alive
-     */
-    var _sanitizeElements = function _sanitizeElements(currentNode) {
-      var content = void 0;
+      var data = {};
 
-      /* Execute a hook if present */
-      _executeHook('beforeSanitizeElements', currentNode, null);
-
-      /* Check if element is clobbered or can clobber */
-      if (_isClobbered(currentNode)) {
-        _forceRemove(currentNode);
-        return true;
+      if (this.$route.params.isDeleted) {
+        data = {
+          params: {
+            isDeleted: true
+          }
+        };
       }
 
-      /* Check if tagname contains Unicode */
-      if (stringMatch(currentNode.nodeName, /[\u0080-\uFFFF]/)) {
-        _forceRemove(currentNode);
-        return true;
-      }
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_4__["default"].show(this.router_params_id, data).then(function (response) {
+        var data = response.data.data;
+        _this4.form.code = data.code;
+        _this4.form.reference_no = data.reference_no;
+        _this4.form.description = data.description;
+        _this4.form.remarks = data.remarks;
+        _this4.form.notes = data.notes;
+        _this4.form.submission_period = data.submission_period;
+        _this4.form.approval_period = data.approval_period;
+        _this4.form.from = data.from;
+        _this4.form.to = data.to;
+        _this4.form.status = data.status;
+        _this4.form.is_late_submitted = data.is_late_submitted;
+        _this4.form.is_late_approved = data.is_late_approved;
+        _this4.form.total = data.total;
+        _this4.form.total_reimbursable = data.total_reimbursable;
+        _this4.form.paid = data.paid;
+        _this4.form.payments = data.payments;
+        _this4.form.payment_id = data.payment_id;
+        _this4.form.balance = data.balance;
+        _this4.form.user = data.user;
+        _this4.form.payment = data.payment; // this.form.expenses = data.expenses;
+        // this.form.created = data.created;
+        // this.form.updated = data.updated;
+        // this.form.deleted = data.deleted;
+        // this.form.submitted = data.submitted;
+        // this.form.approved = data.approved;
+        // this.form.rejected = data.rejected;
+        // this.form.cancelled = data.cancelled;
 
-      /* Now let's check the element's type and name */
-      var tagName = stringToLowerCase(currentNode.nodeName);
+        _this4.form.created_at = data.created_at;
+        _this4.form.updated_at = data.updated_at;
+        _this4.form.deleted_at = data.deleted_at;
+        _this4.form.submitted_at = data.submitted_at;
+        _this4.form.approved_at = data.approved_at;
+        _this4.form.rejected_at = data.rejected_at;
+        _this4.form.cancelled_at = data.cancelled_at;
+        _this4.form.logs = data.logs; // this.loadExpenses();
 
-      /* Execute a hook if present */
-      _executeHook('uponSanitizeElement', currentNode, {
-        tagName: tagName,
-        allowedTags: ALLOWED_TAGS
+        _this4.getDataFromApi().then(function (data) {
+          _this4.form.expenses = data.items;
+          _this4.totalItems = data.total;
+        });
+
+        _this4.formDataLoaded = true;
+      })["catch"](function (error) {
+        _this4.mixin_showErrors(error);
+
+        _this4.formDataLoaded = true;
+
+        _this4.$router.push({
+          name: "user.expense_reports.index"
+        }, function () {});
       });
+    },
+    getDataFromApi: function getDataFromApi() {
+      var _this5 = this;
 
-      /* Take care of an mXSS pattern using p, br inside svg, math */
-      if ((tagName === 'svg' || tagName === 'math') && currentNode.querySelectorAll('p, br').length !== 0) {
-        _forceRemove(currentNode);
-        return true;
-      }
+      this.loading = true;
+      return new Promise(function (resolve, reject) {
+        var _this5$options = _this5.options,
+            sortBy = _this5$options.sortBy,
+            sortDesc = _this5$options.sortDesc,
+            page = _this5$options.page,
+            itemsPerPage = _this5$options.itemsPerPage;
+        var range = [_this5.form.from, _this5.form.to];
+        var expense_report_id = _this5.router_params_id;
+        var data = {
+          params: {
+            page: page,
+            itemsPerPage: itemsPerPage,
+            start_date: range[0],
+            end_date: range[1] ? range[1] : range[0],
+            expense_report_id: expense_report_id,
+            sortBy: "date",
+            sortType: "asc"
+          }
+        };
 
-      /* Detect mXSS attempts abusing namespace confusion */
-      if (!_isNode(currentNode.firstElementChild) && (!_isNode(currentNode.content) || !_isNode(currentNode.content.firstElementChild)) && regExpTest(/<[!/\w]/g, currentNode.innerHTML) && regExpTest(/<[!/\w]/g, currentNode.textContent)) {
-        _forceRemove(currentNode);
-        return true;
-      }
-
-      /* Remove element if anything forbids its presence */
-      if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
-        /* Keep content except for bad-listed elements */
-        if (KEEP_CONTENT && !FORBID_CONTENTS[tagName] && typeof currentNode.insertAdjacentHTML === 'function') {
-          try {
-            var htmlToInsert = currentNode.innerHTML;
-            currentNode.insertAdjacentHTML('AfterEnd', trustedTypesPolicy ? trustedTypesPolicy.createHTML(htmlToInsert) : htmlToInsert);
-          } catch (_) {}
+        if (_this5.$route.params.isDeleted) {
+          data.params.isDeleted = true;
         }
 
-        _forceRemove(currentNode);
-        return true;
-      }
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_5__["default"].getAll(data).then(function (response) {
+          var items = response.data.data;
+          var total = response.data.meta.total;
+          _this5.loading = false;
+          resolve({
+            items: items,
+            total: total
+          });
+        })["catch"](function (error) {
+          _this5.mixin_showErrors(error);
 
-      /* Remove in case a noscript/noembed XSS is suspected */
-      if ((tagName === 'noscript' || tagName === 'noembed') && regExpTest(/<\/no(script|embed)/i, currentNode.innerHTML)) {
-        _forceRemove(currentNode);
-        return true;
-      }
+          _this5.loading = false;
+          reject();
+        });
+      });
+    }
+  },
+  watch: {
+    params: {
+      handler: function handler() {
+        var _this6 = this;
 
-      /* Sanitize element content to be template-safe */
-      if (SAFE_FOR_TEMPLATES && currentNode.nodeType === 3) {
-        /* Get the element's text content */
-        content = currentNode.textContent;
-        content = stringReplace(content, MUSTACHE_EXPR$$1, ' ');
-        content = stringReplace(content, ERB_EXPR$$1, ' ');
-        if (currentNode.textContent !== content) {
-          arrayPush(DOMPurify.removed, { element: currentNode.cloneNode() });
-          currentNode.textContent = content;
-        }
-      }
-
-      /* Execute a hook if present */
-      _executeHook('afterSanitizeElements', currentNode, null);
-
-      return false;
-    };
-
-    /**
-     * _isValidAttribute
-     *
-     * @param  {string} lcTag Lowercase tag name of containing element.
-     * @param  {string} lcName Lowercase attribute name.
-     * @param  {string} value Attribute value.
-     * @return {Boolean} Returns true if `value` is valid, otherwise false.
-     */
-    // eslint-disable-next-line complexity
-    var _isValidAttribute = function _isValidAttribute(lcTag, lcName, value) {
-      /* Make sure attribute cannot clobber */
-      if (SANITIZE_DOM && (lcName === 'id' || lcName === 'name') && (value in document || value in formElement)) {
-        return false;
-      }
-
-      /* Allow valid data-* attributes: At least one character after "-"
-          (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
-          XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
-          We don't need to check the value; it's always URI safe. */
-      if (ALLOW_DATA_ATTR && regExpTest(DATA_ATTR$$1, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR$$1, lcName)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
-        return false;
-
-        /* Check value is safe. First, is attr inert? If so, is safe */
-      } else if (URI_SAFE_ATTRIBUTES[lcName]) ; else if (regExpTest(IS_ALLOWED_URI$$1, stringReplace(value, ATTR_WHITESPACE$$1, ''))) ; else if ((lcName === 'src' || lcName === 'xlink:href' || lcName === 'href') && lcTag !== 'script' && stringIndexOf(value, 'data:') === 0 && DATA_URI_TAGS[lcTag]) ; else if (ALLOW_UNKNOWN_PROTOCOLS && !regExpTest(IS_SCRIPT_OR_DATA$$1, stringReplace(value, ATTR_WHITESPACE$$1, ''))) ; else if (!value) ; else {
+        this.getDataFromApi().then(function (data) {
+          _this6.form.expenses = data.items;
+          _this6.totalItems = data.total;
+        });
+      },
+      deep: true
+    }
+  },
+  computed: {
+    params: function params(nv) {
+      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
+        query: this.date_range
+      }, "query", this.expense_report_id));
+    },
+    canEdit: function canEdit() {
+      if (this.form.approved_at !== null || this.form.cancelled_at !== null || this.form.deleted_at !== null || this.form.rejected_at !== null) {
         return false;
       }
 
       return true;
-    };
-
-    /**
-     * _sanitizeAttributes
-     *
-     * @protect attributes
-     * @protect nodeName
-     * @protect removeAttribute
-     * @protect setAttribute
-     *
-     * @param  {Node} currentNode to sanitize
-     */
-    var _sanitizeAttributes = function _sanitizeAttributes(currentNode) {
-      var attr = void 0;
-      var value = void 0;
-      var lcName = void 0;
-      var l = void 0;
-      /* Execute a hook if present */
-      _executeHook('beforeSanitizeAttributes', currentNode, null);
-
-      var attributes = currentNode.attributes;
-
-      /* Check if we have attributes; if not we might have a text node */
-
-      if (!attributes) {
-        return;
-      }
-
-      var hookEvent = {
-        attrName: '',
-        attrValue: '',
-        keepAttr: true,
-        allowedAttributes: ALLOWED_ATTR
-      };
-      l = attributes.length;
-
-      /* Go backwards over all attributes; safely remove bad ones */
-      while (l--) {
-        attr = attributes[l];
-        var _attr = attr,
-            name = _attr.name,
-            namespaceURI = _attr.namespaceURI;
-
-        value = stringTrim(attr.value);
-        lcName = stringToLowerCase(name);
-
-        /* Execute a hook if present */
-        hookEvent.attrName = lcName;
-        hookEvent.attrValue = value;
-        hookEvent.keepAttr = true;
-        hookEvent.forceKeepAttr = undefined; // Allows developers to see this is a property they can set
-        _executeHook('uponSanitizeAttribute', currentNode, hookEvent);
-        value = hookEvent.attrValue;
-        /* Did the hooks approve of the attribute? */
-        if (hookEvent.forceKeepAttr) {
-          continue;
-        }
-
-        /* Remove attribute */
-        _removeAttribute(name, currentNode);
-
-        /* Did the hooks approve of the attribute? */
-        if (!hookEvent.keepAttr) {
-          continue;
-        }
-
-        /* Work around a security issue in jQuery 3.0 */
-        if (regExpTest(/\/>/i, value)) {
-          _removeAttribute(name, currentNode);
-          continue;
-        }
-
-        /* Sanitize attribute content to be template-safe */
-        if (SAFE_FOR_TEMPLATES) {
-          value = stringReplace(value, MUSTACHE_EXPR$$1, ' ');
-          value = stringReplace(value, ERB_EXPR$$1, ' ');
-        }
-
-        /* Is `value` valid for this attribute? */
-        var lcTag = currentNode.nodeName.toLowerCase();
-        if (!_isValidAttribute(lcTag, lcName, value)) {
-          continue;
-        }
-
-        /* Handle invalid data-* attribute set by try-catching it */
-        try {
-          if (namespaceURI) {
-            currentNode.setAttributeNS(namespaceURI, name, value);
-          } else {
-            /* Fallback to setAttribute() for browser-unrecognized namespaces e.g. "x-schema". */
-            currentNode.setAttribute(name, value);
+    },
+    router_params_id: {
+      get: function get() {
+        if (this.$route) {
+          if (this.$route.params) {
+            return this.$route.params.id == null ? 0 : this.$route.params.id;
           }
 
-          arrayPop(DOMPurify.removed);
-        } catch (_) {}
-      }
-
-      /* Execute a hook if present */
-      _executeHook('afterSanitizeAttributes', currentNode, null);
-    };
-
-    /**
-     * _sanitizeShadowDOM
-     *
-     * @param  {DocumentFragment} fragment to iterate over recursively
-     */
-    var _sanitizeShadowDOM = function _sanitizeShadowDOM(fragment) {
-      var shadowNode = void 0;
-      var shadowIterator = _createIterator(fragment);
-
-      /* Execute a hook if present */
-      _executeHook('beforeSanitizeShadowDOM', fragment, null);
-
-      while (shadowNode = shadowIterator.nextNode()) {
-        /* Execute a hook if present */
-        _executeHook('uponSanitizeShadowNode', shadowNode, null);
-
-        /* Sanitize tags and elements */
-        if (_sanitizeElements(shadowNode)) {
-          continue;
+          return 0;
         }
 
-        /* Deep shadow DOM detected */
-        if (shadowNode.content instanceof DocumentFragment) {
-          _sanitizeShadowDOM(shadowNode.content);
-        }
-
-        /* Check attributes, sanitize if necessary */
-        _sanitizeAttributes(shadowNode);
+        return 0;
+      },
+      set: function set(value) {
+        return value;
       }
+    }
+  },
+  created: function created() {
+    // this.$store.dispatch("AUTH_USER");
+    this.getData();
+  },
+  activated: function activated() {
+    this.getData();
+  },
+  deactivated: function deactivated() {
+    this.form.expenses = [];
+    Object.assign(this.$data.form, this.$options.data());
+  }
+});
 
-      /* Execute a hook if present */
-      _executeHook('afterSanitizeShadowDOM', fragment, null);
-    };
+/***/ }),
 
-    /**
-     * Sanitize
-     * Public method providing core sanitation functionality
-     *
-     * @param {String|Node} dirty string or DOM node
-     * @param {Object} configuration object
-     */
-    // eslint-disable-next-line complexity
-    DOMPurify.sanitize = function (dirty, cfg) {
-      var body = void 0;
-      var importedNode = void 0;
-      var currentNode = void 0;
-      var oldNode = void 0;
-      var returnNode = void 0;
-      /* Make sure we have a string to sanitize.
-        DO NOT return early, as this will return the wrong type if
-        the user has requested a DOM object rather than a string */
-      if (!dirty) {
-        dirty = '<!-->';
-      }
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=template&id=24329f7e&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=template&id=24329f7e& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-      /* Stringify, in case dirty is an object */
-      if (typeof dirty !== 'string' && !_isNode(dirty)) {
-        // eslint-disable-next-line no-negated-condition
-        if (typeof dirty.toString !== 'function') {
-          throw typeErrorCreate('toString is not a function');
-        } else {
-          dirty = dirty.toString();
-          if (typeof dirty !== 'string') {
-            throw typeErrorCreate('dirty is not a string, aborting');
-          }
-        }
-      }
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
+            [
+              _c(
+                "v-card-title",
+                { staticClass: "pt-0" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.goBack()
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("Expense Report Details")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-form",
+                { ref: "form" },
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _c(
+                              "div",
+                              [
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(_vm.form.user.full_name) +
+                                    "\n                            "
+                                ),
+                                _vm.canEdit
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          text: "",
+                                          color: "green",
+                                          to:
+                                            "/expense_reports/" +
+                                            _vm.router_params_id +
+                                            "/edit"
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Edit\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "display-1 green--text" },
+                              [
+                                _vm._v(
+                                  "\n                            PHP " +
+                                    _vm._s(
+                                      _vm.mixin_formatNumber(_vm.form.total)
+                                    ) +
+                                    "\n                        "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [
+                              _vm._v(
+                                "\n                            Period:\n                            " +
+                                  _vm._s(
+                                    _vm.form.from == _vm.form.to
+                                      ? _vm.form.from
+                                      : _vm.form.from + " ~ " + _vm.form.to
+                                  ) +
+                                  "\n                        "
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("div", { staticClass: "headline green--text" }, [
+                              _vm._v(
+                                "\n                            #" +
+                                  _vm._s(_vm.form.code) +
+                                  "\n                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _vm._v(
+                                  "\n                            Status:\n                            "
+                                ),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: {
+                                      color: _vm.form.status.color,
+                                      "x-small": "",
+                                      dark: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(_vm.form.status.status) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _vm.form.is_late_submitted
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "red",
+                                          "x-small": "",
+                                          dark: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Late Submitted\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _vm.form.is_late_approved
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "red",
+                                          "x-small": "",
+                                          dark: ""
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                Late Approved\n                            "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ],
+                              1
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", [
+                            _vm._v(
+                              "Description: " +
+                                _vm._s(_vm.form.description) +
+                                " "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12" } },
+                            [
+                              _c("v-data-table", {
+                                staticClass: "elevation-0",
+                                attrs: {
+                                  headers: _vm.headers,
+                                  items: _vm.form.expenses,
+                                  loading: _vm.loading,
+                                  options: _vm.options,
+                                  "server-items-length": _vm.totalItems,
+                                  "footer-props": {
+                                    itemsPerPageOptions: [10, 20, 50, 100],
+                                    showFirstLastPage: true,
+                                    firstIcon: "mdi-page-first",
+                                    lastIcon: "mdi-page-last",
+                                    prevIcon: "mdi-chevron-left",
+                                    nextIcon: "mdi-chevron-right"
+                                  },
+                                  "show-expand": "",
+                                  "single-expand": "",
+                                  "item-key": "id"
+                                },
+                                on: {
+                                  "update:options": function($event) {
+                                    _vm.options = $event
+                                  }
+                                },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "expanded-item",
+                                      fn: function(ref) {
+                                        var headers = ref.headers
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "td",
+                                            {
+                                              attrs: { colspan: headers.length }
+                                            },
+                                            [
+                                              _c("v-container", [
+                                                _c("table", [
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Code")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(_vm._s(item.code))
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Description")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.description
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Receipt")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.receipt_number
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("tr", [
+                                                    _c("td", [
+                                                      _c("strong", [
+                                                        _vm._v("Vendor")
+                                                      ])
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [_vm._v(":")]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(
+                                                            item.vendor == null
+                                                              ? ""
+                                                              : item.vendor.name
+                                                          ) +
+                                                          "\n                                                "
+                                                      )
+                                                    ])
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  item.remarks
+                                                    ? _c("tr", [
+                                                        _c("td", [
+                                                          _c("strong", [
+                                                            _vm._v("Remarks")
+                                                          ])
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c("td", [_vm._v(":")]),
+                                                        _vm._v(" "),
+                                                        _c("td", [
+                                                          _vm._v(
+                                                            _vm._s(item.remarks)
+                                                          )
+                                                        ])
+                                                      ])
+                                                    : _vm._e()
+                                                ])
+                                              ])
+                                            ],
+                                            1
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.updated_at",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_getHumanDate(
+                                                  item.updated_at
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.amount",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.amount
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.replenishment",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(
+                                                _vm.mixin_formatNumber(
+                                                  item.amount -
+                                                    item.reimbursable_amount
+                                                )
+                                              ) +
+                                              "\n                            "
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.status.status",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-chip",
+                                            {
+                                              attrs: {
+                                                color: item.status.color,
+                                                dark: "",
+                                                small: ""
+                                              }
+                                            },
+                                            [_vm._v(_vm._s(item.status.status))]
+                                          )
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      key: "item.actions",
+                                      fn: function(ref) {
+                                        var item = ref.item
+                                        return [
+                                          _c(
+                                            "v-icon",
+                                            {
+                                              staticClass: "mr-2",
+                                              attrs: { small: "" },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.onShow(item)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    mdi-eye\n                                "
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  true
+                                )
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _c("div", [
+                              _vm._v("Remarks : " + _vm._s(_vm.form.remarks))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("table", { attrs: { width: "100%" } }, [
+                              _c("tbody", [
+                                _c("tr", [
+                                  _c("td", [
+                                    _vm._v(
+                                      "\n                                        Total Expense Amount\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.total
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("td", [
+                                    _vm._v(
+                                      "\n                                        Paid Amount\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        (-)\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.paid
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c(
+                                    "td",
+                                    { attrs: { colspan: "3" } },
+                                    [_c("v-divider")],
+                                    1
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("tr", [
+                                  _c("th", { staticClass: "text-left" }, [
+                                    _vm._v(
+                                      "\n                                        Amount to be reimbursed\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(":")]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "green--text text--darken-4 text-right"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        " +
+                                          _vm._s(
+                                            _vm.mixin_formatNumber(
+                                              _vm.form.balance
+                                            )
+                                          ) +
+                                          "\n                                    "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ])
+                            ])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "mb-4" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "8" } }, [
+                            _vm._v(
+                              "\n                        Notes : " +
+                                _vm._s(_vm.form.notes) +
+                                "\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-col", { attrs: { cols: "12", md: "4" } }, [
+                            _c("div", { staticClass: "text-right" })
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider", { staticClass: "mb-4" }),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        { staticClass: "text--secondary text-caption" },
+                        [
+                          _c("v-col", { attrs: { cols: "12", md: "12" } }, [
+                            _c("div", [_vm._v("History :")]),
+                            _vm._v(" "),
+                            _c("div", [
+                              _c(
+                                "table",
+                                {
+                                  staticClass: "table",
+                                  attrs: { width: "100%" }
+                                },
+                                [
+                                  _c(
+                                    "tbody",
+                                    _vm._l(_vm.form.logs, function(item) {
+                                      return _c("tr", { key: item.id }, [
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(
+                                                _vm.mixin_formatDate(
+                                                  item.created_at,
+                                                  "YYYY-MM-DD HH:mm:ss"
+                                                )
+                                              ) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v("-")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(
+                                                item.causer == null
+                                                  ? "System"
+                                                  : item.causer.name
+                                              ) +
+                                              "\n                                        "
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [_vm._v("-")]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.description))
+                                        ])
+                                      ])
+                                    }),
+                                    0
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
 
-      /* Check we can run. Otherwise fall back or ignore */
-      if (!DOMPurify.isSupported) {
-        if (_typeof(window.toStaticHTML) === 'object' || typeof window.toStaticHTML === 'function') {
-          if (typeof dirty === 'string') {
-            return window.toStaticHTML(dirty);
-          }
 
-          if (_isNode(dirty)) {
-            return window.toStaticHTML(dirty.outerHTML);
-          }
-        }
 
-        return dirty;
-      }
+/***/ }),
 
-      /* Assign config vars */
-      if (!SET_CONFIG) {
-        _parseConfig(cfg);
-      }
+/***/ "./resources/js/services/ExpenseDataService.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/services/ExpenseDataService.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-      /* Clean up removed elements */
-      DOMPurify.removed = [];
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-      /* Check if dirty is correctly typed for IN_PLACE */
-      if (typeof dirty === 'string') {
-        IN_PLACE = false;
-      }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-      if (IN_PLACE) ; else if (dirty instanceof Node) {
-        /* If dirty is a DOM element, append to an empty document to avoid
-           elements being stripped by the parser */
-        body = _initDocument('<!---->');
-        importedNode = body.ownerDocument.importNode(dirty, true);
-        if (importedNode.nodeType === 1 && importedNode.nodeName === 'BODY') {
-          /* Node is already a body, use as is */
-          body = importedNode;
-        } else if (importedNode.nodeName === 'HTML') {
-          body = importedNode;
-        } else {
-          // eslint-disable-next-line unicorn/prefer-node-append
-          body.appendChild(importedNode);
-        }
-      } else {
-        /* Exit directly if we have nothing to do */
-        if (!RETURN_DOM && !SAFE_FOR_TEMPLATES && !WHOLE_DOCUMENT &&
-        // eslint-disable-next-line unicorn/prefer-includes
-        dirty.indexOf('<') === -1) {
-          return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(dirty) : dirty;
-        }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-        /* Initialize the document to work on */
-        body = _initDocument(dirty);
+// import http from "../http-common";
 
-        /* Check we have a DOM node from the data */
-        if (!body) {
-          return RETURN_DOM ? null : emptyHTML;
-        }
-      }
 
-      /* Remove first element node (ours) if FORCE_BODY is set */
-      if (body && FORCE_BODY) {
-        _forceRemove(body.firstChild);
-      }
-
-      /* Get node iterator */
-      var nodeIterator = _createIterator(IN_PLACE ? dirty : body);
-
-      /* Now start iterating over the created document */
-      while (currentNode = nodeIterator.nextNode()) {
-        /* Fix IE's strange behavior with manipulated textNodes #89 */
-        if (currentNode.nodeType === 3 && currentNode === oldNode) {
-          continue;
-        }
-
-        /* Sanitize tags and elements */
-        if (_sanitizeElements(currentNode)) {
-          continue;
-        }
-
-        /* Shadow DOM detected, sanitize it */
-        if (currentNode.content instanceof DocumentFragment) {
-          _sanitizeShadowDOM(currentNode.content);
-        }
-
-        /* Check attributes, sanitize if necessary */
-        _sanitizeAttributes(currentNode);
-
-        oldNode = currentNode;
-      }
-
-      oldNode = null;
-
-      /* If we sanitized `dirty` in-place, return it. */
-      if (IN_PLACE) {
-        return dirty;
-      }
-
-      /* Return sanitized string or DOM */
-      if (RETURN_DOM) {
-        if (RETURN_DOM_FRAGMENT) {
-          returnNode = createDocumentFragment.call(body.ownerDocument);
-
-          while (body.firstChild) {
-            // eslint-disable-next-line unicorn/prefer-node-append
-            returnNode.appendChild(body.firstChild);
-          }
-        } else {
-          returnNode = body;
-        }
-
-        if (RETURN_DOM_IMPORT) {
-          /*
-            AdoptNode() is not used because internal state is not reset
-            (e.g. the past names map of a HTMLFormElement), this is safe
-            in theory but we would rather not risk another attack vector.
-            The state that is cloned by importNode() is explicitly defined
-            by the specs.
-          */
-          returnNode = importNode.call(originalDocument, returnNode, true);
-        }
-
-        return returnNode;
-      }
-
-      var serializedHTML = WHOLE_DOCUMENT ? body.outerHTML : body.innerHTML;
-
-      /* Sanitize final string template-safe */
-      if (SAFE_FOR_TEMPLATES) {
-        serializedHTML = stringReplace(serializedHTML, MUSTACHE_EXPR$$1, ' ');
-        serializedHTML = stringReplace(serializedHTML, ERB_EXPR$$1, ' ');
-      }
-
-      return trustedTypesPolicy && RETURN_TRUSTED_TYPE ? trustedTypesPolicy.createHTML(serializedHTML) : serializedHTML;
-    };
-
-    /**
-     * Public method to set the configuration once
-     * setConfig
-     *
-     * @param {Object} cfg configuration object
-     */
-    DOMPurify.setConfig = function (cfg) {
-      _parseConfig(cfg);
-      SET_CONFIG = true;
-    };
-
-    /**
-     * Public method to remove the configuration
-     * clearConfig
-     *
-     */
-    DOMPurify.clearConfig = function () {
-      CONFIG = null;
-      SET_CONFIG = false;
-    };
-
-    /**
-     * Public method to check if an attribute value is valid.
-     * Uses last set config, if any. Otherwise, uses config defaults.
-     * isValidAttribute
-     *
-     * @param  {string} tag Tag name of containing element.
-     * @param  {string} attr Attribute name.
-     * @param  {string} value Attribute value.
-     * @return {Boolean} Returns true if `value` is valid. Otherwise, returns false.
-     */
-    DOMPurify.isValidAttribute = function (tag, attr, value) {
-      /* Initialize shared config vars if necessary. */
-      if (!CONFIG) {
-        _parseConfig({});
-      }
-
-      var lcTag = stringToLowerCase(tag);
-      var lcName = stringToLowerCase(attr);
-      return _isValidAttribute(lcTag, lcName, value);
-    };
-
-    /**
-     * AddHook
-     * Public method to add DOMPurify hooks
-     *
-     * @param {String} entryPoint entry point for the hook to add
-     * @param {Function} hookFunction function to execute
-     */
-    DOMPurify.addHook = function (entryPoint, hookFunction) {
-      if (typeof hookFunction !== 'function') {
-        return;
-      }
-
-      hooks[entryPoint] = hooks[entryPoint] || [];
-      arrayPush(hooks[entryPoint], hookFunction);
-    };
-
-    /**
-     * RemoveHook
-     * Public method to remove a DOMPurify hook at a given entryPoint
-     * (pops it from the stack of hooks if more are present)
-     *
-     * @param {String} entryPoint entry point for the hook to remove
-     */
-    DOMPurify.removeHook = function (entryPoint) {
-      if (hooks[entryPoint]) {
-        arrayPop(hooks[entryPoint]);
-      }
-    };
-
-    /**
-     * RemoveHooks
-     * Public method to remove all DOMPurify hooks at a given entryPoint
-     *
-     * @param  {String} entryPoint entry point for the hooks to remove
-     */
-    DOMPurify.removeHooks = function (entryPoint) {
-      if (hooks[entryPoint]) {
-        hooks[entryPoint] = [];
-      }
-    };
-
-    /**
-     * RemoveAllHooks
-     * Public method to remove all DOMPurify hooks
-     *
-     */
-    DOMPurify.removeAllHooks = function () {
-      hooks = {};
-    };
-
-    return DOMPurify;
+var ExpenseDataService = /*#__PURE__*/function () {
+  function ExpenseDataService() {
+    _classCallCheck(this, ExpenseDataService);
   }
 
-  var purify = createDOMPurify();
+  _createClass(ExpenseDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expenses", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expenses", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expenses/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
+    }
+  }]);
 
-  return purify;
+  return ExpenseDataService;
+}();
 
-}));
-//# sourceMappingURL=purify.js.map
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseDataService());
+
+/***/ }),
+
+/***/ "./resources/js/services/ExpenseReportDataService.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/services/ExpenseReportDataService.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+// import http from "../http-common";
+
+
+var ExpenseReportDataService = /*#__PURE__*/function () {
+  function ExpenseReportDataService() {
+    _classCallCheck(this, ExpenseReportDataService);
+  }
+
+  _createClass(ExpenseReportDataService, [{
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports", data);
+    }
+  }, {
+    key: "get",
+    value: function get(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_reports", data);
+    }
+  }, {
+    key: "show",
+    value: function show(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports/".concat(id), data);
+    }
+  }, {
+    key: "store",
+    value: function store(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_reports", data);
+    }
+  }, {
+    key: "update",
+    value: function update(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/".concat(id), data);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_reports/".concat(id), data);
+    }
+  }, {
+    key: "restore",
+    value: function restore(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/restore/".concat(id), data);
+    }
+  }, {
+    key: "submit",
+    value: function submit(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/submit/".concat(id), data);
+    }
+  }, {
+    key: "approve",
+    value: function approve(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/approve/".concat(id), data);
+    }
+  }, {
+    key: "reject",
+    value: function reject(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/reject/".concat(id), data);
+    }
+  }, {
+    key: "duplicate",
+    value: function duplicate(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/duplicate/".concat(id), data);
+    }
+  }]);
+
+  return ExpenseReportDataService;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseReportDataService());
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/user/expense_reports/Show.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Show.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Show_vue_vue_type_template_id_24329f7e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Show.vue?vue&type=template&id=24329f7e& */ "./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=template&id=24329f7e&");
+/* harmony import */ var _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Show.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Show_vue_vue_type_template_id_24329f7e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Show_vue_vue_type_template_id_24329f7e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/modules/user/expense_reports/Show.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=template&id=24329f7e&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=template&id=24329f7e& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_24329f7e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=template&id=24329f7e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/user/expense_reports/Show.vue?vue&type=template&id=24329f7e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_24329f7e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_24329f7e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
 
 
 /***/ })

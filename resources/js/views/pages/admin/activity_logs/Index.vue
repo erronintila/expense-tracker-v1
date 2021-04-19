@@ -95,7 +95,7 @@
                             @click="
                                 $router.push(
                                     hasLink(item)
-                                        ? `/admin/${item.properties.custom.link}`
+                                        ? `/${item.properties.custom.link}`
                                         : null
                                 )
                             "

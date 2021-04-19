@@ -87,7 +87,7 @@
                                     <v-card
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
-                                        to="/admin/expenses"
+                                        to="/expenses"
                                     >
                                         <v-card-title>Expenses</v-card-title>
                                         <v-card-subtitle>
@@ -122,7 +122,7 @@
                                     <v-card
                                         class="mx-auto"
                                         :elevation="hover ? 5 : 2"
-                                        to="/admin/reports"
+                                        to="/reports"
                                     >
                                         <v-card-title>Reports</v-card-title>
                                         <v-card-subtitle>

@@ -33,7 +33,7 @@
                                     label="Employee"
                                     readonly
                                 >
-                                    <template v-slot:append>
+                                    <template v-slot:append v-if="mixin_can('select specific users on expense reports')">
                                         <UserDialogSelector
                                             ref="userDialogSelector"
                                             @selectUser="selectUser"
@@ -200,14 +200,5 @@ export default {
             });
         });
     }
-    // activated() {
-    //     this.getData().then(data => {
-    //         this.loadExpenses(data).then(expenses => {
-    //             this.form = data;
-    //             this.form.expenses = expenses;
-    //             this.formDataLoaded = true;
-    //         });
-    //     });
-    // }
 };
 </script>

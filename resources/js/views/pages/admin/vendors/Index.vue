@@ -187,6 +187,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -308,6 +309,12 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+        },
         getDataFromApi() {
             this.loading = true;
 
@@ -445,7 +452,7 @@ export default {
                         return item.id;
                     });
                     let data = { is_active: is_active };
-                    
+
                     VendorDataService.updateActivation(ids, data)
                         .then(response => {
                             this.mixin_successDialog(
@@ -469,12 +476,20 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status
             };
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,

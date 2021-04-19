@@ -190,7 +190,7 @@ export default {
                                 .then(response => {
                                     this.mixin_successDialog(response.data.status, response.data.message);
                                     this.$store.dispatch("AUTH_USER");
-                                    this.$router.push("/admin/users");
+                                    this.$router.push("/users");
                                 })
                                 .catch(error => {
                                     this.mixin_showErrors(error);

@@ -55,7 +55,7 @@ class ExpenseController extends Controller
 
         $expenses = Expense::whereBetween("date", [$start_date, $end_date]);
 
-        if(request()->has("isDeleted") && request("isDeleted")) {
+        if (request()->has("isDeleted") && request("isDeleted")) {
             $expenses = $expenses->withTrashed();
         }
 
@@ -79,8 +79,25 @@ class ExpenseController extends Controller
                 if ($status === "Cancelled Expenses") {
                     $query->withTrashed();
                 }
-            }])
-            ->orderBy($sortBy, $sortType);
+            }]);
+
+        switch ($sortBy) {
+            case 'user.full_name':
+                $expenses = $expenses->leftJoin('users', 'expenses.user_id', '=', 'users.id')
+                    ->select('expenses.*')
+                    ->orderBy('users.first_name', $sortType);
+                break;
+            case 'expense_type.name':
+                $expenses = $expenses->leftJoin('expense_types', 'expenses.expense_type_id', '=', 'expense_types.id')
+                    ->select('expenses.*')
+                    ->orderBy('expense_types.name', $sortType);
+                break;
+            case 'replenishment':
+                break;
+            default:
+                $expenses = $expenses->orderBy($sortBy, $sortType);
+                break;
+        }
 
         switch ($status) {
             case 'Cancelled Expenses':
@@ -191,7 +208,7 @@ class ExpenseController extends Controller
         }
 
         $expenses = $expenses->where(function ($query) use ($search) {
-            $query->where('code', "like", "%" . $search . "%");
+            $query->where('expenses.code', "like", "%" . $search . "%");
             $query->orWhere("date", "like", "%" . $search . "%");
             $query->orWhere("description", "like", "%" . $search . "%");
             $query->orWhere("amount", "like", "%" . $search . "%");

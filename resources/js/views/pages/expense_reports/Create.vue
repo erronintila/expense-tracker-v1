@@ -31,7 +31,7 @@
                                     label="Employee"
                                     readonly
                                 >
-                                    <template v-slot:append>
+                                    <template v-slot:append v-if="mixin_can('select specific users on expense reports')">
                                         <UserDialogSelector
                                             ref="userDialogSelector"
                                             @selectUser="selectUser"
@@ -95,7 +95,7 @@ export default {
                 description: "",
                 remarks: "",
                 notes: "",
-                user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+                user: (this.$store.getters.user.is_admin && this.mixin_can("select specific users on expense reports")) ? null : this.$store.getters.user,
                 expenses: [],
                 status: null,
                 from: moment()

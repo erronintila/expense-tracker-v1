@@ -42,15 +42,24 @@ class JobController extends Controller
         $sortType = request('sortType') ?? "asc";
         $itemsPerPage = request('itemsPerPage') ?? 10;
 
-        // if($sortBy == "department.name") {
-        //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
-        // } else {
         $jobs = Job::with(['department' => function ($query) {
             if (request()->has("isDeleted") && request("isDeleted")) {
                 $query->withTrashed();
             }
-        }])->orderBy($sortBy, $sortType);
-        // }
+        }]);
+
+        switch ($sortBy) {
+            case 'name':
+                $jobs = $jobs->orderBy("name", $sortType);
+                break;
+            case 'department.name':
+                $jobs = $jobs->leftJoin('departments', 'jobs.department_id', '=', 'departments.id')
+                    ->select('jobs.*')
+                    ->orderBy('departments.name', $sortType);
+                break;
+            default:
+                break;
+        }
 
         if (request()->has('status')) {
             switch (request('status')) {
@@ -69,10 +78,12 @@ class JobController extends Controller
             }
         }
 
-        $jobs = $jobs->where('name', "like", "%" . $search . "%")
-            ->orWhereHas('department', function ($q) use ($search) {
+        $jobs = $jobs->where(function ($query) use ($search) {
+            $query->where('jobs.name', "like", "%" . $search . "%");
+            $query->orWhereHas('department', function ($q) use ($search) {
                 $q->where('name', "like", "%" . $search . "%");
             });
+        });
 
         $jobs = $jobs->paginate($itemsPerPage);
 

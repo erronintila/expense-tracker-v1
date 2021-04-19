@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 10)->create();
+        // factory(\App\User::class, 10)->create();
 
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
@@ -70,15 +70,6 @@ class UserSeeder extends Seeder
                 continue;
             }
 
-            // if ($model == "users") {
-            //     // Permission::create(['name' => 'verify users', 'category' => $model]);
-            //     // Permission::create(['name' => 'restore users', 'category' => $model]);
-            //     Permission::create(['name' => 'reset user passwords', 'category' => $model]);
-            //     Permission::create(['name' => 'edit user fund', 'category' => $model]);
-            //     Permission::create(['name' => 'restore users', 'category' => $model]);
-            //     // continue;
-            // }
-
             Permission::create(['name' => 'add ' . $model, 'category' => $model]);
             Permission::create(['name' => 'edit ' . $model, 'category' => $model]);
             Permission::create(['name' => 'delete ' . $model, 'category' => $model]);
@@ -88,7 +79,6 @@ class UserSeeder extends Seeder
 
             if ($model == "users") {
                 // Permission::create(['name' => 'verify users', 'category' => $model]);
-                // Permission::create(['name' => 'restore users', 'category' => $model]);
                 Permission::create(['name' => 'reset user passwords', 'category' => $model]);
                 Permission::create(['name' => 'edit users fund', 'category' => $model]);
                 Permission::create(['name' => 'restore users', 'category' => $model]);
@@ -101,6 +91,8 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'add expenses beyond limit', 'category' => $model]);
                 Permission::create(['name' => 'set reimbursable amount', 'category' => $model]);
                 Permission::create(['name' => 'restore expenses', 'category' => $model]);
+                Permission::create(['name' => 'select specific users on expenses', 'category' => $model]);
+                Permission::create(['name' => 'view all users expenses', 'category' => $model]);
                 // Permission::create(['name' => 'add expense notes', 'category' => $model]);
             }
 
@@ -111,12 +103,14 @@ class UserSeeder extends Seeder
                 Permission::create(['name' => 'approve expense reports beyond due date', 'category' => $model]);
                 Permission::create(['name' => 'reject expense reports', 'category' => $model]);
                 Permission::create(['name' => 'duplicate expense reports', 'category' => $model]);
-
+                Permission::create(['name' => 'select specific users on expense reports', 'category' => $model]);
+                Permission::create(['name' => 'view all users expense reports', 'category' => $model]);
                 // Permission::create(['name' => 'add expense report notes', 'category' => $model]);
             }
 
             if ($model == "payments") {
                 Permission::create(['name' => 'receive payments', 'category' => $model]);
+                Permission::create(['name' => 'view all users payments', 'category' => $model]);
                 // Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
                 // Permission::create(['name' => 'approve payments', 'category' => $model]);
             }

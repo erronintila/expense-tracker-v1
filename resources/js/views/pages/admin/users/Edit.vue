@@ -95,7 +95,7 @@ export default {
                         this.mixin_showErrors(error);
                         this.loader = false;
                         this.formDataLoaded = true;
-                        this.$router.push({ name: "admin.users.index" }, () => {});
+                        this.$router.push("/users");
                         reject();
                     });
             });
@@ -125,7 +125,7 @@ export default {
                         response.data.message
                     );
                     this.loader = false;
-                    window.location.replace("/admin/users");
+                    this.$router.push("/users");
                 })
                 .catch(error => {
                     this.mixin_showErrors(error);

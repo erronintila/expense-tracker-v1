@@ -576,7 +576,6 @@ export default {
                         this.$store.dispatch("AUTH_USER");
                     })
                     .catch(error => {
-                        console.log("error", error);
                         this.mixin_showErrors(error);
                         this.errors = error.response.data.errors;
                     });

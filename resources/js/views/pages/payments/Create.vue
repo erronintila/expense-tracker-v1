@@ -100,10 +100,12 @@
                             ></v-text-field>
                             <v-text-field
                                 v-model="form.voucher_no"
-                                :rules="[]"
+                                :rules="[...mixin_validation.required]"
+                                :error-messages="errors.voucher_no"
                                 :counter="100"
                                 label="Voucher No."
                                 required
+                                type="number"
                             ></v-text-field>
 
                             <div class="overline green--text mb-4">

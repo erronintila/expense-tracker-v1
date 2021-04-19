@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[60],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/datepicker/DateRangePicker.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/datepicker/DateRangePicker.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,6 +11,18 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/views/modules/admin/expenses/Form.vue");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -77,129 +89,156 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    dateRange: {
-      type: Array,
-      "default": function _default() {
-        return [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")];
-      }
-    },
-    datePreset: {
-      type: String,
-      "default": "Custom"
-    },
-    datePresets: {
-      type: Array,
-      "default": function _default() {
-        return [{
-          label: "Today",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD")]
-        }, {
-          label: "Yesterday",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "days").format("YYYY-MM-DD")]
-        }, {
-          label: "This Week",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")]
-        }, {
-          label: "Last Week",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "weeks").endOf("week").format("YYYY-MM-DD")]
-        }, {
-          label: "This Month",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")]
-        }, {
-          label: "Last Month",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "months").endOf("month").format("YYYY-MM-DD")]
-        }, {
-          label: "This Quarter",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("quarter").format("YYYY-MM-DD")]
-        }, {
-          label: "Last Quarter",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").startOf("quarter").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "quarters").endOf("quarter").format("YYYY-MM-DD")]
-        }, {
-          label: "This Year",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("year").format("YYYY-MM-DD")]
-        }, {
-          label: "Last Year",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")]
-        }, {
-          label: "Last 5 Years",
-          range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(5, "years").startOf("year").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(1, "years").endOf("year").format("YYYY-MM-DD")]
-        }];
-      }
-    }
+  components: {
+    Form: _Form__WEBPACK_IMPORTED_MODULE_1__["default"],
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
-      range: [],
-      preset: {},
-      presets: [],
-      dialog: false
+      formDataLoaded: true,
+      usersParameters: {
+        params: {
+          with_expense_types: true,
+          is_superadmin: false
+        }
+      },
+      itemize: false,
+      form: {
+        code: null,
+        reference_no: null,
+        description: null,
+        amount: 0,
+        reimbursable_amount: 0,
+        tax_name: "",
+        tax_rate: 0,
+        is_compound_tax: false,
+        is_tax_inclusive: true,
+        tax_amount: 0,
+        receipt_number: null,
+        date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
+        details: [],
+        // details: {
+        //     description: "",
+        //     quantity: 1,
+        //     amount: 0,
+        //     total: 0
+        // },
+        remarks: "",
+        notes: "",
+        encoding_period: this.$store.getters.settings.expense_encoding_period,
+        // expense_type: {
+        //     id: null,
+        //     name: "",
+        //     limit: null,
+        //     sub_types: { id: null, name: "None", limit: null }
+        // },
+        expense_type: null,
+        sub_type: null,
+        // sub_type: { id: null, name: "", limit: null },
+        user: null,
+        vendor: null,
+        expense_report_id: null,
+        tax_id: null,
+        expense_header_id: null,
+        details_quantity: 0,
+        details_amount: 0,
+        is_active: true,
+        // particular: "",
+        // particular_amount: 0,
+        // particular_reimbursable_amount: 0,
+        is_reimbursable: false,
+        revolving_fund: 0
+      },
+      rules: {
+        reimbursable_amount: [],
+        revolving_fund: []
+      },
+      errors: {
+        sub_type: [],
+        code: [],
+        reference_no: [],
+        description: [],
+        amount: [],
+        reimbursable_amount: [],
+        tax_name: [],
+        tax_rate: [],
+        is_compound_tax: [],
+        is_tax_inclusive: [],
+        tax_amount: [],
+        receipt_number: [],
+        date: [],
+        details: [],
+        remarks: [],
+        notes: [],
+        encoding_period: [],
+        expense_type_id: [],
+        sub_type_id: [],
+        user_id: [],
+        vendor_id: [],
+        expense_report_id: [],
+        tax_id: [],
+        expense_header_id: [],
+        is_active: []
+      }
     };
   },
   methods: {
-    onCancel: function onCancel() {
-      this.dialog = false;
-      this.preset = {};
-    },
-    onSave: function onSave() {
-      if (this.range && this.range.length == 2) {
-        var sortedDates = this.range.sort(function (a, b) {
-          return new Date(a) - new Date(b);
-        });
-        this.$refs.dialog.save(sortedDates);
-        this.$emit("on-change", sortedDates);
+    selectUser: function selectUser(e) {
+      this.errors.user_id = [];
+
+      if (e == null || e == undefined) {
+        this.form.user = null;
         return;
       }
 
-      this.dialog = true;
-    }
-  },
-  computed: {
-    dateRangeText: function dateRangeText() {
-      if (this.range && this.range.length) {
-        var sortedDates = this.range.sort(function (a, b) {
-          return new Date(a) - new Date(b);
-        });
-        return sortedDates.join(" ~ ");
+      this.form.user = e;
+    },
+    resetUser: function resetUser() {
+      this.form.user = null;
+    },
+    onSave: function onSave(value) {
+      var _this = this;
+
+      if (value.vendor) {
+        if (!value.vendor.is_vat_inclusive) {
+          value.tax_rate = 0;
+          value.tax_amount = 0;
+        }
       }
 
-      return "";
-    }
-  },
-  watch: {
-    preset: function preset() {
-      if (this.preset && Object.keys(this.preset).length) {
-        this.range = this.preset.range;
-      }
-    },
-    dateRange: {
-      immediate: true,
-      handler: function handler(newValue, oldValue) {
-        this.range = newValue;
-      }
-    },
-    datePreset: {
-      immediate: true,
-      handler: function handler(newValue, oldValue) {
-        this.preset = newValue;
-      }
-    },
-    datePresets: {
-      immediate: true,
-      handler: function handler(newValue, oldValue) {
-        this.presets = newValue;
-      }
+      value.details = value.itemize ? value.items : null;
+      value.expense_type_id = value.expense_type ? value.expense_type.id : null;
+      value.sub_type_id = value.sub_type ? value.sub_type.id : null;
+      value.user_id = value.user ? value.user.id : null;
+      value.vendor_id = value.vendor ? value.vendor.id : null;
+      value.reimbursable_amount = value.amount_to_reimburse;
+      _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].store(value).then(function (response) {
+        _this.mixin_successDialog(response.data.status, response.data.message);
+
+        _this.$router.go(-1);
+
+        _this.loading = false;
+        _this.formDataLoaded = true;
+      })["catch"](function (error) {
+        _this.mixin_showErrors(error);
+
+        _this.errors = error.response.data.errors;
+        _this.formDataLoaded = true;
+      });
     }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/datepicker/DateRangePicker.vue?vue&type=template&id=9d548a96&":
-/*!*****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/datepicker/DateRangePicker.vue?vue&type=template&id=9d548a96& ***!
-  \*****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
+  \***************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -212,218 +251,166 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-dialog",
-    {
-      ref: "dialog",
-      attrs: { "return-value": _vm.range, persistent: "", width: "290px" },
-      on: {
-        "update:returnValue": function($event) {
-          _vm.range = $event
-        },
-        "update:return-value": function($event) {
-          _vm.range = $event
-        }
-      },
-      scopedSlots: _vm._u(
-        [
-          {
-            key: "activator",
-            fn: function(ref) {
-              var on = ref.on
-              var attrs = ref.attrs
-              return [
-                _vm._t("openDialog", null, null, {
-                  on: on,
-                  attrs: attrs,
-                  dateRangeText: _vm.dateRangeText
-                })
-              ]
-            }
-          }
-        ],
-        null,
-        true
-      ),
-      model: {
-        value: _vm.dialog,
-        callback: function($$v) {
-          _vm.dialog = $$v
-        },
-        expression: "dialog"
-      }
-    },
+    "div",
     [
-      _vm._v(" "),
-      _c(
-        "v-card",
-        [
-          _c(
-            "v-container",
+      !_vm.formDataLoaded
+        ? _c("loader-component")
+        : _c(
+            "v-card",
+            { staticClass: "elevation-0 pt-0" },
             [
               _c(
-                "v-row",
+                "v-card-title",
+                { staticClass: "pt-0" },
                 [
-                  _c("v-col", [
-                    _c(
-                      "div",
-                      { staticClass: "text-center" },
-                      [
-                        _c(
-                          "v-menu",
-                          {
-                            attrs: { "offset-y": "" },
-                            scopedSlots: _vm._u([
-                              {
-                                key: "activator",
-                                fn: function(ref) {
-                                  var on = ref.on
-                                  var attrs = ref.attrs
-                                  return [
-                                    _c(
-                                      "v-btn",
-                                      _vm._g(
-                                        _vm._b(
-                                          {
-                                            attrs: {
-                                              color: "primary",
-                                              dark: "",
-                                              text: ""
-                                            }
-                                          },
-                                          "v-btn",
-                                          attrs,
-                                          false
-                                        ),
-                                        on
-                                      ),
-                                      [
-                                        _c("v-icon", [_vm._v("mdi-calendar")]),
-                                        _vm._v(
-                                          " \n                  " +
-                                            _vm._s(_vm.dateRangeText) +
-                                            "\n                "
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ]
-                                }
-                              }
-                            ])
-                          },
-                          [
-                            _vm._v(" "),
-                            _c(
-                              "v-list",
-                              {
-                                staticClass: "overflow-y-auto",
-                                staticStyle: { "max-height": "200px" }
-                              },
-                              [
-                                _c(
-                                  "v-list-item-group",
-                                  {
-                                    model: {
-                                      value: _vm.preset,
-                                      callback: function($$v) {
-                                        _vm.preset = $$v
-                                      },
-                                      expression: "preset"
-                                    }
-                                  },
-                                  _vm._l(_vm.presets, function(item, index) {
-                                    return _c(
-                                      "v-list-item",
-                                      { key: index, attrs: { value: item } },
-                                      [
-                                        _c("v-list-item-title", [
-                                          _vm._v(
-                                            "\n                      " +
-                                              _vm._s(item.label) +
-                                              "\n                    "
-                                          )
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  }),
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _vm.range && _vm.range.length != 2
-                      ? _c(
-                          "div",
-                          { staticClass: "overline red--text text-capitalize" },
-                          [_vm._v("\n            *select 1 more\n          ")]
-                        )
-                      : _vm._e()
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-3",
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.$router.go(-1)
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "title green--text" }, [
+                    _vm._v("New Expense")
                   ])
                 ],
                 1
               ),
               _vm._v(" "),
-              _c("v-divider")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-date-picker",
-            {
-              attrs: {
-                color: "green",
-                "no-title": "",
-                range: "",
-                scrollable: ""
-              },
-              on: {
-                change: function($event) {
-                  _vm.preset = {}
-                }
-              },
-              model: {
-                value: _vm.range,
-                callback: function($$v) {
-                  _vm.range = $$v
-                },
-                expression: "range"
-              }
-            },
-            [
-              _c("v-spacer"),
-              _vm._v(" "),
               _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "primary" },
-                  on: { click: _vm.onCancel }
-                },
-                [_vm._v(" Cancel ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-btn",
-                {
-                  attrs: { text: "", color: "primary" },
-                  on: { click: _vm.onSave }
-                },
-                [_vm._v(" OK ")]
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: {
+                      errors: _vm.errors,
+                      expenseForm: _vm.form,
+                      rules: _vm.rules
+                    },
+                    on: { "on-save": _vm.onSave },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "userSelector",
+                        fn: function() {
+                          return [
+                            _c(
+                              "v-row",
+                              [
+                                _c(
+                                  "v-col",
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        value: _vm.form.user
+                                          ? _vm.form.user.full_name
+                                          : "No Employee",
+                                        "error-messages": _vm.errors.user_id,
+                                        label: "Employee",
+                                        readonly: ""
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          _vm.errors.user_id = []
+                                        }
+                                      },
+                                      scopedSlots: _vm._u([
+                                        {
+                                          key: "append",
+                                          fn: function() {
+                                            return [
+                                              _c("UserDialogSelector", {
+                                                ref: "userDialogSelector",
+                                                attrs: {
+                                                  selectedUser: _vm.form.user,
+                                                  usersParameters:
+                                                    _vm.usersParameters,
+                                                  itemize: _vm.itemize
+                                                },
+                                                on: {
+                                                  selectUser: _vm.selectUser,
+                                                  onReset: _vm.resetUser
+                                                },
+                                                scopedSlots: _vm._u([
+                                                  {
+                                                    key: "openDialog",
+                                                    fn: function(ref) {
+                                                      var bind = ref.bind
+                                                      var on = ref.on
+                                                      return [
+                                                        _c(
+                                                          "v-btn",
+                                                          _vm._g(
+                                                            _vm._b(
+                                                              {
+                                                                attrs: {
+                                                                  fab: "",
+                                                                  color:
+                                                                    "primary",
+                                                                  text: "",
+                                                                  "x-small": ""
+                                                                }
+                                                              },
+                                                              "v-btn",
+                                                              bind,
+                                                              false
+                                                            ),
+                                                            on
+                                                          ),
+                                                          [
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  dark: ""
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "mdi-magnify"
+                                                                )
+                                                              ]
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    }
+                                                  }
+                                                ])
+                                              })
+                                            ]
+                                          },
+                                          proxy: true
+                                        }
+                                      ])
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ])
+                  })
+                ],
+                1
               )
             ],
             1
           )
-        ],
-        1
-      )
     ],
     1
   )
@@ -435,18 +422,18 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/datepicker/DateRangePicker.vue":
-/*!****************************************************************!*\
-  !*** ./resources/js/components/datepicker/DateRangePicker.vue ***!
-  \****************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Create.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Create.vue ***!
+  \**************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _DateRangePicker_vue_vue_type_template_id_9d548a96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DateRangePicker.vue?vue&type=template&id=9d548a96& */ "./resources/js/components/datepicker/DateRangePicker.vue?vue&type=template&id=9d548a96&");
-/* harmony import */ var _DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DateRangePicker.vue?vue&type=script&lang=js& */ "./resources/js/components/datepicker/DateRangePicker.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=bab06a4e& */ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&");
+/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -455,9 +442,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _DateRangePicker_vue_vue_type_template_id_9d548a96___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _DateRangePicker_vue_vue_type_template_id_9d548a96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -467,38 +454,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/datepicker/DateRangePicker.vue"
+component.options.__file = "resources/js/views/modules/admin/expenses/Create.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/datepicker/DateRangePicker.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************!*\
-  !*** ./resources/js/components/datepicker/DateRangePicker.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DateRangePicker.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/datepicker/DateRangePicker.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/datepicker/DateRangePicker.vue?vue&type=template&id=9d548a96&":
-/*!***********************************************************************************************!*\
-  !*** ./resources/js/components/datepicker/DateRangePicker.vue?vue&type=template&id=9d548a96& ***!
-  \***********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e& ***!
+  \*********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_9d548a96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DateRangePicker.vue?vue&type=template&id=9d548a96& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/datepicker/DateRangePicker.vue?vue&type=template&id=9d548a96&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_9d548a96___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=bab06a4e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/expenses/Create.vue?vue&type=template&id=bab06a4e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DateRangePicker_vue_vue_type_template_id_9d548a96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_bab06a4e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
