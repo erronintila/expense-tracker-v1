@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[81],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/profile/Index.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/profile/Index.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,16 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
-/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
-/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
-/* harmony import */ var _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/PaymentDataService */ "./resources/js/services/PaymentDataService.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
 //
 //
 //
@@ -366,295 +357,312 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-
-
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"],
-    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
-  },
   data: function data() {
-    var _ref;
+    var _this = this;
 
-    return _ref = {
-      loading: true,
+    return {
       formDataLoaded: false,
-      valid: false,
+      showOldPassword: false,
+      showNewPassword: false,
+      showRetypePassword: false,
+      dialogPassword: false,
+      dialog: false,
       menu: false,
-      menu_payee: false,
-      search: "",
-      usersParameters: {
-        params: {
-          with_expense_types: true,
-          is_superadmin: false
-        }
+      form: {
+        id: null,
+        code: null,
+        first_name: null,
+        middle_name: "",
+        last_name: null,
+        suffix: "",
+        gender: null,
+        birthdate: null,
+        mobile_number: null,
+        telephone_number: "",
+        address: null,
+        fund: 0,
+        remaining_fund: 0,
+        username: "",
+        email: null,
+        password: "password",
+        password_confirmation: "password",
+        is_admin: false,
+        is_superadmin: false,
+        can_login: true,
+        type: "",
+        job: null,
+        old_permissions: [],
+        permissions: [],
+        old_role: "",
+        role: "Standard User"
       },
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("week").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("week").format("YYYY-MM-DD")],
-      preset: "",
-      presets: ["Today", "Last 7 Days", "Last 30 Days", "This Week", "This Month", "This Year"],
-      headers: [{
-        text: "Period",
-        value: "period",
-        sortable: false
-      }, {
-        text: "Code",
-        value: "code",
-        sortable: false
-      }, {
-        text: "Description",
-        value: "description",
-        sortable: false
-      }, {
-        text: "Amount",
-        value: "total",
-        sortable: false
-      }, {
-        text: "Balance",
-        value: "balance",
-        sortable: false
-      }, {
-        text: "Payment",
-        value: "balance",
-        sortable: false
-      }, {
-        text: "",
-        value: "actions",
-        sortable: false
-      }, {
-        text: "",
-        value: "data-table-expand",
-        sortable: false
-      }],
-      items: [],
-      selected: [],
-      users: [],
-      total: 0,
-      totalAmount: 0,
-      totalItems: 0
-    }, _defineProperty(_ref, "search", ""), _defineProperty(_ref, "options", {
-      sortBy: ["created_at"],
-      sortDesc: [true],
-      page: 1,
-      itemsPerPage: 10
-    }), _defineProperty(_ref, "form", {
-      id: 0,
-      code: "",
-      reference_no: "",
-      voucher_no: "",
-      description: "",
-      date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
-      cheque_no: "",
-      cheque_date: "",
-      amount: "",
-      payee: "",
-      payee_address: "",
-      payee_phone: "",
-      remarks: "",
-      notes: "",
-      user: null
-    }), _defineProperty(_ref, "errors", {
-      user_id: [],
-      code: [],
-      reference_no: [],
-      voucher_no: [],
-      description: [],
-      date: [],
-      cheque_no: [],
-      cheque_date: [],
-      amount: [],
-      payee: [],
-      payee_address: [],
-      payee_phone: [],
-      remarks: [],
-      notes: [],
-      expense_reports: []
-    }), _ref;
+      // id: "",
+      // email: "",
+      // username: "",
+      // is_admin: "",
+      // updated_at: "",
+      // can_login: 1,
+      // full_name: "",
+      // first_name: "",
+      // middle_name: "",
+      // last_name: "",
+      // suffix: "",
+      // gender: "",
+      // birthdate: "",
+      // mobile_number: "",
+      // telephone_number: "",
+      // email: "",
+      // address: "",
+      // job: { department: {} },
+      old_password: "",
+      password: "",
+      password_confirmation: "",
+      password_rules: {
+        password_confirmation: [function (v) {
+          return !!v || "Retype password is required";
+        }, function (v) {
+          return _this.password === _this.password_confirmation || "Passwords do not match";
+        }]
+      },
+      password_errors: {
+        old_password: [],
+        password: [],
+        password_confirmation: []
+      },
+      rules: {
+        username: [],
+        first_name: [],
+        middle_name: [],
+        last_name: [],
+        suffix: [],
+        gender: [],
+        birthdate: [],
+        job: [],
+        mobile_number: [],
+        telephone_number: [],
+        email: [],
+        address: []
+      },
+      errors: {
+        code: [],
+        first_name: [],
+        middle_name: [],
+        last_name: [],
+        suffix: [],
+        gender: [],
+        birthdate: [],
+        job: [],
+        mobile_number: [],
+        telephone_number: [],
+        email: [],
+        address: [],
+        username: [],
+        role: [],
+        can_login: [],
+        has_fund: [],
+        fund: []
+      }
+    };
   },
   methods: {
-    selectUser: function selectUser(e) {
-      if (e == null || e == undefined) {
-        this.form.user = null;
-        return;
-      }
-
-      this.form.user = e;
-    },
-    resetUser: function resetUser() {
-      this.form.user = null;
-    },
-    onRefresh: function onRefresh() {
-      Object.assign(this.$data, this.$options.data.apply(this));
-    },
-    updateDates: function updateDates(e) {
-      var _this = this;
-
-      this.date_range = e; // this.loadExpenseReports();
-
-      this.getDataFromApi().then(function (data) {
-        _this.items = data.items;
-        _this.totalItems = data.total;
-      });
-    },
-    updateUser: function updateUser() {
-      var _this2 = this;
-
-      this.errors.user_id = [];
-      this.getDataFromApi().then(function (data) {
-        _this2.items = data.items;
-        _this2.totalItems = data.total;
-      });
-    },
-    getDataFromApi: function getDataFromApi() {
-      var _this3 = this;
-
-      this.loading = true;
-      return new Promise(function (resolve, reject) {
-        var _this3$options = _this3.options,
-            sortBy = _this3$options.sortBy,
-            sortDesc = _this3$options.sortDesc,
-            page = _this3$options.page,
-            itemsPerPage = _this3$options.itemsPerPage;
-
-        var search = _this3.search.trim().toLowerCase();
-
-        var status = _this3.status;
-        var user_id = _this3.form.user ? _this3.form.user.id : null;
-        var range = _this3.date_range;
-        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__["default"].getAll({
-          params: {
-            search: search,
-            sortBy: sortBy[0],
-            sortType: sortDesc[0] ? "desc" : "asc",
-            page: page,
-            itemsPerPage: itemsPerPage,
-            status: status,
-            user_id: user_id,
-            start_date: range[0],
-            end_date: range[1] ? range[1] : range[0],
-            admin_page: true,
-            create_payment: true
-          }
-        }).then(function (response) {
-          var items = response.data.data;
-          var total = response.data.meta.total;
-          _this3.loading = false;
-          _this3.formDataLoaded = true;
-          resolve({
-            items: items,
-            total: total
-          });
-        })["catch"](function (error) {
-          _this3.mixin_showErrors(error);
-
-          _this3.loading = false;
-          _this3.formDataLoaded = true;
-          reject();
-        });
-      });
-    },
     onSave: function onSave() {
-      var _this4 = this;
+      var _this2 = this;
 
       this.$refs.form.validate();
 
-      if (!this.form.user) {
-        this.mixin_errorDialog("Error", "No Employee selected.");
-        return;
-      }
-
-      if (this.selected == 0) {
-        this.mixin_errorDialog("Error", "No Expense Report selected.");
-        return;
-      }
-
       if (this.$refs.form.validate()) {
-        this.formDataLoaded = false;
-        _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_4__["default"].store({
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].updateProfile(this.form.id, {
           code: this.form.code,
-          reference_no: this.form.reference_no,
-          voucher_no: this.form.voucher_no,
-          description: this.form.description,
-          date: this.form.date,
-          cheque_no: this.form.cheque_no,
-          cheque_date: this.form.cheque_date,
-          amount: this.total,
-          payee: this.form.payee,
-          payee_address: this.form.payee_address,
-          payee_phone: this.form.payee_phone,
-          remarks: this.form.remarks,
-          notes: this.form.notes,
-          expense_reports: this.selected,
-          user_id: this.form.user ? this.form.user.id : null
+          first_name: this.form.first_name,
+          middle_name: this.form.middle_name,
+          last_name: this.form.last_name,
+          suffix: this.form.suffix,
+          gender: this.form.gender,
+          birthdate: this.form.birthdate,
+          mobile_number: this.form.mobile_number,
+          telephone_number: this.form.telephone_number,
+          address: this.form.address,
+          fund: this.form.fund,
+          remaining_fund: this.form.remaining_fund,
+          username: this.form.username,
+          email: this.form.email,
+          password: "password",
+          password_confirmation: "password",
+          is_admin: this.form.is_admin,
+          is_superadmin: this.form.is_superadmin,
+          can_login: this.form.can_login,
+          type: this.form.type,
+          job_id: this.form.job == null ? null : this.form.job.id
         }).then(function (response) {
-          _this4.onRefresh();
+          _this2.mixin_successDialog(response.data.status, response.data.message);
 
-          _this4.mixin_successDialog(response.data.status, response.data.message);
-
-          _this4.$store.dispatch("AUTH_NOTIFICATIONS");
-
-          _this4.$router.push({
-            name: "admin.payments.index"
-          });
+          _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          _this4.mixin_showErrors(error);
+          console.log("error", error);
 
-          _this4.errors = error.response.data.errors;
-          _this4.formDataLoaded = true;
+          _this2.mixin_showErrors(error);
+
+          _this2.errors = error.response.data.errors;
         });
-        return;
       }
+    },
+    onUpdatePassword: function onUpdatePassword() {
+      var _this3 = this;
+
+      if (this.$refs.form_password.validate()) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].updatePassword(this.form.id, {
+          old_password: this.old_password,
+          password: this.password,
+          password_confirmation: this.password_confirmation
+        }).then(function (response) {
+          _this3.mixin_successDialog(response.data.status, response.data.message); // this.$store.dispatch("AUTH_USER");
+
+
+          _this3.dialogPassword = false;
+          _this3.old_password = "";
+          _this3.password = "";
+          _this3.password_confirmation = "";
+        })["catch"](function (error) {
+          _this3.mixin_showErrors(error);
+
+          if (error.response) {
+            if (error.response.data) {
+              _this3.password_errors = error.response.data.errors;
+            }
+          }
+        });
+      }
+    },
+    closePasswordDialog: function closePasswordDialog() {
+      this.dialogPassword = false;
+      this.old_password = "";
+      this.password = "";
+      this.password_confirmation = "";
+      this.$refs.form_password.resetValidation();
     }
   },
   computed: {
-    params: function params(nv) {
-      var _objectSpread2;
-
-      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        query: this.search
-      }, _defineProperty(_objectSpread2, "query", this.user), _defineProperty(_objectSpread2, "query", this.date_range), _objectSpread2));
-    },
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+    },
+    lastUpdated: function lastUpdated() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
     }
   },
-  watch: {
-    params: {
-      immediate: true,
-      deep: true,
-      handler: function handler() {
-        var _this5 = this;
+  // created() {
+  //     this.$store.dispatch("AUTH_USER").then(response => {
+  //         this.form = response;
+  //         // this.$store.dispatch("AUTH_NOTIFICATIONS");
+  //         this.formDataLoaded = true;
+  //     });
+  // },
+  activated: function activated() {
+    var _this4 = this;
 
-        this.getDataFromApi().then(function (data) {
-          _this5.items = data.items;
-          _this5.totalItems = data.total;
-        });
-      }
-    },
-    selected: function selected() {
-      this.totalAmount = this.mixin_formatNumber(this.selected.reduce(function (total, item) {
-        return total + item.total;
-      }, 0));
-    },
-    "form.user": function formUser() {
-      var _this6 = this;
+    this.$store.dispatch("AUTH_USER").then(function (response) {
+      _this4.form = response; // this.$store.dispatch("AUTH_NOTIFICATIONS");
 
-      this.getDataFromApi().then(function (data) {
-        _this6.items = data.items;
-        _this6.totalItems = data.total;
-      });
-    }
+      _this4.formDataLoaded = true;
+    });
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Create.vue?vue&type=template&id=1a081f87&":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/payments/Create.vue?vue&type=template&id=1a081f87& ***!
-  \***************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/profile/Index.vue?vue&type=template&id=37166355&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/modules/admin/profile/Index.vue?vue&type=template&id=37166355& ***!
+  \*************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -679,329 +687,789 @@ var render = function() {
                 "v-card-title",
                 { staticClass: "pt-0" },
                 [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
                   _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("New Payment Record")
-                  ])
+                    _vm._v("Profile")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer")
                 ],
                 1
               ),
               _vm._v(" "),
+              _c("v-card-subtitle", [
+                _vm._v(
+                  "\n            Last updated: " +
+                    _vm._s(_vm.lastUpdated) +
+                    "\n        "
+                )
+              ]),
+              _vm._v(" "),
               _c(
-                "v-form",
-                {
-                  ref: "form",
-                  model: {
-                    value: _vm.valid,
-                    callback: function($$v) {
-                      _vm.valid = $$v
-                    },
-                    expression: "valid"
-                  }
-                },
+                "v-card-text",
                 [
                   _c(
                     "v-container",
                     [
                       _c(
-                        "v-card",
-                        { staticClass: "mx-auto mb-4", attrs: { flat: "" } },
+                        "v-row",
                         [
                           _c(
-                            "v-container",
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
                             [
-                              _c(
-                                "div",
-                                { staticClass: "overline green--text" },
-                                [
-                                  _vm._v(
-                                    "\n                            BASIC DETAILS\n                        "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-menu",
-                                {
-                                  ref: "menu",
-                                  attrs: {
-                                    transition: "scale-transition",
-                                    "offset-y": "",
-                                    "min-width": "290px"
-                                  },
-                                  scopedSlots: _vm._u([
-                                    {
-                                      key: "activator",
-                                      fn: function(ref) {
-                                        var on = ref.on
-                                        var attrs = ref.attrs
-                                        return [
-                                          _c(
-                                            "v-text-field",
-                                            _vm._g(
-                                              _vm._b(
-                                                {
-                                                  attrs: {
-                                                    "error-messages":
-                                                      _vm.errors.date,
-                                                    label: "Date",
-                                                    readonly: ""
-                                                  },
-                                                  on: {
-                                                    input: function($event) {
-                                                      _vm.errors.date = []
-                                                    }
-                                                  },
-                                                  model: {
-                                                    value: _vm.form.date,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.form,
-                                                        "date",
-                                                        $$v
-                                                      )
-                                                    },
-                                                    expression: "form.date"
-                                                  }
-                                                },
-                                                "v-text-field",
-                                                attrs,
-                                                false
-                                              ),
-                                              on
-                                            )
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ]),
-                                  model: {
-                                    value: _vm.menu,
-                                    callback: function($$v) {
-                                      _vm.menu = $$v
-                                    },
-                                    expression: "menu"
-                                  }
-                                },
-                                [
-                                  _vm._v(" "),
-                                  _c("v-date-picker", {
-                                    attrs: {
-                                      "no-title": "",
-                                      scrollable: "",
-                                      color: "success",
-                                      max: _vm.maxDate
-                                    },
-                                    model: {
-                                      value: _vm.form.date,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.form, "date", $$v)
-                                      },
-                                      expression: "form.date"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-text-field", {
-                                attrs: {
-                                  value: _vm.form.user
-                                    ? _vm.form.user.full_name
-                                    : "No Employee",
-                                  "error-messages": _vm.errors.user_id,
-                                  label: "Employee",
-                                  readonly: ""
-                                },
-                                on: {
-                                  input: function($event) {
-                                    _vm.errors.user_id = []
-                                  }
-                                },
+                              _c("v-hover", {
                                 scopedSlots: _vm._u([
                                   {
-                                    key: "append",
-                                    fn: function() {
+                                    key: "default",
+                                    fn: function(ref) {
+                                      var hover = ref.hover
                                       return [
-                                        _c("UserDialogSelector", {
-                                          ref: "userDialogSelector",
-                                          attrs: {
-                                            selectedUser: _vm.form.user,
-                                            usersParameters: _vm.usersParameters
-                                          },
-                                          on: {
-                                            selectUser: _vm.selectUser,
-                                            onReset: _vm.resetUser
-                                          },
-                                          scopedSlots: _vm._u([
-                                            {
-                                              key: "openDialog",
-                                              fn: function(ref) {
-                                                var bind = ref.bind
-                                                var on = ref.on
-                                                return [
-                                                  _c(
-                                                    "v-btn",
-                                                    _vm._g(
-                                                      _vm._b(
-                                                        {
-                                                          attrs: {
-                                                            fab: "",
-                                                            color: "primary",
-                                                            text: "",
-                                                            "x-small": ""
-                                                          }
-                                                        },
-                                                        "v-btn",
-                                                        bind,
-                                                        false
-                                                      ),
-                                                      on
-                                                    ),
-                                                    [
-                                                      _c(
-                                                        "v-icon",
-                                                        { attrs: { dark: "" } },
-                                                        [_vm._v("mdi-magnify")]
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                ]
-                                              }
+                                        _c(
+                                          "v-card",
+                                          {
+                                            staticClass: "mx-auto mt-3",
+                                            attrs: {
+                                              outlined: "",
+                                              elevation: hover ? 5 : 2
                                             }
-                                          ])
-                                        })
+                                          },
+                                          [
+                                            _c(
+                                              "v-card-text",
+                                              [
+                                                _c(
+                                                  "v-row",
+                                                  {
+                                                    attrs: {
+                                                      align: "center",
+                                                      justify: "center"
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-col",
+                                                      {
+                                                        attrs: {
+                                                          cols: "12",
+                                                          align: "center",
+                                                          justify: "center"
+                                                        }
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "v-avatar",
+                                                          {
+                                                            staticClass:
+                                                              "profile",
+                                                            attrs: {
+                                                              color: "grey",
+                                                              size: "200"
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("v-img", {
+                                                              attrs: {
+                                                                src: __webpack_require__(/*! ../../../../assets/img/user.png */ "./resources/js/assets/img/user.png")
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-row",
+                                                  [
+                                                    _c(
+                                                      "v-col",
+                                                      {
+                                                        attrs: {
+                                                          cols: "12",
+                                                          align: "center",
+                                                          justify: "center"
+                                                        }
+                                                      },
+                                                      [
+                                                        _c("div", [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.form.job ==
+                                                                  null
+                                                                  ? ""
+                                                                  : _vm.form.job
+                                                                      .department ==
+                                                                    null
+                                                                  ? ""
+                                                                  : _vm.form.job
+                                                                      .department
+                                                                      .name
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "h3",
+                                                          {
+                                                            staticClass:
+                                                              "display-1 green--text"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                                " +
+                                                                _vm._s(
+                                                                  _vm.form
+                                                                    .last_name +
+                                                                    ", " +
+                                                                    (_vm.form
+                                                                      .first_name ||
+                                                                      "") +
+                                                                    " " +
+                                                                    (_vm.form
+                                                                      .suffix ||
+                                                                      "")
+                                                                ) +
+                                                                "\n                                            "
+                                                            )
+                                                          ]
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c("p", [
+                                                          _vm._v(
+                                                            "\n                                                " +
+                                                              _vm._s(
+                                                                _vm.form.job ==
+                                                                  null
+                                                                  ? ""
+                                                                  : _vm.form.job
+                                                                      .name
+                                                              ) +
+                                                              "\n                                            "
+                                                          )
+                                                        ]),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "div",
+                                                          {
+                                                            staticClass:
+                                                              "text--primary"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              "\n                                                " +
+                                                                _vm._s(
+                                                                  _vm.form
+                                                                    .mobile_number
+                                                                )
+                                                            ),
+                                                            _c("br"),
+                                                            _vm._v(
+                                                              "\n                                                " +
+                                                                _vm._s(
+                                                                  _vm.form.email
+                                                                ) +
+                                                                "\n                                            "
+                                                            )
+                                                          ]
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-dialog",
+                                              {
+                                                attrs: {
+                                                  persistent: "",
+                                                  width: "500"
+                                                },
+                                                scopedSlots: _vm._u(
+                                                  [
+                                                    {
+                                                      key: "activator",
+                                                      fn: function(ref) {
+                                                        var on = ref.on
+                                                        var attrs = ref.attrs
+                                                        return [
+                                                          _c(
+                                                            "v-btn",
+                                                            _vm._g(
+                                                              _vm._b(
+                                                                {
+                                                                  attrs: {
+                                                                    text: "",
+                                                                    color:
+                                                                      "primary"
+                                                                  }
+                                                                },
+                                                                "v-btn",
+                                                                attrs,
+                                                                false
+                                                              ),
+                                                              on
+                                                            ),
+                                                            [
+                                                              _vm._v(
+                                                                "\n                                            Change Password\n                                        "
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      }
+                                                    }
+                                                  ],
+                                                  null,
+                                                  true
+                                                ),
+                                                model: {
+                                                  value: _vm.dialogPassword,
+                                                  callback: function($$v) {
+                                                    _vm.dialogPassword = $$v
+                                                  },
+                                                  expression: "dialogPassword"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-card",
+                                                  [
+                                                    _c(
+                                                      "v-card-title",
+                                                      {
+                                                        staticClass: "headline"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "\n                                            Change Password\n                                        "
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-form",
+                                                      { ref: "form_password" },
+                                                      [
+                                                        _c(
+                                                          "v-card-text",
+                                                          [
+                                                            _c(
+                                                              "v-container",
+                                                              [
+                                                                _c(
+                                                                  "v-row",
+                                                                  [
+                                                                    _c(
+                                                                      "v-col",
+                                                                      {
+                                                                        attrs: {
+                                                                          cols:
+                                                                            "12"
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            attrs: {
+                                                                              rules:
+                                                                                _vm
+                                                                                  .mixin_validation
+                                                                                  .required,
+                                                                              "error-messages":
+                                                                                _vm
+                                                                                  .password_errors
+                                                                                  .old_password,
+                                                                              color:
+                                                                                "success",
+                                                                              label:
+                                                                                "Old Password",
+                                                                              name:
+                                                                                "password",
+                                                                              type: _vm.showOldPassword
+                                                                                ? "text"
+                                                                                : "password",
+                                                                              "append-icon": _vm.showOldPassword
+                                                                                ? "mdi-eye"
+                                                                                : "mdi-eye-off"
+                                                                            },
+                                                                            on: {
+                                                                              input: function() {
+                                                                                _vm.password_errors.old_password = []
+                                                                              },
+                                                                              "click:append": function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.showOldPassword = !_vm.showOldPassword
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm.old_password,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.old_password = $$v
+                                                                              },
+                                                                              expression:
+                                                                                "\n                                                                    old_password\n                                                                "
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    ),
+                                                                    _vm._v(" "),
+                                                                    _c(
+                                                                      "v-col",
+                                                                      {
+                                                                        attrs: {
+                                                                          cols:
+                                                                            "12"
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            attrs: {
+                                                                              rules: _vm.mixin_validation.required.concat(
+                                                                                _vm.mixin_validation.minimumLength(
+                                                                                  8
+                                                                                )
+                                                                              ),
+                                                                              "error-messages":
+                                                                                _vm
+                                                                                  .password_errors
+                                                                                  .password,
+                                                                              color:
+                                                                                "success",
+                                                                              label:
+                                                                                "New Password",
+                                                                              name:
+                                                                                "password",
+                                                                              type: _vm.showNewPassword
+                                                                                ? "text"
+                                                                                : "password",
+                                                                              "append-icon": _vm.showNewPassword
+                                                                                ? "mdi-eye"
+                                                                                : "mdi-eye-off"
+                                                                            },
+                                                                            on: {
+                                                                              input: function() {
+                                                                                _vm.password_errors.password = []
+                                                                              },
+                                                                              "click:append": function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.showNewPassword = !_vm.showNewPassword
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm.password,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.password = $$v
+                                                                              },
+                                                                              expression:
+                                                                                "\n                                                                    password\n                                                                "
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    ),
+                                                                    _vm._v(" "),
+                                                                    _c(
+                                                                      "v-col",
+                                                                      {
+                                                                        attrs: {
+                                                                          cols:
+                                                                            "12"
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            attrs: {
+                                                                              rules:
+                                                                                _vm
+                                                                                  .password_rules
+                                                                                  .password_confirmation,
+                                                                              "error-messages":
+                                                                                _vm
+                                                                                  .password_errors
+                                                                                  .password_confirmation,
+                                                                              color:
+                                                                                "success",
+                                                                              label:
+                                                                                "Re-type Password",
+                                                                              name:
+                                                                                "confirm_password",
+                                                                              type: _vm.showRetypePassword
+                                                                                ? "text"
+                                                                                : "password",
+                                                                              "append-icon": _vm.showRetypePassword
+                                                                                ? "mdi-eye"
+                                                                                : "mdi-eye-off"
+                                                                            },
+                                                                            on: {
+                                                                              input: function() {
+                                                                                _vm.password_errors.password_confirmation = []
+                                                                              },
+                                                                              "click:append": function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.showRetypePassword = !_vm.showRetypePassword
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm.password_confirmation,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.password_confirmation = $$v
+                                                                              },
+                                                                              expression:
+                                                                                "\n                                                                    password_confirmation\n                                                                "
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  ],
+                                                                  1
+                                                                )
+                                                              ],
+                                                              1
+                                                            )
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-card-actions",
+                                                          [
+                                                            _c("v-spacer"),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-btn",
+                                                              {
+                                                                attrs: {
+                                                                  color:
+                                                                    "primary",
+                                                                  text: ""
+                                                                },
+                                                                on: {
+                                                                  click:
+                                                                    _vm.closePasswordDialog
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                                                    Cancel\n                                                "
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-btn",
+                                                              {
+                                                                attrs: {
+                                                                  color:
+                                                                    "primary",
+                                                                  text: ""
+                                                                },
+                                                                on: {
+                                                                  click:
+                                                                    _vm.onUpdatePassword
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                                                    Save\n                                                "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c("v-row", { staticClass: "mt-4" })
+                                          ],
+                                          1
+                                        )
                                       ]
-                                    },
-                                    proxy: true
+                                    }
                                   }
                                 ])
-                              }),
-                              _vm._v(" "),
-                              _c("v-text-field", {
-                                attrs: {
-                                  rules: _vm.mixin_validation.required.concat(
-                                    _vm.mixin_validation.minLength(100)
-                                  ),
-                                  counter: 100,
-                                  "error-messages": _vm.errors.description,
-                                  label: "Description",
-                                  required: ""
-                                },
-                                model: {
-                                  value: _vm.form.description,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "description", $$v)
-                                  },
-                                  expression: "form.description"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("v-text-field", {
-                                attrs: {
-                                  rules: [].concat(
-                                    _vm.mixin_validation.required
-                                  ),
-                                  counter: 100,
-                                  label: "Voucher No.",
-                                  required: "",
-                                  type: "number"
-                                },
-                                model: {
-                                  value: _vm.form.voucher_no,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "voucher_no", $$v)
-                                  },
-                                  expression: "form.voucher_no"
-                                }
-                              }),
-                              _vm._v(" "),
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "8" } },
+                            [
                               _c(
-                                "div",
-                                { staticClass: "overline green--text mb-4" },
+                                "v-form",
+                                { ref: "form" },
                                 [
-                                  _vm._v(
-                                    "\n                            Expense Reports\n                        "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _vm.errors.expense_reports &&
-                              _vm.errors.expense_reports.length > 0
-                                ? _c("small", { staticClass: "red--text" }, [
-                                    _vm._v(
-                                      _vm._s(_vm.errors.expense_reports[0])
-                                    )
-                                  ])
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c(
-                                "v-data-table",
-                                {
-                                  staticClass: "elevation-0",
-                                  attrs: {
-                                    headers: _vm.headers,
-                                    items: _vm.items,
-                                    loading: _vm.loading,
-                                    options: _vm.options,
-                                    "server-items-length": _vm.totalItems,
-                                    "footer-props": {
-                                      itemsPerPageOptions: [10, 20, 50, 100],
-                                      showFirstLastPage: true,
-                                      firstIcon: "mdi-page-first",
-                                      lastIcon: "mdi-page-last",
-                                      prevIcon: "mdi-chevron-left",
-                                      nextIcon: "mdi-chevron-right"
-                                    },
-                                    "show-expand": "",
-                                    "single-expand": "",
-                                    "show-select": "",
-                                    "item-key": "id"
-                                  },
-                                  on: {
-                                    "update:options": function($event) {
-                                      _vm.options = $event
-                                    }
-                                  },
-                                  scopedSlots: _vm._u(
+                                  _c(
+                                    "v-row",
                                     [
-                                      {
-                                        key: "top",
-                                        fn: function() {
-                                          return [
-                                            _c("DateRangePicker", {
-                                              ref: "dateRangePicker",
-                                              attrs: {
-                                                dateRange: _vm.date_range
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "12" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules:
+                                                _vm.mixin_validation.required,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.username,
+                                              label: "Username",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.username = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.username,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "username",
+                                                  $$v
+                                                )
                                               },
-                                              on: {
-                                                "on-change": _vm.updateDates
+                                              expression: "form.username"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules:
+                                                _vm.mixin_validation.required,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.first_name,
+                                              label: "First Name",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.first_name = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.first_name,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "first_name",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.first_name"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.middle_name,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.middle_name,
+                                              label: "Middle Name"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.middle_name = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.middle_name,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "middle_name",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.middle_name"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules:
+                                                _vm.mixin_validation.required,
+                                              counter: 100,
+                                              "error-messages":
+                                                _vm.errors.last_name,
+                                              label: "Last Name",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.last_name = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.last_name,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "last_name",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.last_name"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-combobox", {
+                                            attrs: {
+                                              rules: _vm.rules.suffix,
+                                              counter: 30,
+                                              items: ["Jr", "Sr", "II", "III"],
+                                              "error-messages":
+                                                _vm.errors.suffix,
+                                              label: "Suffix"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.suffix = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.suffix,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "suffix",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.suffix"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-select", {
+                                            attrs: {
+                                              rules: _vm.rules.gender,
+                                              items: ["Male", "Female"],
+                                              "error-messages":
+                                                _vm.errors.gender,
+                                              label: "Gender",
+                                              required: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.gender = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.gender,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "gender",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.gender"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c(
+                                            "v-menu",
+                                            {
+                                              ref: "menu",
+                                              attrs: {
+                                                transition: "scale-transition",
+                                                "offset-y": "",
+                                                "min-width": "290px",
+                                                "close-on-content-click": false
                                               },
                                               scopedSlots: _vm._u([
                                                 {
-                                                  key: "openDialog",
+                                                  key: "activator",
                                                   fn: function(ref) {
                                                     var on = ref.on
                                                     var attrs = ref.attrs
-                                                    var dateRangeText =
-                                                      ref.dateRangeText
                                                     return [
                                                       _c(
                                                         "v-text-field",
@@ -1009,9 +1477,38 @@ var render = function() {
                                                           _vm._b(
                                                             {
                                                               attrs: {
-                                                                label: "Date",
-                                                                readonly: "",
-                                                                value: dateRangeText
+                                                                rules:
+                                                                  _vm.rules
+                                                                    .birthdate,
+                                                                "error-messages":
+                                                                  _vm.errors
+                                                                    .birthdate,
+                                                                label:
+                                                                  "Birthdate ",
+                                                                readonly: ""
+                                                              },
+                                                              on: {
+                                                                input: function(
+                                                                  $event
+                                                                ) {
+                                                                  _vm.errors.birthdate = []
+                                                                }
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  _vm.form
+                                                                    .birthdate,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    _vm.form,
+                                                                    "birthdate",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "form.birthdate"
                                                               }
                                                             },
                                                             "v-text-field",
@@ -1024,418 +1521,198 @@ var render = function() {
                                                     ]
                                                   }
                                                 }
-                                              ])
-                                            }),
-                                            _vm._v(" "),
-                                            _vm.selected.length > 0
-                                              ? _c(
-                                                  "div",
-                                                  [
-                                                    _c(
-                                                      "div",
-                                                      {
-                                                        staticClass: "d-inline"
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                                        " +
-                                                            _vm._s(
-                                                              _vm.selected
-                                                                .length
-                                                            ) +
-                                                            " Item(s)\n                                        Selected\n                                    "
-                                                        )
-                                                      ]
-                                                    ),
-                                                    _vm._v(" "),
-                                                    _c(
-                                                      "v-btn",
-                                                      {
-                                                        on: {
-                                                          click: function(
-                                                            $event
-                                                          ) {
-                                                            _vm.selected = []
-                                                          }
-                                                        }
-                                                      },
-                                                      [
-                                                        _vm._v(
-                                                          "\n                                        Clear All Selected\n                                    "
-                                                        )
-                                                      ]
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _c("v-text-field", {
-                                              attrs: {
-                                                "append-icon": "mdi-magnify",
-                                                label: "Search",
-                                                "single-line": "",
-                                                "hide-details": ""
-                                              },
+                                              ]),
                                               model: {
-                                                value: _vm.search,
+                                                value: _vm.menu,
                                                 callback: function($$v) {
-                                                  _vm.search = $$v
+                                                  _vm.menu = $$v
                                                 },
-                                                expression: "search"
+                                                expression: "menu"
                                               }
-                                            })
-                                          ]
-                                        },
-                                        proxy: true
-                                      },
-                                      {
-                                        key: "item.period",
-                                        fn: function(ref) {
-                                          var item = ref.item
-                                          return [
-                                            _vm._v(
-                                              "\n                                " +
-                                                _vm._s(item.from) +
-                                                " ~ " +
-                                                _vm._s(item.to) +
-                                                "\n                            "
-                                            )
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        key: "item.actions",
-                                        fn: function(ref) {
-                                          var item = ref.item
-                                          return [
-                                            _c(
-                                              "v-icon",
-                                              {
-                                                staticClass: "mr-2",
-                                                attrs: { small: "" },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.$router.push(
-                                                      "/admin/expense_reports/" +
-                                                        item.id
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                    mdi-eye\n                                "
-                                                )
-                                              ]
-                                            )
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        key: "expanded-item",
-                                        fn: function(ref) {
-                                          var headers = ref.headers
-                                          var item = ref.item
-                                          return [
-                                            _c(
-                                              "td",
-                                              {
+                                            },
+                                            [
+                                              _vm._v(" "),
+                                              _c("v-date-picker", {
                                                 attrs: {
-                                                  colspan: headers.length
+                                                  "no-title": "",
+                                                  scrollable: "",
+                                                  color: "success",
+                                                  max: _vm.maxDate
+                                                },
+                                                model: {
+                                                  value: _vm.form.birthdate,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.form,
+                                                      "birthdate",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "form.birthdate"
                                                 }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules:
+                                                _vm.mixin_validation.required,
+                                              counter: 30,
+                                              "error-messages":
+                                                _vm.errors.mobile_number,
+                                              label: "Mobile Number",
+                                              type: "number"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.mobile_number = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.mobile_number,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "mobile_number",
+                                                  $$v
+                                                )
                                               },
-                                              [
-                                                _c("v-container", [
-                                                  _c("table", [
-                                                    _c("tr", [
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v("Created")
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td", [_vm._v(":")]),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _vm._v(
-                                                          "\n                                                    " +
-                                                            _vm._s(
-                                                              _vm.mixin_formatDate(
-                                                                item.created_at,
-                                                                "YYYY-MM-DD HH:mm:ss"
-                                                              )
-                                                            ) +
-                                                            "\n                                                "
-                                                        )
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("tr", [
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v(
-                                                            "Reimbursable\n                                                        Amount"
-                                                          )
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td", [_vm._v(":")]),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _vm._v(
-                                                          "\n                                                    " +
-                                                            _vm._s(
-                                                              _vm.mixin_formatNumber(
-                                                                item.total_reimbursable
-                                                              )
-                                                            ) +
-                                                            "\n                                                "
-                                                        )
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    _c("tr", [
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v("Paid")
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td", [_vm._v(":")]),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _vm._v(
-                                                          "\n                                                    " +
-                                                            _vm._s(
-                                                              _vm.mixin_formatNumber(
-                                                                item.paid
-                                                              )
-                                                            ) +
-                                                            "\n                                                "
-                                                        )
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    item.balance > 0
-                                                      ? _c("tr", [
-                                                          _c("td", [
-                                                            _c("strong", [
-                                                              _vm._v("Balance")
-                                                            ])
-                                                          ]),
-                                                          _vm._v(" "),
-                                                          _c("td", [
-                                                            _vm._v(":")
-                                                          ]),
-                                                          _vm._v(" "),
-                                                          _c("td", [
-                                                            _vm._v(
-                                                              "\n                                                    " +
-                                                                _vm._s(
-                                                                  _vm.mixin_formatNumber(
-                                                                    item.balance
-                                                                  )
-                                                                ) +
-                                                                "\n                                                "
-                                                            )
-                                                          ])
-                                                        ])
-                                                      : _vm._e(),
-                                                    _vm._v(" "),
-                                                    _c("tr", [
-                                                      _c("td", [
-                                                        _c("strong", [
-                                                          _vm._v("Status")
-                                                        ])
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c("td", [_vm._v(":")]),
-                                                      _vm._v(" "),
-                                                      _c("td", [
-                                                        _vm._v(
-                                                          "\n                                                    " +
-                                                            _vm._s(
-                                                              item.status.status
-                                                            ) +
-                                                            "\n                                                    (" +
-                                                            _vm._s(
-                                                              item.status
-                                                                .remarks
-                                                            ) +
-                                                            ")\n                                                "
-                                                        )
-                                                      ])
-                                                    ]),
-                                                    _vm._v(" "),
-                                                    item.remarks
-                                                      ? _c("tr", [
-                                                          _c("td", [
-                                                            _c("strong", [
-                                                              _vm._v("Remarks")
-                                                            ])
-                                                          ]),
-                                                          _vm._v(" "),
-                                                          _c("td", [
-                                                            _vm._v(":")
-                                                          ]),
-                                                          _vm._v(" "),
-                                                          _c("td", [
-                                                            _vm._v(
-                                                              _vm._s(
-                                                                item.remarks
-                                                              )
-                                                            )
-                                                          ])
-                                                        ])
-                                                      : _vm._e()
-                                                  ])
-                                                ])
-                                              ],
-                                              1
-                                            )
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        key: "item.total",
-                                        fn: function(ref) {
-                                          var item = ref.item
-                                          return [
-                                            _vm._v(
-                                              "\n                                " +
-                                                _vm._s(
-                                                  _vm.mixin_formatNumber(
-                                                    item.total
-                                                  )
-                                                ) +
-                                                "\n                            "
-                                            )
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        key: "item.user",
-                                        fn: function(ref) {
-                                          var item = ref.item
-                                          return [
-                                            _vm._v(
-                                              "\n                                " +
-                                                _vm._s(
-                                                  item.last_name +
-                                                    ", " +
-                                                    item.first_name
-                                                ) +
-                                                "\n                            "
-                                            )
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        key: "item.updated_at",
-                                        fn: function(ref) {
-                                          var item = ref.item
-                                          return [
-                                            _vm._v(
-                                              "\n                                " +
-                                                _vm._s(
-                                                  _vm.mixin_getHumanDate(
-                                                    item.updated_at
-                                                  )
-                                                ) +
-                                                "\n                            "
-                                            )
-                                          ]
-                                        }
-                                      }
+                                              expression: "form.mobile_number"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules: _vm.rules.telephone_number,
+                                              counter: 30,
+                                              "error-messages":
+                                                _vm.errors.telephone_number,
+                                              label: "Telephone Number",
+                                              type: "number"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.telephone_number = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.telephone_number,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "telephone_number",
+                                                  $$v
+                                                )
+                                              },
+                                              expression:
+                                                "form.telephone_number"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12", md: "4" } },
+                                        [
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              rules:
+                                                _vm.mixin_validation.required,
+                                              "error-messages":
+                                                _vm.errors.email,
+                                              label: "Email Address"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.email = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.email,
+                                              callback: function($$v) {
+                                                _vm.$set(_vm.form, "email", $$v)
+                                              },
+                                              expression: "form.email"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-col",
+                                        { attrs: { cols: "12" } },
+                                        [
+                                          _c("v-textarea", {
+                                            attrs: {
+                                              rules:
+                                                _vm.mixin_validation.required,
+                                              "error-messages":
+                                                _vm.errors.address,
+                                              label: "Address",
+                                              rows: "1"
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.address = []
+                                              }
+                                            },
+                                            model: {
+                                              value: _vm.form.address,
+                                              callback: function($$v) {
+                                                _vm.$set(
+                                                  _vm.form,
+                                                  "address",
+                                                  $$v
+                                                )
+                                              },
+                                              expression: "form.address"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
                                     ],
-                                    null,
-                                    true
+                                    1
                                   ),
-                                  model: {
-                                    value: _vm.selected,
-                                    callback: function($$v) {
-                                      _vm.selected = $$v
-                                    },
-                                    expression: "selected"
-                                  }
-                                },
-                                [
                                   _vm._v(" "),
-                                  _vm._v(" "),
-                                  _vm._v(" "),
-                                  _vm._v(" "),
-                                  _vm._v(" "),
-                                  _vm._v(" "),
-                                  _vm._v(" "),
-                                  _vm.items.length > 0
-                                    ? _c("template", { slot: "body.append" }, [
-                                        _c(
-                                          "tr",
-                                          {
-                                            staticClass:
-                                              "green--text hidden-md-and-up"
-                                          },
-                                          [
-                                            _c("td", { staticClass: "title" }, [
-                                              _vm._v(
-                                                "\n                                        Total:\n                                        "
-                                              ),
-                                              _c("strong", [
-                                                _vm._v(_vm._s(_vm.totalAmount))
-                                              ])
-                                            ])
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "tr",
-                                          {
-                                            staticClass:
-                                              "green--text hidden-sm-and-down"
-                                          },
-                                          [
-                                            _c("td", { staticClass: "title" }, [
-                                              _vm._v("Total")
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
-                                            _c("td", [
-                                              _c("strong", [
-                                                _vm._v(_vm._s(_vm.totalAmount))
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
-                                            _c("td"),
-                                            _vm._v(" "),
-                                            _c("td")
-                                          ]
-                                        )
-                                      ])
-                                    : _vm._e()
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { color: "primary" },
+                                          on: { click: _vm.onSave }
+                                        },
+                                        [_vm._v("Update Profile")]
+                                      )
+                                    ],
+                                    1
+                                  )
                                 ],
-                                2
-                              ),
-                              _vm._v(" "),
-                              _c("v-textarea", {
-                                attrs: { label: "Remarks", rows: "3" },
-                                model: {
-                                  value: _vm.form.remarks,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "remarks", $$v)
-                                  },
-                                  expression: "form.remarks"
-                                }
-                              })
+                                1
+                              )
                             ],
                             1
                           )
@@ -1444,35 +1721,6 @@ var render = function() {
                       )
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green", dark: "" },
-                      on: { click: _vm.onSave }
-                    },
-                    [_vm._v("Save")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_vm._v("\n                Cancel\n            ")]
                   )
                 ],
                 1
@@ -1491,10 +1739,21 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/services/ExpenseReportDataService.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/services/ExpenseReportDataService.js ***!
-  \***********************************************************/
+/***/ "./resources/js/assets/img/user.png":
+/*!******************************************!*\
+  !*** ./resources/js/assets/img/user.png ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/user.png?5405d77c51fb46a0cbf26cb96fe4da4d";
+
+/***/ }),
+
+/***/ "./resources/js/services/UserDataService.js":
+/*!**************************************************!*\
+  !*** ./resources/js/services/UserDataService.js ***!
+  \**************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1511,155 +1770,111 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // import http from "../http-common";
 
 
-var ExpenseReportDataService = /*#__PURE__*/function () {
-  function ExpenseReportDataService() {
-    _classCallCheck(this, ExpenseReportDataService);
+var UserDataService = /*#__PURE__*/function () {
+  function UserDataService() {
+    _classCallCheck(this, UserDataService);
   }
 
-  _createClass(ExpenseReportDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports", data);
-    }
-  }, {
+  _createClass(UserDataService, [{
     key: "get",
     value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_reports", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/users", data);
+    }
+  }, {
+    key: "getAll",
+    value: function getAll(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users", data);
     }
   }, {
     key: "show",
     value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/".concat(id), data);
     }
   }, {
     key: "store",
     value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_reports", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/users", data);
     }
   }, {
     key: "update",
     value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/".concat(id), data);
     }
   }, {
     key: "delete",
     value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_reports/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/users/".concat(id), data);
     }
   }, {
     key: "restore",
     value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/restore/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/restore/".concat(id), data);
     }
   }, {
-    key: "submit",
-    value: function submit(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/submit/".concat(id), data);
+    key: "updatePassword",
+    value: function updatePassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_password/".concat(id), data);
     }
   }, {
-    key: "approve",
-    value: function approve(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/approve/".concat(id), data);
+    key: "resetPassword",
+    value: function resetPassword(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/reset_password/".concat(id), data);
     }
   }, {
-    key: "reject",
-    value: function reject(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/reject/".concat(id), data);
+    key: "verifyEmail",
+    value: function verifyEmail(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/verify_email/".concat(id), data);
     }
   }, {
-    key: "duplicate",
-    value: function duplicate(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/duplicate/".concat(id), data);
+    key: "updateFund",
+    value: function updateFund(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_fund/".concat(id), data);
+    }
+  }, {
+    key: "updateSettings",
+    value: function updateSettings(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_settings/".concat(id), data);
+    }
+  }, {
+    key: "updatePermissions",
+    value: function updatePermissions(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_permissions/".concat(id), data);
+    }
+  }, {
+    key: "updateProfile",
+    value: function updateProfile(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_profile/".concat(id), data);
+    }
+  }, {
+    key: "updateActivation",
+    value: function updateActivation(id, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/users/update_activation/".concat(id), data);
+    }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
     }
   }]);
 
-  return ExpenseReportDataService;
+  return UserDataService;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new ExpenseReportDataService());
+/* harmony default export */ __webpack_exports__["default"] = (new UserDataService());
 
 /***/ }),
 
-/***/ "./resources/js/services/PaymentDataService.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/services/PaymentDataService.js ***!
-  \*****************************************************/
+/***/ "./resources/js/views/modules/admin/profile/Index.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/views/modules/admin/profile/Index.vue ***!
+  \************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// import http from "../http-common";
-
-
-var PaymentDataService = /*#__PURE__*/function () {
-  function PaymentDataService() {
-    _classCallCheck(this, PaymentDataService);
-  }
-
-  _createClass(PaymentDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/payments", data);
-    }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/payments", data);
-    }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/payments/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/payments", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/payments/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/payments/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/payments/restore/".concat(id), data);
-    }
-  }]);
-
-  return PaymentDataService;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (new PaymentDataService());
-
-/***/ }),
-
-/***/ "./resources/js/views/modules/admin/payments/Create.vue":
-/*!**************************************************************!*\
-  !*** ./resources/js/views/modules/admin/payments/Create.vue ***!
-  \**************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Create_vue_vue_type_template_id_1a081f87___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=1a081f87& */ "./resources/js/views/modules/admin/payments/Create.vue?vue&type=template&id=1a081f87&");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_37166355___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=37166355& */ "./resources/js/views/modules/admin/profile/Index.vue?vue&type=template&id=37166355&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/modules/admin/profile/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1669,9 +1884,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Create_vue_vue_type_template_id_1a081f87___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Create_vue_vue_type_template_id_1a081f87___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_37166355___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_37166355___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1681,38 +1896,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/modules/admin/payments/Create.vue"
+component.options.__file = "resources/js/views/modules/admin/profile/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************/
+/***/ "./resources/js/views/modules/admin/profile/Index.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/profile/Index.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Create.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/profile/Index.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/modules/admin/payments/Create.vue?vue&type=template&id=1a081f87&":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/views/modules/admin/payments/Create.vue?vue&type=template&id=1a081f87& ***!
-  \*********************************************************************************************/
+/***/ "./resources/js/views/modules/admin/profile/Index.vue?vue&type=template&id=37166355&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/views/modules/admin/profile/Index.vue?vue&type=template&id=37166355& ***!
+  \*******************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_1a081f87___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=1a081f87& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/payments/Create.vue?vue&type=template&id=1a081f87&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_1a081f87___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_37166355___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=37166355& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/modules/admin/profile/Index.vue?vue&type=template&id=37166355&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_37166355___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_1a081f87___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_37166355___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
