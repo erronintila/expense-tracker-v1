@@ -51,8 +51,19 @@ class ExpenseReportController extends Controller
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
         $expense_reports = ExpenseReport::with('user')
-            ->with('payments')
-            ->orderBy($sortBy, $sortType);
+            ->with('payments');
+            
+
+        switch ($sortBy) {
+            case 'user':
+                $expense_reports = $expense_reports->leftJoin('users', 'expense_reports.user_id', '=', 'users.id')
+                    ->select('expense_reports.*')
+                    ->orderBy('users.first_name', $sortType);
+                break;
+            default:
+                $expense_reports = $expense_reports->orderBy($sortBy, $sortType);
+                break;
+        }
 
         if (request()->has('status')) {
             switch (request("status")) {
@@ -151,12 +162,12 @@ class ExpenseReportController extends Controller
         if (request()->has("start_date") && request()->has("end_date")) {
             $start_date = Carbon::parse(request("start_date"))->startOfDay();
             $end_date = Carbon::parse(request("end_date"))->endOfDay();
-            $expense_reports = $expense_reports->whereBetween("created_at", [$start_date, $end_date]);
+            $expense_reports = $expense_reports->whereBetween("expense_reports.created_at", [$start_date, $end_date]);
         }
 
         $expense_reports = $expense_reports->where(function ($query) use ($search) {
-            $query->where('code', "like", "%" . $search . "%");
-            $query->orWhere('description', "like", "%" . $search . "%");
+            $query->where('expense_reports.code', "like", "%" . $search . "%");
+            $query->orWhere('expense_reports.description', "like", "%" . $search . "%");
             $query->orWhereHas('user', function ($q) use ($search) {
                 $q->where('first_name', "like", "%" . $search . "%");
                 $q->orWhere('middle_name', "like", "%" . $search . "%");

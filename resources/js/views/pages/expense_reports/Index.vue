@@ -583,8 +583,8 @@ export default {
             headers: [
                 { text: "Report No.", value: "code" },
                 { text: "Period", value: "date" },
-                { text: "Employee", value: "user", sortable: false },
-                { text: "Amount", value: "total", sortable: false },
+                { text: "Employee", value: "user" },
+                { text: "Amount", value: "total" },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },

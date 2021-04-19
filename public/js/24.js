@@ -547,13 +547,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Date",
         value: "date"
       }, {
-        text: "Expense",
-        value: "expense_type.name",
-        sortable: false
+        text: "Type",
+        value: "expense_type.name"
       }, {
         text: "Employee",
-        value: "user.full_name",
-        sortable: false
+        value: "user.full_name"
       }, {
         text: "Amount",
         value: "amount"

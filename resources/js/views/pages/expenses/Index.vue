@@ -544,14 +544,12 @@ export default {
             headers: [
                 { text: "Date", value: "date" },
                 {
-                    text: "Expense",
+                    text: "Type",
                     value: "expense_type.name",
-                    sortable: false
                 },
                 {
                     text: "Employee",
                     value: "user.full_name",
-                    sortable: false
                 },
                 { text: "Amount", value: "amount" },
                 {
