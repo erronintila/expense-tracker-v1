@@ -513,7 +513,7 @@ export default {
                         this.$store.dispatch("AUTH_USER");
                         this.$store.dispatch("AUTH_SETTINGS");
 
-                        window.location.replace("/admin/settings");
+                        window.location.replace("/settings");
                     })
                     .catch(error => {
                         this.mixin_showErrors(error);

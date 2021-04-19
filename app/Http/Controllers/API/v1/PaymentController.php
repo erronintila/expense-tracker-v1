@@ -40,8 +40,18 @@ class PaymentController extends Controller
         $sortType = request("sortType") ?? "desc";
         $itemsPerPage = request("itemsPerPage") ?? 10;
 
-        $payments = Payment::with('user')->with("expense_reports")
-        ->orderBy($sortBy, $sortType);
+        $payments = Payment::with('user')->with("expense_reports");
+
+        switch ($sortBy) {
+            case 'user':
+                $payments = $payments->leftJoin('users', 'payments.user_id', '=', 'users.id')
+                    ->select('payments.*')
+                    ->orderBy('users.first_name', $sortType);
+                break;
+            default:
+                $payments = $payments->orderBy($sortBy, $sortType);
+                break;
+        }
 
         if (request()->has('status')) {
             switch (request("status")) {
@@ -106,7 +116,7 @@ class PaymentController extends Controller
         }
 
         $payments = $payments->where(function ($query) use ($search) {
-            $query->where('code', "like", "%" . $search . "%");
+            $query->where('payments.code', "like", "%" . $search . "%");
             $query->orWhere('date', "like", "%" . $search . "%");
             $query->orWhere('reference_no', "like", "%" . $search . "%");
             $query->orWhere('voucher_no', "like", "%" . $search . "%");

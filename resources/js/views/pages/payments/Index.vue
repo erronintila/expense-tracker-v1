@@ -97,7 +97,7 @@
                 </v-menu>
 
                 <UserDialogSelector
-                    v-if="$store.getters.user.is_admin"
+                    v-if="$store.getters.user.is_admin && mixin_can('view all users payments')"
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -146,6 +146,7 @@
 
                 <v-chip
                     v-show="
+                        $store.getters.user.is_admin && mixin_can('delete payments') &&
                         selected.length > 0 &&
                             selected.filter(item => item.deleted_at == null)
                                 .length > 0
@@ -169,6 +170,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -339,7 +341,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
-                { text: "User", value: "user" },
+                { text: "Employee", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
@@ -349,7 +351,11 @@ export default {
             ],
             totalAmount: 0,
             items: [],
-            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+            user:
+                this.$store.getters.user.is_admin &&
+                this.mixin_can("view all users payments")
+                    ? null
+                    : this.$store.getters.user,
             status: "All Payments",
             statuses: [
                 "All Payments",
@@ -396,6 +402,12 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
+        },
         updateDates(e) {
             this.date_range = e;
         },
@@ -589,7 +601,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.date_range,
                 query: this.user
@@ -611,6 +623,14 @@ export default {
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,
@@ -638,6 +658,14 @@ export default {
     //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
     // },
     activated() {
+        if(this.$route.params.status) {
+            this.status = this.$route.params.status;
+        }
+
+        if(this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range
+        }
+        
         this.$store.dispatch("AUTH_USER").then(response => {
             this.getDataFromApi().then(data => {
                 this.items = data.items;

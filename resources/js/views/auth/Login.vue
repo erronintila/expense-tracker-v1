@@ -117,11 +117,13 @@ export default {
                         };
 
                         this.$store.dispatch("AUTH_USER").then(response => {
-                            if (this.$store.getters.admin) {
-                                window.location.replace("/admin");
-                            } else {
-                                window.location.replace("/");
-                            }
+                            this.$router.push("/");
+                            // window.location.replace("/");
+                            // if (this.$store.getters.admin) {
+                            //     window.location.replace("/admin");
+                            // } else {
+                            //     window.location.replace("/");
+                            // }
                         });
                     })
                     .catch(error => {

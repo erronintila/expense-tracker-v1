@@ -36,7 +36,7 @@
                                     label="Employee"
                                     readonly
                                 >
-                                    <template v-slot:append>
+                                    <template v-slot:append v-if="mixin_can('select specific users on expenses')">
                                         <UserDialogSelector
                                             ref="userDialogSelector"
                                             @selectUser="selectUser"

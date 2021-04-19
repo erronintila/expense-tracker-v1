@@ -3,9 +3,9 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import authRoutes from "./modules/auth";
-import adminRoutes from "./modules/admin";
-import userRoutes from "./modules/user";
-// import pageRoutes from "./modules/pages";
+// import adminRoutes from "./modules/admin";
+// import userRoutes from "./modules/user";
+import pageRoutes from "./modules/pages";
 import errorRoutes from "../router/modules/errors";
 
 import { store } from "../store/index";
@@ -13,10 +13,10 @@ import { store } from "../store/index";
 const baseRoutes = [];
 const routes = baseRoutes.concat(
     authRoutes,
-    adminRoutes,
-    userRoutes,
+    // adminRoutes,
+    // userRoutes,
     errorRoutes,
-    // pageRoutes
+    pageRoutes
 );
 
 export const router = new VueRouter({
@@ -26,6 +26,7 @@ export const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     store.dispatch('CANCEL_PENDING_REQUESTS');
+    // store.dispatch('AUTH_USER');
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.authenticated) {
             next({ name: "login" });

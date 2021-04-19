@@ -22,7 +22,7 @@
                                     text
                                     color="green"
                                     :to="
-                                        `/user/expense_reports/${router_params_id}/edit`
+                                        `/expense_reports/${router_params_id}/edit`
                                     "
                                 >
                                     Edit
@@ -1341,17 +1341,8 @@ export default {
             }
         }
     },
-    mounted() {
-        // this.$store.dispatch("AUTH_USER");
-        this.getData().then(() => {
-            this.getDataFromApi().then(data => {
-                this.form.expenses = data.items;
-                this.totalItems = data.total;
-                this.formDataLoaded = true;
-            });
-        });
-    },
     activated() {
+        this.$store.dispatch("AUTH_USER");
         this.getData().then(() => {
             this.getDataFromApi().then(data => {
                 this.form.expenses = data.items;

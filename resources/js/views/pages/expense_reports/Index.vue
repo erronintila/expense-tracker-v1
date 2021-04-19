@@ -103,6 +103,10 @@
                 </v-menu>
 
                 <UserDialogSelector
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            mixin_can('view all users expense reports')
+                    "
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -226,6 +230,7 @@
                     label="Search"
                     single-line
                     hide-details
+                    @keydown.enter="onSearch"
                 ></v-text-field>
             </v-card-subtitle>
 
@@ -472,6 +477,7 @@
                                     </v-list-item>
 
                                     <v-list-item
+                                        v-if="$store.getters.user.is_admin"
                                         @click="
                                             printReport(
                                                 '',
@@ -525,6 +531,7 @@
                                         </v-list-item-title>
                                     </v-list-item>
                                     <v-list-item
+                                        v-if="$store.getters.user.is_admin"
                                         @click="
                                             printReport(
                                                 '',
@@ -578,15 +585,19 @@ export default {
             headers: [
                 { text: "Report No.", value: "code" },
                 { text: "Period", value: "date" },
-                { text: "Employee", value: "user", sortable: false },
-                { text: "Amount", value: "total", sortable: false },
+                { text: "Employee", value: "user" },
+                { text: "Amount", value: "total" },
                 { text: "Last Updated", value: "updated_at" },
                 { text: "Status", value: "status.status", sortable: false },
                 { text: "Actions", value: "actions", sortable: false },
                 { text: "", value: "data-table-expand" }
             ],
             items: [],
-            user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+            user:
+                this.$store.getters.user.is_admin &&
+                this.mixin_can("view all users expense reports")
+                    ? null
+                    : this.$store.getters.user,
             users: [],
             date_range: [
                 moment()
@@ -644,6 +655,15 @@ export default {
         };
     },
     methods: {
+        onSearch() {
+            this.getDataFromApi().then(data => {
+                this.getDataFromApi().then(data => {
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                    this.formDataLoaded = true;
+                });
+            });
+        },
         selectUser(e) {
             this.selected = [];
             if (e == null || e == undefined) {
@@ -1288,6 +1308,19 @@ export default {
             }
 
             if (
+                !this.$store.getters.user.is_admin &&
+                this.selected
+                    .map(item => item.status.status)
+                    .includes("Approved")
+            ) {
+                this.mixin_errorDialog(
+                    "Error",
+                    "Approved expense reports can't be cancelled"
+                );
+                return;
+            }
+
+            if (
                 this.selected
                     .map(item => item.status.status)
                     .includes("Paid/Reimbursed")
@@ -1677,7 +1710,21 @@ export default {
                     break;
 
                 default:
-                    last_submission_date = moment(submission_date).format(
+                    let encoding = this.$store.getters.settings
+                        .expense_encoding_period;
+                    let submission = moment
+                        .min(
+                            this.selected
+                                .filter(function(item) {
+                                    return item.status.status === "Unsubmitted";
+                                })
+                                .map(item2 =>
+                                    moment(item2.from).add(encoding - 1, "days")
+                                )
+                        )
+                        .format("YYYY-MM-DD");
+
+                    last_submission_date = moment(submission).format(
                         "YYYY-MM-DD"
                     );
                     break;
@@ -1764,6 +1811,17 @@ export default {
         }
     },
     watch: {
+        search() {
+            if (this.search == "") {
+                this.getDataFromApi().then(data => {
+                    this.getDataFromApi().then(data => {
+                        this.items = data.items;
+                        this.totalItems = data.total;
+                        this.formDataLoaded = true;
+                    });
+                });
+            }
+        },
         params: {
             immediate: true,
             deep: true,
@@ -1805,7 +1863,17 @@ export default {
                         break;
 
                     default:
-                        last_submission_date = moment(submission_date).format(
+                        let encoding = this.$store.getters.settings
+                            .expense_encoding_period;
+                        let submission = moment
+                            .min(
+                                this.selected.map(item =>
+                                    moment(item.from).add(encoding - 1, "days")
+                                )
+                            )
+                            .format("YYYY-MM-DD");
+
+                        last_submission_date = moment(submission).format(
                             "YYYY-MM-DD"
                         );
                         break;
@@ -1835,7 +1903,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.search,
+                // query: this.search,
                 query: this.status,
                 query: this.user,
                 query: this.date_range
@@ -1988,6 +2056,10 @@ export default {
                 return false;
             }
 
+            if (!this.$store.getters.user.is_admin) {
+                return false;
+            }
+
             return true;
         },
         isValidReject() {
@@ -2004,6 +2076,10 @@ export default {
                 this.selectedCount.rejected > 0 ||
                 this.selectedCount.deleted > 0
             ) {
+                return false;
+            }
+
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 
@@ -2079,16 +2155,16 @@ export default {
             };
         }
     },
-    // created() {
-    //     // this.$store.dispatch("AUTH_USER");
-    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-    //     // this.$store.dispatch("AUTH_SETTINGS");
-    //     // this.loadTotalCountReportStatus();
-    //     // this.loadExpenseTypes();
-    // },
     activated() {
-        this.$store.dispatch("AUTH_NOTIFICATIONS");
-        this.$store.dispatch("AUTH_SETTINGS");
+        if (this.$route.params.status) {
+            this.status = this.$route.params.status;
+        }
+
+        if (this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range;
+        }
+
+        this.$store.dispatch("AUTH_USER");
         this.loadTotalCountReportStatus();
         this.loadExpenseTypes();
         this.getDataFromApi().then(data => {

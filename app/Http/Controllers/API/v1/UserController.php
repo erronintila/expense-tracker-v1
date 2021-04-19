@@ -81,18 +81,15 @@ class UserController extends Controller
                 $users = $users->orderBy("first_name", $sortType);
                 break;
             case 'job':
-                // $users = $users->leftJoin('jobs', 'jobs.id', '=', 'users.job_id')
-                //     ->orderBy("jobs.name", $sortType)->select("users.*");
-                $users = $users->whereHas("job", function ($query) use ($sortType) {
-                    $query->orderBy("name", $sortType);
-                });
+                $users = $users->leftJoin('jobs', 'users.job_id', '=', 'jobs.id')
+                    ->select('users.*')
+                    ->orderBy('jobs.name', $sortType);
                 break;
             case 'department':
-                $users = $users->whereHas("job", function ($query) use ($sortType) {
-                    $query->whereHas("department", function ($query2) use ($sortType) {
-                        $query2->orderBy("name", $sortType);
-                    });
-                });
+                $users = $users->leftJoin('jobs', 'users.job_id', '=', 'jobs.id')
+                    ->leftJoin('departments', 'jobs.department_id', '=', 'departments.id')
+                    ->select('users.*')
+                    ->orderBy('departments.name', $sortType);
                 break;
             case 'revolving_fund':
                 $users = $users->orderBy("fund", $sortType);
@@ -149,7 +146,7 @@ class UserController extends Controller
         }
 
         $users = $users->where(function ($query) use ($search) {
-            $query->where('code', "like", "%" . $search . "%");
+            $query->where('users.code', "like", "%" . $search . "%");
             $query->orWhere("first_name", "like", "%" . $search . "%");
             $query->orWhere("middle_name", "like", "%" . $search . "%");
             $query->orWhere("last_name", "like", "%" . $search . "%");
