@@ -555,7 +555,6 @@ export default {
         });
     },
     activated() {
-        console.log("new");
         this.$store.dispatch("AUTH_USER").then(response => {
             this.user = response;
         });

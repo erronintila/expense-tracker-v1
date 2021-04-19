@@ -588,7 +588,6 @@ __webpack_require__.r(__webpack_exports__);
   activated: function activated() {
     var _this4 = this;
 
-    console.log("new");
     this.$store.dispatch("AUTH_USER").then(function (response) {
       _this4.user = response;
     });

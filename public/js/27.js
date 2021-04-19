@@ -588,8 +588,6 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.$store.dispatch("AUTH_USER");
         })["catch"](function (error) {
-          console.log("error", error);
-
           _this2.mixin_showErrors(error);
 
           _this2.errors = error.response.data.errors;
