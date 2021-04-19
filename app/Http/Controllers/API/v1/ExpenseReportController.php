@@ -60,6 +60,18 @@ class ExpenseReportController extends Controller
                     ->select('expense_reports.*')
                     ->orderBy('users.first_name', $sortType);
                 break;
+            case 'total':
+                $expense_reports = $expense_reports->leftJoin('expenses', 'expense_reports.id', '=', 'expenses.expense_report_id')
+                    ->select('expense_reports.*')
+                    ->orderBy(DB::raw('sum(expenses.amount)'), $sortType)
+                    ->groupBy('expense_reports.id');
+                break;
+            case 'date':
+                $expense_reports = $expense_reports->leftJoin('expenses', 'expense_reports.id', '=', 'expenses.expense_report_id')
+                    ->select('expense_reports.*')
+                    ->orderBy(DB::raw('min(expenses.date)'), $sortType)
+                    ->groupBy('expense_reports.id');
+                break;
             default:
                 $expense_reports = $expense_reports->orderBy($sortBy, $sortType);
                 break;
