@@ -678,6 +678,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1973,7 +2019,16 @@ var render = function() {
                                             attrs: {
                                               text: "",
                                               to: {
-                                                name: "user.expenses.index"
+                                                name: "user.expenses.index",
+                                                params: {
+                                                  status: "Unreported Expenses",
+                                                  date_range: [
+                                                    "0000-01-01",
+                                                    _vm
+                                                      .moment()
+                                                      .format("YYYY-MM-DD")
+                                                  ]
+                                                }
                                               }
                                             }
                                           },
@@ -2177,7 +2232,19 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "user.expense_reports.index"
+                                                          "user.expense_reports.index",
+                                                        params: {
+                                                          status:
+                                                            "Unsubmitted Expense Reports",
+                                                          date_range: [
+                                                            "0000-01-01",
+                                                            _vm
+                                                              .moment()
+                                                              .format(
+                                                                "YYYY-MM-DD"
+                                                              )
+                                                          ]
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -2259,7 +2326,19 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "user.expense_reports.index"
+                                                          "user.expense_reports.index",
+                                                        params: {
+                                                          status:
+                                                            "Submitted Expense Reports",
+                                                          date_range: [
+                                                            "0000-01-01",
+                                                            _vm
+                                                              .moment()
+                                                              .format(
+                                                                "YYYY-MM-DD"
+                                                              )
+                                                          ]
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -2351,7 +2430,19 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "user.expense_reports.index"
+                                                          "user.expense_reports.index",
+                                                        params: {
+                                                          status:
+                                                            "Approved Expense Reports",
+                                                          date_range: [
+                                                            "0000-01-01",
+                                                            _vm
+                                                              .moment()
+                                                              .format(
+                                                                "YYYY-MM-DD"
+                                                              )
+                                                          ]
+                                                        }
                                                       }
                                                     }
                                                   },
@@ -2433,7 +2524,19 @@ var render = function() {
                                                       text: "",
                                                       to: {
                                                         name:
-                                                          "user.payments.index"
+                                                          "user.payments.index",
+                                                        params: {
+                                                          status:
+                                                            "Released Payments",
+                                                          date_range: [
+                                                            "0000-01-01",
+                                                            _vm
+                                                              .moment()
+                                                              .format(
+                                                                "YYYY-MM-DD"
+                                                              )
+                                                          ]
+                                                        }
                                                       }
                                                     }
                                                   },

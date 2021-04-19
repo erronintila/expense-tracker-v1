@@ -936,6 +936,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   activated: function activated() {
     var _this8 = this;
 
+    if (this.$route.params.status) {
+      this.status = this.$route.params.status;
+    }
+
+    if (this.$route.params.date_range) {
+      this.date_range = this.$route.params.date_range;
+    }
+
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.loadExpenseTypes();
     this.getDataFromApi().then(function (data) {

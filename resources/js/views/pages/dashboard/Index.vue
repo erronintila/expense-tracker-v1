@@ -190,7 +190,14 @@
                                     class="ml-0 pl-0"
                                     text
                                     :to="{
-                                        name: 'user.expenses.index'
+                                        name: 'user.expenses.index',
+                                        params: {
+                                            status: 'Unreported Expenses',
+                                            date_range: [
+                                                '0000-01-01',
+                                                moment().format('YYYY-MM-DD')
+                                            ]
+                                        }
                                     }"
                                 >
                                     <span>
@@ -280,7 +287,17 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'user.expense_reports.index'
+                                                    'user.expense_reports.index',
+                                                params: {
+                                                    status:
+                                                        'Unsubmitted Expense Reports',
+                                                    date_range: [
+                                                        '0000-01-01',
+                                                        moment().format(
+                                                            'YYYY-MM-DD'
+                                                        )
+                                                    ]
+                                                }
                                             }"
                                         >
                                             <span>
@@ -318,7 +335,17 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'user.expense_reports.index'
+                                                    'user.expense_reports.index',
+                                                params: {
+                                                    status:
+                                                        'Submitted Expense Reports',
+                                                    date_range: [
+                                                        '0000-01-01',
+                                                        moment().format(
+                                                            'YYYY-MM-DD'
+                                                        )
+                                                    ]
+                                                }
                                             }"
                                         >
                                             <div>
@@ -369,7 +396,17 @@
                                             class="mt-4 mb-4"
                                             :to="{
                                                 name:
-                                                    'user.expense_reports.index'
+                                                    'user.expense_reports.index',
+                                                params: {
+                                                    status:
+                                                        'Approved Expense Reports',
+                                                    date_range: [
+                                                        '0000-01-01',
+                                                        moment().format(
+                                                            'YYYY-MM-DD'
+                                                        )
+                                                    ]
+                                                }
                                             }"
                                         >
                                             <div>
@@ -407,7 +444,16 @@
                                             text
                                             class="mt-4 mb-4"
                                             :to="{
-                                                name: 'user.payments.index'
+                                                name: 'user.payments.index',
+                                                params: {
+                                                    status: 'Released Payments',
+                                                    date_range: [
+                                                        '0000-01-01',
+                                                        moment().format(
+                                                            'YYYY-MM-DD'
+                                                        )
+                                                    ]
+                                                }
                                             }"
                                         >
                                             <div>

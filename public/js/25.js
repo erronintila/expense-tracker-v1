@@ -366,6 +366,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -919,6 +920,7 @@ var render = function() {
                                   rules: [].concat(
                                     _vm.mixin_validation.required
                                   ),
+                                  "error-messages": _vm.errors.voucher_no,
                                   counter: 100,
                                   label: "Voucher No.",
                                   required: "",

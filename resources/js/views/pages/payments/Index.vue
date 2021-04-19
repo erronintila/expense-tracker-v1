@@ -658,6 +658,14 @@ export default {
     //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
     // },
     activated() {
+        if(this.$route.params.status) {
+            this.status = this.$route.params.status;
+        }
+
+        if(this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range
+        }
+        
         this.$store.dispatch("AUTH_USER").then(response => {
             this.getDataFromApi().then(data => {
                 this.items = data.items;
