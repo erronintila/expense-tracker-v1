@@ -368,7 +368,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Date",
         value: "date"
       }, {
-        text: "User",
+        text: "Employee",
         value: "user"
       }, {
         text: "Description",

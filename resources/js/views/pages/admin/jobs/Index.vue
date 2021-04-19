@@ -266,7 +266,6 @@ export default {
                     {
                         text: "Department",
                         value: "department.name",
-                        sortable: false
                     },
                     { text: "Actions", value: "actions", sortable: false }
                 ]
@@ -328,10 +327,13 @@ export default {
                     }
                 };
 
+                console.log(data);
+
                 JobDataService.getAll(data)
                     .then(response => {
                         this.loading = false;
                         this.formDataLoaded = true;
+                        console.log(response.data);
                         resolve(response.data);
                     })
                     .catch(error => {

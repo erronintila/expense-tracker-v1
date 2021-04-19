@@ -410,8 +410,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           value: "name"
         }, {
           text: "Department",
-          value: "department.name",
-          sortable: false
+          value: "department.name"
         }, {
           text: "Actions",
           value: "actions",
@@ -484,9 +483,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             isDeleted: isDeleted
           }
         };
+        console.log(data);
         _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           _this2.loading = false;
           _this2.formDataLoaded = true;
+          console.log(response.data);
           resolve(response.data);
         })["catch"](function (error) {
           _this2.mixin_showErrors(error);

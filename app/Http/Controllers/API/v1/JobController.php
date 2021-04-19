@@ -42,15 +42,21 @@ class JobController extends Controller
         $sortType = request('sortType') ?? "asc";
         $itemsPerPage = request('itemsPerPage') ?? 10;
 
-        // if($sortBy == "department.name") {
-        //     $jobs = Job::with("department")->sortBy("department.name", $sortType);
-        // } else {
         $jobs = Job::with(['department' => function ($query) {
             if (request()->has("isDeleted") && request("isDeleted")) {
                 $query->withTrashed();
             }
-        }])->orderBy($sortBy, $sortType);
-        // }
+        }]);
+
+        switch ($sortBy) {
+            case 'name':
+                $jobs = $jobs->orderBy("name", $sortType);
+                break;
+            case 'department.name':
+                break;
+            default:
+                break;
+        }
 
         if (request()->has('status')) {
             switch (request('status')) {

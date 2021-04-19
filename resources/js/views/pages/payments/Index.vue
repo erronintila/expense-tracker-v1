@@ -341,7 +341,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
-                { text: "User", value: "user" },
+                { text: "Employee", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
                 { text: "Last Updated", value: "updated_at" },
