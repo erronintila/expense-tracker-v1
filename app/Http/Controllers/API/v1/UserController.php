@@ -20,6 +20,7 @@ use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Requests\User\UserProfileUpdateRequest;
 use App\Http\Requests\User\UserUpdatePasswordRequest;
 use App\Http\Requests\User\UserPermissionUpdateRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -514,6 +515,15 @@ class UserController extends Controller
                 return Permission::all();
                 break;
         }
+    }
+
+    public function getLoggedInUser()
+    {
+        $user = User::with('job.department')
+            ->with('expense_types.sub_types')
+            ->findOrFail(Auth::id());
+
+        return new UserResource($user);
     }
     
     /**

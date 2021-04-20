@@ -120,31 +120,33 @@ Route::middleware('auth:sanctum')->group(function () {
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
-    Route::get('/user', function (Request $request) {
+    Route::get('/user', 'API\v1\UserController@getLoggedInUser');
 
-        // $user = $request->user();
-        $user = User::with(['job' => function ($query) {
-            // $query->withTrashed();
-            $query->with(['department' => function ($query) {
-                // $query->withTrashed();
-            }]);
-            // $query->with(['expense_types' => function ($query) {
-            //     $query->withTrashed();
-            //     $query->with(['sub_types' => function ($query) {
-            //         $query->withTrashed();
-            //     }]);
-            // }]);
-        }])
-        ->with(['expense_types' => function ($query) {
-            // $query->withTrashed();
-            $query->with(['sub_types' => function ($query) {
-                // $query->withTrashed();
-            }]);
-        }])
-        ->findOrFail(Auth::id());
+    // Route::get('/user', function (Request $request) {
 
-        return new UserResource($user);
-    });
+    //     // $user = $request->user();
+    //     $user = User::with(['job' => function ($query) {
+    //         // $query->withTrashed();
+    //         $query->with(['department' => function ($query) {
+    //             // $query->withTrashed();
+    //         }]);
+    //         // $query->with(['expense_types' => function ($query) {
+    //         //     $query->withTrashed();
+    //         //     $query->with(['sub_types' => function ($query) {
+    //         //         $query->withTrashed();
+    //         //     }]);
+    //         // }]);
+    //     }])
+    //     ->with(['expense_types' => function ($query) {
+    //         // $query->withTrashed();
+    //         $query->with(['sub_types' => function ($query) {
+    //             // $query->withTrashed();
+    //         }]);
+    //     }])
+    //     ->findOrFail(Auth::id());
+
+    //     return new UserResource($user);
+    // });
 
     Route::put('/users/restore/{id}', 'API\v1\UserController@restore');
     Route::put('/users/update_settings/{id}', 'API\v1\UserController@update_settings');
