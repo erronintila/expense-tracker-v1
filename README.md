@@ -60,7 +60,8 @@ This is an example of how to list things you need to use the software and how to
 <!-- CONTACT -->
 ## Contact
 
-![@eronintilla](https://twitter.com/eronintilla) - erronintila@gmail.com
+<a href="https://mail.google.com/a?view=cm&fs=1&to=erronintila@gmail.com" target="_blank">![Google Mail](https://img.shields.io/badge/Gmail-D14836?style=flat-square&logo=gmail&logoColor=white)</a>
+<a href="https://twitter.com/eronintilla" target="_blank">![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=flat-square&logo=twitter&logoColor=white)</a>
 
 Project Link: [https://github.com/erronintila/expense-tracker-v1.git](https://github.com/erronintila/expense-tracker-v1.git)
 
