@@ -35,11 +35,10 @@ To get a local copy up and running follow these simple example steps.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-* composer <br/>
+* Node.js <br/>
+  Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download the file. <br/>
+  Open the downloaded file and install.
+* Composer <br/>
   Go to <a href="https://getcomposer.org/download/">this link</a> and follow installation process or install through command line:
   ```
   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -50,21 +49,32 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/erronintila/expense-tracker-v1.git
    ```
-3. Install NPM packages
-   ```sh
+2. Install NPM packages
+   ```
    npm install
    npm run dev
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+3. Install Composer packages
    ```
-   
+   composer install
+   ```
+4. Set the .env configuration
+   ```
+   cp .env.example .env
+   ```
+5. Laravel...
+   ```
+   php artisan key:generate
+   ```
+6. seed the data
+   ```
+   php artisan migrate:fresh --seed
+   ```
+
 <!-- CONTACT -->
 ## Contact
 
