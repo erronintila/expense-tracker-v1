@@ -71,7 +71,6 @@ class ExpenseReportShowResource extends JsonResource
             "reviewed_at" => $this->reviewed_at,
             "approved_at" => $this->approved_at,
             "rejected_at" => $this->rejected_at,
-            "cancelled_at" => $this->cancelled_at,
 
             "created_by" => $this->created_by,
             "updated_by" => $this->updated_by,
@@ -80,7 +79,6 @@ class ExpenseReportShowResource extends JsonResource
             "reviewed_by" => $this->reviewed_by,
             "approved_by" => $this->approved_by,
             "rejected_by" => $this->rejected_by,
-            "cancelled_by" => $this->cancelled_by,
 
             // -------------------------------------------------------------------
             // Relationships

@@ -35,7 +35,7 @@ class ExpenseReport extends Model
     {
         parent::boot();
         static::deleting(function ($expense_report) {
-            abort_if($expense_report->payments()->count() > 0, 422, "Some records can't be cancelled.");
+            abort_if($expense_report->payments()->count() > 0, 422, "Some records can't be deleted.");
         });
     }
     
@@ -205,7 +205,6 @@ class ExpenseReport extends Model
         $reviewed = is_null($this->reviewed_at);
         $approved = is_null($this->approved_at);
         $rejected = is_null($this->rejected_at);
-        $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
         // $paid = false;
         $paid = ($this->payments->count() > 0);
@@ -213,18 +212,18 @@ class ExpenseReport extends Model
         if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Expense Report was cancelled',
-                'status' => 'Cancelled',
+                'remarks' => 'Expense Report was deleted',
+                'status' => 'Deleted',
             ];
 
             return $arr;
         }
 
-        if (!$cancelled) {
+        if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Expense Report was cancelled',
-                'status' => 'Cancelled',
+                'remarks' => 'Expense Report was deleted',
+                'status' => 'Deleted',
             ];
 
             return $arr;
@@ -585,24 +584,6 @@ class ExpenseReport extends Model
         //         "rejected_at" => $this->rejected_at,
         //         "rejected_by" => User::withTrashed()->findOrFail($this->rejected_by)
         //         // "rejected_by" => User::findOrFail($this->rejected_by)
-        //     ];
-        // }
-
-        return null;
-    }
-    
-    /**
-     * getCancelledInfoAttribute
-     *
-     * @return mixed
-     */
-    public function getCancelledInfoAttribute()
-    {
-        // if ($this->cancelled_at) {
-        //     return [
-        //         "cancelled_at" => $this->cancelled_at,
-        //         "cancelled_by" => User::withTrashed()->findOrFail($this->cancelled_by)
-        //         // "cancelled_by" => User::findOrFail($this->cancelled_by)
         //     ];
         // }
 

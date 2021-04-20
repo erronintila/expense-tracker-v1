@@ -82,7 +82,7 @@ class ExpenseReportController extends Controller
                 case 'Overdue Expense Reports':
                     $expense_reports = $expense_reports;
                     break;
-                case 'Cancelled Expense Reports':
+                case 'Deleted Expense Reports':
                     $expense_reports = $expense_reports->onlyTrashed();
                     break;
                 case 'Released Payment':
@@ -90,14 +90,13 @@ class ExpenseReportController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ])
                         ->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
                                 ["released_at", "<>", null],
                                 ["received_at", "=", null],
-                                ["cancelled_at", "=", null],
                                 ["deleted_at", "=", null],
                             ]);
                         });
@@ -107,14 +106,13 @@ class ExpenseReportController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ])
                         ->whereHas("payments", function ($query) {
                             $query->where([
                                 ["approved_at", "<>", null],
                                 ["released_at", "<>", null],
                                 ["received_at", "<>", null],
-                                ["cancelled_at", "=", null],
                                 ["deleted_at", "=", null],
                             ]);
                         });
@@ -124,7 +122,7 @@ class ExpenseReportController extends Controller
                         // ["submitted_at", "<>", null],
                         // ["approved_at", "=", null],
                         ["rejected_at", "<>", null],
-                        // ["cancelled_at", "=", null],
+                        // ["deleted_at", "=", null],
                     ]);
                     break;
                 case 'Approved Expense Reports':
@@ -132,7 +130,7 @@ class ExpenseReportController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ])->whereDoesntHave("payments");
                     break;
                 case 'Submitted Expense Reports':
@@ -140,7 +138,7 @@ class ExpenseReportController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "=", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ])->whereDoesntHave("payments");
                     break;
                 case 'Unsubmitted Expense Reports':
@@ -148,7 +146,7 @@ class ExpenseReportController extends Controller
                         ["submitted_at", "=", null],
                         ["approved_at", "=", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ])->whereDoesntHave("payments");
                     break;
                 default:
@@ -202,7 +200,7 @@ class ExpenseReportController extends Controller
                 ->where("approved_at", "<>", null)
                 // ->where("submitted_at", "<>", null)
                 ->where("rejected_at", null)
-                ->where("cancelled_at", null)
+                ->where("deleted_at", null)
                 ->whereDoesntHave("payments");
         }
 
@@ -305,13 +303,13 @@ class ExpenseReportController extends Controller
         $message = "Expense Report updated successfully";
 
 
-        // // Prevent update if expense report has been cancelled
+        // // Prevent update if expense report has been deleted
         if (Auth::user()->is_admin) {
             $count = 0;
             $count = ExpenseReport::where("id", $id)
                 ->where(function ($query) {
                     $query->whereHas('payments');
-                    $query->orWhere("cancelled_at", "<>", null);
+                    $query->orWhere("deleted_at", "<>", null);
                     $query->orWhere("rejected_at", "<>", null);
                     $query->orWhere("deleted_at", "<>", null);
                 })
@@ -325,7 +323,7 @@ class ExpenseReportController extends Controller
             $count = ExpenseReport::where("id", $id)
                 ->where(function ($query) {
                     $query->where("approved_at", "<>", null);
-                    $query->orWhere("cancelled_at", "<>", null);
+                    $query->orWhere("deleted_at", "<>", null);
                     $query->orWhere("rejected_at", "<>", null);
                     $query->orWhere("deleted_at", "<>", null);
                 })
@@ -402,12 +400,12 @@ class ExpenseReportController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        // check if deleted/cancelled
+        // check if deleted
         $deleted = ExpenseReport::whereIn("id", explode(",", $id))
             ->where("deleted_at", "<>", null)->count();
 
         if ($deleted > 0) {
-            return $this->errorResponse("Expense Report has already been cancelled", 422);
+            return $this->errorResponse("Expense Report has already been deleted", 422);
         }
 
         //check if has payment
@@ -454,12 +452,12 @@ class ExpenseReportController extends Controller
 
     public function submit(Request $request, $id)
     {
-        // check if deleted/cancelled
+        // check if deleted
         $deleted = ExpenseReport::whereIn("id", explode(",", $id))
             ->where("deleted_at", "<>", null)->count();
 
         if ($deleted > 0) {
-            return $this->errorResponse("Expense Report has already been cancelled.", 422);
+            return $this->errorResponse("Expense Report has already been deleted.", 422);
         }
 
         // check if rejected
@@ -494,7 +492,7 @@ class ExpenseReportController extends Controller
             return $this->errorResponse("Expense Report has payment records", 422);
         }
 
-        // // Prevent submit if expense report has been submitted or approved or cancelled
+        // // Prevent submit if expense report has been submitted or approved or deleted
         // $submitted = ExpenseReport::whereIn("id", request("")ids)
         //     ->where("submitted_at", "<>", null)->count();
 
@@ -526,12 +524,12 @@ class ExpenseReportController extends Controller
     {
         abort_if(!auth()->user()->is_admin, 403);
 
-        // check if deleted/cancelled
+        // check if deleted
         $deleted = ExpenseReport::whereIn("id", explode(",", $id))
             ->where("deleted_at", "<>", null)->count();
 
         if ($deleted > 0) {
-            return $this->errorResponse("Expense Report has already been cancelled.", 422);
+            return $this->errorResponse("Expense Report has already been deleted.", 422);
         }
 
         // check if rejected
@@ -558,7 +556,7 @@ class ExpenseReportController extends Controller
             return $this->errorResponse("Expense Report has payment records", 422);
         }
 
-        // // Prevent approve if expense report has been approved or cancelled
+        // // Prevent approve if expense report has been approved or deleted
         // $approved = ExpenseReport::whereIn("id", request("")ids)
         //     ->where("approved_at", "<>", null)->count();
 
@@ -605,7 +603,7 @@ class ExpenseReportController extends Controller
             return $this->errorResponse("Expense Report has payment records", 422);
         }
 
-        // // Prevent approve if expense report has been approved or cancelled
+        // // Prevent approve if expense report has been approved or deleted
         // $rejected = ExpenseReport::whereIn("id", request("")ids)
         //     ->where("rejected_at", "<>", null)->count();
 
@@ -669,13 +667,11 @@ class ExpenseReportController extends Controller
                 $new_report->reviewed_at = null;
                 $new_report->approved_at = null;
                 $new_report->rejected_at = null;
-                $new_report->cancelled_at = null;
                 $new_report->deleted_at = null;
                 $new_report->submitted_by = null;
                 $new_report->reviewed_by = null;
                 $new_report->approved_by = null;
                 $new_report->rejected_by = null;
-                $new_report->cancelled_by = null;
                 $new_report->deleted_by = null;
                 $new_report->code = generate_code(ExpenseReport::class, setting("expense_report.report_no.prefix"), setting("expense_report.report_no.num_length"));
                 $new_report->save();
@@ -720,22 +716,22 @@ class ExpenseReportController extends Controller
      * @param  mixed $reviewed
      * @param  mixed $approved
      * @param  mixed $rejected
-     * @param  mixed $cancelled
+     * @param  mixed $deleted
      * @return void
      */
-    public function updateReport(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
+    public function updateReport(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $deleted)
     {
         $expense_report->submitted_at = $submitted ? now() : $expense_report->submitted_at;
         $expense_report->reviewed_at = $reviewed ? now() : $expense_report->reviewed_at;
         $expense_report->approved_at = $approved ? now() : $expense_report->approved_at;
         $expense_report->rejected_at = $rejected ? now() : $expense_report->rejected_at;
-        $expense_report->cancelled_at = $cancelled ? now() : $expense_report->cancelled_at;
+        $expense_report->deleted_at = $deleted ? now() : $expense_report->deleted_at;
 
         $expense_report->submitted_by = $submitted ? Auth::id() : $expense_report->submitted_by;
         $expense_report->reviewed_by = $reviewed ? Auth::id() : $expense_report->reviewed_by;
         $expense_report->approved_by = $approved ? Auth::id() : $expense_report->approved_by;
         $expense_report->rejected_by = $rejected ? Auth::id() : $expense_report->rejected_by;
-        $expense_report->cancelled_by = $cancelled ? Auth::id() : $expense_report->cancelled_by;
+        $expense_report->deleted_by = $deleted ? Auth::id() : $expense_report->deleted_by;
 
         if ($approved) {
             $expense_report->submitted_at = $expense_report->submitted_at == null ? now() : $expense_report->submitted_at;
@@ -745,7 +741,7 @@ class ExpenseReportController extends Controller
 
         $expense_report->disableLogging();
         $expense_report->save();
-        $this->logUpdateActivity($expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled);
+        $this->logUpdateActivity($expense_report, $submitted, $reviewed, $approved, $rejected, $deleted);
     }
 
     /**
@@ -756,22 +752,22 @@ class ExpenseReportController extends Controller
      * @param  mixed $reviewed
      * @param  mixed $approved
      * @param  mixed $rejected
-     * @param  mixed $cancelled
+     * @param  mixed $deleted
      * @return void
      */
-    public function updateExpense(Expense $expense, $submitted, $reviewed, $approved, $rejected, $cancelled)
+    public function updateExpense(Expense $expense, $submitted, $reviewed, $approved, $rejected, $deleted)
     {
         $expense->submitted_at = $submitted ? now() : $expense->submitted_at;
         $expense->reviewed_at = $reviewed ? now() : $expense->reviewed_at;
         $expense->approved_at = $approved ? now() : $expense->approved_at;
         $expense->rejected_at = $rejected ? now() : $expense->rejected_at;
-        $expense->cancelled_at = $cancelled ? now() : $expense->cancelled_at;
+        $expense->deleted_at = $deleted ? now() : $expense->deleted_at;
 
         $expense->submitted_by = $submitted ? Auth::id() : $expense->submitted_by;
         $expense->reviewed_by = $reviewed ? Auth::id() : $expense->reviewed_by;
         $expense->approved_by = $approved ? Auth::id() : $expense->approved_by;
         $expense->rejected_by = $rejected ? Auth::id() : $expense->rejected_by;
-        $expense->cancelled_by = $cancelled ? Auth::id() : $expense->cancelled_by;
+        $expense->deleted_by = $deleted ? Auth::id() : $expense->deleted_by;
 
         if ($approved) {
             $expense->submitted_at = $expense->submitted_at == null ? now() : $expense->submitted_at;
@@ -790,10 +786,10 @@ class ExpenseReportController extends Controller
      * @param  mixed $reviewed
      * @param  mixed $approved
      * @param  mixed $rejected
-     * @param  mixed $cancelled
+     * @param  mixed $deleted
      * @return void
      */
-    public function logUpdateActivity(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $cancelled)
+    public function logUpdateActivity(ExpenseReport $expense_report, $submitted, $reviewed, $approved, $rejected, $deleted)
     {
         $action = "";
         $key = "";
@@ -815,10 +811,10 @@ class ExpenseReportController extends Controller
             $action = "rejected";
             $key = "rejected_at";
             $value = $expense_report->rejected_at;
-        } elseif ($cancelled) {
-            $action = "cancelled";
-            $key = "cancelled_at";
-            $value = $expense_report->cancelled_at;
+        } elseif ($deleted) {
+            $action = "deleted";
+            $key = "deleted_at";
+            $value = $expense_report->deleted_at;
         }
 
         activity("expense_report")
@@ -885,7 +881,6 @@ class ExpenseReportController extends Controller
                 ["submitted_at", "=", null],
                 ["approved_at", "=", null],
                 ["rejected_at", "=", null],
-                ["cancelled_at", "=", null],
                 ["deleted_at", "=", null],
             ]);
 
@@ -893,7 +888,6 @@ class ExpenseReportController extends Controller
                 ["submitted_at", "<>", null],
                 ["approved_at", "=", null],
                 ["rejected_at", "=", null],
-                ["cancelled_at", "=", null],
                 ["deleted_at", "=", null],
             ]);
 
@@ -918,7 +912,6 @@ class ExpenseReportController extends Controller
             $expense_reports = $expense_reports
                 ->where("approved_at", "<>", null)
                 ->where("submitted_at", "<>", null)
-                ->where("cancelled_at", null)
                 ->whereDoesntHave("payments")
                 ->get();
 
