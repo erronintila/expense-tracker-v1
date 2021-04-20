@@ -1697,9 +1697,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (item) {
-        if (!item.approved_at) {
+        if (item.approved_at != null) {
           return false;
-        } else if (!item.deleted_at) {
+        } else if (item.deleted_at != null) {
           return false;
         }
       }

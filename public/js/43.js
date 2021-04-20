@@ -397,7 +397,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
       // "Unreported Advance Payments",
-      "Released Payments", "Completed Payments", "Cancelled Payments"],
+      "Released Payments", "Completed Payments", "Deleted Payments"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -518,7 +518,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //         this.mixin_errorDialog("Error", "No item(s) selected");
     //         return;
     //     }
-    //     this.$confirm("do you want to cancel payment?").then(res => {
+    //     this.$confirm("do you want to delete payment?").then(res => {
     //         if (res) {
     //             axios
     //                 .delete(`/api/payments/${this.selected[0].id}`, {
@@ -584,7 +584,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             //     url = `/api/payments/${this.selected[0].id}`;
             //     break;
 
-            case "cancel":
+            case "delete":
               url = "/api/payments/".concat(ids);
               break;
 
@@ -1089,13 +1089,13 @@ var render = function() {
                       },
                       on: {
                         "click:close": function($event) {
-                          return _vm.onUpdate("cancel", "delete")
+                          return _vm.onUpdate("delete", "delete")
                         }
                       }
                     },
                     [
                       _vm._v(
-                        "\n                Cancel Payment(s)\n            "
+                        "\n                Delete Payment(s)\n            "
                       )
                     ]
                   )

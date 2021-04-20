@@ -67,7 +67,6 @@ class PaymentShowResource extends JsonResource
             "approved_at" => $this->approved_at,
             "released_at" => $this->released_at,
             "received_at" => $this->received_at,
-            "cancelled_at" => $this->cancelled_at,
 
             "created_by" => $this->created_by,
             "updated_by" => $this->updated_by,
@@ -75,7 +74,6 @@ class PaymentShowResource extends JsonResource
             "approved_by" => $this->approved_by,
             "released_by" => $this->released_by,
             "received_by" => $this->received_by,
-            "cancelled_by" => $this->cancelled_by,
 
             // -------------------------------------------------------------------
             // Relationships

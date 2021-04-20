@@ -55,13 +55,13 @@ class PaymentController extends Controller
 
         if (request()->has('status')) {
             switch (request("status")) {
-                case 'Cancelled Payments':
+                case 'Deleted Payments':
                     $payments = $payments->onlyTrashed();
                     break;
                 case 'Completed Payments':
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
                     ])
@@ -71,7 +71,7 @@ class PaymentController extends Controller
                 case 'Received Payments':
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
                     ])
@@ -81,7 +81,7 @@ class PaymentController extends Controller
                 case 'Released Payments':
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "=", null],
                     ])
@@ -91,7 +91,7 @@ class PaymentController extends Controller
                 case 'Approved Payments':
                     $payments = $payments->where([
                         ["approved_at", "<>", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                         ["released_at", "=", null],
                         ["received_at", "=", null],
                     ])
@@ -281,7 +281,7 @@ class PaymentController extends Controller
             });
         });
 
-        $message = "Payment Cancelled successfully";
+        $message = "Payment Deleted successfully";
         return $this->successResponse($data, $message, 200);
     }
 

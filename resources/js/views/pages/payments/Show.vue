@@ -348,9 +348,9 @@
                                 <v-btn
                                     color="green"
                                     dark
-                                    @click="cancelPayment"
+                                    @click="deletePayment"
                                 >
-                                    Cancel Payment
+                                    Delete Payment
                                 </v-btn>
                             </div>
                         </v-col>
@@ -395,8 +395,8 @@
 
                     <!-- <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green" dark @click="cancelPayment">
-                            Cancel Payment
+                        <v-btn color="green" dark @click="deletePayment">
+                            Delete Payment
                         </v-btn>
                     </v-card-actions> -->
                 </v-container>
@@ -483,7 +483,6 @@ export default {
                 reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
                 approved: { approved_at: null, approved_by: { name: "" } },
                 rejected: { rejected_at: null, rejected_by: { name: "" } },
-                cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
 
                 logs: []
             }
@@ -546,7 +545,6 @@ export default {
                     this.form.reviewed = data.reviewed;
                     this.form.approved = data.approved;
                     this.form.rejected = data.rejected;
-                    this.form.cancelled = data.cancelled;
 
                     this.form.logs = data.logs;
 
@@ -598,8 +596,8 @@ export default {
                     });
             });
         },
-        cancelPayment() {
-            this.$confirm(`Do you want to cancel this payment?`).then(res => {
+        deletePayment() {
+            this.$confirm(`Do you want to delete this payment?`).then(res => {
                 if (res) {
                     this.loader = true;
 

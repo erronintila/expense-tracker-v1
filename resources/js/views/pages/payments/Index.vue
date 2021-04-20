@@ -154,12 +154,12 @@
                     close
                     class="mr-2"
                     small
-                    @click:close="onUpdate('cancel', 'delete')"
+                    @click:close="onUpdate('delete', 'delete')"
                     close-icon="mdi-close"
                     color="red"
                     dark
                 >
-                    Cancel Payment(s)
+                    Delete Payment(s)
                 </v-chip>
             </v-row>
 
@@ -250,7 +250,7 @@
                                         </td>
                                     </tr>
                                     <tr v-if="item.deleted">
-                                        <td><strong>Cancelled</strong></td>
+                                        <td><strong>Deleted</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
@@ -364,7 +364,7 @@ export default {
                 // "Unreported Advance Payments",
                 "Released Payments",
                 "Completed Payments",
-                "Cancelled Payments"
+                "Deleted Payments"
             ],
             selected: [],
             search: "",
@@ -490,7 +490,7 @@ export default {
         //         return;
         //     }
 
-        //     this.$confirm("do you want to cancel payment?").then(res => {
+        //     this.$confirm("do you want to delete payment?").then(res => {
         //         if (res) {
         //             axios
         //                 .delete(`/api/payments/${this.selected[0].id}`, {
@@ -559,7 +559,7 @@ export default {
                         // case "update":
                         //     url = `/api/payments/${this.selected[0].id}`;
                         //     break;
-                        case "cancel":
+                        case "delete":
                             url = `/api/payments/${ids}`;
                             break;
                         default:
