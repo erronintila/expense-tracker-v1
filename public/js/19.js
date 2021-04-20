@@ -666,7 +666,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       totalUnapproved: 0,
       status: "All Expense Reports",
       statuses: ["All Expense Reports", "Unsubmitted Expense Reports", "Submitted Expense Reports", "Approved Expense Reports", "Rejected Expense Reports", "Released Payment", "Reimbursed Expense Reports", // "Overdue Expense Reports",
-      "Cancelled Expense Reports" // "Archived Expense Reports"
+      "Deleted Expense Reports" // "Archived Expense Reports"
       ],
       selected: [],
       search: "",
@@ -1225,8 +1225,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      if (item.status.status == "Cancelled") {
-        this.mixin_errorDialog("Error", "Report has been cancelled");
+      if (item.status.status == "Deleted") {
+        this.mixin_errorDialog("Error", "Report has been deleted");
         return;
       }
 
@@ -1247,22 +1247,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (this.selected.map(function (item) {
         return item.status.status;
-      }).includes("Cancelled")) {
-        this.mixin_errorDialog("Error", "Report has already been cancelled");
+      }).includes("Deleted")) {
+        this.mixin_errorDialog("Error", "Report has already been deleted");
         return;
       }
 
       if (!this.$store.getters.user.is_admin && this.selected.map(function (item) {
         return item.status.status;
       }).includes("Approved")) {
-        this.mixin_errorDialog("Error", "Approved expense reports can't be cancelled");
+        this.mixin_errorDialog("Error", "Approved expense reports can't be deleted");
         return;
       }
 
       if (this.selected.map(function (item) {
         return item.status.status;
       }).includes("Paid/Reimbursed")) {
-        this.mixin_errorDialog("Error", "Paid/reimbursed expense reports can't be cancelled");
+        this.mixin_errorDialog("Error", "Paid/reimbursed expense reports can't be deleted");
         return;
       }
 
@@ -1271,7 +1271,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.$confirm("Do you want to cancel expense report(s)?").then(function (res) {
+      this.$confirm("Do you want to delete expense report(s)?").then(function (res) {
         if (res) {
           var ids = _this7.selected.map(function (item) {
             return item.id;
@@ -1343,9 +1343,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //         action == "submit" &&
     //         this.selected
     //             .map(item => item.status.status)
-    //             .includes("Cancelled")
+    //             .includes("Deleted")
     //     ) {
-    //         this.$dialog.message.error("Report has been cancelled", {
+    //         this.$dialog.message.error("Report has been deleted", {
     //             position: "top-right",
     //             timeout: 2000
     //         });
@@ -1420,9 +1420,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //         action == "approve" &&
     //         this.selected
     //             .map(item => item.status.status)
-    //             .includes("Cancelled")
+    //             .includes("Deleted")
     //     ) {
-    //         this.$dialog.message.error("Report has been cancelled", {
+    //         this.$dialog.message.error("Report has been deleted", {
     //             position: "top-right",
     //             timeout: 2000
     //         });
@@ -1466,12 +1466,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     //         }
     //     }
     //     if (
-    //         action == "cancel" &&
+    //         action == "delete" &&
     //         this.selected
     //             .map(item => item.status.status)
-    //             .includes("Cancelled")
+    //             .includes("Deleted")
     //     ) {
-    //         this.$dialog.message.error("Report has been cancelled", {
+    //         this.$dialog.message.error("Report has been deleted", {
     //             position: "top-right",
     //             timeout: 2000
     //         });
@@ -1697,11 +1697,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (item) {
-        if (!item.approved_at) {
+        if (item.approved_at != null) {
           return false;
-        } else if (!item.cancelled_at) {
-          return false;
-        } else if (!item.deleted_at) {
+        } else if (item.deleted_at != null) {
           return false;
         }
       }
@@ -2464,7 +2462,7 @@ var render = function() {
                               },
                               on: { "click:close": _vm.onDelete }
                             },
-                            [_vm._v("\n                Cancel\n            ")]
+                            [_vm._v("\n                Delete\n            ")]
                           )
                         : _vm._e(),
                       _vm._v(" "),

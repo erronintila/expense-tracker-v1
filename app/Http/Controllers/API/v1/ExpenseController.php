@@ -61,22 +61,22 @@ class ExpenseController extends Controller
 
         $expenses = $expenses
             ->with(['user' => function ($query) use ($status) {
-                if ($status === "Cancelled Expenses") {
+                if ($status === "Deleted Expenses") {
                     $query->withTrashed();
                 }
             }])
             ->with(['vendor' => function ($query) use ($status) {
-                if ($status === "Cancelled Expenses") {
+                if ($status === "Deleted Expenses") {
                     $query->withTrashed();
                 }
             }])
             ->with(['expense_type' => function ($query) use ($status) {
-                if ($status === "Cancelled Expenses") {
+                if ($status === "Deleted Expenses") {
                     $query->withTrashed();
                 }
             }])
             ->with(['expense_report' => function ($query) use ($status) {
-                if ($status === "Cancelled Expenses") {
+                if ($status === "Deleted Expenses") {
                     $query->withTrashed();
                 }
             }]);
@@ -100,7 +100,7 @@ class ExpenseController extends Controller
         }
 
         switch ($status) {
-            case 'Cancelled Expenses':
+            case 'Deleted Expenses':
                 $expenses = $expenses->onlyTrashed();
                 break;
             case 'Released Payment':
@@ -109,14 +109,13 @@ class ExpenseController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null]
+                        ["deleted_at", "=", null]
                     ]);
                     $query->whereHas("payments", function ($query) {
                         $query->where([
                             ["approved_at", "<>", null],
                             ["released_at", "<>", null],
                             ["received_at", "=", null],
-                            ["cancelled_at", "=", null],
                             ["deleted_at", "=", null],
                         ]);
                     });
@@ -128,14 +127,13 @@ class ExpenseController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null]
+                        ["deleted_at", "=", null]
                     ]);
                     $query->whereHas("payments", function ($query) {
                         $query->where([
                             ["approved_at", "<>", null],
                             ["released_at", "<>", null],
                             ["received_at", "<>", null],
-                            ["cancelled_at", "=", null],
                             ["deleted_at", "=", null],
                         ]);
                     });
@@ -148,7 +146,7 @@ class ExpenseController extends Controller
                         ["submitted_at", "<>", null],
                         // ["approved_at", "<>", null],
                         ["rejected_at", "<>", null],
-                        // ["cancelled_at", "=", null],
+                        // ["deleted_at", "=", null],
                     ]);
                 });
                 break;
@@ -158,7 +156,7 @@ class ExpenseController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "<>", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ]);
                     $query->whereDoesntHave("payments");
                 });
@@ -169,7 +167,7 @@ class ExpenseController extends Controller
                         ["submitted_at", "<>", null],
                         ["approved_at", "=", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ]);
 
                     $query->whereDoesntHave("payments");
@@ -181,7 +179,7 @@ class ExpenseController extends Controller
                         ["submitted_at", "=", null],
                         ["approved_at", "=", null],
                         ["rejected_at", "=", null],
-                        ["cancelled_at", "=", null],
+                        ["deleted_at", "=", null],
                     ]);
 
                     $query->whereDoesntHave("payments");
@@ -270,29 +268,29 @@ class ExpenseController extends Controller
 
         // $expenses = Expense::whereBetween("date", [$start_date, $end_date])
         //     ->with(['user' => function ($query) use ($status) {
-        //         if ($status === "Cancelled Expenses") {
+        //         if ($status === "Deleted Expenses") {
         //             $query->withTrashed();
         //         }
         //     }])
         //     ->with(['expense_type' => function ($query) use ($status) {
-        //         if ($status === "Cancelled Expenses") {
+        //         if ($status === "Deleted Expenses") {
         //             $query->withTrashed();
         //         }
         //     }])
         //     ->with(['expense_report' => function ($query) use ($status) {
-        //         if ($status === "Cancelled Expenses") {
+        //         if ($status === "Deleted Expenses") {
         //             $query->withTrashed();
         //         }
         //     }])
         //     ->with(['vendor' => function ($query) use ($status) {
-        //         if ($status === "Cancelled Expenses") {
+        //         if ($status === "Deleted Expenses") {
         //             $query->withTrashed();
         //         }
         //     }])
         //     ->orderBy($sortBy, $sortType);
 
         // switch ($status) {
-        //         case 'Cancelled Expenses':
+        //         case 'Deleted Expenses':
         //             $expenses = $expenses->onlyTrashed();
         //             break;
         //         case 'Reimbursed Expenses':
@@ -301,14 +299,13 @@ class ExpenseController extends Controller
         //                     ["submitted_at", "<>", null],
         //                     ["approved_at", "<>", null],
         //                     ["rejected_at", "=", null],
-        //                     ["cancelled_at", "=", null]
+        //                     ["deleted_at", "=", null]
         //                 ]);
         //                 $query->whereHas("payments", function ($query) {
         //                     $query->where([
         //                         ["approved_at", "<>", null],
         //                         ["released_at", "<>", null],
         //                         ["received_at", "<>", null],
-        //                         ["cancelled_at", "=", null],
         //                         ["deleted_at", "=", null],
         //                     ]);
         //                 });
@@ -321,7 +318,7 @@ class ExpenseController extends Controller
         //                     ["submitted_at", "<>", null],
         //                     // ["approved_at", "<>", null],
         //                     ["rejected_at", "<>", null],
-        //                     // ["cancelled_at", "=", null],
+        //                     // ["deleted_at", "=", null],
         //                 ]);
         //             });
         //             break;
@@ -331,7 +328,7 @@ class ExpenseController extends Controller
         //                     ["submitted_at", "<>", null],
         //                     ["approved_at", "<>", null],
         //                     ["rejected_at", "=", null],
-        //                     ["cancelled_at", "=", null],
+        //                     ["deleted_at", "=", null],
         //                 ]);
         //                 $query->whereDoesntHave("payments");
         //             });
@@ -342,7 +339,7 @@ class ExpenseController extends Controller
         //                     ["submitted_at", "<>", null],
         //                     ["approved_at", "=", null],
         //                     ["rejected_at", "=", null],
-        //                     ["cancelled_at", "=", null],
+        //                     ["deleted_at", "=", null],
         //                 ]);
 
         //                 $query->whereDoesntHave("payments");
@@ -354,7 +351,7 @@ class ExpenseController extends Controller
         //                     ["submitted_at", "=", null],
         //                     ["approved_at", "=", null],
         //                     ["rejected_at", "=", null],
-        //                     ["cancelled_at", "=", null],
+        //                     ["deleted_at", "=", null],
         //                 ]);
 
         //                 $query->whereDoesntHave("payments");
@@ -546,7 +543,6 @@ class ExpenseController extends Controller
                 $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
                         ->where(function ($query) {
                             $query->whereHas('payments');
-                            $query->orWhere("cancelled_at", "<>", null);
                             $query->orWhere("rejected_at", "<>", null);
                             $query->orWhere("deleted_at", "<>", null);
                         })
@@ -555,7 +551,6 @@ class ExpenseController extends Controller
                 $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
                         ->where(function ($query) {
                             $query->where("approved_at", "<>", null);
-                            $query->orWhere("cancelled_at", "<>", null);
                             $query->orWhere("rejected_at", "<>", null);
                             $query->orWhere("deleted_at", "<>", null);
                         })

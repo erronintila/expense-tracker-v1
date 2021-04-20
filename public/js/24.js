@@ -582,7 +582,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       expense_types: [],
       status: "All Expenses",
-      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Cancelled Expenses", "Released Payment", "Reimbursed Expenses" // "Archived Expenses"
+      statuses: ["All Expenses", "Unreported Expenses", "Unsubmitted Expenses", "Submitted Expenses", "Approved Expenses", "Rejected Expenses", "Deleted Expenses", "Released Payment", "Reimbursed Expenses" // "Archived Expenses"
       ],
       selected: [],
       search: "",
@@ -725,7 +725,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
 
-      if (this.status == "Cancelled") {
+      if (this.status == "Deleted") {
         this.mixin_errorDialog("Error", "Expense has been deleted.");
         return;
       }
@@ -752,18 +752,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       } // this.mixin_check_if_error(
       //     arr.includes(false),
-      //     "Expense(s) can't be cancelled"
+      //     "Expense(s) can't be deleted"
       // );
       // if (arr.includes(false)) {
       //     this.mixin_errorDialog(
       //         "Error",
-      //         "Expense(s) can't be cancelled"
+      //         "Expense(s) can't be deleted"
       //     );
       //     return;
       // }
 
 
-      this.$confirm("Do you want to cancel expense(s)?").then(function (res) {
+      this.$confirm("Do you want to delete expense(s)?").then(function (res) {
         if (res) {
           var ids = _this4.selected.map(function (item) {
             return item.id;
@@ -838,8 +838,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if (!item.expense_report.approved_at) {
             return false;
           } else if (!item.expense_report.rejected_at) {
-            return false;
-          } else if (!item.expense_report.cancelled_at) {
             return false;
           } else if (!item.expense_report.deleted_at) {
             return false;
@@ -1371,9 +1369,9 @@ var render = function() {
                           rawName: "v-show",
                           value:
                             _vm.selected.length > 0 &&
-                            _vm.status == "Cancelled Expenses",
+                            _vm.status == "Deleted Expenses",
                           expression:
-                            "\n                    selected.length > 0 && status == 'Cancelled Expenses'\n                "
+                            "\n                    selected.length > 0 && status == 'Deleted Expenses'\n                "
                         }
                       ],
                       staticClass: "mr-2 mb-2",
@@ -1398,9 +1396,9 @@ var render = function() {
                           rawName: "v-show",
                           value:
                             _vm.selected.length > 0 &&
-                            _vm.status !== "Cancelled Expenses",
+                            _vm.status !== "Deleted Expenses",
                           expression:
-                            "\n                    selected.length > 0 && status !== 'Cancelled Expenses'\n                "
+                            "\n                    selected.length > 0 && status !== 'Deleted Expenses'\n                "
                         }
                       ],
                       staticClass: "mr-2 mb-2",
@@ -1415,7 +1413,7 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                Cancel Expense(s)\n            "
+                        "\n                Delete Expense(s)\n            "
                       )
                     ]
                   )

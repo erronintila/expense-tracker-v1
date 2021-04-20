@@ -495,7 +495,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
         // approved: { approved_at: null, approved_by: { name: "" } },
         // rejected: { rejected_at: null, rejected_by: { name: "" } },
-        // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
         created_at: null,
         updated_at: null,
         deleted_at: null,
@@ -503,7 +502,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         reviewed_at: null,
         approved_at: null,
         rejected_at: null,
-        cancelled_at: null,
         logs: []
       }
     };
@@ -1082,7 +1080,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           // this.form.submitted = data.submitted;
           // this.form.approved = data.approved;
           // this.form.rejected = data.rejected;
-          // this.form.cancelled = data.cancelled;
 
           _this4.form.created_at = data.created_at;
           _this4.form.updated_at = data.updated_at;
@@ -1090,7 +1087,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.form.submitted_at = data.submitted_at;
           _this4.form.approved_at = data.approved_at;
           _this4.form.rejected_at = data.rejected_at;
-          _this4.form.cancelled_at = data.cancelled_at;
           _this4.form.logs = data.logs; // this.loadExpenses();
 
           resolve();
@@ -1171,7 +1167,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, "query", this.expense_report_id));
     },
     canEdit: function canEdit() {
-      if (this.form.approved_at !== null || this.form.cancelled_at !== null || this.form.deleted_at !== null || this.form.rejected_at !== null) {
+      if (this.form.approved_at !== null || this.form.deleted_at !== null || this.form.rejected_at !== null) {
         return false;
       }
 

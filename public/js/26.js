@@ -554,12 +554,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             name: ""
           }
         },
-        cancelled: {
-          cancelled_at: null,
-          cancelled_by: {
-            name: ""
-          }
-        },
         logs: []
       }
     };
@@ -617,7 +611,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.form.reviewed = data.reviewed;
         _this.form.approved = data.approved;
         _this.form.rejected = data.rejected;
-        _this.form.cancelled = data.cancelled;
         _this.form.logs = data.logs;
 
         _this.getDataFromApi().then(function (data) {
@@ -675,10 +668,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
-    cancelPayment: function cancelPayment() {
+    deletePayment: function deletePayment() {
       var _this3 = this;
 
-      this.$confirm("Do you want to cancel this payment?").then(function (res) {
+      this.$confirm("Do you want to delete this payment?").then(function (res) {
         if (res) {
           _this3.loader = true;
           _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_2__["default"]["delete"](_this3.$route.params.id, {
@@ -1418,11 +1411,11 @@ var render = function() {
                                   "v-btn",
                                   {
                                     attrs: { color: "green", dark: "" },
-                                    on: { click: _vm.cancelPayment }
+                                    on: { click: _vm.deletePayment }
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                Cancel Payment\n                            "
+                                      "\n                                Delete Payment\n                            "
                                     )
                                   ]
                                 )

@@ -279,7 +279,7 @@
                                         </td>
                                     </tr>
                                     <tr v-if="form.deleted_at">
-                                        <td>Cancelled</td>
+                                        <td>Deleted</td>
                                         <td>:</td>
                                         <!-- <td>
                                             {{ form.deleted_by }}
@@ -415,7 +415,6 @@ export default {
                 // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
                 // approved: { approved_at: null, approved_by: { name: "" } },
                 // rejected: { rejected_at: null, rejected_by: { name: "" } },
-                // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
 
                 created_at: null,
                 updated_at: null,
@@ -424,7 +423,6 @@ export default {
                 reviewed_at: null,
                 approved_at: null,
                 rejected_at: null,
-                cancelled_at: null,
 
                 expense_report: null,
 
@@ -537,9 +535,6 @@ export default {
                     this.form.rejected_at = data.expense_report
                         ? data.expense_report.rejected_at
                         : null;
-                    this.form.cancelled_at = data.expense_report
-                        ? data.expense_report.cancelled_at
-                        : null;
                     this.form.logs = data.logs;
                     this.formDataLoaded = true;
                 })
@@ -558,8 +553,7 @@ export default {
             if (
                 this.form.deleted_at !== null ||
                 this.form.approved_at !== null ||
-                this.form.rejected_at !== null ||
-                this.form.cancelled_at !== null
+                this.form.rejected_at !== null
             ) {
                 return false;
             }
@@ -567,7 +561,6 @@ export default {
             if (this.form.expense_report !== null) {
                 if (
                     this.form.expense_report.approved_at !== null ||
-                    this.form.expense_report.cancelled_at !== null ||
                     this.form.expense_report.deleted_at !== null ||
                     this.form.expense_report.rejected_at !== null
                 ) {

@@ -451,7 +451,6 @@ export default {
                 // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
                 // approved: { approved_at: null, approved_by: { name: "" } },
                 // rejected: { rejected_at: null, rejected_by: { name: "" } },
-                // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
 
                 created_at: null,
                 updated_at: null,
@@ -460,7 +459,6 @@ export default {
                 reviewed_at: null,
                 approved_at: null,
                 rejected_at: null,
-                cancelled_at: null,
 
                 logs: []
             }
@@ -1228,7 +1226,6 @@ export default {
                         // this.form.submitted = data.submitted;
                         // this.form.approved = data.approved;
                         // this.form.rejected = data.rejected;
-                        // this.form.cancelled = data.cancelled;
 
                         this.form.created_at = data.created_at;
                         this.form.updated_at = data.updated_at;
@@ -1236,7 +1233,6 @@ export default {
                         this.form.submitted_at = data.submitted_at;
                         this.form.approved_at = data.approved_at;
                         this.form.rejected_at = data.rejected_at;
-                        this.form.cancelled_at = data.cancelled_at;
 
                         this.form.logs = data.logs;
 
@@ -1312,7 +1308,6 @@ export default {
         canEdit() {
             if (
                 this.form.approved_at !== null ||
-                this.form.cancelled_at !== null ||
                 this.form.deleted_at !== null ||
                 this.form.rejected_at !== null
             ) {

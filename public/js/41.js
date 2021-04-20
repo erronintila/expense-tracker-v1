@@ -450,7 +450,6 @@ __webpack_require__.r(__webpack_exports__);
         // reviewed: { reviewed_at: null, reviewed_by: { name: "" } },
         // approved: { approved_at: null, approved_by: { name: "" } },
         // rejected: { rejected_at: null, rejected_by: { name: "" } },
-        // cancelled: { cancelled_at: null, cancelled_by: { name: "" } },
         created_at: null,
         updated_at: null,
         deleted_at: null,
@@ -458,7 +457,6 @@ __webpack_require__.r(__webpack_exports__);
         reviewed_at: null,
         approved_at: null,
         rejected_at: null,
-        cancelled_at: null,
         expense_report: null,
         logs: []
       }
@@ -556,7 +554,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.form.submitted_at = data.expense_report ? data.expense_report.submitted_at : null;
         _this.form.approved_at = data.expense_report ? data.expense_report.approved_at : null;
         _this.form.rejected_at = data.expense_report ? data.expense_report.rejected_at : null;
-        _this.form.cancelled_at = data.expense_report ? data.expense_report.cancelled_at : null;
         _this.form.logs = data.logs;
         _this.formDataLoaded = true;
       })["catch"](function (error) {
@@ -572,12 +569,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     canEdit: function canEdit() {
-      if (this.form.deleted_at !== null || this.form.approved_at !== null || this.form.rejected_at !== null || this.form.cancelled_at !== null) {
+      if (this.form.deleted_at !== null || this.form.approved_at !== null || this.form.rejected_at !== null) {
         return false;
       }
 
       if (this.form.expense_report !== null) {
-        if (this.form.expense_report.approved_at !== null || this.form.expense_report.cancelled_at !== null || this.form.expense_report.deleted_at !== null || this.form.expense_report.rejected_at !== null) {
+        if (this.form.expense_report.approved_at !== null || this.form.expense_report.deleted_at !== null || this.form.expense_report.rejected_at !== null) {
           return false;
         }
       }
@@ -1253,7 +1250,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _vm.form.deleted_at
                                     ? _c("tr", [
-                                        _c("td", [_vm._v("Cancelled")]),
+                                        _c("td", [_vm._v("Deleted")]),
                                         _vm._v(" "),
                                         _c("td", [_vm._v(":")]),
                                         _vm._v(" "),

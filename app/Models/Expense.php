@@ -83,7 +83,6 @@ class Expense extends Model
         'status',
         // 'is_late_encoded',
         // 'reimbursed_info',
-        // 'cancelled_info',
         // 'rejected_info',
         // 'approved_info',
         // 'reviewed_info',
@@ -245,7 +244,6 @@ class Expense extends Model
         // $submitted = is_null($this->submitted_at);
         // $reviewed = is_null($this->reviewed_at);
         // $approved = is_null($this->approved_at);
-        // $cancelled = is_null($this->cancelled_at);
         // $rejected = is_null($this->rejected_at);
         // $deleted = is_null($this->deleted_at);
         // $paid = is_null($this->paid_at);
@@ -254,7 +252,6 @@ class Expense extends Model
         $submitted = is_null($this->expense_report->submitted_at ?? null);
         $reviewed = is_null($this->expense_report->reviewed_at ?? null);
         $approved = is_null($this->expense_report->approved_at ?? null);
-        $cancelled = is_null($this->expense_report->cancelled_at ?? null);
         $rejected = is_null($this->expense_report->rejected_at ?? null);
         $deleted = is_null($this->deleted_at);
         // $paid = false;
@@ -264,8 +261,8 @@ class Expense extends Model
         if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Expense was cancelled',
-                'status' => 'Cancelled',
+                'remarks' => 'Expense was deleted',
+                'status' => 'Deleted',
             ];
 
             // $arr = [
@@ -311,11 +308,11 @@ class Expense extends Model
             return $arr;
         }
 
-        if (!$cancelled) {
+        if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Expense was cancelled',
-                'status' => 'Cancelled',
+                'remarks' => 'Expense was deleted',
+                'status' => 'Deleted',
             ];
 
             return $arr;
@@ -582,26 +579,6 @@ class Expense extends Model
         //         "rejected_at" => $expense_report->rejected_at,
         //         "rejected_by" => User::withTrashed()->findOrFail($expense_report->rejected_by)
         //         // "rejected_by" => User::findOrFail($expense_report->rejected_by)
-        //     ];
-        // }
-
-        return null;
-    }
-
-    /**
-     * getCancelledInfoAttribute
-     *
-     * @return mixed
-     */
-    public function getCancelledInfoAttribute()
-    {
-        // $expense_report = $this->expense_report;
-
-        // if ($expense_report && $expense_report->cancelled_at) {
-        //     return [
-        //         "cancelled_at" => $expense_report->cancelled_at,
-        //         "cancelled_by" => User::withTrashed()->findOrFail($expense_report->cancelled_by)
-        //         // "cancelled_by" => User::findOrFail($expense_report->cancelled_by)
         //     ];
         // }
 

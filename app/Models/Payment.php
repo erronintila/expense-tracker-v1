@@ -65,7 +65,6 @@ class Payment extends Model
         // 'updated_info',
         // 'deleted_info',
         // 'approved_info',
-        // 'cancelled_info',
         // 'released_info',
         // 'received_info',
         // 'total_amount'
@@ -208,15 +207,15 @@ class Payment extends Model
         ];
 
         $approved = is_null($this->approved_at);
-        $cancelled = is_null($this->deleted_at);
+        $deleted = is_null($this->deleted_at);
         $released = is_null($this->released_at);
         $received = is_null($this->received_at);
 
-        if (!$cancelled) {
+        if (!$deleted) {
             $arr = [
                 'color' => 'red',
-                'remarks' => 'Payment was cancelled',
-                'status' => 'Cancelled',
+                'remarks' => 'Payment was deleted',
+                'status' => 'Deleted',
             ];
 
             return $arr;
@@ -327,24 +326,6 @@ class Payment extends Model
         //         "approved_at" => $this->approved_at,
         //         "approved_by" => User::withTrashed()->find($this->approved_by)
         //         // "approved_by" => User::find($this->approved_by)
-        //     ];
-        // }
-
-        return null;
-    }
-    
-    /**
-     * getCancelledInfoAttribute
-     *
-     * @return mixed
-     */
-    public function getCancelledInfoAttribute()
-    {
-        // if ($this->cancelled_at) {
-        //     return [
-        //         "cancelled_at" => $this->cancelled_at,
-        //         "cancelled_by" => User::withTrashed()->find($this->cancelled_by)
-        //         // "cancelled_by" => User::find($this->cancelled_by)
         //     ];
         // }
 

@@ -209,7 +209,7 @@
                     color="red"
                     dark
                 >
-                    Cancel
+                    Delete
                 </v-chip>
                 <v-chip
                     v-if="isValidDuplicate"
@@ -636,7 +636,7 @@ export default {
                 "Released Payment",
                 "Reimbursed Expense Reports",
                 // "Overdue Expense Reports",
-                "Cancelled Expense Reports"
+                "Deleted Expense Reports"
                 // "Archived Expense Reports"
             ],
             selected: [],
@@ -1276,8 +1276,8 @@ export default {
                 return;
             }
 
-            if (item.status.status == "Cancelled") {
-                this.mixin_errorDialog("Error", "Report has been cancelled");
+            if (item.status.status == "Deleted") {
+                this.mixin_errorDialog("Error", "Report has been deleted");
                 return;
             }
 
@@ -1298,11 +1298,11 @@ export default {
             if (
                 this.selected
                     .map(item => item.status.status)
-                    .includes("Cancelled")
+                    .includes("Deleted")
             ) {
                 this.mixin_errorDialog(
                     "Error",
-                    "Report has already been cancelled"
+                    "Report has already been deleted"
                 );
                 return;
             }
@@ -1315,7 +1315,7 @@ export default {
             ) {
                 this.mixin_errorDialog(
                     "Error",
-                    "Approved expense reports can't be cancelled"
+                    "Approved expense reports can't be deleted"
                 );
                 return;
             }
@@ -1327,7 +1327,7 @@ export default {
             ) {
                 this.mixin_errorDialog(
                     "Error",
-                    "Paid/reimbursed expense reports can't be cancelled"
+                    "Paid/reimbursed expense reports can't be deleted"
                 );
                 return;
             }
@@ -1337,7 +1337,7 @@ export default {
                 return;
             }
 
-            this.$confirm("Do you want to cancel expense report(s)?").then(
+            this.$confirm("Do you want to delete expense report(s)?").then(
                 res => {
                     if (res) {
                         let ids = this.selected.map(item => {
@@ -1416,9 +1416,9 @@ export default {
         //         action == "submit" &&
         //         this.selected
         //             .map(item => item.status.status)
-        //             .includes("Cancelled")
+        //             .includes("Deleted")
         //     ) {
-        //         this.$dialog.message.error("Report has been cancelled", {
+        //         this.$dialog.message.error("Report has been deleted", {
         //             position: "top-right",
         //             timeout: 2000
         //         });
@@ -1500,9 +1500,9 @@ export default {
         //         action == "approve" &&
         //         this.selected
         //             .map(item => item.status.status)
-        //             .includes("Cancelled")
+        //             .includes("Deleted")
         //     ) {
-        //         this.$dialog.message.error("Report has been cancelled", {
+        //         this.$dialog.message.error("Report has been deleted", {
         //             position: "top-right",
         //             timeout: 2000
         //         });
@@ -1550,12 +1550,12 @@ export default {
         //     }
 
         //     if (
-        //         action == "cancel" &&
+        //         action == "delete" &&
         //         this.selected
         //             .map(item => item.status.status)
-        //             .includes("Cancelled")
+        //             .includes("Deleted")
         //     ) {
-        //         this.$dialog.message.error("Report has been cancelled", {
+        //         this.$dialog.message.error("Report has been deleted", {
         //             position: "top-right",
         //             timeout: 2000
         //         });
@@ -1798,11 +1798,9 @@ export default {
             }
 
             if (item) {
-                if (!item.approved_at) {
+                if (item.approved_at != null) {
                     return false;
-                } else if (!item.cancelled_at) {
-                    return false;
-                } else if (!item.deleted_at) {
+                } else if (item.deleted_at != null) {
                     return false;
                 }
             }
