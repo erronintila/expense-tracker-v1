@@ -474,6 +474,7 @@ class DashboardController extends Controller
             ->where("expense_reports.rejected_at", "=", null)
             ->where("expense_reports.cancelled_at", "=", null)
             ->where("expense_reports.deleted_at", "=", null)
+            ->where("payments.cancelled_at", "=", null)
             ->select(DB::raw("
                 distinct 
                 `expenses`.`id` AS expense_id,
@@ -519,7 +520,9 @@ class DashboardController extends Controller
                         ON `expense_report_payment`.`expense_report_id` = `er`.`id` 
                         JOIN `payments` 
                         ON `payments`.`id` = `expense_report_payment`.`payment_id` 
-                    WHERE `er`.`id` = `expense_reports`.`id` AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
+                    WHERE `er`.`id` = `expense_reports`.`id` 
+                    AND `payments`.`cancelled_at` IS NULL 
+                    AND`expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
                     0
                     ) AS paid,
 
@@ -538,7 +541,9 @@ class DashboardController extends Controller
                         JOIN `payments` 
                         ON `payments`.`id` = `expense_report_payment`.`payment_id` 
                     WHERE `er`.`id` = `expense_reports`.`id` 
-                    AND `payments`.`received_at` IS NULL AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
+                    AND `payments`.`received_at` IS NULL 
+                    AND `payments`.`cancelled_at` IS NULL
+                    AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
                     0
                     ) AS unreceived,
 
@@ -563,7 +568,9 @@ class DashboardController extends Controller
                     JOIN `payments` 
                         ON `payments`.`id` = `expense_report_payment`.`payment_id` 
                     WHERE `er`.`id` = `expense_reports`.`id` 
-                    AND `payments`.`received_at` IS NOT NULL AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
+                    AND `payments`.`received_at` IS NOT NULL 
+                    AND `payments`.`cancelled_at` IS NULL
+                    AND `expenses`.`date` BETWEEN '2020-01-01' AND '2020-12-31'),
                     0
                 ) AS balance 
             "));

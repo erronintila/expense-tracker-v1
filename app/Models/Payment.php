@@ -207,6 +207,7 @@ class Payment extends Model
         ];
 
         $approved = is_null($this->approved_at);
+        $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
         $released = is_null($this->released_at);
         $received = is_null($this->received_at);
@@ -216,6 +217,16 @@ class Payment extends Model
                 'color' => 'red',
                 'remarks' => 'Payment was deleted',
                 'status' => 'Deleted',
+            ];
+
+            return $arr;
+        }
+
+        if (!$cancelled) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Payment was cancelled',
+                'status' => 'Cancelled',
             ];
 
             return $arr;

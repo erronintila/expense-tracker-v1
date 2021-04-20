@@ -169,7 +169,7 @@ class ExpenseReport extends Model
      */
     public function payments()
     {
-        return $this->belongsToMany(Payment::class)->withPivot('payment')->withTimestamps();
+        return $this->belongsToMany(Payment::class)->where("cancelled_at", null)->withPivot('payment')->withTimestamps();
     }
 
     /**

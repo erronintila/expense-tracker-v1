@@ -97,7 +97,10 @@
                 </v-menu>
 
                 <UserDialogSelector
-                    v-if="$store.getters.user.is_admin && mixin_can('view all users payments')"
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            mixin_can('view all users payments')
+                    "
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -145,9 +148,23 @@
                 </v-chip>
 
                 <v-chip
+                    v-show="selected.length > 0"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onUpdate('cancel', 'put')"
+                    close-icon="mdi-close"
+                    color="red"
+                    dark
+                >
+                    Cancel Payment(s)
+                </v-chip>
+
+                <v-chip
                     v-show="
-                        $store.getters.user.is_admin && mixin_can('delete payments') &&
-                        selected.length > 0 &&
+                        $store.getters.user.is_admin &&
+                            mixin_can('delete payments') &&
+                            selected.length > 0 &&
                             selected.filter(item => item.deleted_at == null)
                                 .length > 0
                     "
@@ -364,6 +381,7 @@ export default {
                 // "Unreported Advance Payments",
                 "Released Payments",
                 "Completed Payments",
+                "Cancelled Payments",
                 "Deleted Payments"
             ],
             selected: [],
@@ -516,7 +534,11 @@ export default {
         onUpdate(action, method) {
             if (action == "receive" && !this.mixin_can("receive payments")) {
                 this.mixin_errorDialog(`Error`, "Not allowed");
+                return;
+            }
 
+            if (action == "cancel" && !this.mixin_can("cancel payments")) {
+                this.mixin_errorDialog(`Error`, "Not allowed");
                 return;
             }
 
@@ -555,6 +577,9 @@ export default {
                             break;
                         case "complete":
                             url = `/api/payments/complete_payment/${ids}`;
+                            break;
+                        case "cancel":
+                            url = `/api/payments/cancel_payment/${ids}`;
                             break;
                         // case "update":
                         //     url = `/api/payments/${this.selected[0].id}`;
@@ -658,14 +683,14 @@ export default {
     //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
     // },
     activated() {
-        if(this.$route.params.status) {
+        if (this.$route.params.status) {
             this.status = this.$route.params.status;
         }
 
-        if(this.$route.params.date_range) {
-            this.date_range = this.$route.params.date_range
+        if (this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range;
         }
-        
+
         this.$store.dispatch("AUTH_USER").then(response => {
             this.getDataFromApi().then(data => {
                 this.items = data.items;

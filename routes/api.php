@@ -103,6 +103,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/payments/release_payment/{id}', 'API\v1\PaymentController@release_payment');
     Route::put('/payments/receive_payment/{id}', 'API\v1\PaymentController@receive_payment');
     Route::put('/payments/complete_payment/{id}', 'API\v1\PaymentController@complete_payment');
+    Route::put('/payments/cancel_payment/{id}', 'API\v1\PaymentController@cancel_payment');
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------

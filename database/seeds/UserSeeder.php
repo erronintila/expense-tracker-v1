@@ -110,6 +110,7 @@ class UserSeeder extends Seeder
 
             if ($model == "payments") {
                 Permission::create(['name' => 'receive payments', 'category' => $model]);
+                Permission::create(['name' => 'cancel payments', 'category' => $model]);
                 Permission::create(['name' => 'view all users payments', 'category' => $model]);
                 // Permission::create(['name' => 'add advance' . $model, 'category' => $model]);
                 // Permission::create(['name' => 'approve payments', 'category' => $model]);

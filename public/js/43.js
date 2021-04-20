@@ -350,6 +350,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -397,7 +414,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       statuses: ["All Payments", // "All Advance Payments",
       // "Reported Advance Payments",
       // "Unreported Advance Payments",
-      "Released Payments", "Completed Payments", "Deleted Payments"],
+      "Released Payments", "Completed Payments", "Cancelled Payments", "Deleted Payments"],
       selected: [],
       search: "",
       totalItems: 0,
@@ -549,6 +566,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
+      if (action == "cancel" && !this.mixin_can("cancel payments")) {
+        this.mixin_errorDialog("Error", "Not allowed");
+        return;
+      }
+
       if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;
@@ -579,6 +601,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             case "complete":
               url = "/api/payments/complete_payment/".concat(ids);
+              break;
+
+            case "cancel":
+              url = "/api/payments/cancel_payment/".concat(ids);
               break;
             // case "update":
             //     url = `/api/payments/${this.selected[0].id}`;
@@ -1068,6 +1094,38 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
+                          value: _vm.selected.length > 0,
+                          expression: "selected.length > 0"
+                        }
+                      ],
+                      staticClass: "mr-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-close",
+                        color: "red",
+                        dark: ""
+                      },
+                      on: {
+                        "click:close": function($event) {
+                          return _vm.onUpdate("cancel", "put")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                Cancel Payment(s)\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
                           value:
                             _vm.$store.getters.user.is_admin &&
                             _vm.mixin_can("delete payments") &&
@@ -1076,7 +1134,7 @@ var render = function() {
                               return item.deleted_at == null
                             }).length > 0,
                           expression:
-                            "\n                    $store.getters.user.is_admin && mixin_can('delete payments') &&\n                    selected.length > 0 &&\n                        selected.filter(item => item.deleted_at == null)\n                            .length > 0\n                "
+                            "\n                    $store.getters.user.is_admin &&\n                        mixin_can('delete payments') &&\n                        selected.length > 0 &&\n                        selected.filter(item => item.deleted_at == null)\n                            .length > 0\n                "
                         }
                       ],
                       staticClass: "mr-2",

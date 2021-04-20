@@ -26,6 +26,7 @@ class PaymentController extends Controller
         $this->middleware(['permission:add payments'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete payments'], ['only' => ['destroy']]);
+        // $this->middleware(['permission:cancel payments'], ['only' => ['cancel_payment']]);
     }
 
     /**
@@ -64,6 +65,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -74,6 +76,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -84,6 +87,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "=", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -94,6 +98,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "=", null],
                         ["received_at", "=", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -351,6 +356,23 @@ class PaymentController extends Controller
                 $item->approved_at = now();
                 $item->released_at = now();
                 $item->received_at = now();
+                $item->save();
+            });
+
+            return $payment;
+        });
+        
+        $message = "Payment(s) completed successfully";
+        return $this->successResponse($data, $message, 200);
+    }
+
+    public function cancel_payment(Request $request, $id)
+    {
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $payment = Payment::findOrFail($ids);
+            $payment->each(function ($item) {
+                $item->cancelled_at = now();
                 $item->save();
             });
 
