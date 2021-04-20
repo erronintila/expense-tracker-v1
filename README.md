@@ -29,7 +29,7 @@ The Employee Expense Tracking System provides an accurate data visualization for
 <!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple example steps.
+To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 * XAMPP <br />
