@@ -39,7 +39,6 @@ class expenseindex extends JsonResource
         //         "reviewed_at" => $this->expense_report->reviewed_at,
         //         "approved_at" => $this->expense_report->approved_at,
         //         "rejected_at" => $this->expense_report->rejected_at,
-        //         "cancelled_at" => $this->expense_report->cancelled_at,
         //     ];
         // }
 

@@ -162,7 +162,7 @@
                 </v-chip>
                 <v-chip
                     v-show="
-                        selected.length > 0 && status == 'Cancelled Expenses'
+                        selected.length > 0 && status == 'Deleted Expenses'
                     "
                     close
                     class="mr-2 mb-2"
@@ -177,7 +177,7 @@
 
                 <v-chip
                     v-show="
-                        selected.length > 0 && status !== 'Cancelled Expenses'
+                        selected.length > 0 && status !== 'Deleted Expenses'
                     "
                     close
                     class="mr-2 mb-2"
@@ -187,7 +187,7 @@
                     color="red"
                     dark
                 >
-                    Cancel Expense(s)
+                    Delete Expense(s)
                 </v-chip>
             </v-row>
 
@@ -356,7 +356,7 @@
                                         </td>
                                     </tr>
                                     <tr v-if="item.deleted">
-                                        <td><strong>Cancelled</strong></td>
+                                        <td><strong>Deleted</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{
@@ -368,7 +368,7 @@
                                         </td>
                                     </tr>
                                     <tr v-if="item.deleted">
-                                        <td><strong>Cancelled By</strong></td>
+                                        <td><strong>Deleted By</strong></td>
                                         <td>:</td>
                                         <td>
                                             {{ item.deleted.deleted_by == null ? "" : item.deleted.deleted_by.name }}
@@ -578,7 +578,7 @@ export default {
                 "Submitted Expenses",
                 "Approved Expenses",
                 "Rejected Expenses",
-                "Cancelled Expenses",
+                "Deleted Expenses",
                 "Released Payment",
                 "Reimbursed Expenses"
                 // "Archived Expenses"
@@ -713,7 +713,7 @@ export default {
                 }
             }
 
-            if (this.status == "Cancelled") {
+            if (this.status == "Deleted") {
                 this.mixin_errorDialog("Error", "Expense has been deleted.");
                 return;
             }
@@ -738,18 +738,18 @@ export default {
 
             // this.mixin_check_if_error(
             //     arr.includes(false),
-            //     "Expense(s) can't be cancelled"
+            //     "Expense(s) can't be deleted"
             // );
 
             // if (arr.includes(false)) {
             //     this.mixin_errorDialog(
             //         "Error",
-            //         "Expense(s) can't be cancelled"
+            //         "Expense(s) can't be deleted"
             //     );
             //     return;
             // }
 
-            this.$confirm("Do you want to cancel expense(s)?").then(res => {
+            this.$confirm("Do you want to delete expense(s)?").then(res => {
                 if (res) {
                     let ids = this.selected.map(item => {
                         return item.id;
@@ -831,8 +831,6 @@ export default {
                     if (!item.expense_report.approved_at) {
                         return false;
                     } else if (!item.expense_report.rejected_at) {
-                        return false;
-                    } else if (!item.expense_report.cancelled_at) {
                         return false;
                     } else if (!item.expense_report.deleted_at) {
                         return false;
