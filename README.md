@@ -33,11 +33,13 @@ This is an example of how you may give instructions on setting up your project l
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+* XAMPP <br />
+  Go to <a href="https://www.apachefriends.org/download.html">this link</a> download and install the file.<br/>
 
-This is an example of how to list things you need to use the software and how to install them.
 * Node.js <br/>
   Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download the file. <br/>
-  Open the downloaded file and install.
+  Open the downloaded file and install.<br/>
+  
 * Composer <br/>
   Go to <a href="https://getcomposer.org/download/">this link</a> and follow installation process or install through command line:
   ```
@@ -62,18 +64,20 @@ This is an example of how to list things you need to use the software and how to
    ```
    composer install
    ```
-4. Set the .env configuration
+4. Create the .env file. Then open the file to edit application and database configuration.
    ```
    cp .env.example .env
    ```
-5. Laravel...
+5. Generate the key for the application
    ```
    php artisan key:generate
    ```
-6. seed the data
+6. Set default data
    ```
    php artisan migrate:fresh --seed
    ```
+
+Note: Default account (username: 'superadmin', password: 'password')
 
 <!-- CONTACT -->
 ## Contact
