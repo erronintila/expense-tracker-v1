@@ -34,7 +34,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 * XAMPP <br />
-  Go to <a href="https://www.apachefriends.org/download.html">this link</a> download and install the file.<br/>
+  Go to <a href="https://www.apachefriends.org/download.html">this link</a> to download and install the file.<br/>
 
 * Node.js <br/>
   Go to <a href="https://nodejs.org/en/">https://nodejs.org/en/</a> and download the file. <br/>
