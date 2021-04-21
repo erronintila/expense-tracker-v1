@@ -265,7 +265,7 @@ class PaymentController extends Controller
                             $expense->user->remaining_fund -= $expense_amount;
                             $expense->user->save();
                         });
-
+                        activity()->enableLogging();
                         log_activity(
                             "expense_report",
                             $expense_report,
@@ -273,10 +273,8 @@ class PaymentController extends Controller
                                 "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                                 "custom" => ["link" => "expense_reports/{$expense_report->id}"]
                             ],
-                            "removed expense report association with payment #{$item->code}"
+                            "deleted associated payment #{$item->code}"
                         );
-                        
-                        activity()->enableLogging();
                     });
                 }
             
@@ -304,6 +302,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->approved_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "approved associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
@@ -321,6 +331,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->released_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "released associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
@@ -338,6 +360,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->received_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "received associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
@@ -374,6 +408,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->cancelled_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "cancelled associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;

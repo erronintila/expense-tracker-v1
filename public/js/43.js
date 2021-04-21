@@ -641,7 +641,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (this.selected.some(function (item) {
-        return item.received_at != null || item.cancelled_at != null || !item.deleted_at;
+        return item.received_at != null || item.cancelled_at != null;
       })) {
         return false;
       }

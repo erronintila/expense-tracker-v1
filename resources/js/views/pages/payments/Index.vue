@@ -615,7 +615,7 @@ export default {
                 return false;
             }
 
-            if(this.selected.some(item => item.received_at != null || item.cancelled_at != null || !item.deleted_at)) {
+            if(this.selected.some(item => item.received_at != null || item.cancelled_at != null)) {
                 return false;
             }
 
