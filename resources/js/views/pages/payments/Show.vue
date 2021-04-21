@@ -66,7 +66,7 @@
                                         class="mr-2"
                                         @click="
                                             $router.push(
-                                                `/user/expense_reports/${item.id}`
+                                                `/expense_reports/${item.id}`
                                             )
                                         "
                                     >
@@ -137,7 +137,7 @@
                                         class="mr-2"
                                         @click="
                                             $router.push(
-                                                `/user/expense_reports/${item.id}`
+                                                `/expense_reports/${item.id}`
                                             )
                                         "
                                     >

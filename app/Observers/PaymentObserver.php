@@ -32,6 +32,30 @@ class PaymentObserver
      */
     public function updated(Payment $payment)
     {
+        $original_cancelled_at = $payment->getOriginal("cancelled_at");
+        $original_received_at = $payment->getOriginal("received_at");
+
+        if(!$payment->cancelled_at == null && !$original_cancelled_at == null) {
+            return;
+        }
+
+        if(!$payment->cancelled_at == null && $original_received_at == null) {
+            return;
+        }
+
+        if(!$payment->cancelled_at == null && $original_cancelled_at == null && !$original_received_at == null) {
+            foreach ($payment->expense_reports as $expense_report) {
+                $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
+                foreach ($expense_report->expenses as $expense) {
+                    $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                    $user = User::findOrFail($expense->user_id);
+                    $user->remaining_fund -= $expense_amount;
+                    $user->save();
+                }
+            }
+            return;
+        }
+
         // if($payment->received_at == null) {
         //     $payment->amount = $payment->getTotalAmountAttribute() ?? 0;
         //     $payment->save();

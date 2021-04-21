@@ -353,10 +353,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -374,6 +370,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       headers: [{
         text: "Date",
         value: "date"
+      }, {
+        text: "Voucher",
+        value: "voucher_no"
       }, {
         text: "Employee",
         value: "user"
@@ -642,7 +641,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (this.selected.some(function (item) {
-        return item.cancelled_at != null || item.released_at != null || item.deleted_at != null;
+        return item.cancelled_at != null || item.released_at == null || item.deleted_at != null;
       })) {
         return false;
       }
@@ -1309,20 +1308,6 @@ var render = function() {
                                         _vm._v(" "),
                                         _c("tr", [
                                           _c("td", [
-                                            _c("strong", [
-                                              _vm._v("Voucher No.")
-                                            ])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("td", [_vm._v(":")]),
-                                          _vm._v(" "),
-                                          _c("td", [
-                                            _vm._v(_vm._s(item.voucher_no))
-                                          ])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("tr", [
-                                          _c("td", [
                                             _c("strong", [_vm._v("Remarks")])
                                           ]),
                                           _vm._v(" "),
@@ -1494,6 +1479,8 @@ var render = function() {
                                 _c("td", { staticClass: "title" }, [
                                   _vm._v("Total")
                                 ]),
+                                _vm._v(" "),
+                                _c("td"),
                                 _vm._v(" "),
                                 _c("td"),
                                 _vm._v(" "),

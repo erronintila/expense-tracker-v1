@@ -32,8 +32,12 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <v-btn @click="$router.go(-1)">Go back</v-btn>
-                                            <v-btn :to="`${isAdmin ? '/admin/' : '/'}dashboard`">Go to dashboard</v-btn>
+                                            <v-btn @click="$router.go(-1)"
+                                                >Go back</v-btn
+                                            >
+                                            <v-btn to="/dashboard"
+                                                >Go to dashboard</v-btn
+                                            >
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -52,11 +56,6 @@ export default {
         return {
             src: require("../../assets/img/403.svg")
         };
-    },
-    computed: {
-        isAdmin() {
-            return this.$store.getters.admin;
-        }
-    },
+    }
 };
 </script>

@@ -62,11 +62,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       src: __webpack_require__(/*! ../../assets/img/404.svg */ "./resources/js/assets/img/404.svg")
     };
-  },
-  computed: {
-    isAdmin: function isAdmin() {
-      return this.$store.getters.admin;
-    }
   }
 });
 
@@ -192,14 +187,7 @@ var render = function() {
                                           _vm._v(" "),
                                           _c(
                                             "v-btn",
-                                            {
-                                              attrs: {
-                                                to:
-                                                  (_vm.isAdmin
-                                                    ? "/admin/"
-                                                    : "/") + "dashboard"
-                                              }
-                                            },
+                                            { attrs: { to: "/dashboard" } },
                                             [_vm._v("Go to dashboard")]
                                           )
                                         ],

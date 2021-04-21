@@ -229,11 +229,6 @@
                                         <td>:</td>
                                         <td>{{ item.reference_no }}</td>
                                     </tr>
-                                    <tr>
-                                        <td><strong>Voucher No.</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.voucher_no }}</td>
-                                    </tr>
                                     <!-- <tr>
                                         <td><strong>Payee</strong></td>
                                         <td>:</td>
@@ -318,6 +313,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
@@ -348,6 +344,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
+                { text: "Voucher", value: "voucher_no" },
                 { text: "Employee", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
@@ -618,7 +615,7 @@ export default {
                 return false;
             }
 
-            if(this.selected.some(item => item.cancelled_at != null || item.released_at != null || item.deleted_at != null)) {
+            if(this.selected.some(item => item.cancelled_at != null || item.released_at == null || item.deleted_at != null)) {
                 return false;
             }
 
