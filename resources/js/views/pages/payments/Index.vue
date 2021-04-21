@@ -619,14 +619,6 @@ export default {
                 return false;
             }
 
-            // if(this.selected.some(item => {!item.received_at; console.log(item.received_at);})) {
-            //     return false;
-            // }
-
-            // if(this.selected.some(item => item.cancelled_at != null || item.released_at == null || !item.received_at == null || item.deleted_at != null)) {
-            //     return false;
-            // }
-
             return true;
         },
         showDeletePayment() {
