@@ -641,10 +641,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (this.selected.some(function (item) {
-        return item.cancelled_at != null || item.released_at == null || item.deleted_at != null;
+        return item.received_at != null || item.cancelled_at != null || !item.deleted_at;
       })) {
         return false;
-      }
+      } // if(this.selected.some(item => {!item.received_at; console.log(item.received_at);})) {
+      //     return false;
+      // }
+      // if(this.selected.some(item => item.cancelled_at != null || item.released_at == null || !item.received_at == null || item.deleted_at != null)) {
+      //     return false;
+      // }
+
 
       return true;
     },
