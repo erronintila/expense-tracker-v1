@@ -131,11 +131,7 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="
-                        selected.length > 0 &&
-                            selected.filter(item => item.received_at == null)
-                                .length > 0
-                    "
+                    v-show="showMarkAsReceived"
                     close
                     class="mr-2"
                     small
@@ -148,7 +144,7 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="selected.length > 0"
+                    v-show="showCancelPayment"
                     close
                     class="mr-2"
                     small
@@ -161,13 +157,7 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="
-                        $store.getters.user.is_admin &&
-                            mixin_can('delete payments') &&
-                            selected.length > 0 &&
-                            selected.filter(item => item.deleted_at == null)
-                                .length > 0
-                    "
+                    v-show="showDeletePayment"
                     close
                     class="mr-2"
                     small
@@ -623,6 +613,39 @@ export default {
         }
     },
     computed: {
+        showMarkAsReceived() {
+            if (!this.selected.length) {
+                return false;
+            }
+
+            if(this.selected.some(item => item.cancelled_at != null || item.released_at != null || item.deleted_at != null)) {
+                return false;
+            }
+
+            return true;
+        },
+        showDeletePayment() {
+            if (!this.selected.length) {
+                return false;
+            }
+
+            if(this.selected.some(item => item.deleted_at != null)) {
+                return false;
+            }
+
+            return true;
+        },
+        showCancelPayment() {
+            if (!this.selected.length) {
+                return false;
+            }
+
+            if(this.selected.some(item => item.deleted_at != null || item.cancelled_at != null)) {
+                return false;
+            }
+
+            return true;
+        },
         params(nv) {
             return {
                 ...this.options,

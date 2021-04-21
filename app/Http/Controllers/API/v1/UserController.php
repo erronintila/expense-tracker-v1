@@ -619,14 +619,14 @@ class UserController extends Controller
             ->where(DB::raw('expense_reports.cancelled_at'), null)
             ->where(DB::raw('expense_reports.deleted_at'), null)
             ->where(DB::raw('payments.deleted_at'), null)
-            ->where(DB::raw('payments.cancelled_at'), null)
+            // ->where(DB::raw('payments.cancelled_at'), null)
             ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
             ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
             ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
             ->first("total");
 
         $user = User::findOrFail(request("id"));
-        $user->remaining_fund = $user->fund - $deduction->total;
+        $user->remaining_fund = $user->fund - $deduction->total ?? 0;
 
         $user->save();
         return $this->successResponse(["user" => $user, "deduction" => $deduction->total], "Validated User Remaining Fund", 200);

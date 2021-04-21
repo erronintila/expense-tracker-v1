@@ -357,16 +357,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -646,6 +636,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   computed: {
+    showMarkAsReceived: function showMarkAsReceived() {
+      if (!this.selected.length) {
+        return false;
+      }
+
+      if (this.selected.some(function (item) {
+        return item.cancelled_at != null || item.released_at != null || item.deleted_at != null;
+      })) {
+        return false;
+      }
+
+      return true;
+    },
+    showDeletePayment: function showDeletePayment() {
+      if (!this.selected.length) {
+        return false;
+      }
+
+      if (this.selected.some(function (item) {
+        return item.deleted_at != null;
+      })) {
+        return false;
+      }
+
+      return true;
+    },
+    showCancelPayment: function showCancelPayment() {
+      if (!this.selected.length) {
+        return false;
+      }
+
+      if (this.selected.some(function (item) {
+        return item.deleted_at != null || item.cancelled_at != null;
+      })) {
+        return false;
+      }
+
+      return true;
+    },
     params: function params(nv) {
       var _objectSpread2;
 
@@ -1061,13 +1090,8 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value:
-                            _vm.selected.length > 0 &&
-                            _vm.selected.filter(function(item) {
-                              return item.received_at == null
-                            }).length > 0,
-                          expression:
-                            "\n                    selected.length > 0 &&\n                        selected.filter(item => item.received_at == null)\n                            .length > 0\n                "
+                          value: _vm.showMarkAsReceived,
+                          expression: "showMarkAsReceived"
                         }
                       ],
                       staticClass: "mr-2",
@@ -1094,8 +1118,8 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.selected.length > 0,
-                          expression: "selected.length > 0"
+                          value: _vm.showCancelPayment,
+                          expression: "showCancelPayment"
                         }
                       ],
                       staticClass: "mr-2",
@@ -1126,15 +1150,8 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value:
-                            _vm.$store.getters.user.is_admin &&
-                            _vm.mixin_can("delete payments") &&
-                            _vm.selected.length > 0 &&
-                            _vm.selected.filter(function(item) {
-                              return item.deleted_at == null
-                            }).length > 0,
-                          expression:
-                            "\n                    $store.getters.user.is_admin &&\n                        mixin_can('delete payments') &&\n                        selected.length > 0 &&\n                        selected.filter(item => item.deleted_at == null)\n                            .length > 0\n                "
+                          value: _vm.showDeletePayment,
+                          expression: "showDeletePayment"
                         }
                       ],
                       staticClass: "mr-2",
