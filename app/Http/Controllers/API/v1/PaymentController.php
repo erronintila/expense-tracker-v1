@@ -257,7 +257,8 @@ class PaymentController extends Controller
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);
             $payment->each(function ($item) {
-                if ($item->received_at !== null) {
+                $original_cancelled_at = $item->getOriginal("cancelled_at");
+                if ($original_cancelled_at == null && $item->received_at !== null) {
                     $item->expense_reports->each(function ($expense_report) use ($item) {
                         activity()->disableLogging();
                         $expense_report->expenses->each(function ($expense) {
