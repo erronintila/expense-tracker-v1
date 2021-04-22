@@ -1,0 +1,46 @@
+payment:
+
+mixin_can validation payment
+is_admin validation payment delete
+
+
+
+
+
+validate user fund: 
+
+SELECT 
+  IFNULL(SUM(ex.`amount`), 0) AS total_expenses,
+  IFNULL(SUM(erp.`payment`), 0) AS total_payment 
+FROM
+  `expenses` ex 
+  JOIN `expense_reports` er 
+    ON er.`id` = ex.`expense_report_id` 
+  LEFT JOIN `expense_report_payment` erp 
+    ON erp.`expense_report_id` = er.`id` 
+  LEFT JOIN `payments` p 
+    ON p.`id` = erp.`payment_id` AND p.`deleted_at` IS NULL AND p.`cancelled_at` IS NULL AND p.`received_at` IS NOT NULL
+WHERE ex.`deleted_at` IS NULL 
+  AND er.`deleted_at` IS NULL 
+  AND er.`rejected_at` IS NULL 
+  AND er.`cancelled_at` IS NULL 
+
+
+this is okay but expenses is zero if payment is not received:
+
+SELECT 
+  IFNULL(SUM(ex.`amount`), 0) AS total_expenses, 
+  IFNULL(SUM(erp.`payment`), 0) AS total_payment,
+  SUM(p.`id`)
+FROM 
+  `expenses` ex 
+  JOIN `expense_reports` er 
+    ON er.`id` = ex.`expense_report_id` 
+  LEFT JOIN `expense_report_payment` erp 
+    ON erp.`expense_report_id` = er.`id` 
+  JOIN `payments` p 
+    ON p.`id` = erp.`payment_id` AND p.`deleted_at` IS NULL AND p.`cancelled_at` IS NULL AND p.`received_at` IS NOT NULL 
+WHERE ex.`deleted_at` IS NULL 
+  AND er.`deleted_at` IS NULL 
+  AND er.`rejected_at` IS NULL 
+  AND er.`cancelled_at` IS NULL 
