@@ -4,7 +4,7 @@ const routes = [
         name: "login",
         component: () => import("../../views/auth/Login"),
         meta: {
-            requiresVisitor: true,
+            requiresVisitor: true
         }
     },
     // {
@@ -22,12 +22,12 @@ const routes = [
         meta: {
             requiresAuth: true
         }
-    },
-    {
-        path: "/playground",
-        name: "playground",
-        component: () => import("../../views/Playground"),
     }
+    // {
+    //     path: "/playground",
+    //     name: "playground",
+    //     component: () => import("../../views/Playground"),
+    // }
 ];
 
 export default routes.map(route => {
