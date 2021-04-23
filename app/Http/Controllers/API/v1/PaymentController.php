@@ -215,7 +215,7 @@ class PaymentController extends Controller
                 ->findOrFail($id);
             }
         } else {
-            $payment = Payment::with(['expense_reports' => function($query) {
+            $payment = Payment::with(['expense_reports' => function ($query) {
                 $query->with("expenses");
             }])
                 ->with('user')
@@ -260,13 +260,6 @@ class PaymentController extends Controller
                 $original_cancelled_at = $item->getOriginal("cancelled_at");
                 if ($original_cancelled_at == null && $item->received_at !== null) {
                     $item->expense_reports->each(function ($expense_report) use ($item) {
-                        activity()->disableLogging();
-                        $expense_report->expenses->each(function ($expense) {
-                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
-                            $expense->user->remaining_fund -= $expense_amount;
-                            $expense->user->save();
-                        });
-                        activity()->enableLogging();
                         log_activity(
                             "expense_report",
                             $expense_report,
@@ -274,6 +267,26 @@ class PaymentController extends Controller
                                 "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                                 "custom" => ["link" => "expense_reports/{$expense_report->id}"]
                             ],
+                            "deleted associated payment #{$item->code}"
+                        );
+
+                        activity()->disableLogging();
+                        $expense_report->expenses->each(function ($expense) {
+                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                            $expense->user->remaining_fund -= $expense_amount;
+                            $expense->user->save();
+                        });
+                        activity()->enableLogging();
+                    });
+                } else {
+                    $item->expense_reports->each(function ($expense_report) use ($item) {
+                        log_activity(
+                            "expense_report",
+                            $expense_report,
+                            [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
                             "deleted associated payment #{$item->code}"
                         );
                     });
@@ -408,6 +421,7 @@ class PaymentController extends Controller
             $payment = Payment::findOrFail($ids);
             $payment->each(function ($item) {
                 $item->cancelled_at = now();
+                $item->amount = $item->expense_reports->sum('pivot.payment');
                 $item->save();
 
                 $item->expense_reports->each(function ($expense_report) use ($item) {

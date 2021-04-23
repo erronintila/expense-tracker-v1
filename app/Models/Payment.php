@@ -75,7 +75,6 @@ class Payment extends Model
         parent::boot();
 
         static::deleting(function ($payment) {
-            
         });
     }
 
@@ -102,8 +101,8 @@ class Payment extends Model
     protected static $logAttributesToIgnore = [
         "approved_at",
         "approved_by",
-        'updated_at', 
-        "updated_by", 
+        'updated_at',
+        "updated_by",
         "deleted_by",
     ];
 
@@ -386,8 +385,12 @@ class Payment extends Model
      */
     public function getTotalAmountAttribute()
     {
+        if (!$this->expense_reports || !count($this->expense_reports)) {
+            return $this->amount;
+        }
+        
         return $this->expense_reports->sum('pivot.payment');
-
+        
         // $expense_reports = $this->expense_reports;
         // $sum = 0;
 
