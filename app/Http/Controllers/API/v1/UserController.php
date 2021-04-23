@@ -587,49 +587,37 @@ class UserController extends Controller
      */
     public function validateFund(Request $request)
     {
-        // $deduction = DB::table('expenses')
-        //     ->select(DB::raw('SUM(expenses.amount) - SUM(expenses.reimbursable_amount) -
-        //         CASE WHEN ((SUM(`expenses`.`amount`) - SUM(`expenses`.`reimbursable_amount`)) = 0)
-        //             THEN 0 ELSE SUM(`expense_report_payment`.`payment`) END AS deduction'))
-        //     ->leftJoin('expense_reports', 'expense_reports.id', '=', 'expenses.expense_report_id')
-        //     ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
-        //     ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
-        //     ->where(DB::raw('expenses.user_id'), request("id"))
-        //     ->where(DB::raw('expenses.deleted_at'), null)
-        //     ->where(DB::raw('expense_reports.rejected_at'), null)
-        //     ->where(DB::raw('expense_reports.cancelled_at'), null)
-        //     ->where(DB::raw('expense_reports.deleted_at'), null)
-        //     ->first();
-
-        // $user = User::findOrFail(request("id"));
-
-        // if ($user->remaining_fund > $user->fund) {
-        //     // $user->remaining_fund = $user->fund;
-        // } else {
-        //     // $user->remaining_fund = $user->fund - $deduction->deduction;
-        // }
-
-        // $user->save();
-
-        $deduction = DB::table('expenses')
-            ->select(DB::raw("CASE WHEN (((sum(expenses.amount) - sum(expense_report_payment.payment)) - sum(expenses.reimbursable_amount)) < 0)
-                THEN 0 ELSE ((sum(expenses.amount) - sum(expense_report_payment.payment)) - sum(expenses.reimbursable_amount)) END AS total"))
-            ->where(DB::raw('expenses.user_id'), request("id"))
-            ->where(DB::raw('expenses.deleted_at'), null)
-            ->where(DB::raw('expense_reports.rejected_at'), null)
-            ->where(DB::raw('expense_reports.cancelled_at'), null)
-            ->where(DB::raw('expense_reports.deleted_at'), null)
+        $expenseReportPayment = DB::table('expense_report_payment')
+            ->select(DB::raw('expense_report_payment.*'))
+            ->join("payments", "payments.id", "=", "expense_report_payment.payment_id")
+            ->where(DB::raw("payments.user_id"), request("id"))
+            ->where(DB::raw('payments.received_at'), "<>", null)
             ->where(DB::raw('payments.deleted_at'), null)
-            // ->where(DB::raw('payments.cancelled_at'), null)
-            ->leftJoin("expense_reports", "expense_reports.id", "=", "expenses.expense_report_id")
-            ->leftJoin('expense_report_payment', 'expense_report_payment.expense_report_id', '=', 'expense_reports.id')
-            ->leftJoin('payments', 'payments.id', '=', 'expense_report_payment.payment_id')
-            ->first("total");
+            ->where(DB::raw('payments.cancelled_at'), null);
+
+        $total_summary = DB::table('expenses')
+            ->select(DB::raw('IFNULL(sum(expenses.amount), 0) as total_expenses, 
+            IFNULL(sum(expenses.reimbursable_amount), 0) as total_reimbursable, 
+            IFNULL(sum(erp.payment), 0) as total_payment,
+            (IFNULL(sum(expenses.amount), 0) - IFNULL(sum(erp.payment), 0)) - IFNULL(sum(expenses.reimbursable_amount), 0) AS total_deduction
+            '))
+            ->join("expense_reports", function ($query) {
+                $query->on("expense_reports.id", "=", "expenses.expense_report_id")
+                    ->where(DB::raw("expense_reports.rejected_at"), null)
+                    ->where(DB::raw("expense_reports.cancelled_at"), null)
+                    ->where(DB::raw("expense_reports.deleted_at"), null);
+            })
+            ->leftJoinSub($expenseReportPayment, 'erp', function ($join) {
+                $join->on('erp.expense_report_id', '=', 'expense_reports.id');
+            })
+            ->where("expenses.user_id", request("id"))
+            ->where(DB::raw("expenses.deleted_at"), null)
+            ->first();
 
         $user = User::findOrFail(request("id"));
-        $user->remaining_fund = $user->fund - $deduction->total ?? 0;
+        $user->remaining_fund = $user->fund - $total_summary->total_deduction ?? 0;
         $user->save();
 
-        return $this->successResponse(["user" => $user, "deduction" => $deduction->total], "Validated User Remaining Fund", 200);
+        return $this->successResponse(["user" => $user], "Validated User Remaining Fund", 200);
     }
 }
