@@ -169,7 +169,10 @@ class ExpenseReport extends Model
      */
     public function payments()
     {
-        return $this->belongsToMany(Payment::class)->withPivot('payment')->withTimestamps();
+        return $this->belongsToMany(Payment::class)
+                    ->where("cancelled_at", null)
+                    ->withPivot('payment')
+                    ->withTimestamps();
     }
 
     /**
@@ -314,7 +317,7 @@ class ExpenseReport extends Model
         //     ->where("expense_reports.id", $this->id)
         //     ->join("expenses", "expenses.expense_report_id", "=", "expense_reports.id")
         //     ->select(DB::raw("
-        //         MIN(expenses.date) as min_date, 
+        //         MIN(expenses.date) as min_date,
         //         DATE_ADD(
         //             MIN(`expenses`.`date`),
         //             INTERVAL (1- DAYOFWEEK(MIN(`expenses`.`date`))) DAY

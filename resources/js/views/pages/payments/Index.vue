@@ -97,7 +97,10 @@
                 </v-menu>
 
                 <UserDialogSelector
-                    v-if="$store.getters.user.is_admin && mixin_can('view all users payments')"
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            mixin_can('view all users payments')
+                    "
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -128,11 +131,7 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="
-                        selected.length > 0 &&
-                            selected.filter(item => item.received_at == null)
-                                .length > 0
-                    "
+                    v-show="showMarkAsReceived"
                     close
                     class="mr-2"
                     small
@@ -145,12 +144,20 @@
                 </v-chip>
 
                 <v-chip
-                    v-show="
-                        $store.getters.user.is_admin && mixin_can('delete payments') &&
-                        selected.length > 0 &&
-                            selected.filter(item => item.deleted_at == null)
-                                .length > 0
-                    "
+                    v-show="showCancelPayment"
+                    close
+                    class="mr-2"
+                    small
+                    @click:close="onUpdate('cancel', 'put')"
+                    close-icon="mdi-close"
+                    color="red"
+                    dark
+                >
+                    Cancel Payment(s)
+                </v-chip>
+
+                <v-chip
+                    v-show="showDeletePayment"
                     close
                     class="mr-2"
                     small
@@ -221,11 +228,6 @@
                                         <td><strong>Reference No.</strong></td>
                                         <td>:</td>
                                         <td>{{ item.reference_no }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Voucher No.</strong></td>
-                                        <td>:</td>
-                                        <td>{{ item.voucher_no }}</td>
                                     </tr>
                                     <!-- <tr>
                                         <td><strong>Payee</strong></td>
@@ -311,6 +313,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td>
                                 <strong>{{ totalAmount }}</strong>
                             </td>
@@ -341,6 +344,7 @@ export default {
             loading: true,
             headers: [
                 { text: "Date", value: "date" },
+                { text: "Voucher", value: "voucher_no" },
                 { text: "Employee", value: "user" },
                 { text: "Description", value: "description" },
                 { text: "Amount", value: "amount" },
@@ -364,6 +368,7 @@ export default {
                 // "Unreported Advance Payments",
                 "Released Payments",
                 "Completed Payments",
+                "Cancelled Payments",
                 "Deleted Payments"
             ],
             selected: [],
@@ -516,7 +521,11 @@ export default {
         onUpdate(action, method) {
             if (action == "receive" && !this.mixin_can("receive payments")) {
                 this.mixin_errorDialog(`Error`, "Not allowed");
+                return;
+            }
 
+            if (action == "cancel" && !this.mixin_can("cancel payments")) {
+                this.mixin_errorDialog(`Error`, "Not allowed");
                 return;
             }
 
@@ -555,6 +564,9 @@ export default {
                             break;
                         case "complete":
                             url = `/api/payments/complete_payment/${ids}`;
+                            break;
+                        case "cancel":
+                            url = `/api/payments/cancel_payment/${ids}`;
                             break;
                         // case "update":
                         //     url = `/api/payments/${this.selected[0].id}`;
@@ -598,6 +610,39 @@ export default {
         }
     },
     computed: {
+        showMarkAsReceived() {
+            if (!this.selected.length) {
+                return false;
+            }
+
+            if(this.selected.some(item => item.received_at != null || item.cancelled_at != null)) {
+                return false;
+            }
+
+            return true;
+        },
+        showDeletePayment() {
+            if (!this.selected.length) {
+                return false;
+            }
+
+            if(this.selected.some(item => item.deleted_at != null)) {
+                return false;
+            }
+
+            return true;
+        },
+        showCancelPayment() {
+            if (!this.selected.length) {
+                return false;
+            }
+
+            if(this.selected.some(item => item.deleted_at != null || item.cancelled_at != null)) {
+                return false;
+            }
+
+            return true;
+        },
         params(nv) {
             return {
                 ...this.options,
@@ -658,14 +703,14 @@ export default {
     //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
     // },
     activated() {
-        if(this.$route.params.status) {
+        if (this.$route.params.status) {
             this.status = this.$route.params.status;
         }
 
-        if(this.$route.params.date_range) {
-            this.date_range = this.$route.params.date_range
+        if (this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range;
         }
-        
+
         this.$store.dispatch("AUTH_USER").then(response => {
             this.getDataFromApi().then(data => {
                 this.items = data.items;

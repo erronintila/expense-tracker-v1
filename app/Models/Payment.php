@@ -75,7 +75,6 @@ class Payment extends Model
         parent::boot();
 
         static::deleting(function ($payment) {
-            
         });
     }
 
@@ -102,8 +101,8 @@ class Payment extends Model
     protected static $logAttributesToIgnore = [
         "approved_at",
         "approved_by",
-        'updated_at', 
-        "updated_by", 
+        'updated_at',
+        "updated_by",
         "deleted_by",
     ];
 
@@ -207,6 +206,7 @@ class Payment extends Model
         ];
 
         $approved = is_null($this->approved_at);
+        $cancelled = is_null($this->cancelled_at);
         $deleted = is_null($this->deleted_at);
         $released = is_null($this->released_at);
         $received = is_null($this->received_at);
@@ -216,6 +216,16 @@ class Payment extends Model
                 'color' => 'red',
                 'remarks' => 'Payment was deleted',
                 'status' => 'Deleted',
+            ];
+
+            return $arr;
+        }
+
+        if (!$cancelled) {
+            $arr = [
+                'color' => 'red',
+                'remarks' => 'Payment was cancelled',
+                'status' => 'Cancelled',
             ];
 
             return $arr;
@@ -375,8 +385,12 @@ class Payment extends Model
      */
     public function getTotalAmountAttribute()
     {
+        if (!$this->expense_reports || !count($this->expense_reports)) {
+            return $this->amount;
+        }
+        
         return $this->expense_reports->sum('pivot.payment');
-
+        
         // $expense_reports = $this->expense_reports;
         // $sum = 0;
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PaymentStoreRequest extends FormRequest
 {
@@ -26,7 +27,7 @@ class PaymentStoreRequest extends FormRequest
         return [
             "code" => ['nullable', 'string', 'unique:payments', 'max:255'],
             "reference_no" => ['nullable', 'max:255'],
-            "voucher_no" => ['required', 'unique:payments', 'max:255'],
+            "voucher_no" => ['required', Rule::unique("payments")->whereNull("deleted_at"), 'max:255'],
             "description" => ['required', 'string', 'max:255'],
             "date" => ['required'],
             "cheque_no" => ['nullable', 'max:255'],

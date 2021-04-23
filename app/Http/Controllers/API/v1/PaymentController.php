@@ -26,6 +26,7 @@ class PaymentController extends Controller
         $this->middleware(['permission:add payments'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete payments'], ['only' => ['destroy']]);
+        // $this->middleware(['permission:cancel payments'], ['only' => ['cancel_payment']]);
     }
 
     /**
@@ -64,6 +65,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -74,6 +76,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "<>", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -84,6 +87,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "<>", null],
                         ["received_at", "=", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -94,6 +98,7 @@ class PaymentController extends Controller
                         ["deleted_at", "=", null],
                         ["released_at", "=", null],
                         ["received_at", "=", null],
+                        ["cancelled_at", "=", null],
                     ])
                     ->whereHas("expense_reports");
 
@@ -210,7 +215,7 @@ class PaymentController extends Controller
                 ->findOrFail($id);
             }
         } else {
-            $payment = Payment::with(['expense_reports' => function($query) {
+            $payment = Payment::with(['expense_reports' => function ($query) {
                 $query->with("expenses");
             }])
                 ->with('user')
@@ -252,15 +257,9 @@ class PaymentController extends Controller
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);
             $payment->each(function ($item) {
-                if ($item->received_at !== null) {
+                $original_cancelled_at = $item->getOriginal("cancelled_at");
+                if ($original_cancelled_at == null && $item->received_at !== null) {
                     $item->expense_reports->each(function ($expense_report) use ($item) {
-                        activity()->disableLogging();
-                        $expense_report->expenses->each(function ($expense) {
-                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
-                            $expense->user->remaining_fund -= $expense_amount;
-                            $expense->user->save();
-                        });
-
                         log_activity(
                             "expense_report",
                             $expense_report,
@@ -268,10 +267,28 @@ class PaymentController extends Controller
                                 "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
                                 "custom" => ["link" => "expense_reports/{$expense_report->id}"]
                             ],
-                            "removed expense report association with payment #{$item->code}"
+                            "deleted associated payment #{$item->code}"
                         );
-                        
+
+                        activity()->disableLogging();
+                        $expense_report->expenses->each(function ($expense) {
+                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                            $expense->user->remaining_fund -= $expense_amount;
+                            $expense->user->save();
+                        });
                         activity()->enableLogging();
+                    });
+                } else {
+                    $item->expense_reports->each(function ($expense_report) use ($item) {
+                        log_activity(
+                            "expense_report",
+                            $expense_report,
+                            [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                            "deleted associated payment #{$item->code}"
+                        );
                     });
                 }
             
@@ -299,6 +316,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->approved_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "approved associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
@@ -316,6 +345,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->released_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "released associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
@@ -333,6 +374,18 @@ class PaymentController extends Controller
             $payment->each(function ($item) {
                 $item->received_at = now();
                 $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "received associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
@@ -352,6 +405,36 @@ class PaymentController extends Controller
                 $item->released_at = now();
                 $item->received_at = now();
                 $item->save();
+            });
+
+            return $payment;
+        });
+        
+        $message = "Payment(s) completed successfully";
+        return $this->successResponse($data, $message, 200);
+    }
+
+    public function cancel_payment(Request $request, $id)
+    {
+        $data = DB::transaction(function () use ($id) {
+            $ids = explode(",", $id);
+            $payment = Payment::findOrFail($ids);
+            $payment->each(function ($item) {
+                $item->cancelled_at = now();
+                $item->amount = $item->expense_reports->sum('pivot.payment');
+                $item->save();
+
+                $item->expense_reports->each(function ($expense_report) use ($item) {
+                    log_activity(
+                        "expense_report",
+                        $expense_report,
+                        [
+                            "attributes" => ["code" => $expense_report->code, "updated_at" => now()],
+                            "custom" => ["link" => "expense_reports/{$expense_report->id}"]
+                        ],
+                        "cancelled associated payment #{$item->code}"
+                    );
+                });
             });
 
             return $payment;
