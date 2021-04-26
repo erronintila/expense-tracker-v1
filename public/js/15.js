@@ -127,17 +127,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/jobs/Index.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/jobs/Index.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Index.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/users/Index.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../services/JobDataService */ "./resources/js/services/JobDataService.js");
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
 /* harmony import */ var _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/dropdown/DepartmentDropdownSelector */ "./resources/js/components/selector/dropdown/DepartmentDropdownSelector.vue");
+/* harmony import */ var _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dropdown/JobDropdownSelector */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -392,42 +393,321 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {},
   components: {
-    DepartmentDropdownSelector: _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_1__["default"]
+    DepartmentDropdownSelector: _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_1__["default"],
+    JobDropdownSelector: _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
       formDataLoaded: false,
+      expanded: [],
       loading: true,
+      headers: [{
+        text: "Name",
+        value: "full_name"
+      }, {
+        text: "Job Designation",
+        value: "job"
+      }, {
+        text: "Department",
+        value: "department"
+      }, {
+        text: "Revolving Fund",
+        value: "revolving_fund"
+      }, {
+        text: "Actions",
+        value: "actions",
+        sortable: false
+      }, {
+        text: "",
+        value: "data-table-expand",
+        sortable: false
+      }],
+      items: [],
+      department: null,
+      job: null,
+      total_fund: 0,
+      total_remaining_fund: 0,
+      status: "Active",
+      statuses: ["Active", "Inactive", "Archived"],
+      selected: [],
+      search: "",
       collections: {
-        selected: [],
-        items: [],
         headers: [{
           text: "Name",
-          value: "name"
+          value: "full_name"
+        }, {
+          text: "Job Designation",
+          value: "job",
+          sortable: false
         }, {
           text: "Department",
-          value: "department.name"
+          value: "department",
+          sortable: false
+        }, {
+          text: "Revolving Fund",
+          value: "revolving_fund"
         }, {
           text: "Actions",
           value: "actions",
           sortable: false
-        }]
+        }, {
+          text: "",
+          value: "data-table-expand"
+        }],
+        selected: [],
+        selectedUsers: [],
+        statuses: ["Active", "Inactive", "Archived"],
+        items: [],
+        users: []
       },
       filters: {
         department: {
           id: null,
           name: "All Departments"
         },
-        status: "Active",
+        job: {
+          id: null,
+          name: "All Job Designations"
+        },
         search: "",
-        statuses: ["Active", "Archived"]
+        status: "Active"
       },
       options: {
-        sortBy: ["name"],
+        sortBy: ["first_name"],
         sortDesc: [false],
         page: 1,
         itemsPerPage: 10
@@ -444,16 +724,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   methods: {
+    onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
+
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true
+        };
+      }
+
+      this.$router.push({
+        name: "admin.users.show",
+        params: params
+      });
+    },
     onSearch: function onSearch() {
       var _this = this;
 
       this.getDataFromApi().then(function (data) {
-        _this.collections.items = data.data;
+        _this.items = data.data;
         _this.meta = data.meta;
       });
     },
-    onChangeDepartment: function onChangeDepartment(value) {
-      this.filters.department = value;
+    changeStatus: function changeStatus() {},
+    onChangeDepartment: function onChangeDepartment(e) {
+      this.department = e;
+      this.job = null;
+    },
+    onResetDepartment: function onResetDepartment() {
+      this.department = null;
+      this.job = null;
+    },
+    onChangeJob: function onChangeJob(e) {
+      this.job = e;
+    },
+    onResetJob: function onResetJob() {
+      this.job = null;
+    },
+    changeJob: function changeJob(e) {
+      this.job = e;
     },
     getDataFromApi: function getDataFromApi() {
       var _this2 = this;
@@ -466,11 +778,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             page = _this2$options.page,
             itemsPerPage = _this2$options.itemsPerPage;
 
-        var search = _this2.filters.search.trim().toLowerCase();
+        var search = _this2.search.trim().toLowerCase();
 
-        var department_id = _this2.filters.department.id;
-        var status = _this2.filters.status;
-        var isDeleted = _this2.filters.status == "Archived";
+        var department_id = _this2.department == null ? null : _this2.department.id;
+        var job_id = _this2.job == null ? null : _this2.job.id;
+        var status = _this2.status;
         var data = {
           params: {
             search: search,
@@ -480,10 +792,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage: itemsPerPage,
             status: status,
             department_id: department_id,
-            isDeleted: isDeleted
+            job_id: job_id,
+            is_superadmin: false
           }
         };
-        _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].getAll(data).then(function (response) {
           _this2.loading = false;
           _this2.formDataLoaded = true;
           resolve(response.data);
@@ -498,134 +811,211 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
-      this.collections.selected = [];
+      this.onResetDepartment();
+      this.onResetJob(); // this.department = null;
+      // this.job = null;
     },
-    onShow: function onShow(item) {
-      var params = {
-        id: item.id
-      };
-
-      if (item.deleted_at) {
-        params = {
-          id: item.id,
-          isDeleted: true
-        };
-      }
-
-      this.$router.push({
-        name: "admin.jobs.show",
-        params: params
-      });
-    },
-    onEdit: function onEdit(item) {
-      this.$router.push({
-        name: "admin.jobs.edit",
-        params: {
-          id: item.id
-        }
-      });
-    },
-    onDelete: function onDelete() {
-      var _this3 = this;
-
-      if (this.collections.selected.length == 0) {
+    onEditFund: function onEditFund() {
+      if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
-      this.$confirm("Move item(s) to archive?").then(function (res) {
+      this.$router.push("/users/".concat(this.selected[0].id, "/edit/fund"));
+      this.selected = [];
+    },
+    onEditPermissions: function onEditPermissions() {
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$router.push("/users/".concat(this.selected[0].id, "/edit/permissions"));
+      this.selected = [];
+    },
+    onPasswordReset: function onPasswordReset() {
+      var _this3 = this;
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to reset password?").then(function (res) {
         if (res) {
-          var ids = _this3.collections.selected.map(function (item) {
+          var ids = _this3.selected.map(function (item) {
             return item.id;
           });
 
-          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].resetPassword(ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
-              _this3.collections.items = data.data;
+              _this3.items = data.data;
               _this3.meta = data.meta;
             });
 
-            _this3.collections.selected = [];
+            _this3.selected = [];
           })["catch"](function (error) {
             _this3.mixin_showErrors(error);
           });
         }
       });
     },
-    onRestore: function onRestore() {
+    onDelete: function onDelete() {
       var _this4 = this;
 
-      if (this.collections.selected.length == 0) {
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Move item(s) to archive?").then(function (res) {
+        if (res) {
+          var ids = _this4.selected.map(function (item) {
+            return item.id;
+          });
+
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](ids).then(function (response) {
+            _this4.mixin_successDialog(response.data.status, response.data.message);
+
+            _this4.getDataFromApi().then(function (data) {
+              _this4.items = data.data;
+              _this4.meta = data.meta;
+            });
+
+            _this4.selected = [];
+          })["catch"](function (error) {
+            _this4.mixin_showErrors(error);
+          });
+        }
+      });
+    },
+    onRestore: function onRestore() {
+      var _this5 = this;
+
+      if (this.selected.length == 0) {
         this.mixin_errorDialog("Error", "No item(s) selected");
         return;
       }
 
       this.$confirm("Do you want to restore account(s)?").then(function (res) {
         if (res) {
-          var ids = _this4.collections.selected.map(function (item) {
+          var ids = _this5.selected.map(function (item) {
             return item.id;
           });
 
-          _services_JobDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
-            _this4.mixin_successDialog(response.data.status, response.data.message);
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].restore(ids).then(function (response) {
+            _this5.mixin_successDialog(response.data.status, response.data.message);
 
-            _this4.getDataFromApi().then(function (data) {
-              _this4.collections.items = data.data;
-              _this4.meta = data.meta;
+            _this5.getDataFromApi().then(function (data) {
+              _this5.items = data.data;
+              _this5.meta = data.meta;
             });
 
-            _this4.collections.selected = [];
+            _this5.selected = [];
           })["catch"](function (error) {
-            _this4.mixin_showErrors(error);
+            _this5.mixin_showErrors(error);
           });
         }
       });
-    }
-  },
-  computed: {
-    params: function params(nv) {
-      return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
-        // query: this.filters.search,
-        query: this.filters.status
-      }, "query", this.filters.department));
+    },
+    onSetActivation: function onSetActivation(is_active) {
+      var _this6 = this;
+
+      if (this.selected.length == 0) {
+        this.mixin_errorDialog("Error", "No item(s) selected");
+        return;
+      }
+
+      this.$confirm("Do you want to ".concat(is_active ? "activate" : "deactivate", " account(s)?")).then(function (res) {
+        if (res) {
+          var ids = _this6.selected.map(function (item) {
+            return item.id;
+          });
+
+          var data = {
+            is_active: is_active
+          };
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"].updateActivation(ids, data).then(function (response) {
+            _this6.mixin_successDialog(response.data.status, response.data.message);
+
+            _this6.getDataFromApi().then(function (data) {
+              _this6.items = data.data;
+              _this6.meta = data.meta;
+            });
+
+            _this6.selected = [];
+          })["catch"](function (error) {
+            _this6.mixin_showErrors(error);
+          });
+        }
+      });
+    },
+    onExport: function onExport() {
+      var _this7 = this;
+
+      _services_UserDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["export"]().then(function (response) {
+        window.location.href = "/api/users/export/data";
+
+        _this7.mixin_successDialog("Success", "The file was saved to 'Downloads' folder)");
+      })["catch"](function (error) {
+        return _this7.mixin_showErrors(error);
+      });
     }
   },
   watch: {
-    "filters.search": function filtersSearch() {
-      var _this5 = this;
-
-      if (this.filters.search == "") {
-        this.getDataFromApi().then(function (data) {
-          _this5.collections.items = data.data;
-          _this5.meta = data.meta;
-        });
-      }
-    },
     params: {
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this6 = this;
+        var _this8 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this6.collections.items = data.data;
-          _this6.meta = data.meta;
+          _this8.items = data.data;
+          _this8.meta = data.meta;
+          _this8.total_fund = _this8.mixin_formatNumber(data.data.reduce(function (total, item) {
+            return total + item.fund;
+          }, 0));
+          _this8.total_remaining_fund = _this8.mixin_formatNumber(data.data.reduce(function (total, item) {
+            return total + item.remaining_fund;
+          }, 0));
+        });
+      }
+    },
+    search: function search() {
+      var _this9 = this;
+
+      if (this.search == "") {
+        this.getDataFromApi().then(function (data) {
+          _this9.items = data.data;
+          _this9.meta = data.meta;
         });
       }
     }
   },
+  computed: {
+    params: function params(nv) {
+      var _objectSpread2;
+
+      return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
+        // query: this.search,
+        query: this.status
+      }, _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
+    }
+  },
   // created() {
+  //     this.$store.dispatch("AUTH_USER");
   //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this7 = this;
+    var _this10 = this;
 
-    this.$store.dispatch("AUTH_NOTIFICATIONS");
+    this.$store.dispatch("AUTH_USER"); // this.$store.dispatch("AUTH_NOTIFICATIONS");
+
     this.getDataFromApi().then(function (data) {
-      _this7.collections.items = data.data;
-      _this7.meta = data.meta;
+      _this10.items = data.data;
+      _this10.meta = data.meta;
     });
   }
 });
@@ -674,10 +1064,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/jobs/Index.vue?vue&type=template&id=c7402dba&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/jobs/Index.vue?vue&type=template&id=c7402dba& ***!
-  \********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Index.vue?vue&type=template&id=242adbf1&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/users/Index.vue?vue&type=template&id=242adbf1& ***!
+  \*********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -696,14 +1086,14 @@ var render = function() {
         ? _c("loader-component")
         : _c(
             "v-card",
-            { staticClass: "elevation-0 pt-0" },
+            { staticClass: "elevation-0 p-0 m-0" },
             [
               _c(
                 "v-card-title",
                 { staticClass: "pt-0" },
                 [
                   _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("Job Designations")
+                    _vm._v("Employees")
                   ]),
                   _vm._v(" "),
                   _c("v-spacer"),
@@ -714,7 +1104,7 @@ var render = function() {
                       attrs: { bottom: "" },
                       scopedSlots: _vm._u(
                         [
-                          _vm.mixin_can("add jobs")
+                          _vm.mixin_can("add users")
                             ? {
                                 key: "activator",
                                 fn: function(ref) {
@@ -729,7 +1119,9 @@ var render = function() {
                                             staticClass: "elevation-3 mr-2",
                                             attrs: {
                                               color: "green",
-                                              to: { name: "admin.jobs.create" },
+                                              to: {
+                                                name: "admin.users.create"
+                                              },
                                               dark: "",
                                               fab: "",
                                               "x-small": ""
@@ -767,7 +1159,7 @@ var render = function() {
                 "v-row",
                 { staticClass: "ml-4" },
                 [
-                  _vm.collections.selected.length > 0
+                  _vm.selected.length > 0
                     ? _c(
                         "v-chip",
                         {
@@ -781,14 +1173,14 @@ var render = function() {
                           },
                           on: {
                             "click:close": function($event) {
-                              _vm.collections.selected = []
+                              _vm.selected = []
                             }
                           }
                         },
                         [
                           _vm._v(
                             "\n                " +
-                              _vm._s(_vm.collections.selected.length) +
+                              _vm._s(_vm.selected.length) +
                               " Selected\n            "
                           )
                         ]
@@ -804,7 +1196,8 @@ var render = function() {
                         "nudge-width": 200,
                         "offset-y": "",
                         right: "",
-                        bottom: ""
+                        bottom: "",
+                        eager: ""
                       },
                       scopedSlots: _vm._u([
                         {
@@ -813,30 +1206,28 @@ var render = function() {
                             var menu = ref.on
                             var attrs = ref.attrs
                             return [
-                              _vm.filters.status != null
-                                ? _c(
+                              _c(
+                                "v-chip",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "mr-2 mb-2",
+                                      attrs: { small: "" }
+                                    },
                                     "v-chip",
-                                    _vm._g(
-                                      _vm._b(
-                                        {
-                                          staticClass: "mr-2 mb-2",
-                                          attrs: { small: "" }
-                                        },
-                                        "v-chip",
-                                        attrs,
-                                        false
-                                      ),
-                                      menu
-                                    ),
-                                    [
-                                      _vm._v(
-                                        "\n                        " +
-                                          _vm._s(_vm.filters.status) +
-                                          "\n                    "
-                                      )
-                                    ]
+                                    attrs,
+                                    false
+                                  ),
+                                  menu
+                                ),
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(_vm.status) +
+                                      "\n                    "
                                   )
-                                : _vm._e()
+                                ]
+                              )
                             ]
                           }
                         }
@@ -855,15 +1246,15 @@ var render = function() {
                                 [
                                   _c("v-select", {
                                     attrs: {
-                                      items: _vm.filters.statuses,
+                                      items: _vm.statuses,
                                       label: "Status"
                                     },
                                     model: {
-                                      value: _vm.filters.status,
+                                      value: _vm.status,
                                       callback: function($$v) {
-                                        _vm.$set(_vm.filters, "status", $$v)
+                                        _vm.status = $$v
                                       },
-                                      expression: "filters.status"
+                                      expression: "status"
                                     }
                                   })
                                 ],
@@ -888,7 +1279,8 @@ var render = function() {
                         "nudge-width": 200,
                         "offset-y": "",
                         right: "",
-                        bottom: ""
+                        bottom: "",
+                        eager: ""
                       },
                       scopedSlots: _vm._u([
                         {
@@ -897,30 +1289,32 @@ var render = function() {
                             var menu = ref.on
                             var attrs = ref.attrs
                             return [
-                              _vm.filters.department != null
-                                ? _c(
+                              _c(
+                                "v-chip",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "mr-2 mb-2",
+                                      attrs: { small: "" }
+                                    },
                                     "v-chip",
-                                    _vm._g(
-                                      _vm._b(
-                                        {
-                                          staticClass: "mr-2 mb-2",
-                                          attrs: { small: "" }
-                                        },
-                                        "v-chip",
-                                        attrs,
-                                        false
-                                      ),
-                                      menu
-                                    ),
-                                    [
-                                      _vm._v(
-                                        "\n                        " +
-                                          _vm._s(_vm.filters.department.name) +
-                                          "\n                    "
-                                      )
-                                    ]
+                                    attrs,
+                                    false
+                                  ),
+                                  menu
+                                ),
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(
+                                        _vm.department
+                                          ? _vm.department.name
+                                          : "All Departments"
+                                      ) +
+                                      "\n                    "
                                   )
-                                : _vm._e()
+                                ]
+                              )
                             ]
                           }
                         }
@@ -940,11 +1334,113 @@ var render = function() {
                                   _c("DepartmentDropdownSelector", {
                                     ref: "departmentDropdownSelector",
                                     attrs: {
-                                      selectedDepartment:
-                                        _vm.filters.department,
-                                      showAll: true
+                                      showAll: true,
+                                      selectedDepartment: _vm.department
                                     },
-                                    on: { onChange: _vm.onChangeDepartment }
+                                    on: {
+                                      onReset: _vm.onResetDepartment,
+                                      onChange: _vm.onChangeDepartment
+                                    },
+                                    model: {
+                                      value: _vm.department,
+                                      callback: function($$v) {
+                                        _vm.department = $$v
+                                      },
+                                      expression: "department"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-menu",
+                    {
+                      attrs: {
+                        transition: "scale-transition",
+                        "close-on-content-click": false,
+                        "nudge-width": 200,
+                        "offset-y": "",
+                        right: "",
+                        bottom: "",
+                        eager: ""
+                      },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var menu = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-chip",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "mr-2 mb-2",
+                                      attrs: { small: "" }
+                                    },
+                                    "v-chip",
+                                    attrs,
+                                    false
+                                  ),
+                                  menu
+                                ),
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(
+                                        _vm.job
+                                          ? _vm.job.name
+                                          : "All Job Designations"
+                                      ) +
+                                      "\n                    "
+                                  )
+                                ]
+                              )
+                            ]
+                          }
+                        }
+                      ])
+                    },
+                    [
+                      _vm._v(" "),
+                      _c(
+                        "v-card",
+                        [
+                          _c(
+                            "v-list",
+                            [
+                              _c(
+                                "v-list-item",
+                                [
+                                  _c("JobDropdownSelector", {
+                                    ref: "jobDropdownSelector",
+                                    attrs: {
+                                      showAll: true,
+                                      selectedJob: _vm.job,
+                                      selectedDepartment: _vm.department
+                                    },
+                                    on: {
+                                      onReset: _vm.onResetJob,
+                                      onChange: _vm.onChangeJob
+                                    },
+                                    model: {
+                                      value: _vm.job,
+                                      callback: function($$v) {
+                                        _vm.job = $$v
+                                      },
+                                      expression: "job"
+                                    }
                                   })
                                 ],
                                 1
@@ -980,90 +1476,286 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value:
-                            _vm.collections.selected.length > 0 &&
-                            _vm.filters.status == "Archived",
-                          expression:
-                            "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Archived'\n                "
+                          value: _vm.mixin_can("export users"),
+                          expression: "mixin_can('export users')"
                         }
                       ],
                       staticClass: "mr-2 mb-2",
                       attrs: {
                         close: "",
                         small: "",
-                        "close-icon": "mdi-history",
-                        color: "green",
+                        "close-icon": "mdi-download",
                         dark: ""
                       },
-                      on: { "click:close": _vm.onRestore }
+                      on: { "click:close": _vm.onExport }
                     },
-                    [_vm._v("\n                Restore\n            ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-chip",
-                    {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value:
-                            _vm.collections.selected.length > 0 &&
-                            _vm.filters.status == "Active",
-                          expression:
-                            "\n                    collections.selected.length > 0 &&\n                        filters.status == 'Active'\n                "
-                        }
-                      ],
-                      staticClass: "mr-2 mb-2",
-                      attrs: {
-                        close: "",
-                        small: "",
-                        "close-icon": "mdi-trash-can-outline",
-                        color: "red",
-                        dark: ""
-                      },
-                      on: { "click:close": _vm.onDelete }
-                    },
-                    [_vm._v("\n                Archive\n            ")]
+                    [_vm._v("\n                Export Data\n            ")]
                   )
                 ],
                 1
               ),
               _vm._v(" "),
+              _vm.selected.length > 0
+                ? _c(
+                    "v-row",
+                    { staticClass: "ml-4" },
+                    [
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Active",
+                              expression:
+                                "selected.length > 0 && status == 'Active'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-lock"
+                          },
+                          on: { "click:close": _vm.onPasswordReset }
+                        },
+                        [
+                          _vm._v(
+                            "\n                Reset Password\n            "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length == 1 &&
+                                _vm.status == "Active",
+                              expression:
+                                "selected.length == 1 && status == 'Active'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-credit-card-refund"
+                          },
+                          on: { "click:close": _vm.onEditFund }
+                        },
+                        [
+                          _vm._v(
+                            "\n                Edit Revolving Fund\n            "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length == 1 &&
+                                _vm.status == "Active",
+                              expression:
+                                "selected.length == 1 && status == 'Active'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-account-cog-outline",
+                            color: "orange",
+                            dark: ""
+                          },
+                          on: { "click:close": _vm.onEditPermissions }
+                        },
+                        [
+                          _vm._v(
+                            "\n                Edit Permissions\n            "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Inactive",
+                              expression:
+                                "selected.length > 0 && status == 'Inactive'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-check",
+                            color: "green",
+                            dark: ""
+                          },
+                          on: {
+                            "click:close": function($event) {
+                              return _vm.onSetActivation(true)
+                            }
+                          }
+                        },
+                        [_vm._v("\n                Activate\n            ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Active",
+                              expression:
+                                "selected.length > 0 && status == 'Active'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-lock",
+                            color: "red",
+                            dark: ""
+                          },
+                          on: {
+                            "click:close": function($event) {
+                              return _vm.onSetActivation(false)
+                            }
+                          }
+                        },
+                        [_vm._v("\n                Deactivate\n            ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Archived",
+                              expression:
+                                "selected.length > 0 && status == 'Archived'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-history",
+                            color: "green",
+                            dark: ""
+                          },
+                          on: { "click:close": _vm.onRestore }
+                        },
+                        [_vm._v("\n                Restore\n            ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-chip",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value:
+                                _vm.selected.length > 0 &&
+                                _vm.status == "Inactive",
+                              expression:
+                                "selected.length > 0 && status == 'Inactive'"
+                            }
+                          ],
+                          staticClass: "mr-2 mb-2",
+                          attrs: {
+                            close: "",
+                            small: "",
+                            "close-icon": "mdi-trash-can-outline",
+                            color: "red",
+                            dark: ""
+                          },
+                          on: { "click:close": _vm.onDelete }
+                        },
+                        [_vm._v("\n                Archive\n            ")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c(
                 "v-card-subtitle",
                 [
-                  _c("v-text-field", {
-                    attrs: {
-                      "append-icon": "mdi-magnify",
-                      label: "Search",
-                      "single-line": "",
-                      "hide-details": ""
-                    },
-                    on: {
-                      keydown: function($event) {
-                        if (
-                          !$event.type.indexOf("key") &&
-                          _vm._k(
-                            $event.keyCode,
-                            "enter",
-                            13,
-                            $event.key,
-                            "Enter"
-                          )
-                        ) {
-                          return null
+                  _c("v-hover", {
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var hover = ref.hover
+                          return [
+                            _c("v-text-field", {
+                              attrs: {
+                                elevation: hover ? 5 : 2,
+                                "append-icon": "mdi-magnify",
+                                label: "Search",
+                                "single-line": "",
+                                "hide-details": ""
+                              },
+                              on: {
+                                keydown: function($event) {
+                                  if (
+                                    !$event.type.indexOf("key") &&
+                                    _vm._k(
+                                      $event.keyCode,
+                                      "enter",
+                                      13,
+                                      $event.key,
+                                      "Enter"
+                                    )
+                                  ) {
+                                    return null
+                                  }
+                                  return _vm.onSearch($event)
+                                }
+                              },
+                              model: {
+                                value: _vm.search,
+                                callback: function($$v) {
+                                  _vm.search = $$v
+                                },
+                                expression: "search"
+                              }
+                            })
+                          ]
                         }
-                        return _vm.onSearch($event)
                       }
-                    },
-                    model: {
-                      value: _vm.filters.search,
-                      callback: function($$v) {
-                        _vm.$set(_vm.filters, "search", $$v)
-                      },
-                      expression: "filters.search"
-                    }
+                    ])
                   })
                 ],
                 1
@@ -1072,72 +1764,304 @@ var render = function() {
               _c(
                 "v-card-text",
                 [
-                  _c("v-data-table", {
-                    staticClass: "elevation-0",
-                    attrs: {
-                      headers: _vm.collections.headers,
-                      items: _vm.collections.items,
-                      loading: _vm.loading,
-                      options: _vm.options,
-                      "server-items-length": _vm.meta.total,
-                      "footer-props": {
-                        itemsPerPageOptions: [10, 20, 50, 100],
-                        showFirstLastPage: true,
-                        firstIcon: "mdi-page-first",
-                        lastIcon: "mdi-page-last",
-                        prevIcon: "mdi-chevron-left",
-                        nextIcon: "mdi-chevron-right"
+                  _c(
+                    "v-data-table",
+                    {
+                      staticClass: "elevation-0",
+                      attrs: {
+                        headers: _vm.headers,
+                        items: _vm.items,
+                        loading: _vm.loading,
+                        options: _vm.options,
+                        "server-items-length": _vm.meta.total,
+                        "footer-props": {
+                          itemsPerPageOptions: [10, 20, 50, 100],
+                          showFirstLastPage: true,
+                          firstIcon: "mdi-page-first",
+                          lastIcon: "mdi-page-last",
+                          prevIcon: "mdi-chevron-left",
+                          nextIcon: "mdi-chevron-right"
+                        },
+                        "show-expand": "",
+                        "single-expand": "",
+                        "show-select": "",
+                        "item-key": "id"
                       },
-                      "show-select": "",
-                      "item-key": "id"
-                    },
-                    on: {
-                      "update:options": function($event) {
-                        _vm.options = $event
+                      on: {
+                        "update:options": function($event) {
+                          _vm.options = $event
+                        }
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "expanded-item",
+                            fn: function(ref) {
+                              var headers = ref.headers
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "td",
+                                  { attrs: { colspan: headers.length } },
+                                  [
+                                    _c("v-container", [
+                                      _c("table", [
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Code")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(_vm._s(item.code))])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Gender")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.gender))
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Birthdate")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.birthdate))
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Email Address")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(_vm._s(item.email))])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [
+                                              _vm._v("Telephone #")
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(
+                                              _vm._s(item.telephone_number)
+                                            )
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("tr", [
+                                          _c("td", [
+                                            _c("strong", [_vm._v("Address")])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [_vm._v(":")]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _vm._v(_vm._s(item.address))
+                                          ])
+                                        ])
+                                      ])
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.revolving_fund",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(
+                                      item.remaining_fund + " / " + item.fund
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.job",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(
+                                      "" + (item.job ? item.job.name : "")
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.department",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(
+                                      "" +
+                                        (item.job
+                                          ? item.job.department
+                                            ? item.job.department.name
+                                            : ""
+                                          : "")
+                                    ) +
+                                    "\n                "
+                                )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.actions",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: { small: "" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onShow(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                        mdi-eye\n                    "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _vm.mixin_can("edit users") &&
+                                item.is_active == 1 &&
+                                item.deleted_at == null
+                                  ? _c(
+                                      "v-icon",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: { small: "" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.$router.push({
+                                              name: "admin.users.edit",
+                                              params: { id: item.id }
+                                            })
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                        mdi-pencil\n                    "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        true
+                      ),
+                      model: {
+                        value: _vm.selected,
+                        callback: function($$v) {
+                          _vm.selected = $$v
+                        },
+                        expression: "selected"
                       }
                     },
-                    scopedSlots: _vm._u(
-                      [
-                        {
-                          key: "item.actions",
-                          fn: function(ref) {
-                            var item = ref.item
-                            return [
-                              _vm.mixin_can("edit jobs") &&
-                              item.deleted_at == null
-                                ? _c(
-                                    "v-icon",
-                                    {
-                                      staticClass: "mr-2",
-                                      attrs: { small: "" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.onEdit(item)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                        mdi-pencil\n                    "
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]
-                          }
-                        }
-                      ],
-                      null,
-                      true
-                    ),
-                    model: {
-                      value: _vm.collections.selected,
-                      callback: function($$v) {
-                        _vm.$set(_vm.collections, "selected", $$v)
-                      },
-                      expression: "collections.selected"
-                    }
-                  })
+                    [
+                      _vm._v(" "),
+                      _vm._v(" "),
+                      _vm._v(" "),
+                      _vm._v(" "),
+                      _vm._v(" "),
+                      _vm.items.length > 0
+                        ? _c("template", { slot: "body.append" }, [
+                            _c(
+                              "tr",
+                              { staticClass: "green--text hidden-md-and-up" },
+                              [
+                                _c("td", { staticClass: "title" }, [
+                                  _vm._v(
+                                    "\n                            Total:\n                            "
+                                  ),
+                                  _c("strong", [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(_vm.total_remaining_fund) +
+                                        " /\n                                " +
+                                        _vm._s(_vm.total_fund) +
+                                        "\n                            "
+                                    )
+                                  ])
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "tr",
+                              { staticClass: "green--text hidden-sm-and-down" },
+                              [
+                                _c("td", { staticClass: "title" }, [
+                                  _vm._v("Total")
+                                ]),
+                                _vm._v(" "),
+                                _c("td"),
+                                _vm._v(" "),
+                                _c("td"),
+                                _vm._v(" "),
+                                _c("td"),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _c("strong", [
+                                    _vm._v(
+                                      _vm._s(_vm.total_remaining_fund) +
+                                        " /\n                                " +
+                                        _vm._s(_vm.total_fund)
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("td"),
+                                _vm._v(" "),
+                                _c("td")
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ],
+                    2
+                  )
                 ],
                 1
               )
@@ -1293,86 +2217,17 @@ var DepartmentDataService = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./resources/js/services/JobDataService.js":
-/*!*************************************************!*\
-  !*** ./resources/js/services/JobDataService.js ***!
-  \*************************************************/
+/***/ "./resources/js/views/pages/admin/users/Index.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/views/pages/admin/users/Index.vue ***!
+  \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// import http from "../http-common";
-
-
-var JobDataService = /*#__PURE__*/function () {
-  function JobDataService() {
-    _classCallCheck(this, JobDataService);
-  }
-
-  _createClass(JobDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/jobs", data);
-    }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/jobs", data);
-    }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/jobs/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/jobs", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/jobs/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/jobs/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/jobs/restore/".concat(id), data);
-    }
-  }]);
-
-  return JobDataService;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (new JobDataService());
-
-/***/ }),
-
-/***/ "./resources/js/views/pages/admin/jobs/Index.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/views/pages/admin/jobs/Index.vue ***!
-  \*******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_c7402dba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=c7402dba& */ "./resources/js/views/pages/admin/jobs/Index.vue?vue&type=template&id=c7402dba&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/jobs/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=242adbf1& */ "./resources/js/views/pages/admin/users/Index.vue?vue&type=template&id=242adbf1&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/users/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1383,8 +2238,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_c7402dba___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_c7402dba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1394,38 +2249,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/pages/admin/jobs/Index.vue"
+component.options.__file = "resources/js/views/pages/admin/users/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/jobs/Index.vue?vue&type=script&lang=js&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/jobs/Index.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************/
+/***/ "./resources/js/views/pages/admin/users/Index.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/users/Index.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/jobs/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/jobs/Index.vue?vue&type=template&id=c7402dba&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/jobs/Index.vue?vue&type=template&id=c7402dba& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/views/pages/admin/users/Index.vue?vue&type=template&id=242adbf1&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/users/Index.vue?vue&type=template&id=242adbf1& ***!
+  \***************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_c7402dba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=c7402dba& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/jobs/Index.vue?vue&type=template&id=c7402dba&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_c7402dba___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=242adbf1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Index.vue?vue&type=template&id=242adbf1&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_c7402dba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

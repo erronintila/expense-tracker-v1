@@ -63,7 +63,7 @@ class UserDataService {
     }
 
     export() {
-        return axios.get("/api/users/export");
+        return axios.get("/api/users/export/data");
     }
 }
 

@@ -1155,7 +1155,7 @@ var UserDataService = /*#__PURE__*/function () {
   }, {
     key: "export",
     value: function _export() {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export");
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/users/export/data");
     }
   }]);
 

@@ -38,6 +38,7 @@ class UserController extends Controller
         $this->middleware(['permission:reset user passwords'], ['only' => ['reset_password']]);
         $this->middleware(['permission:edit permissions'], ['only' => ['update_permissions']]);
         $this->middleware(['permission:set user activation'], ['only' => ['update_activation']]);
+        $this->middleware(['permission:export users'], ['only' => ['export']]);
     }
 
     /**

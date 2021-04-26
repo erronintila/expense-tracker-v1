@@ -228,6 +228,23 @@
                 >
                     Refresh
                 </v-chip>
+                <v-chip
+                    v-show="mixin_can('export users')"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onExport"
+                    close-icon="mdi-download"
+                    dark
+                >
+                    Export Data
+                </v-chip>
+                <!-- <a
+                    type="button"
+                    href="/api/users/export/data/"
+                >
+                    Export
+                </a> -->
             </v-row>
 
             <v-row class="ml-4" v-if="selected.length > 0">
@@ -479,7 +496,7 @@ export default {
                 { text: "Job Designation", value: "job" },
                 {
                     text: "Department",
-                    value: "department",
+                    value: "department"
                 },
                 { text: "Revolving Fund", value: "revolving_fund" },
                 { text: "Actions", value: "actions", sortable: false },
@@ -636,9 +653,7 @@ export default {
                 this.mixin_errorDialog("Error", "No item(s) selected");
                 return;
             }
-            this.$router.push(
-                `/users/${this.selected[0].id}/edit/permissions`
-            );
+            this.$router.push(`/users/${this.selected[0].id}/edit/permissions`);
             this.selected = [];
         },
         onPasswordReset() {
@@ -768,7 +783,15 @@ export default {
             });
         },
         onExport() {
-            UserDataService.export();
+            UserDataService.export()
+                .then(response => {
+                    window.location.href = "/api/users/export/data";
+                    this.mixin_successDialog(
+                        "Success",
+                        "The file was saved to 'Downloads' folder)"
+                    );
+                })
+                .catch(error => this.mixin_showErrors(error));
         }
     },
     watch: {
@@ -794,7 +817,7 @@ export default {
             }
         },
         search() {
-            if(this.search == '') {
+            if (this.search == "") {
                 this.getDataFromApi().then(data => {
                     this.items = data.data;
                     this.meta = data.meta;

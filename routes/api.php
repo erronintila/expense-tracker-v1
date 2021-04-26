@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->group(function () {
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
+    
+
     Route::apiResources(
         [
             'activity_logs' => 'API\v1\ActivityLogController',
@@ -204,6 +206,5 @@ Route::middleware('auth:sanctum')->group(function () {
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
-    // Route::get('/users/export', 'API\v1\UserController@export'); // Excel Export Package
-    // Route::get('/users/export', 'API\v1\userController@export'); // Excel Export Package
+    Route::get('/users/export/data', 'API\v1\UserController@export'); // Excel Export Package
 });

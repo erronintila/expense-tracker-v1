@@ -1,149 +1,343 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[7],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/vendors/Form.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/vendors/Form.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var _this = undefined;
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/selector/dropdown/JobDropdownSelector */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue");
+/* harmony import */ var _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/PermissionDataService */ "./resources/js/services/PermissionDataService.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    JobDropdownSelector: _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   props: {
-    vendorForm: {
+    userForm: {
       type: Object,
       "default": function _default() {
         return {
-          code: "",
-          name: "",
-          email: "",
-          tin: "",
-          contact_person: "",
-          mobile_number: "",
+          code: null,
+          first_name: null,
+          middle_name: "",
+          last_name: null,
+          suffix: "",
+          gender: null,
+          birthdate: null,
+          mobile_number: null,
           telephone_number: "",
-          remarks: "",
-          website: "",
-          is_vat_inclusive: true,
-          address: "",
-          is_active: true
+          address: null,
+          fund: 0,
+          remaining_fund: 0,
+          username: "",
+          email: null,
+          password: "password",
+          password_confirmation: "password",
+          is_admin: false,
+          is_superadmin: false,
+          can_login: true,
+          is_active: true,
+          type: "employee",
+          job: null,
+          permissions: [],
+          role: "Standard User"
         };
       }
     },
@@ -152,91 +346,136 @@ var _this = undefined;
       "default": function _default() {
         return {
           code: [],
-          name: [],
-          email: [],
-          tin: [],
-          contact_person: [],
+          first_name: [],
+          middle_name: [],
+          last_name: [],
+          suffix: [],
+          gender: [],
+          birthdate: [],
+          job: [],
           mobile_number: [],
           telephone_number: [],
-          remarks: [],
-          website: [],
-          is_vat_inclusive: [],
+          email: [],
           address: [],
-          is_active: []
+          username: [],
+          role: [],
+          can_login: [],
+          is_active: [],
+          has_fund: [],
+          fund: []
         };
       }
     },
     rules: {
       type: Object,
       "default": function _default() {
-        return {
-          tin: [function (v) {
-            return _this.is_vat_inclusive == true || "This field is required.";
-          }]
-        };
+        return {};
       }
+    },
+    isEdit: {
+      type: Boolean,
+      "default": false
     }
   },
   data: function data() {
     return {
-      no_tin: false,
+      panel: [0, 1, 2],
       valid: false,
-      row: null,
+      menu: false,
+      collections: {
+        permissions: [],
+        headers: [{
+          text: "Permission",
+          value: "name",
+          sortable: false
+        }]
+      },
       form: {
-        code: "",
-        name: "",
-        email: "",
-        tin: "",
-        contact_person: "",
-        mobile_number: "",
+        code: null,
+        first_name: null,
+        middle_name: "",
+        last_name: null,
+        suffix: "",
+        gender: null,
+        birthdate: null,
+        mobile_number: null,
         telephone_number: "",
-        remarks: "",
-        website: "",
-        is_vat_inclusive: true,
-        address: ""
+        address: null,
+        fund: 0,
+        remaining_fund: 0,
+        username: "",
+        email: null,
+        password: "password",
+        password_confirmation: "password",
+        is_admin: false,
+        is_superadmin: false,
+        can_login: true,
+        is_active: true,
+        type: "employee",
+        job: null,
+        permissions: [],
+        role: "Standard User"
       }
     };
   },
   methods: {
+    onChangeJob: function onChangeJob(e) {
+      this.errors.job_id = [];
+      this.form.job = e;
+    },
     onSave: function onSave() {
       if (!this.$refs.form.validate()) {
         return;
       }
 
       this.$emit("on-save", this.form);
+    },
+    loadPermissions: function loadPermissions() {
+      var _this = this;
+
+      _services_PermissionDataService__WEBPACK_IMPORTED_MODULE_2__["default"].get({
+        params: {
+          role: this.form.role
+        }
+      }).then(function (response) {
+        _this.collections.permissions = response.data;
+        _this.form.permissions = response.data;
+      })["catch"](function (error) {
+        _this.mixin_showErrors(error);
+      });
+    }
+  },
+  computed: {
+    maxDate: function maxDate() {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
   },
   watch: {
-    vendorForm: {
-      immediate: true,
+    userForm: {
       deep: true,
+      immediate: true,
       handler: function handler(newValue, oldValue) {
         this.form = newValue;
       }
     },
-    "form.is_vat_inclusive": function formIs_vat_inclusive() {
-      if (this.form.is_vat_inclusive) {
-        this.no_tin = false;
-        return;
-      }
-    },
-    no_tin: function no_tin() {
-      this.form.tin = this.no_tin ? "N/A" : "";
-    },
-    "form.tin": function formTin() {
-      if (this.form.tin == "N/A" || this.form.tin == null) {
-        this.no_tin = true;
-      }
+    "form.role": function formRole() {
+      this.loadPermissions();
     }
+  },
+  created: function created() {
+    this.loadPermissions();
+  },
+  activated: function activated() {
+    this.loadPermissions();
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/vendors/Form.vue?vue&type=template&id=e73a289c&":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/vendors/Form.vue?vue&type=template&id=e73a289c& ***!
-  \**********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216& ***!
+  \********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -261,65 +500,704 @@ var render = function() {
       }
     },
     [
-      _c("div", { staticClass: "overline green--text" }, [
-        _vm._v("\n        BASIC DETAILS\n    ")
-      ]),
-      _vm._v(" "),
       _c(
-        "v-row",
+        "v-expansion-panels",
+        {
+          attrs: { flat: "", multiple: "" },
+          model: {
+            value: _vm.panel,
+            callback: function($$v) {
+              _vm.panel = $$v
+            },
+            expression: "panel"
+          }
+        },
         [
           _c(
-            "v-col",
-            { attrs: { cols: "12", md: "9" } },
+            "v-expansion-panel",
             [
-              _c("v-text-field", {
-                attrs: {
-                  counter: 150,
-                  "error-messages": _vm.errors.name,
-                  rules: _vm.mixin_validation.required.concat(
-                    _vm.mixin_validation.minLength(150)
+              _c("v-expansion-panel-header", [
+                _c("div", { staticClass: "overline green--text" }, [
+                  _vm._v(
+                    "\n                    Basic Details\n                "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-expansion-panel-content",
+                [
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("JobDropdownSelector", {
+                            ref: "jobSelector",
+                            attrs: {
+                              selectedJob: _vm.form.job,
+                              rules: _vm.mixin_validation.required,
+                              errors: _vm.errors.job_id
+                            },
+                            on: { onChange: _vm.onChangeJob },
+                            model: {
+                              value: _vm.form.job,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "job", $$v)
+                              },
+                              expression: "form.job"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(100)
+                              ),
+                              counter: 100,
+                              "error-messages": _vm.errors.code,
+                              label: "Code",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.code = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.code,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "code", $$v)
+                              },
+                              expression: "form.code"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
                   ),
-                  label: "Name",
-                  required: ""
-                },
-                model: {
-                  value: _vm.form.name,
-                  callback: function($$v) {
-                    _vm.$set(_vm.form, "name", $$v)
-                  },
-                  expression: "form.name"
-                }
-              })
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(100)
+                              ),
+                              counter: 100,
+                              "error-messages": _vm.errors.first_name,
+                              label: "First Name",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.first_name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.first_name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "first_name", $$v)
+                              },
+                              expression: "form.first_name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              counter: 100,
+                              "error-messages": _vm.errors.middle_name,
+                              label: "Middle Name"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.middle_name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.middle_name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "middle_name", $$v)
+                              },
+                              expression: "form.middle_name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(100)
+                              ),
+                              counter: 100,
+                              "error-messages": _vm.errors.last_name,
+                              label: "Last Name",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.last_name = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.last_name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "last_name", $$v)
+                              },
+                              expression: "form.last_name"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-combobox", {
+                            attrs: {
+                              counter: 30,
+                              items: ["Jr", "Sr", "II", "III"],
+                              "error-messages": _vm.errors.suffix,
+                              label: "Suffix"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.suffix = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.suffix,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "suffix", $$v)
+                              },
+                              expression: "form.suffix"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-select", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required,
+                              items: ["Male", "Female"],
+                              "error-messages": _vm.errors.gender,
+                              label: "Gender",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.gender = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.gender,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "gender", $$v)
+                              },
+                              expression: "form.gender"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c(
+                            "v-menu",
+                            {
+                              ref: "menu",
+                              attrs: {
+                                "close-on-content-click": false,
+                                transition: "scale-transition",
+                                "offset-y": "",
+                                "min-width": "290px"
+                              },
+                              scopedSlots: _vm._u([
+                                {
+                                  key: "activator",
+                                  fn: function(ref) {
+                                    var on = ref.on
+                                    var attrs = ref.attrs
+                                    return [
+                                      _c(
+                                        "v-text-field",
+                                        _vm._g(
+                                          _vm._b(
+                                            {
+                                              attrs: {
+                                                rules:
+                                                  _vm.mixin_validation.required,
+                                                "error-messages":
+                                                  _vm.errors.birthdate,
+                                                label: "Birthdate",
+                                                readonly: ""
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  _vm.errors.birthdate = []
+                                                }
+                                              },
+                                              model: {
+                                                value: _vm.form.birthdate,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.form,
+                                                    "birthdate",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "form.birthdate"
+                                              }
+                                            },
+                                            "v-text-field",
+                                            attrs,
+                                            false
+                                          ),
+                                          on
+                                        )
+                                      )
+                                    ]
+                                  }
+                                }
+                              ]),
+                              model: {
+                                value: _vm.menu,
+                                callback: function($$v) {
+                                  _vm.menu = $$v
+                                },
+                                expression: "menu"
+                              }
+                            },
+                            [
+                              _vm._v(" "),
+                              _c("v-date-picker", {
+                                attrs: {
+                                  "no-title": "",
+                                  scrollable: "",
+                                  color: "success",
+                                  max: _vm.maxDate
+                                },
+                                model: {
+                                  value: _vm.form.birthdate,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "birthdate", $$v)
+                                  },
+                                  expression: "form.birthdate"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required,
+                              counter: 30,
+                              "error-messages": _vm.errors.mobile_number,
+                              label: "Mobile Number",
+                              type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.mobile_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.mobile_number,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "mobile_number", $$v)
+                              },
+                              expression: "form.mobile_number"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              counter: 30,
+                              "error-messages": _vm.errors.telephone_number,
+                              label: "Telephone Number",
+                              type: "number"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.telephone_number = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.telephone_number,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "telephone_number", $$v)
+                              },
+                              expression: "form.telephone_number"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.email
+                              ),
+                              "error-messages": _vm.errors.email,
+                              label: "Email Address"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.email = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.email,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "email", $$v)
+                              },
+                              expression: "form.email"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12" } },
+                        [
+                          _c("v-textarea", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required,
+                              "error-messages": _vm.errors.address,
+                              label: "Address",
+                              rows: "1"
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.address = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.address,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "address", $$v)
+                              },
+                              expression: "form.address"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  !_vm.isEdit
+                    ? _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: {
+                                  label: "has Revolving Fund",
+                                  "error-messages": _vm.errors.has_fund
+                                },
+                                model: {
+                                  value: _vm.form.has_fund,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "has_fund", $$v)
+                                  },
+                                  expression: "form.has_fund"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.form.has_fund && !_vm.isEdit
+                    ? _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Revolving Fund",
+                                  "error-messages": _vm.errors.fund,
+                                  type: "number"
+                                },
+                                on: {
+                                  input: function($event) {
+                                    _vm.errors.fund = []
+                                  }
+                                },
+                                model: {
+                                  value: _vm.form.fund,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "fund", $$v)
+                                  },
+                                  expression: "form.fund"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
             ],
             1
           ),
           _vm._v(" "),
           _c(
-            "v-col",
-            { attrs: { cols: "12", md: "3" } },
+            "v-expansion-panel",
             [
+              _c("v-expansion-panel-header", [
+                _c("div", { staticClass: "overline green--text" }, [
+                  _vm._v(
+                    "\n                    Account Details\n                "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
               _c(
-                "v-radio-group",
-                {
-                  attrs: { row: "" },
-                  on: {
-                    change: function($event) {
-                      _vm.no_tin = false
-                      _vm.form.tin = ""
-                    }
-                  },
-                  model: {
-                    value: _vm.form.is_vat_inclusive,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "is_vat_inclusive", $$v)
-                    },
-                    expression: "form.is_vat_inclusive"
-                  }
-                },
+                "v-expansion-panel-content",
                 [
-                  _c("v-radio", { attrs: { label: "VAT", value: true } }),
+                  !_vm.isEdit
+                    ? _c("small", { staticClass: "text--secondary" }, [
+                        _vm._v(
+                          '\n                    Default Password: "password"\n                '
+                        )
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("v-radio", { attrs: { label: "Non-VAT", value: false } })
+                  _c(
+                    "v-row",
+                    [
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "4" } },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              rules: _vm.mixin_validation.required.concat(
+                                _vm.mixin_validation.minLength(50)
+                              ),
+                              counter: 50,
+                              "error-messages": _vm.errors.username,
+                              label: "Username",
+                              required: ""
+                            },
+                            on: {
+                              input: function($event) {
+                                _vm.errors.username = []
+                              }
+                            },
+                            model: {
+                              value: _vm.form.username,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "username", $$v)
+                              },
+                              expression: "form.username"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      !_vm.isEdit
+                        ? _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: {
+                                  label: "Active Account",
+                                  "error-messages": _vm.errors.is_active
+                                },
+                                model: {
+                                  value: _vm.form.is_active,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "is_active", $$v)
+                                  },
+                                  expression: "form.is_active"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.isEdit
+                        ? _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: {
+                                  label: "Allow Login",
+                                  "error-messages": _vm.errors.can_login
+                                },
+                                model: {
+                                  value: _vm.form.can_login,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "can_login", $$v)
+                                  },
+                                  expression: "form.can_login"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.isEdit
+                        ? _c(
+                            "v-col",
+                            { attrs: { cols: "12", md: "4" } },
+                            [
+                              _c(
+                                "v-radio-group",
+                                {
+                                  attrs: { row: "", label: "Role" },
+                                  model: {
+                                    value: _vm.form.role,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.form, "role", $$v)
+                                    },
+                                    expression: "form.role"
+                                  }
+                                },
+                                [
+                                  _c("v-radio", {
+                                    attrs: {
+                                      label: "Standard User",
+                                      value: "Standard User"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("v-radio", {
+                                    attrs: {
+                                      label: "Administrator",
+                                      value: "Administrator"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  !_vm.isEdit
+                    ? _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            [
+                              _c("v-data-table", {
+                                attrs: {
+                                  "show-select": "",
+                                  "items-per-page": -1,
+                                  headers: _vm.collections.headers,
+                                  items: _vm.collections.permissions,
+                                  "group-by": "category"
+                                },
+                                model: {
+                                  value: _vm.form.permissions,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "permissions", $$v)
+                                  },
+                                  expression: "form.permissions"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e()
                 ],
                 1
               )
@@ -335,181 +1213,6 @@ var render = function() {
         [
           _c(
             "v-col",
-            { attrs: { cols: "9", md: "9" } },
-            [
-              _c("v-text-field", {
-                attrs: {
-                  rules: _vm.mixin_validation.required,
-                  "error-messages": _vm.errors.tin,
-                  counter: 100,
-                  label: "Tax Identification Number (TIN)",
-                  required: "",
-                  readonly: _vm.no_tin
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "append",
-                    fn: function() {
-                      return undefined
-                    },
-                    proxy: true
-                  }
-                ]),
-                model: {
-                  value: _vm.form.tin,
-                  callback: function($$v) {
-                    _vm.$set(_vm.form, "tin", $$v)
-                  },
-                  expression: "form.tin"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-col",
-            { attrs: { cols: "3", md: "3" } },
-            [
-              _c("v-checkbox", {
-                attrs: { label: "N/A", readonly: _vm.form.is_vat_inclusive },
-                model: {
-                  value: _vm.no_tin,
-                  callback: function($$v) {
-                    _vm.no_tin = $$v
-                  },
-                  expression: "no_tin"
-                }
-              })
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: [],
-          "error-messages": _vm.errors.email,
-          label: "Email Address"
-        },
-        model: {
-          value: _vm.form.email,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "email", $$v)
-          },
-          expression: "form.email"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: [],
-          "error-messages": _vm.errors.contact_person,
-          counter: 100,
-          label: "Contact Person"
-        },
-        model: {
-          value: _vm.form.contact_person,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "contact_person", $$v)
-          },
-          expression: "form.contact_person"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: [],
-          counter: 30,
-          "error-messages": _vm.errors.mobile_number,
-          label: "Mobile Number",
-          type: "number"
-        },
-        on: {
-          input: function($event) {
-            _vm.errors.mobile_number = []
-          }
-        },
-        model: {
-          value: _vm.form.mobile_number,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "mobile_number", $$v)
-          },
-          expression: "form.mobile_number"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          rules: [],
-          counter: 30,
-          "error-messages": _vm.errors.telephone_number,
-          label: "Telephone Number",
-          type: "number"
-        },
-        on: {
-          input: function($event) {
-            _vm.errors.telephone_number = []
-          }
-        },
-        model: {
-          value: _vm.form.telephone_number,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "telephone_number", $$v)
-          },
-          expression: "form.telephone_number"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-text-field", {
-        attrs: {
-          counter: 100,
-          rules: [],
-          "error-messages": _vm.errors.website,
-          label: "Website"
-        },
-        on: {
-          input: function($event) {
-            _vm.errors.website = []
-          }
-        },
-        model: {
-          value: _vm.form.website,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "website", $$v)
-          },
-          expression: "form.website"
-        }
-      }),
-      _vm._v(" "),
-      _c("v-textarea", {
-        attrs: {
-          "error-messages": _vm.errors.address,
-          rules: _vm.mixin_validation.required,
-          label: "Address",
-          rows: "3"
-        },
-        on: {
-          input: function($event) {
-            _vm.errors.address = []
-          }
-        },
-        model: {
-          value: _vm.form.address,
-          callback: function($$v) {
-            _vm.$set(_vm.form, "address", $$v)
-          },
-          expression: "form.address"
-        }
-      }),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c(
-            "v-col",
             { staticClass: "text-right" },
             [
               _c(
@@ -518,7 +1221,7 @@ var render = function() {
                   attrs: { color: "success", dark: "" },
                   on: { click: _vm.onSave }
                 },
-                [_vm._v("\n                Save\n            ")]
+                [_vm._v("Save")]
               ),
               _vm._v(" "),
               _c(
@@ -549,10 +1252,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/services/VendorDataService.js":
-/*!****************************************************!*\
-  !*** ./resources/js/services/VendorDataService.js ***!
-  \****************************************************/
+/***/ "./resources/js/services/PermissionDataService.js":
+/*!********************************************************!*\
+  !*** ./resources/js/services/PermissionDataService.js ***!
+  \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -569,71 +1272,41 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // import http from "../http-common";
 
 
-var VendorDataService = /*#__PURE__*/function () {
-  function VendorDataService() {
-    _classCallCheck(this, VendorDataService);
+var PermissionDataService = /*#__PURE__*/function () {
+  function PermissionDataService() {
+    _classCallCheck(this, PermissionDataService);
   }
 
-  _createClass(VendorDataService, [{
+  _createClass(PermissionDataService, [{
     key: "getAll",
     value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/permissions", data);
     }
   }, {
     key: "get",
     value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/vendors", data);
-    }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/vendors", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/vendors/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/restore/".concat(id), data);
-    }
-  }, {
-    key: "updateActivation",
-    value: function updateActivation(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/update_activation/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/permissions", data);
     }
   }]);
 
-  return VendorDataService;
+  return PermissionDataService;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new VendorDataService());
+/* harmony default export */ __webpack_exports__["default"] = (new PermissionDataService());
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/vendors/Form.vue":
-/*!*********************************************************!*\
-  !*** ./resources/js/views/pages/admin/vendors/Form.vue ***!
-  \*********************************************************/
+/***/ "./resources/js/views/pages/admin/users/Form.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/views/pages/admin/users/Form.vue ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Form_vue_vue_type_template_id_e73a289c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue?vue&type=template&id=e73a289c& */ "./resources/js/views/pages/admin/vendors/Form.vue?vue&type=template&id=e73a289c&");
-/* harmony import */ var _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/vendors/Form.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Form.vue?vue&type=template&id=fc079216& */ "./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&");
+/* harmony import */ var _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -644,8 +1317,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Form_vue_vue_type_template_id_e73a289c___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Form_vue_vue_type_template_id_e73a289c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -655,38 +1328,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/pages/admin/vendors/Form.vue"
+component.options.__file = "resources/js/views/pages/admin/users/Form.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/vendors/Form.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/vendors/Form.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************/
+/***/ "./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/vendors/Form.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/vendors/Form.vue?vue&type=template&id=e73a289c&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/vendors/Form.vue?vue&type=template&id=e73a289c& ***!
-  \****************************************************************************************/
+/***/ "./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216& ***!
+  \**************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_e73a289c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=e73a289c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/vendors/Form.vue?vue&type=template&id=e73a289c&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_e73a289c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=fc079216& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/users/Form.vue?vue&type=template&id=fc079216&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_e73a289c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_fc079216___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
