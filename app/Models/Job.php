@@ -144,16 +144,6 @@ class Job extends Model
         return $this->hasMany(User::class);
     }
 
-    // /**
-    //  * Displays the job histories associated with job designation.
-    //  *
-    //  * @return mixed
-    //  */
-    // public function job_histories()
-    // {
-    //     return $this->hasMany(JobHistory::class);
-    // }
-
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
     | LARAVEL ACCESSORS
