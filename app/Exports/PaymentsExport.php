@@ -2,18 +2,18 @@
 
 namespace App\Exports;
 
-use App\Models\Expense;
+use App\Models\Payment as Payment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ExpensesExport implements FromCollection, WithHeadings
+class PaymentsExport implements FromCollection, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Expense::all();
+        return Payment::all();
     }
 
     public function headings(): array
