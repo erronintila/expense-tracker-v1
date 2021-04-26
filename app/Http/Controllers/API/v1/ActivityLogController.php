@@ -19,6 +19,7 @@ class ActivityLogController extends Controller
     {
         $this->middleware(['permission:view all activity logs'], ['only' => ['index']]);
         $this->middleware(['permission:delete activity logs'], ['only' => ['destroy']]);
+        $this->middleware(['permission:export activity logs'], ['only' => ['export']]);
     }
 
     /**
@@ -106,10 +107,12 @@ class ActivityLogController extends Controller
      *
      * @return void
      */
-    public function export()
+    public function export(Request $request)
     {
         $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
         $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        $start_date = Carbon::parse($start_date)->startOfDay();
+        $end_date = Carbon::parse($end_date)->endOfDay();
         return Excel::download(new ActivityLogsExport($start_date, $end_date), 'Activity Logs - Expense Tracker.xlsx');
     }
 }

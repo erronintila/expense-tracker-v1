@@ -62,6 +62,17 @@
                 >
                     Refresh
                 </v-chip>
+                <v-chip
+                    v-show="mixin_can('export activity logs')"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onExport"
+                    close-icon="mdi-download"
+                    dark
+                >
+                    Export Data
+                </v-chip>
             </v-row>
 
             <v-card-text>
@@ -294,6 +305,27 @@ export default {
             }
 
             return false;
+        },
+        onExport() {
+            let range = this.filters.date_range;
+            let data = {
+                params: {
+                    start_date: range[0],
+                    end_date: range[1] ? range[1] : range[0]
+                }
+            };
+            // window.location.href = `api/activity_logs/export/data?start_date=${start_date}&end_date=${end_date}`;
+            ActivityLogDataService.export(data)
+                .then(response => {
+                    window.location.href = `/api/activity_logs/export/data?
+                        start_date=${data.params.start_date}&
+                        end_date=${data.params.end_date}`;
+                    this.mixin_successDialog(
+                        "Success",
+                        "The file was saved to 'Downloads' folder)"
+                    );
+                })
+                .catch(error => this.mixin_showErrors(error));
         }
     },
     watch: {

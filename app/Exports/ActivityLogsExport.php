@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Http\Resources\ActivityLogResource;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Spatie\Activitylog\Models\Activity;
@@ -22,11 +24,25 @@ class ActivityLogsExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Activity::all();
+        $data = DB::table('activity_log')->orderBy("created_at", "desc")
+            ->whereBetween("created_at", [$this->start_date, $this->end_date])
+            ->get();
+        return $data;
     }
 
     public function headings(): array
     {
-        return [];
+        return [
+            "id",
+            "log name",
+            "description",
+            "subject type",
+            "subject id",
+            "causer type",
+            "causer id",
+            "properties",
+            "created at",
+            "updated at"
+        ];
     }
 }

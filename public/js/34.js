@@ -162,6 +162,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -304,6 +315,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return false;
+    },
+    onExport: function onExport() {
+      var _this2 = this;
+
+      var range = this.filters.date_range;
+      var data = {
+        params: {
+          start_date: range[0],
+          end_date: range[1] ? range[1] : range[0]
+        }
+      }; // window.location.href = `api/activity_logs/export/data?start_date=${start_date}&end_date=${end_date}`;
+
+      _services_ActivityLogDataService__WEBPACK_IMPORTED_MODULE_3__["default"]["export"](data).then(function (response) {
+        window.location.href = "/api/activity_logs/export/data?\n                        start_date=".concat(data.params.start_date, "&\n                        end_date=").concat(data.params.end_date);
+
+        _this2.mixin_successDialog("Success", "The file was saved to 'Downloads' folder)");
+      })["catch"](function (error) {
+        return _this2.mixin_showErrors(error);
+      });
     }
   },
   watch: {
@@ -311,11 +341,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this2 = this;
+        var _this3 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this2.collections.activityLogs = data.data;
-          _this2.meta = data.meta;
+          _this3.collections.activityLogs = data.data;
+          _this3.meta = data.meta;
         });
       }
     }
@@ -347,12 +377,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this3 = this;
+    var _this4 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this3.collections.activityLogs = data.data;
-      _this3.meta = data.meta;
+      _this4.collections.activityLogs = data.data;
+      _this4.meta = data.meta;
     });
   }
 });
@@ -532,6 +562,29 @@ var render = function() {
                       on: { "click:close": _vm.onReset }
                     },
                     [_vm._v("\n                Refresh\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.mixin_can("export activity logs"),
+                          expression: "mixin_can('export activity logs')"
+                        }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-download",
+                        dark: ""
+                      },
+                      on: { "click:close": _vm.onExport }
+                    },
+                    [_vm._v("\n                Export Data\n            ")]
                   )
                 ],
                 1
@@ -752,8 +805,8 @@ var ActivityLogDataService = /*#__PURE__*/function () {
     }
   }, {
     key: "export",
-    value: function _export() {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/activity_logs/export/data");
+    value: function _export(data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/activity_logs/export/data", data);
     }
   }]);
 

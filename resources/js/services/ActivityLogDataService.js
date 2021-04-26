@@ -6,8 +6,8 @@ class ActivityLogDataService {
         return axios.get("/api/activity_logs", data);
     }
 
-    export() {
-        return axios.get("/api/activity_logs/export/data");
+    export(data) {
+        return axios.get("/api/activity_logs/export/data", data);
     }
 }
 
