@@ -36,6 +36,7 @@ class UsersExport implements FromCollection, WithHeadings
             "))
             ->join("jobs", "jobs.id", "=", "users.job_id")
             ->join("departments", "departments.id", "=", "jobs.department_id")
+            ->where(DB::raw("users.deleted_at"), null)
             ->get();
         return $data;
     }
