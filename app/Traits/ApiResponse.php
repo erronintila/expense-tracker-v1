@@ -5,7 +5,7 @@ namespace App\Traits;
 trait ApiResponse
 {    
     /**
-     * successResponse
+     * Returns a success response on each request
      *
      * @param  mixed $data
      * @param  mixed $message
@@ -22,7 +22,7 @@ trait ApiResponse
     }
     
     /**
-     * errorResponse
+     * Returns an error response on each request
      *
      * @param  mixed $message
      * @param  mixed $code

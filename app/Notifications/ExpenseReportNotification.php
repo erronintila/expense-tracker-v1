@@ -74,7 +74,6 @@ class ExpenseReportNotification extends Notification
                 $description = "Rejected Expense Report";
                 break;
             default:
-                # code...
                 break;
         }
 

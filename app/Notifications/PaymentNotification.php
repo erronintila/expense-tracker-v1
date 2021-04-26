@@ -70,7 +70,6 @@ class PaymentNotification extends Notification
                 $description = "Confirmed Payment";
                 break;
             default:
-                # code...
                 break;
         }
 

@@ -6,7 +6,7 @@ use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
 
 class ExpenseObserver
-{    
+{
     /**
      * created
      *
@@ -28,13 +28,6 @@ class ExpenseObserver
      */
     public function updated(Expense $expense)
     {
-        // $rejected = $expense->expense_report->getOriginal("rejected_at");
-        // if ($rejected == null && $expense->expense_report->rejected_at !== null) {
-        //     $expense_amount = $expense->amount - $expense->reimbursable_amount;
-        //     $expense->user->remaining_fund += $expense_amount;
-        //     $expense->user->save();
-        //     return;
-        // }
         $original_deducted_amount = $expense->getOriginal("amount") - $expense->getOriginal("reimbursable_amount");
         $new_amount = $expense->amount - $expense->reimbursable_amount;
         $remaining_fund = $expense->user->remaining_fund;
@@ -63,12 +56,10 @@ class ExpenseObserver
     public function deleted(Expense $expense)
     {
         if ($expense->expense_report()->onlyTrashed()->count()) {
-            // if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
             if ($expense->expense_report()->onlyTrashed()->first()->rejected_at) {
                 return;
             }
         }
-        // $expense_amount = $expense->revolving_fund;
         $expense_amount = $expense->amount - $expense->reimbursable_amount;
         $expense->user->remaining_fund += $expense_amount;
         $expense->user->save();
@@ -83,7 +74,6 @@ class ExpenseObserver
     public function restored(Expense $expense)
     {
         if ($expense->expense_report) {
-            // if ($expense->expense_report()->withTrashed()->first()->rejected_at) {
             if ($expense->expense_report()->first()->rejected_at) {
                 return;
             }

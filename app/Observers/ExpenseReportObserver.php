@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\ExpenseReport;
-use Illuminate\Support\Facades\Auth;
 
 class ExpenseReportObserver
 {

@@ -21,12 +21,6 @@ class AdjustmentObserver
             $remaining_fund = $adjustment->user->remaining_fund;
             $adjustment->user->fund = ($fund + $added_amount) - $subtracted_amount;
             $adjustment->user->remaining_fund = ($remaining_fund + $added_amount) - $subtracted_amount;
-            // if ($remaining_fund == 0) {
-            //     $adjustment->user->remaining_fund = $adjustment->user->fund;
-            // } else {
-            //     $adjustment->user->remaining_fund = $adjustment->user->fund > $remaining_fund ?
-            //         $remaining_fund : $adjustment->user->fund;
-            // }
             $adjustment->user->save();
         }
     }

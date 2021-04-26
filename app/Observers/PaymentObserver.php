@@ -35,15 +35,15 @@ class PaymentObserver
         $original_cancelled_at = $payment->getOriginal("cancelled_at");
         $original_received_at = $payment->getOriginal("received_at");
 
-        if(!$payment->cancelled_at == null && !$original_cancelled_at == null) {
+        if (!$payment->cancelled_at == null && !$original_cancelled_at == null) {
             return;
         }
 
-        if(!$payment->cancelled_at == null && $original_received_at == null) {
+        if (!$payment->cancelled_at == null && $original_received_at == null) {
             return;
         }
 
-        if(!$payment->cancelled_at == null && $original_cancelled_at == null && !$original_received_at == null) {
+        if (!$payment->cancelled_at == null && $original_cancelled_at == null && !$original_received_at == null) {
             foreach ($payment->expense_reports as $expense_report) {
                 $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
                 foreach ($expense_report->expenses as $expense) {
@@ -56,33 +56,16 @@ class PaymentObserver
             return;
         }
 
-        // if($payment->received_at == null) {
-        //     $payment->amount = $payment->getTotalAmountAttribute() ?? 0;
-        //     $payment->save();
-        //     return;
-        // }
-        // $received = $payment->getOriginal("received_at");
-        // if ($received == null && $payment->received_at !== null) {
         foreach ($payment->expense_reports as $expense_report) {
-            // $expense_report = ExpenseReport::withTrashed()->findOrFail($expense_report["id"]);
             $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
-            // $expense_report->paid_at = now();
-            // $expense_report->paid_by = Auth::id();
-            // $expense_report->save();
             foreach ($expense_report->expenses as $expense) {
                 $expense_amount = $expense->amount - $expense->reimbursable_amount;
-                // $expense->user->remaining_fund += $expense_amount;
-                // $expense->paid_at = now();
-                // $expense->paid_by = Auth::id();
                 $expense->save();
-                // $expense->user->save();
-                // $user = User::withTrashed()->findOrFail($expense->user_id);
                 $user = User::findOrFail($expense->user_id);
                 $user->remaining_fund += $expense_amount;
                 $user->save();
             }
         }
-        // }
     }
 
     /**

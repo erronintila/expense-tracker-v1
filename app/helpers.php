@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('generate_code')) {    
     /**
-     * generate_code
+     * Generate default code
      *
      * @param  mixed $model
      * @param  mixed $prefix
@@ -22,7 +22,7 @@ if (!function_exists('generate_code')) {
 
 if (!function_exists('log_activity')) {
     /**
-     * log_activity
+     * Logs user's activity
      *
      * @param  mixed $log_name
      * @param  mixed $model
