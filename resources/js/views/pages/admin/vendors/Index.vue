@@ -178,6 +178,18 @@
                 >
                     Archive
                 </v-chip>
+
+                <v-chip
+                    v-show="mixin_can('export vendors')"
+                    close
+                    class="mr-2 mb-2"
+                    small
+                    @click:close="onExport"
+                    close-icon="mdi-download"
+                    dark
+                >
+                    Export Data
+                </v-chip>
             </v-row>
 
             <v-card-subtitle>
@@ -470,6 +482,17 @@ export default {
                         });
                 }
             });
+        },
+        onExport() {
+            VendorDataService.export()
+                .then(response => {
+                    window.location.href = "/api/vendors/export/data";
+                    this.mixin_successDialog(
+                        "Success",
+                        "The file was saved to 'Downloads' folder)"
+                    );
+                })
+                .catch(error => this.mixin_showErrors(error));
         }
     },
     computed: {

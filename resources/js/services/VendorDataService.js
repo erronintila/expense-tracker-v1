@@ -33,6 +33,10 @@ class VendorDataService {
     updateActivation(id, data) {
         return axios.put(`/api/vendors/update_activation/${id}`, data);
     }
+
+    export() {
+        return axios.get("/api/vendors/export/data");
+    }
 }
 
 export default new VendorDataService();

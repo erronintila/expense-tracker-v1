@@ -206,5 +206,10 @@ Route::middleware('auth:sanctum')->group(function () {
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
-    Route::get('/users/export/data', 'API\v1\UserController@export'); // Excel Export Package
+    // Excel Export Package
+    Route::get('/users/export/data', 'API\v1\UserController@export');
+    Route::get('/vendors/export/data', 'API\v1\VendorController@export');
+    Route::get('/expenses/export/data', 'API\v1\ExpenseController@export');
+    Route::get('/expense_reports/export/data', 'API\v1\ExpenseReportController@export');
+    Route::get('/payments/export/data', 'API\v1\PaymentController@export');
 });

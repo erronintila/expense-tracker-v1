@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\ExpensesExport;
 use App\User;
 use App\Models\Expense;
 use App\Models\ExpenseType;
@@ -20,6 +21,7 @@ use App\Http\Resources\ExpenseIndexResource;
 use App\Http\Resources\ExpesneIndexResource;
 use App\Models\Vendor;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExpenseController extends Controller
 {
@@ -615,6 +617,18 @@ class ExpenseController extends Controller
     | EXPENSE CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    /**
+     * Export data to Excel
+     *
+     * @return void
+     */
+    public function export()
+    {
+        $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
+        $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        return Excel::download(new ExpensesExport($start_date, $end_date), 'Expenses - Expense Tracker.xlsx');
+    }
 
     public function restore(Request $request, $id)
     {

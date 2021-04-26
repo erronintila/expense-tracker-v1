@@ -29,6 +29,10 @@ class PaymentDataService {
     restore(id, data) {
         return axios.put(`/api/payments/restore/${id}`, data);
     }
+
+    export() {
+        return axios.get("/api/payments/export/data");
+    }
 }
 
 export default new PaymentDataService();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\VendorsExport;
 use App\Models\Vendor;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\VendorResource;
 use App\Http\Requests\Vendor\VendorStoreRequest;
 use App\Http\Requests\Vendor\VendorUpdateRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VendorController extends Controller
 {
@@ -221,5 +223,15 @@ class VendorController extends Controller
     {
         $vendors = Vendor::with('expense_types')->orderBy("name")->get();
         return VendorResource::collection($vendors);
+    }
+
+    /**
+     * Export User data to Excel
+     *
+     * @return void
+     */
+    public function export()
+    {
+        return Excel::download(new VendorsExport, 'Vendors - Expense Tracker.xlsx');
     }
 }

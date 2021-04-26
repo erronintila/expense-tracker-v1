@@ -45,6 +45,10 @@ class ExpenseReportDataService {
     duplicate(id, data) {
         return axios.put(`/api/expense_reports/duplicate/${id}`, data);
     }
+
+    export() {
+        return axios.get("/api/expense_reports/export/data");
+    }
 }
 
 export default new ExpenseReportDataService();

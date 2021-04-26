@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\ExpenseReportsExport;
 use App\User;
 use Carbon\Carbon;
 use App\Models\Expense;
@@ -17,6 +18,7 @@ use App\Http\Resources\ExpenseReportResource;
 use App\Notifications\ExpenseReportNotification;
 use App\Http\Requests\ExpenseReport\ExpenseReportStoreRequest;
 use App\Http\Requests\ExpenseReport\ExpenseReportUpdateRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExpenseReportController extends Controller
 {
@@ -435,6 +437,18 @@ class ExpenseReportController extends Controller
     | EXPENSE REPORT CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    /**
+     * Export data to Excel
+     *
+     * @return void
+     */
+    public function export()
+    {
+        $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
+        $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        return Excel::download(new ExpenseReportsExport($start_date, $end_date), 'Expense Reports - Expense Tracker.xlsx');
+    }
 
     public function restore(Request $request, $id)
     {

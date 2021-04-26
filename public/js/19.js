@@ -3441,6 +3441,11 @@ var ExpenseReportDataService = /*#__PURE__*/function () {
     value: function duplicate(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_reports/duplicate/".concat(id), data);
     }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_reports/export/data");
+    }
   }]);
 
   return ExpenseReportDataService;

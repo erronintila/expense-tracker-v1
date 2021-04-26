@@ -750,6 +750,11 @@ var ActivityLogDataService = /*#__PURE__*/function () {
     value: function getAll(data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/activity_logs", data);
     }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/activity_logs/export/data");
+    }
   }]);
 
   return ActivityLogDataService;

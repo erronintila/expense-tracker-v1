@@ -293,6 +293,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
@@ -505,6 +517,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    onExport: function onExport() {
+      var _this6 = this;
+
+      _services_VendorDataService__WEBPACK_IMPORTED_MODULE_0__["default"]["export"]().then(function (response) {
+        window.location.href = "/api/vendors/export/data";
+
+        _this6.mixin_successDialog("Success", "The file was saved to 'Downloads' folder)");
+      })["catch"](function (error) {
+        return _this6.mixin_showErrors(error);
+      });
     }
   },
   computed: {
@@ -517,12 +540,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     search: function search() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.search == "") {
         this.getDataFromApi().then(function (data) {
-          _this6.items = data.items;
-          _this6.totalItems = data.total;
+          _this7.items = data.items;
+          _this7.totalItems = data.total;
         });
       }
     },
@@ -530,11 +553,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       immediate: true,
       deep: true,
       handler: function handler() {
-        var _this7 = this;
+        var _this8 = this;
 
         this.getDataFromApi().then(function (data) {
-          _this7.items = data.items;
-          _this7.totalItems = data.total;
+          _this8.items = data.items;
+          _this8.totalItems = data.total;
         });
       }
     }
@@ -543,12 +566,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   //     this.$store.dispatch("AUTH_NOTIFICATIONS");
   // },
   activated: function activated() {
-    var _this8 = this;
+    var _this9 = this;
 
     this.$store.dispatch("AUTH_NOTIFICATIONS");
     this.getDataFromApi().then(function (data) {
-      _this8.items = data.items;
-      _this8.totalItems = data.total;
+      _this9.items = data.items;
+      _this9.totalItems = data.total;
     });
   }
 });
@@ -886,6 +909,29 @@ var render = function() {
                       on: { "click:close": _vm.onDelete }
                     },
                     [_vm._v("\n                Archive\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-chip",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.mixin_can("export vendors"),
+                          expression: "mixin_can('export vendors')"
+                        }
+                      ],
+                      staticClass: "mr-2 mb-2",
+                      attrs: {
+                        close: "",
+                        small: "",
+                        "close-icon": "mdi-download",
+                        dark: ""
+                      },
+                      on: { "click:close": _vm.onExport }
+                    },
+                    [_vm._v("\n                Export Data\n            ")]
                   )
                 ],
                 1
@@ -1202,6 +1248,11 @@ var VendorDataService = /*#__PURE__*/function () {
     key: "updateActivation",
     value: function updateActivation(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/update_activation/".concat(id), data);
+    }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors/export/data");
     }
   }]);
 

@@ -3554,6 +3554,11 @@ var ExpenseDataService = /*#__PURE__*/function () {
     value: function restore(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
     }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/export/data");
+    }
   }]);
 
   return ExpenseDataService;
@@ -3627,6 +3632,11 @@ var VendorDataService = /*#__PURE__*/function () {
     key: "updateActivation",
     value: function updateActivation(id, data) {
       return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/vendors/update_activation/".concat(id), data);
+    }
+  }, {
+    key: "export",
+    value: function _export() {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/vendors/export/data");
     }
   }]);
 

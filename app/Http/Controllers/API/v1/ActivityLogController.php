@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\ActivityLogsExport;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Resources\ActivityLogResource;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ActivityLogController extends Controller
 {
@@ -97,5 +99,17 @@ class ActivityLogController extends Controller
     public function destroy(Request $request, $id)
     {
         abort(422, "Activity Logs can't be deleted.");
+    }
+
+    /**
+     * Export data to Excel
+     *
+     * @return void
+     */
+    public function export()
+    {
+        $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
+        $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        return Excel::download(new ActivityLogsExport($start_date, $end_date), 'Activity Logs - Expense Tracker.xlsx');
     }
 }

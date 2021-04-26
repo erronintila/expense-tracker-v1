@@ -13,11 +13,25 @@ class VendorsExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Vendor::all();
+        return Vendor::select("id", "code", "name", "email", "tin", "contact_person", "mobile_number", "telephone_number", "website", "address", "is_vat_inclusive")
+            ->where("deleted_at", null)
+            ->get();
     }
 
     public function headings(): array
     {
-        return [];
+        return [
+            "id",
+            "code",
+            "name", 
+            "email",
+            "tin",
+            "contact person",
+            "mobile number",
+            "telephone number",
+            "website",
+            "address",
+            "VAT Inclusive"
+        ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Exports\PaymentsExport;
 use App\Models\Payment;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,9 @@ use App\Http\Resources\PaymentIndexResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PaymentResource;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentController extends Controller
 {
@@ -307,6 +310,18 @@ class PaymentController extends Controller
     | PAYMENT CUSTOM FUNCTIONS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    /**
+     * Export data to Excel
+     *
+     * @return void
+     */
+    public function export()
+    {
+        $start_date = request("start_date") ?? Carbon::now()->startOfMonth()->format("Y-m-d");
+        $end_date = request("end_date") ?? Carbon::now()->endOfMonth()->format("Y-m-d");
+        return Excel::download(new PaymentsExport($start_date, $end_date), 'Payment Vouchers - Expense Tracker.xlsx');
+    }
 
     public function approve_payment(Request $request, $id)
     {

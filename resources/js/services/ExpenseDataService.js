@@ -29,6 +29,10 @@ class ExpenseDataService {
     restore(id, data) {
         return axios.put(`/api/expenses/restore/${id}`, data);
     }
+
+    export() {
+        return axios.get("/api/expenses/export/data");
+    }
 }
 
 export default new ExpenseDataService();
