@@ -1367,7 +1367,7 @@ var render = function() {
                                               _vm._b(
                                                 {
                                                   attrs: {
-                                                    label: "Date",
+                                                    label: "Date Created",
                                                     readonly: "",
                                                     value: dateRangeText
                                                   }

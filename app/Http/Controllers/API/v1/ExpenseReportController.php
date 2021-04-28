@@ -216,11 +216,13 @@ class ExpenseReportController extends Controller
                 ->where("approved_at", "<>", null)
                 ->where("rejected_at", null)
                 ->where("deleted_at", null)
-                ->where(function ($q) use ($request) {
-                    $q->whereBetween("created_at", [request("start_date"), request("end_date")]);
+                ->where(function ($q) use ($request, $start_date, $end_date) {
+                    $q->whereBetween("expense_reports.created_at", [$start_date, $end_date]);
                     $q->orWhereDoesntHave("payments");
                     $q->orWhereHas("payments", function ($query) {
                         $query->where("payments.id", request("id"));
+                        $query->where("payments.deleted_at", null);
+                        $query->where("payments.cancelled_at", null);
                     });
                 });
         }

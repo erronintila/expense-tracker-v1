@@ -109,7 +109,7 @@
                                 }"
                             >
                                 <v-text-field
-                                    label="Date"
+                                    label="Date Created"
                                     v-bind="attrs"
                                     v-on="on"
                                     readonly
