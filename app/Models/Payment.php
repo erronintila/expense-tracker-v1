@@ -192,6 +192,26 @@ class Payment extends Model
     | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    /**
+     * Displays the earliest created date covered by the payment.
+     *
+     * @return mixed
+     */
+    public function getPaymentStartDateAttribute()
+    {
+        return $this->expense_reports()->withTrashed()->min("expense_reports.created_at");
+    }
+
+    /**
+     * Displays the latest created date covered by the payment.
+     *
+     * @return mixed
+     */
+    public function getPaymentEndDateAttribute()
+    {
+        return $this->expense_reports()->withTrashed()->max("expense_reports.created_at");
+    }
     
     /**
      * status

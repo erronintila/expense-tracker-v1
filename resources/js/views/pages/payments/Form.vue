@@ -6,6 +6,9 @@
             <v-card class="mx-auto mb-4" flat>
                 <div class="overline green--text">
                     BASIC DETAILS
+                    <v-btn :color="form.status.color" x-small dark>
+                        {{ form.status.status }}
+                    </v-btn>
                 </div>
                 <v-menu
                     ref="menu"
@@ -17,8 +20,8 @@
                     <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                             v-model="form.date"
-                            :error-messages="errors.date"
-                            @input="errors.date = []"
+                            :error-messages="paymentErrors.date"
+                            @input="paymentErrors.date = []"
                             label="Date"
                             readonly
                             v-bind="attrs"
@@ -44,14 +47,14 @@
                         ...mixin_validation.minLength(100)
                     ]"
                     :counter="100"
-                    :error-messages="errors.description"
+                    :error-messages="paymentErrors.description"
                     label="Description"
                     required
                 ></v-text-field>
                 <v-text-field
                     v-model="form.voucher_no"
                     :rules="[...mixin_validation.required]"
-                    :error-messages="errors.voucher_no"
+                    :error-messages="paymentErrors.voucher_no"
                     :counter="100"
                     label="Voucher No."
                     required
@@ -64,11 +67,11 @@
 
                 <small
                     v-if="
-                        errors.expense_reports &&
-                            errors.expense_reports.length > 0
+                        paymentErrors.expense_reports &&
+                            paymentErrors.expense_reports.length > 0
                     "
                     class="red--text"
-                    >{{ errors.expense_reports[0] }}</small
+                    >{{ paymentErrors.expense_reports[0] }}</small
                 >
 
                 <v-data-table
@@ -95,7 +98,7 @@
                     <template v-slot:top>
                         <DateRangePicker
                             ref="dateRangePicker"
-                            :dateRange="date_range"
+                            :dateRange="range"
                             @on-change="updateDates"
                         >
                             <template
@@ -124,14 +127,6 @@
                                 Clear All Selected
                             </v-btn>
                         </div>
-
-                        <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            single-line
-                            hide-details
-                        ></v-text-field>
                     </template>
                     <template v-slot:[`item.period`]="{ item }">
                         {{ item.from }} ~ {{ item.to }}
@@ -140,9 +135,7 @@
                         <v-icon
                             small
                             class="mr-2"
-                            @click="
-                                $router.push(`/user/expense_reports/${item.id}`)
-                            "
+                            @click="$router.push(`/expense_reports/${item.id}`)"
                         >
                             mdi-eye
                         </v-icon>
@@ -228,7 +221,7 @@
                         <tr class="green--text hidden-md-and-up">
                             <td class="title">
                                 Total:
-                                <strong>{{ totalAmount }}</strong>
+                                <strong>{{ total }}</strong>
                             </td>
                         </tr>
                         <tr class="green--text hidden-sm-and-down">
@@ -237,7 +230,7 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <strong>{{ totalAmount }}</strong>
+                                <strong>{{ total }}</strong>
                             </td>
                             <td></td>
                             <td></td>
@@ -287,7 +280,7 @@
                                         class="green--text text--darken-4 text-right"
                                     >
                                         (-)
-                                        {{ mixin_formatNumber(paid) }}
+                                        {{ mixin_formatNumber(form.amount) }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -349,6 +342,7 @@ export default {
                     payee_phone: "",
                     remarks: "",
                     notes: "",
+                    status: "",
                     user: {},
                     expense_reports: []
                 };
@@ -401,7 +395,7 @@ export default {
             //         is_superadmin: false
             //     }
             // },
-            date_range: [
+            range: [
                 moment()
                     .startOf("week")
                     .format("YYYY-MM-DD"),
@@ -462,9 +456,8 @@ export default {
                 itemsPerPage: 10
             },
             // users: [],
-            // totalAmount: 0,
-            menu: false,
-            search: ""
+            totalAmount: 0,
+            menu: false
         };
     },
     methods: {
@@ -500,7 +493,6 @@ export default {
 
                 ExpenseReportDataService.getAll(data)
                     .then(response => {
-                        console.log(response.data);
                         let items = response.data.data;
                         let total = response.data.meta.total;
                         this.loading = false;
@@ -544,13 +536,15 @@ export default {
         },
         balance() {
             return this.total - this.paid;
+        },
+        maxDate() {
+            return moment().format("YYYY-MM-DD");
         }
     },
     watch: {
         params: {
             handler() {
                 this.getDataFromApi().then(data => {
-                    console.log("elo");
                     this.items = data.items;
                     this.totalItems = data.total;
                     this.formDataLoaded = true;
@@ -581,6 +575,9 @@ export default {
             this.form.expense_reports = this.selected;
             this.$emit("on-update", this.form);
         }
+    },
+    created() {
+        this.formDataLoaded = true;
     }
 };
 </script>

@@ -54,7 +54,6 @@ class ExpenseReportController extends Controller
 
         $expense_reports = ExpenseReport::with('user')
             ->with('payments');
-            
 
         switch ($sortBy) {
             case 'user':
@@ -121,10 +120,7 @@ class ExpenseReportController extends Controller
                     break;
                 case 'Rejected Expense Reports':
                     $expense_reports = $expense_reports->where([
-                        // ["submitted_at", "<>", null],
-                        // ["approved_at", "=", null],
                         ["rejected_at", "<>", null],
-                        // ["deleted_at", "=", null],
                     ]);
                     break;
                 case 'Approved Expense Reports':
@@ -204,6 +200,29 @@ class ExpenseReportController extends Controller
                 ->where("rejected_at", null)
                 ->where("deleted_at", null)
                 ->whereDoesntHave("payments");
+        }
+
+        if (request()->has("update_payment")) {
+            $start_date = Carbon::parse(request("start_date"))->startOfDay();
+            $end_date = Carbon::parse(request("end_date"))->endOfDay();
+
+            $expense_reports = ExpenseReport::with('user')
+                ->where(function ($query) use ($search) {
+                    $query->where('code', "like", "%" . $search . "%");
+                    $query->orWhere('description', "like", "%" . $search . "%");
+                })
+                ->where("user_id", request("user_id"))
+                ->orderBy($sortBy, $sortType)
+                ->where("approved_at", "<>", null)
+                ->where("rejected_at", null)
+                ->where("deleted_at", null)
+                ->where(function ($q) use ($request) {
+                    $q->whereBetween("created_at", [request("start_date"), request("end_date")]);
+                    $q->orWhereDoesntHave("payments");
+                    $q->orWhereHas("payments", function ($query) {
+                        $query->where("payments.id", request("id"));
+                    });
+                });
         }
 
         $expense_reports = $expense_reports->paginate($itemsPerPage);

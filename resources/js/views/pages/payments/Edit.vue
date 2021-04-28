@@ -116,6 +116,7 @@ export default {
                 payee_phone: "",
                 remarks: "",
                 notes: "",
+                status: "",
                 user: null
             },
             errors: {
@@ -181,7 +182,6 @@ export default {
                     }
                 })
                     .then(response => {
-                        console.log("loadExpenseReports", response.data);
                         this.loader = false;
                         resolve(response.data.data);
                     })
@@ -214,17 +214,14 @@ export default {
         }
     },
     computed: {
-        params(nv) {
-            return {
-                ...this.options,
-                query: this.search,
-                query: this.user,
-                query: this.date_range
-            };
-        },
-        maxDate() {
-            return moment().format("YYYY-MM-DD");
-        }
+        // params(nv) {
+        //     return {
+        //         ...this.options,
+        //         query: this.search,
+        //         query: this.user,
+        //         query: this.date_range
+        //     };
+        // },
     },
     watch: {
         // params: {
@@ -250,6 +247,7 @@ export default {
         // }
     },
     created() {
+        this.formDataLoaded = true;
         // this.getData();
         this.getData().then(data => {
             // this.loadExpenseReports(data).then(expense_reports => {
