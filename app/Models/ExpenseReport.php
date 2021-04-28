@@ -35,6 +35,7 @@ class ExpenseReport extends Model
     {
         parent::boot();
         static::deleting(function ($expense_report) {
+            abort_if(!Auth::user()->is_admin && $expense_report->approved_at != null, 422, "Approved expense report can't be deleted.");
             abort_if($expense_report->payments()->count() > 0, 422, "Some records can't be deleted.");
         });
     }

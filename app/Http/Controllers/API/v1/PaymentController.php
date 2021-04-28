@@ -29,7 +29,7 @@ class PaymentController extends Controller
         $this->middleware(['permission:add payments'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit payments'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete payments'], ['only' => ['destroy']]);
-        // $this->middleware(['permission:cancel payments'], ['only' => ['cancel_payment']]);
+        $this->middleware(['permission:cancel payments'], ['only' => ['cancel_payment']]);
     }
 
     /**
@@ -61,6 +61,12 @@ class PaymentController extends Controller
             switch (request("status")) {
                 case 'Deleted Payments':
                     $payments = $payments->onlyTrashed();
+                    break;
+                case 'Cancelled Payments':
+                    $payments = $payments->where([
+                        ["deleted_at", "=", null],
+                        ["cancelled_at", "<>", null],
+                    ]);
                     break;
                 case 'Completed Payments':
                     $payments = $payments->where([
@@ -254,7 +260,7 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        abort_if(!auth()->user()->is_admin, 403);
+        abort_if(!Auth::user()->is_admin, 422, "Some records can't be deleted.");
 
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
@@ -325,6 +331,8 @@ class PaymentController extends Controller
 
     public function approve_payment(Request $request, $id)
     {
+        abort_if(!Auth::user()->is_admin, 422, "Some records can't be approved.");
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);
@@ -354,6 +362,8 @@ class PaymentController extends Controller
 
     public function release_payment(Request $request, $id)
     {
+        abort_if(!Auth::user()->is_admin, 422, "Some records can't be released.");
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);
@@ -412,6 +422,8 @@ class PaymentController extends Controller
 
     public function complete_payment(Request $request, $id)
     {
+        abort_if(!Auth::user()->is_admin, 422, "Some records can't be completed.");
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);
@@ -431,6 +443,8 @@ class PaymentController extends Controller
 
     public function cancel_payment(Request $request, $id)
     {
+        abort_if(!Auth::user()->is_admin, 422, "Some records can't be cancelled.");
+
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
             $payment = Payment::findOrFail($ids);
