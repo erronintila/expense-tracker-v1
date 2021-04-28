@@ -353,6 +353,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1429,6 +1438,18 @@ var render = function() {
                                 _c(
                                   "v-icon",
                                   {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value:
+                                          item.deleted_at == null &&
+                                          item.cancelled_at == null &&
+                                          _vm.$store.getters.user.is_admin,
+                                        expression:
+                                          "\n                            item.deleted_at == null &&\n                                item.cancelled_at == null &&\n                                $store.getters.user.is_admin\n                        "
+                                      }
+                                    ],
                                     staticClass: "mr-2",
                                     attrs: { small: "" },
                                     on: {

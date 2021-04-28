@@ -295,7 +295,16 @@
                         >
                             mdi-eye
                         </v-icon>
-                        <v-icon small class="mr-2" @click="onEdit(item)">
+                        <v-icon
+                            v-show="
+                                item.deleted_at == null &&
+                                    item.cancelled_at == null &&
+                                    $store.getters.user.is_admin
+                            "
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                        >
                             mdi-pencil
                         </v-icon>
                     </template>
@@ -615,7 +624,12 @@ export default {
                 return false;
             }
 
-            if(this.selected.some(item => item.received_at != null || item.cancelled_at != null)) {
+            if (
+                this.selected.some(
+                    item =>
+                        item.received_at != null || item.cancelled_at != null
+                )
+            ) {
                 return false;
             }
 
@@ -626,11 +640,11 @@ export default {
                 return false;
             }
 
-            if(!this.$store.getters.user.is_admin) {
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 
-            if(this.selected.some(item => item.deleted_at != null)) {
+            if (this.selected.some(item => item.deleted_at != null)) {
                 return false;
             }
 
@@ -641,11 +655,15 @@ export default {
                 return false;
             }
 
-            if(!this.$store.getters.user.is_admin) {
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 
-            if(this.selected.some(item => item.deleted_at != null || item.cancelled_at != null)) {
+            if (
+                this.selected.some(
+                    item => item.deleted_at != null || item.cancelled_at != null
+                )
+            ) {
                 return false;
             }
 
