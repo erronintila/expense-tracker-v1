@@ -295,9 +295,9 @@
                         >
                             mdi-eye
                         </v-icon>
-                        <!-- <v-icon small class="mr-2" @click="onEdit(item)">
+                        <v-icon small class="mr-2" @click="onEdit(item)">
                             mdi-pencil
-                        </v-icon> -->
+                        </v-icon>
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}

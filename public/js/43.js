@@ -1424,6 +1424,24 @@ var render = function() {
                                       "\n                        mdi-eye\n                    "
                                     )
                                   ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: { small: "" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.onEdit(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                        mdi-pencil\n                    "
+                                    )
+                                  ]
                                 )
                               ]
                             }
