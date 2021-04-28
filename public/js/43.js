@@ -653,6 +653,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return false;
       }
 
+      if (!this.$store.getters.user.is_admin) {
+        return false;
+      }
+
       if (this.selected.some(function (item) {
         return item.deleted_at != null;
       })) {
@@ -663,6 +667,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     showCancelPayment: function showCancelPayment() {
       if (!this.selected.length) {
+        return false;
+      }
+
+      if (!this.$store.getters.user.is_admin) {
         return false;
       }
 

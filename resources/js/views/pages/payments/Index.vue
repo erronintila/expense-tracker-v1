@@ -626,6 +626,10 @@ export default {
                 return false;
             }
 
+            if(!this.$store.getters.user.is_admin) {
+                return false;
+            }
+
             if(this.selected.some(item => item.deleted_at != null)) {
                 return false;
             }
@@ -634,6 +638,10 @@ export default {
         },
         showCancelPayment() {
             if (!this.selected.length) {
+                return false;
+            }
+
+            if(!this.$store.getters.user.is_admin) {
                 return false;
             }
 
