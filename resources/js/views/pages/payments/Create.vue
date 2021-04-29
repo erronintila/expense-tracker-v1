@@ -88,7 +88,7 @@ export default {
                 }
             },
             form: {
-                id: 0,
+                id: null,
                 code: "",
                 reference_no: "",
                 voucher_no: "",

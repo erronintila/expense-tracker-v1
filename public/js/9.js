@@ -204,7 +204,7 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       menu: false,
       form: {
-        id: 0,
+        id: null,
         code: "",
         reference_no: "",
         voucher_no: "",
