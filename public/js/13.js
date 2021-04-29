@@ -457,6 +457,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "notification-drawer",
   props: {
@@ -1333,7 +1338,7 @@ var render = function() {
                     2
                   ),
                   _vm._v(" "),
-                  index < _vm.items.length - 1
+                  index < _vm.$store.getters.notifications.data.length - 1
                     ? _c("v-divider", { key: index })
                     : _vm._e()
                 ]
