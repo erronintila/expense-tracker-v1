@@ -2,105 +2,114 @@
     <div>
         <loader-component v-if="loader"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Dashboard</h4>
-                <v-spacer></v-spacer>
-                <v-menu
-                    v-if="
-                        $store.getters.user.is_admin &&
-                            mixin_can('view all users expenses')
-                    "
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-y
-                    left
-                    bottom
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </template>
+            <!-- Page Header -->
+            <page-header :title="'Dashboard'">
+                <template v-slot:actions>
+                    <v-menu
+                        v-if="
+                            $store.getters.user.is_admin &&
+                                mixin_can('view all users expenses')
+                        "
+                        :close-on-content-click="false"
+                        :nudge-width="200"
+                        offset-y
+                        left
+                        bottom
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn icon v-bind="attrs" v-on="on">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
+                        </template>
 
-                    <v-card>
-                        <v-list>
-                            <v-list-item>
-                                <v-text-field
-                                    :value="
-                                        user ? user.full_name : 'All Employees'
-                                    "
-                                    label="Employee"
-                                    readonly
-                                >
-                                    <template v-slot:append>
-                                        <UserDialogSelector
-                                            ref="userDialogSelector"
-                                            @selectUser="selectUser"
-                                            @onReset="resetUser"
-                                            :selectedUser="user"
-                                            :usersParameters="{
-                                                params: { is_superadmin: false }
-                                            }"
-                                        >
-                                            <template
-                                                v-slot:openDialog="{
-                                                    bind,
-                                                    on
+                        <v-card>
+                            <v-list>
+                                <v-list-item>
+                                    <v-text-field
+                                        :value="
+                                            user
+                                                ? user.full_name
+                                                : 'All Employees'
+                                        "
+                                        label="Employee"
+                                        readonly
+                                    >
+                                        <template v-slot:append>
+                                            <UserDialogSelector
+                                                ref="userDialogSelector"
+                                                @selectUser="selectUser"
+                                                @onReset="resetUser"
+                                                :selectedUser="user"
+                                                :usersParameters="{
+                                                    params: {
+                                                        is_superadmin: false
+                                                    }
                                                 }"
                                             >
-                                                <v-btn
-                                                    fab
-                                                    color="primary"
-                                                    text
-                                                    x-small
-                                                    v-bind="bind"
-                                                    v-on="on"
+                                                <template
+                                                    v-slot:openDialog="{
+                                                        bind,
+                                                        on
+                                                    }"
                                                 >
-                                                    <v-icon dark
-                                                        >mdi-magnify</v-icon
+                                                    <v-btn
+                                                        fab
+                                                        color="primary"
+                                                        text
+                                                        x-small
+                                                        v-bind="bind"
+                                                        v-on="on"
                                                     >
-                                                </v-btn>
-                                            </template>
-                                        </UserDialogSelector>
-                                    </template>
-                                </v-text-field>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-            </v-card-title>
-            <v-card-subtitle>
-                <!-- {{ formattedDateRange }} -->
-
-                <DateRangePicker
-                    ref="dateRangePicker"
-                    :dateRange="date_range"
-                    @on-change="updateDates"
-                >
-                    <template
-                        v-slot:openDialog="{
-                            on,
-                            attrs,
-                            dateRangeText
-                        }"
+                                                        <v-icon dark
+                                                            >mdi-magnify</v-icon
+                                                        >
+                                                    </v-btn>
+                                                </template>
+                                            </UserDialogSelector>
+                                        </template>
+                                    </v-text-field>
+                                </v-list-item>
+                            </v-list>
+                        </v-card>
+                    </v-menu>
+                </template>
+                <template v-slot:sub-actions>
+                    <DateRangePicker
+                        ref="dateRangePicker"
+                        :dateRange="date_range"
+                        @on-change="updateDates"
                     >
-                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
-                            {{ dateRangeText }}
-                        </v-btn>
-                    </template>
-                </DateRangePicker>
+                        <template
+                            v-slot:openDialog="{
+                                on,
+                                attrs,
+                                dateRangeText
+                            }"
+                        >
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                text
+                                class="ml-0 pl-0"
+                            >
+                                {{ dateRangeText }}
+                            </v-btn>
+                        </template>
+                    </DateRangePicker>
 
-                <v-chip
-                    v-if="
-                        $store.getters.user.is_admin &&
-                            user != null &&
-                            user.id > 0 &&
-                            mixin_can('view all users expenses')
-                    "
-                    small
-                    >{{ user.full_name }}</v-chip
-                >
-            </v-card-subtitle>
+                    <v-chip
+                        v-if="
+                            $store.getters.user.is_admin &&
+                                user != null &&
+                                user.id > 0 &&
+                                mixin_can('view all users expenses')
+                        "
+                        small
+                        >{{ user.full_name }}</v-chip
+                    >
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row>
                 <v-col cols="12" md="4">
@@ -617,6 +626,7 @@
 import moment from "moment";
 import randomcolor from "randomcolor";
 import numeral from "numeral";
+import PageHeader from "../../../components/page/PageHeader";
 import DateRangePicker from "../../../components/datepicker/DateRangePicker";
 import DoughnutChart from "../../../components/chart/DoughnutChart";
 import HorizontalBarChart from "../../../components/chart/HorizontalBarChart";
@@ -631,7 +641,8 @@ export default {
         HorizontalBarChart,
         LineChart,
         DateRangePicker,
-        UserDialogSelector
+        UserDialogSelector,
+        PageHeader
     },
     data() {
         return {

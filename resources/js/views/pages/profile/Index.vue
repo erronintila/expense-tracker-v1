@@ -2,13 +2,18 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
+            <page-header :title="'Profile'">
+                <template v-slot:sub-actions>
+                    Last updated: {{ lastUpdated }}
+                </template>
+            </page-header>
+            <!-- <v-card-title class="pt-0">
                 <h4 class="title green--text">Profile</h4>
                 <v-spacer></v-spacer>
-            </v-card-title>
-            <v-card-subtitle>
+            </v-card-title> -->
+            <!-- <v-card-subtitle>
                 Last updated: {{ lastUpdated }}
-            </v-card-subtitle>
+            </v-card-subtitle> -->
 
             <v-card-text>
                 <v-container>
@@ -432,9 +437,13 @@
 
 <script>
 import moment from "moment";
+import PageHeader from "../../../components/page/PageHeader";
 import UserDataService from "../../../services/UserDataService";
 
 export default {
+    components: {
+        PageHeader
+    },
     data() {
         return {
             formDataLoaded: false,
@@ -589,7 +598,10 @@ export default {
                     password_confirmation: this.password_confirmation
                 })
                     .then(response => {
-                        this.mixin_successDialog(response.data.status, response.data.message);
+                        this.mixin_successDialog(
+                            response.data.status,
+                            response.data.message
+                        );
                         // this.$store.dispatch("AUTH_USER");
 
                         this.dialogPassword = false;

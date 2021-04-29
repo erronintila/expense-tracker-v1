@@ -2,102 +2,32 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 p-0 m-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Employees</h4>
-
-                <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template
-                        v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add users')"
-                    >
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            :to="{ name: 'admin.users.create' }"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
+            <!-- Page Header -->
+            <page-header :title="'Employees'">
+                <template v-slot:actions>
+                    <v-tooltip bottom>
+                        <template
+                            v-slot:activator="{ on, attrs }"
+                            v-if="mixin_can('add users')"
                         >
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Add New</span>
-                </v-tooltip>
-
-                <!-- <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onPasswordReset">
-                            <v-list-item-icon>
-                                <v-icon>mdi-lock-reset</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Reset Password
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onEditFund">
-                            <v-list-item-icon>
-                                <v-icon>mdi-text-box-plus-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Edit Revolving Fund
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onEditPermissions">
-                            <v-list-item-icon>
-                                <v-icon>mdi-text-box-plus-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Edit Permissions
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onRestore">
-                            <v-list-item-icon>
-                                <v-icon>mdi-history</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Restore
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-trash-can-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Move to archive
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu> -->
-            </v-card-title>
+                            <v-btn
+                                class="elevation-3 mr-2"
+                                color="green"
+                                :to="{ name: 'admin.users.create' }"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon dark>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Add New</span>
+                    </v-tooltip>
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-4">
                 <v-chip
@@ -475,6 +405,7 @@
 </template>
 
 <script>
+import PageHeader from "../../../../components/page/PageHeader";
 import UserDataService from "../../../../services/UserDataService";
 import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 import JobDropdownSelector from "../../../../components/selector/dropdown/JobDropdownSelector";
@@ -482,6 +413,7 @@ import JobDropdownSelector from "../../../../components/selector/dropdown/JobDro
 export default {
     props: {},
     components: {
+        PageHeader,
         DepartmentDropdownSelector,
         JobDropdownSelector
     },

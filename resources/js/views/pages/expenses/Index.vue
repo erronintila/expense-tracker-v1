@@ -2,58 +2,52 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Expenses</h4>
-
-                <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template
-                        v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add expenses')"
-                    >
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            :to="{ name: 'user.expenses.create' }"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
+            <!-- Page Header -->
+            <page-header :title="'Expenses'">
+                <template v-slot:actions>
+                    <v-tooltip bottom>
+                        <template
+                            v-slot:activator="{ on, attrs }"
+                            v-if="mixin_can('add expenses')"
                         >
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Add New</span>
-                </v-tooltip>
-            </v-card-title>
-
-            <v-card-subtitle>
-                <!-- <DateRangePicker
-                    :buttonType="true"
-                    :buttonText="true"
-                    :buttonColor="'grey'"
-                    :buttonClass="'ml-0 pl-0'"
-                    :preset="preset"
-                    :presets="presets"
-                    :value="date_range"
-                    @updateDates="updateDates"
-                >
-                </DateRangePicker> -->
-
-                <DateRangePicker
-                    ref="dateRangePicker"
-                    :dateRange="date_range"
-                    @on-change="updateDates"
-                >
-                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
-                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
-                            {{ dateRangeText }}
-                        </v-btn>
-                    </template>
-                </DateRangePicker>
-            </v-card-subtitle>
+                            <v-btn
+                                class="elevation-3 mr-2"
+                                color="green"
+                                :to="{ name: 'user.expenses.create' }"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon dark>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Add New</span>
+                    </v-tooltip>
+                </template>
+                <template v-slot:sub-actions>
+                    <DateRangePicker
+                        ref="dateRangePicker"
+                        :dateRange="date_range"
+                        @on-change="updateDates"
+                    >
+                        <template
+                            v-slot:openDialog="{ on, attrs, dateRangeText }"
+                        >
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                text
+                                class="ml-0 pl-0"
+                            >
+                                {{ dateRangeText }}
+                            </v-btn>
+                        </template>
+                    </DateRangePicker>
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-4">
                 <v-chip
@@ -101,7 +95,10 @@
                 </v-chip> -->
 
                 <UserDialogSelector
-                    v-if="$store.getters.user.is_admin && mixin_can('view all users expenses')"
+                    v-if="
+                        $store.getters.user.is_admin &&
+                            mixin_can('view all users expenses')
+                    "
                     ref="userDialogSelector"
                     @selectUser="selectUser"
                     @onReset="resetUser"
@@ -161,9 +158,7 @@
                     Refresh
                 </v-chip>
                 <v-chip
-                    v-show="
-                        selected.length > 0 && status == 'Deleted Expenses'
-                    "
+                    v-show="selected.length > 0 && status == 'Deleted Expenses'"
                     close
                     class="mr-2 mb-2"
                     small
@@ -503,6 +498,7 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import PageHeader from "../../../components/page/PageHeader";
 import DateRangePicker from "../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../components/selector/dialog/UserDialogSelector";
 import ExpenseDataService from "../../../services/ExpenseDataService";
@@ -511,7 +507,8 @@ import ExpenseTypeDataService from "../../../services/ExpenseTypeDataService";
 export default {
     components: {
         DateRangePicker,
-        UserDialogSelector
+        UserDialogSelector,
+        PageHeader
     },
     data() {
         return {
@@ -545,11 +542,11 @@ export default {
                 { text: "Date", value: "date" },
                 {
                     text: "Type",
-                    value: "expense_type.name",
+                    value: "expense_type.name"
                 },
                 {
                     text: "Employee",
-                    value: "user.full_name",
+                    value: "user.full_name"
                 },
                 { text: "Amount", value: "amount" },
                 {
@@ -932,12 +929,12 @@ export default {
         }
     },
     activated() {
-        if(this.$route.params.status) {
+        if (this.$route.params.status) {
             this.status = this.$route.params.status;
         }
 
-        if(this.$route.params.date_range) {
-            this.date_range = this.$route.params.date_range
+        if (this.$route.params.date_range) {
+            this.date_range = this.$route.params.date_range;
         }
 
         this.$store.dispatch("AUTH_NOTIFICATIONS");

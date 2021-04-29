@@ -2,20 +2,25 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Settings</h4>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="green"
-                    :to="{ name: 'admin.settings.user' }"
-                    outlined
-                    dark
-                    class="mr-2"
-                >
-                    Employee Settings
-                </v-btn>
-                <v-btn color="green" @click="onSave" dark>Save Changes</v-btn>
-            </v-card-title>
+            <!-- Page Header -->
+            <page-header :title="'Settings'">
+                <template v-slot:actions>
+                    <v-btn
+                        color="green"
+                        :to="{ name: 'admin.settings.user' }"
+                        outlined
+                        dark
+                        class="mr-2"
+                    >
+                        Employee Settings
+                    </v-btn>
+                    <v-btn color="green" @click="onSave" dark
+                        >Save Changes</v-btn
+                    >
+                </template>
+                <template v-slot:sub-actions> </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-expansion-panels v-model="panel" multiple>
                 <v-expansion-panel>
@@ -408,9 +413,13 @@
 
 <script>
 import moment from "moment";
+import PageHeader from "../../../../components/page/PageHeader";
 import SettingDataService from "../../../../services/SettingDataService";
 
 export default {
+    components: {
+        PageHeader
+    },
     data() {
         return {
             formDataLoaded: false,
