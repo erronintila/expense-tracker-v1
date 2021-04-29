@@ -423,9 +423,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  // created() {
-  //     this.$store.dispatch("AUTH_NOTIFICATIONS");
-  // },
   activated: function activated() {
     var _this7 = this;
 

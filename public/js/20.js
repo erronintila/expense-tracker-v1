@@ -230,42 +230,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  computed: {// params(nv) {
-    //     return {
-    //         ...this.options,
-    //         query: this.search,
-    //         query: this.user,
-    //         query: this.date_range
-    //     };
-    // },
-  },
-  watch: {// params: {
-    //     immediate: true,
-    //     deep: true,
-    //     handler() {
-    //         this.getDataFromApi().then(data => {
-    //             this.items = data.items;
-    //             this.totalItems = data.total;
-    //         });
-    //     }
-    // },
-    // selected() {
-    //     this.totalAmount = this.mixin_formatNumber(
-    //         this.selected.reduce((total, item) => total + item.total, 0)
-    //     );
-    // },
-    // "form.user": function() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // }
-  },
   created: function created() {
     var _this4 = this;
 
-    this.formDataLoaded = true; // this.getData();
-
+    this.formDataLoaded = true;
     this.getData().then(function (data) {
       // this.loadExpenseReports(data).then(expense_reports => {
       _this4.form = data; // this.form.expense_reports = expense_reports;

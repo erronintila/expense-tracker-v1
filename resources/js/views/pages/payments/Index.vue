@@ -498,35 +498,6 @@ export default {
                 params: { id: item.id }
             });
         },
-        // onDelete() {
-        //     if (this.selected.length == 0) {
-        //         this.mixin_errorDialog("Error", "No item(s) selected");
-        //         return;
-        //     }
-
-        //     this.$confirm("do you want to delete payment?").then(res => {
-        //         if (res) {
-        //             axios
-        //                 .delete(`/api/payments/${this.selected[0].id}`, {
-        //                     params: {
-        //                         ids: this.selected.map(item => {
-        //                             return item.id;
-        //                         })
-        //                     }
-        //                 })
-        //                 .then(response => {
-        //                      this.mixin_successDialog(response.data.status, response.data.message);
-        //                     this.getDataFromApi().then(data => {
-        //                         this.items = data.items;
-        //                         this.totalItems = data.total;
-        //                     });
-        //                 })
-        //                 .catch(error => {
-        //                     this.mixin_showErrors(error);
-        //                 });
-        //         }
-        //     });
-        // },
         onUpdate(action, method) {
             if (action == "receive" && !this.mixin_can("receive payments")) {
                 this.mixin_errorDialog(`Error`, "Not allowed");
@@ -595,9 +566,6 @@ export default {
                     axios({
                         method: method,
                         url: url
-                        // data: {
-                        //     ids: ids
-                        // }
                     })
                         .then(response => {
                             this.mixin_successDialog(
@@ -672,7 +640,6 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                // query: this.search,
                 query: this.status,
                 query: this.date_range,
                 query: this.user
@@ -718,16 +685,6 @@ export default {
             );
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
-    // created() {
-    //     // this.$store.dispatch("AUTH_USER");
-    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-    // },
     activated() {
         if (this.$route.params.status) {
             this.status = this.$route.params.status;

@@ -557,34 +557,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-    // onDelete() {
-    //     if (this.selected.length == 0) {
-    //         this.mixin_errorDialog("Error", "No item(s) selected");
-    //         return;
-    //     }
-    //     this.$confirm("do you want to delete payment?").then(res => {
-    //         if (res) {
-    //             axios
-    //                 .delete(`/api/payments/${this.selected[0].id}`, {
-    //                     params: {
-    //                         ids: this.selected.map(item => {
-    //                             return item.id;
-    //                         })
-    //                     }
-    //                 })
-    //                 .then(response => {
-    //                      this.mixin_successDialog(response.data.status, response.data.message);
-    //                     this.getDataFromApi().then(data => {
-    //                         this.items = data.items;
-    //                         this.totalItems = data.total;
-    //                     });
-    //                 })
-    //                 .catch(error => {
-    //                     this.mixin_showErrors(error);
-    //                 });
-    //         }
-    //     });
-    // },
     onUpdate: function onUpdate(action, method) {
       var _this3 = this;
 
@@ -650,10 +622,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           axios({
             method: method,
-            url: url // data: {
-            //     ids: ids
-            // }
-
+            url: url
           }).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
@@ -724,7 +693,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _objectSpread2;
 
       return _objectSpread(_objectSpread({}, this.options), {}, (_objectSpread2 = {
-        // query: this.search,
         query: this.status
       }, _defineProperty(_objectSpread2, "query", this.date_range), _defineProperty(_objectSpread2, "query", this.user), _objectSpread2));
     },
@@ -772,16 +740,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, 0));
     }
   },
-  // mounted() {
-  //     this.getDataFromApi().then(data => {
-  //         this.items = data.items;
-  //         this.totalItems = data.total;
-  //     });
-  // },
-  // created() {
-  //     // this.$store.dispatch("AUTH_USER");
-  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-  // },
   activated: function activated() {
     var _this6 = this;
 

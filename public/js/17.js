@@ -968,15 +968,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, _defineProperty(_objectSpread2, "query", this.department), _defineProperty(_objectSpread2, "query", this.job), _objectSpread2));
     }
   },
-  // created() {
-  //     this.$store.dispatch("AUTH_USER");
-  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-  // },
   activated: function activated() {
     var _this10 = this;
 
-    this.$store.dispatch("AUTH_USER"); // this.$store.dispatch("AUTH_NOTIFICATIONS");
-
+    this.$store.dispatch("AUTH_USER");
     this.getDataFromApi().then(function (data) {
       _this10.items = data.data;
       _this10.meta = data.meta;

@@ -359,9 +359,6 @@ export default {
             }
         }
     },
-    // created() {
-    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
-    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
