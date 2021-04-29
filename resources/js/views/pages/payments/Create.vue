@@ -13,7 +13,55 @@
             </v-card-title>
 
             <v-container>
-                <Form></Form>
+                <Form :paymentForm="form" :paymentErrors="errors" paymentRules="rules" :isEdit="false">
+                    <template v-slot:userSelector>
+                        <v-row>
+                            <v-col>
+                                <v-text-field
+                                    :value="
+                                        form.user
+                                            ? form.user.full_name
+                                            : 'No Employee'
+                                    "
+                                    :error-messages="errors.user_id"
+                                    @input="errors.user_id = []"
+                                    label="Employee"
+                                    readonly
+                                >
+                                    <template v-slot:append>
+                                        <UserDialogSelector
+                                            ref="userDialogSelector"
+                                            @selectUser="selectUser"
+                                            @onReset="resetUser"
+                                            :selectedUser="form.user"
+                                            :usersParameters="usersParameters"
+                                        >
+                                            <template
+                                                v-slot:openDialog="{
+                                                    bind,
+                                                    on
+                                                }"
+                                            >
+                                                <v-btn
+                                                    fab
+                                                    color="primary"
+                                                    text
+                                                    x-small
+                                                    v-bind="bind"
+                                                    v-on="on"
+                                                >
+                                                    <v-icon dark>
+                                                        mdi-magnify
+                                                    </v-icon>
+                                                </v-btn>
+                                            </template>
+                                        </UserDialogSelector>
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                    </template>
+                </Form>
             </v-container>
         </v-card>
     </div>
@@ -75,10 +123,20 @@ export default {
                 expense_reports: []
             },
             rules: {}
-        }
+        };
     },
     methods: {
+        selectUser(e) {
+            if (e == null || e == undefined) {
+                this.form.user = null;
+                return;
+            }
+            this.form.user = e;
+        },
+        resetUser() {
+            this.form.user = null;
+        },
         onSave() {}
-    },
-}
+    }
+};
 </script>

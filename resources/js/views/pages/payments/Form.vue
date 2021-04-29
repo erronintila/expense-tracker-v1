@@ -221,6 +221,15 @@ export default {
         maxDate() {
             return moment().format("YYYY-MM-DD");
         }
+    },
+    watch: {
+        paymentForm: {
+            deep: true,
+            immediate: true,
+            handler(newValue) {
+                this.form = newValue;
+            }
+        }
     }
 };
 </script>

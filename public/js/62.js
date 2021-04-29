@@ -232,6 +232,15 @@ __webpack_require__.r(__webpack_exports__);
     maxDate: function maxDate() {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
     }
+  },
+  watch: {
+    paymentForm: {
+      deep: true,
+      immediate: true,
+      handler: function handler(newValue) {
+        this.form = newValue;
+      }
+    }
   }
 });
 

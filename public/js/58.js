@@ -35,6 +35,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -92,6 +140,17 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    selectUser: function selectUser(e) {
+      if (e == null || e == undefined) {
+        this.form.user = null;
+        return;
+      }
+
+      this.form.user = e;
+    },
+    resetUser: function resetUser() {
+      this.form.user = null;
+    },
     onSave: function onSave() {}
   }
 });
@@ -150,7 +209,126 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("v-container", [_c("Form")], 1)
+              _c(
+                "v-container",
+                [
+                  _c("Form", {
+                    attrs: {
+                      paymentForm: _vm.form,
+                      paymentErrors: _vm.errors,
+                      paymentRules: "rules",
+                      isEdit: false
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "userSelector",
+                        fn: function() {
+                          return [
+                            _c(
+                              "v-row",
+                              [
+                                _c(
+                                  "v-col",
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        value: _vm.form.user
+                                          ? _vm.form.user.full_name
+                                          : "No Employee",
+                                        "error-messages": _vm.errors.user_id,
+                                        label: "Employee",
+                                        readonly: ""
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          _vm.errors.user_id = []
+                                        }
+                                      },
+                                      scopedSlots: _vm._u([
+                                        {
+                                          key: "append",
+                                          fn: function() {
+                                            return [
+                                              _c("UserDialogSelector", {
+                                                ref: "userDialogSelector",
+                                                attrs: {
+                                                  selectedUser: _vm.form.user,
+                                                  usersParameters:
+                                                    _vm.usersParameters
+                                                },
+                                                on: {
+                                                  selectUser: _vm.selectUser,
+                                                  onReset: _vm.resetUser
+                                                },
+                                                scopedSlots: _vm._u([
+                                                  {
+                                                    key: "openDialog",
+                                                    fn: function(ref) {
+                                                      var bind = ref.bind
+                                                      var on = ref.on
+                                                      return [
+                                                        _c(
+                                                          "v-btn",
+                                                          _vm._g(
+                                                            _vm._b(
+                                                              {
+                                                                attrs: {
+                                                                  fab: "",
+                                                                  color:
+                                                                    "primary",
+                                                                  text: "",
+                                                                  "x-small": ""
+                                                                }
+                                                              },
+                                                              "v-btn",
+                                                              bind,
+                                                              false
+                                                            ),
+                                                            on
+                                                          ),
+                                                          [
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  dark: ""
+                                                                }
+                                                              },
+                                                              [
+                                                                _vm._v(
+                                                                  "\n                                                    mdi-magnify\n                                                "
+                                                                )
+                                                              ]
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    }
+                                                  }
+                                                ])
+                                              })
+                                            ]
+                                          },
+                                          proxy: true
+                                        }
+                                      ])
+                                    })
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
             ],
             1
           )
