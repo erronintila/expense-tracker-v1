@@ -17,6 +17,7 @@
                     :paymentErrors="errors"
                     :paymentRules="rules"
                     :payment_id="payment_id"
+                    :isEdit="true"
                     @on-save="onSave"
                 >
                     <template v-slot:userSelector>
@@ -110,7 +111,7 @@ export default {
                 date: moment().format("YYYY-MM-DD"),
                 cheque_no: "",
                 cheque_date: "",
-                amount: "",
+                amount: 0,
                 payee: "",
                 payee_address: "",
                 payee_phone: "",
@@ -168,16 +169,12 @@ export default {
                     });
             });
         },
-        loadExpenseReports(paymentData) {
+        loadExpenseReports() {
             return new Promise((resolve, reject) => {
                 ExpenseReportDataService.get({
                     params: {
                         update_payment: true,
-                        user_id: paymentData.user ? paymentData.user.id : null,
-                        start_date: paymentData.from,
-                        end_date: moment()
-                            .endOf()
-                            .format("YYYY-MM-DD"),
+                        // user_id: paymentData.user ? paymentData.user.id : null,
                         payment_id: this.$route.params.id
                     }
                 })
@@ -194,15 +191,14 @@ export default {
         },
         onSave(value) {
             this.loader = true;
-            value.user_id = value.user ? value.user.id : null;
-            ExpenseReportDataService.update(this.$route.params.id, value)
+            PaymentDataService.update(this.$route.params.id, value)
                 .then(response => {
                     this.mixin_successDialog(
                         response.data.status,
                         response.data.message
                     );
                     this.$router.push({
-                        name: "user.expense_reports.index"
+                        name: "user.payments.index"
                     });
                     this.loader = false;
                 })
@@ -214,13 +210,13 @@ export default {
         }
     },
     created() {
-        this.formDataLoaded = true;
         this.getData().then(data => {
-            // this.loadExpenseReports(data).then(expense_reports => {
             this.form = data;
-            // this.form.expense_reports = expense_reports;
-            this.formDataLoaded = true;
-            // });
+
+            this.loadExpenseReports().then(data => {
+                this.form.expense_reports = data;
+                this.formDataLoaded = true;
+            });
         });
     }
 };

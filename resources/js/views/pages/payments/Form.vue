@@ -328,6 +328,10 @@ import ExpenseReportDataService from "../../../services/ExpenseReportDataService
 
 export default {
     props: {
+        payment_id: {
+            type: Number,
+            default: null
+        },
         isEdit: {
             type: Boolean,
             default: false
@@ -387,6 +391,8 @@ export default {
             ],
             items: [],
             selected: [],
+            totalItems: 0,
+            loading: false,
             options: {
                 sortBy: ["created_at"],
                 sortDesc: [true],
@@ -419,10 +425,6 @@ export default {
     methods: {
         updateDates(e) {
             this.date_range = e;
-            // this.getDataFromApi().then(data => {
-            //     this.items = data.items;
-            //     this.totalItems = data.total;
-            // });
         },
         getDataFromApi() {
             this.loading = true;
@@ -433,7 +435,7 @@ export default {
                 let user_id = this.form.user ? this.form.user.id : null;
                 let range = this.date_range;
 
-                ExpenseReportDataService.getAll({
+                let data = {
                     params: {
                         sortBy: sortBy[0],
                         sortType: sortDesc[0] ? "desc" : "asc",
@@ -443,14 +445,21 @@ export default {
                         start_date: range[0],
                         end_date: range[1] ? range[1] : range[0],
                         admin_page: true,
-                        create_payment: true
+                        update_payment: true
                     }
-                })
+                };
+
+                if (this.isEdit) {
+                    data.params.payment_id = this.payment_id;
+                }
+
+                ExpenseReportDataService.getAll(data)
                     .then(response => {
                         let items = response.data.data;
                         let total = response.data.meta.total;
                         this.loading = false;
                         this.formDataLoaded = true;
+
                         resolve({ items, total });
                     })
                     .catch(error => {
@@ -478,7 +487,6 @@ export default {
                 this.form.expense_reports = this.selected;
                 this.form.user_id = this.form.user ? this.form.user.id : null;
                 this.form.amount = parseFloat(this.totalAmount);
-                 console.log(this.form);
                 this.$emit("on-save", this.form);
             }
         }
@@ -487,7 +495,7 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                query: this.user,
+                query: this.form.user,
                 query: this.date_range
             };
         },
@@ -497,7 +505,7 @@ export default {
     },
     watch: {
         params: {
-            immediate: true,
+            // immediate: true,
             deep: true,
             handler() {
                 this.getDataFromApi().then(data => {
@@ -511,13 +519,33 @@ export default {
             immediate: true,
             handler(newValue) {
                 this.form = newValue;
+
+                if (this.isEdit) {
+                    this.selected = newValue.expense_reports;
+
+                    if (newValue && newValue.expense_reports) {
+                        this.totalAmount = this.mixin_formatNumber(
+                            newValue.expense_reports.reduce(
+                                (total, item) => total + item.total,
+                                0
+                            )
+                        );
+
+                        this.totalPaidAmount = this.mixin_formatNumber(
+                            newValue.expense_reports.reduce(
+                                (total, item) => total + item.total,
+                                0
+                            )
+                        );
+
+                        this.totalReimbursedAmount =
+                            this.totalAmount - this.totalPaidAmount;
+                        if (newValue.expense_reports.length > 0) {
+                            this.paymentErrors.expense_reports = [];
+                        }
+                    }
+                }
             }
-        },
-        "form.user": function() {
-            this.getDataFromApi().then(data => {
-                this.items = data.items;
-                this.totalItems = data.total;
-            });
         },
         selected() {
             this.totalAmount = this.mixin_formatNumber(

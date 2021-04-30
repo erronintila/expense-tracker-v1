@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\PaymentStoreRequest;
+use App\Http\Requests\Payment\PaymentUpdateRequest;
 use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentIndexResource;
 use Illuminate\Support\Facades\Auth;
@@ -247,9 +248,39 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PaymentUpdateRequest $request, $id)
     {
-        //
+        abort_if(!auth()->user()->is_admin, 403);
+        
+        $validated = $request->validated();
+        
+        $data = DB::transaction(function () use ($id, $validated) {
+            $user = User::findOrFail($validated["user_id"]);
+
+            $payment = Payment::findOrFail($id);
+            $payment->fill($validated);
+            $payment->code = $validated["code"] ?? generate_code(Payment::class, "PAY", 10);
+            $payment->updated_by = Auth::id();
+            $payment->user()->associate($user);
+            $payment->save();
+
+            if (request()->has("expense_reports")) {
+                $arr = [];
+
+                foreach (request("expense_reports") as $item) {
+                    $expense_report = ExpenseReport::findOrFail($item["id"]);
+                    $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
+                }
+            
+                $payment->expense_reports()->sync([]);
+                $payment->expense_reports()->sync($arr);
+            }
+
+            return $payment;
+        });
+
+        $message = "Payment updated successfully";
+        return $this->successResponse($data, $message, 200);
     }
 
     /**

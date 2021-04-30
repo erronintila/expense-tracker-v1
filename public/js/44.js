@@ -347,6 +347,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    payment_id: {
+      type: Number,
+      "default": null
+    },
     isEdit: {
       type: Boolean,
       "default": false
@@ -416,6 +420,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }],
       items: [],
       selected: [],
+      totalItems: 0,
+      loading: false,
       options: {
         sortBy: ["created_at"],
         sortDesc: [true],
@@ -447,10 +453,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     updateDates: function updateDates(e) {
-      this.date_range = e; // this.getDataFromApi().then(data => {
-      //     this.items = data.items;
-      //     this.totalItems = data.total;
-      // });
+      this.date_range = e;
     },
     getDataFromApi: function getDataFromApi() {
       var _this = this;
@@ -464,7 +467,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             itemsPerPage = _this$options.itemsPerPage;
         var user_id = _this.form.user ? _this.form.user.id : null;
         var range = _this.date_range;
-        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll({
+        var data = {
           params: {
             sortBy: sortBy[0],
             sortType: sortDesc[0] ? "desc" : "asc",
@@ -474,9 +477,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             start_date: range[0],
             end_date: range[1] ? range[1] : range[0],
             admin_page: true,
-            create_payment: true
+            update_payment: true
           }
-        }).then(function (response) {
+        };
+
+        if (_this.isEdit) {
+          data.params.payment_id = _this.payment_id;
+        }
+
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
           _this.loading = false;
@@ -511,7 +520,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.form.expense_reports = this.selected;
         this.form.user_id = this.form.user ? this.form.user.id : null;
         this.form.amount = parseFloat(this.totalAmount);
-        console.log(this.form);
         this.$emit("on-save", this.form);
       }
     }
@@ -519,7 +527,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: {
     params: function params(nv) {
       return _objectSpread(_objectSpread({}, this.options), {}, _defineProperty({
-        query: this.user
+        query: this.form.user
       }, "query", this.date_range));
     },
     maxDate: function maxDate() {
@@ -528,7 +536,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     params: {
-      immediate: true,
+      // immediate: true,
       deep: true,
       handler: function handler() {
         var _this2 = this;
@@ -544,15 +552,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       immediate: true,
       handler: function handler(newValue) {
         this.form = newValue;
-      }
-    },
-    "form.user": function formUser() {
-      var _this3 = this;
 
-      this.getDataFromApi().then(function (data) {
-        _this3.items = data.items;
-        _this3.totalItems = data.total;
-      });
+        if (this.isEdit) {
+          this.selected = newValue.expense_reports;
+
+          if (newValue && newValue.expense_reports) {
+            this.totalAmount = this.mixin_formatNumber(newValue.expense_reports.reduce(function (total, item) {
+              return total + item.total;
+            }, 0));
+            this.totalPaidAmount = this.mixin_formatNumber(newValue.expense_reports.reduce(function (total, item) {
+              return total + item.total;
+            }, 0));
+            this.totalReimbursedAmount = this.totalAmount - this.totalPaidAmount;
+
+            if (newValue.expense_reports.length > 0) {
+              this.paymentErrors.expense_reports = [];
+            }
+          }
+        }
+      }
     },
     selected: function selected() {
       this.totalAmount = this.mixin_formatNumber(this.selected.reduce(function (total, item) {

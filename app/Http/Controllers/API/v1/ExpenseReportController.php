@@ -213,14 +213,16 @@ class ExpenseReportController extends Controller
                 })
                 ->where("user_id", request("user_id"))
                 ->orderBy($sortBy, $sortType)
-                ->where("approved_at", "<>", null)
+                // ->where("approved_at", "<>", null)
                 ->where("rejected_at", null)
                 ->where("deleted_at", null)
                 ->where(function ($q) use ($request, $start_date, $end_date) {
-                    $q->whereBetween("expense_reports.created_at", [$start_date, $end_date]);
-                    $q->orWhereDoesntHave("payments");
+                    $q->where(function ($query) use ($start_date, $end_date) {
+                        $query->whereDoesntHave("payments");
+                        $query->whereBetween("expense_reports.created_at", [$start_date, $end_date]);
+                    });
                     $q->orWhereHas("payments", function ($query) {
-                        $query->where("payments.id", request("id"));
+                        $query->where("payments.id", request("payment_id"));
                         $query->where("payments.deleted_at", null);
                         $query->where("payments.cancelled_at", null);
                     });
@@ -949,6 +951,17 @@ class ExpenseReportController extends Controller
                 ->where("submitted_at", "<>", null)
                 ->whereDoesntHave("payments")
                 ->get();
+
+            return response()->json([
+                "data" => ExpenseReportResource::collection($expense_reports),
+            ]);
+        }
+
+        if (request()->has('update_payment')) {
+            $expense_reports = ExpenseReport::whereHas("payments", function ($query) {
+                $query->where("payments.id", request("payment_id"));
+            })
+            ->get();
 
             return response()->json([
                 "data" => ExpenseReportResource::collection($expense_reports),

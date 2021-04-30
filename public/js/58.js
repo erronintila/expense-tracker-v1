@@ -96,6 +96,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -125,7 +126,7 @@ __webpack_require__.r(__webpack_exports__);
         date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
         cheque_no: "",
         cheque_date: "",
-        amount: "",
+        amount: 0,
         payee: "",
         payee_address: "",
         payee_phone: "",
@@ -186,16 +187,14 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    loadExpenseReports: function loadExpenseReports(paymentData) {
+    loadExpenseReports: function loadExpenseReports() {
       var _this2 = this;
 
       return new Promise(function (resolve, reject) {
         _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__["default"].get({
           params: {
             update_payment: true,
-            user_id: paymentData.user ? paymentData.user.id : null,
-            start_date: paymentData.from,
-            end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf().format("YYYY-MM-DD"),
+            // user_id: paymentData.user ? paymentData.user.id : null,
             payment_id: _this2.$route.params.id
           }
         }).then(function (response) {
@@ -213,12 +212,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       this.loader = true;
-      value.user_id = value.user ? value.user.id : null;
-      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_3__["default"].update(this.$route.params.id, value).then(function (response) {
+      _services_PaymentDataService__WEBPACK_IMPORTED_MODULE_2__["default"].update(this.$route.params.id, value).then(function (response) {
         _this3.mixin_successDialog(response.data.status, response.data.message);
 
         _this3.$router.push({
-          name: "user.expense_reports.index"
+          name: "user.payments.index"
         });
 
         _this3.loader = false;
@@ -233,12 +231,13 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this4 = this;
 
-    this.formDataLoaded = true;
     this.getData().then(function (data) {
-      // this.loadExpenseReports(data).then(expense_reports => {
-      _this4.form = data; // this.form.expense_reports = expense_reports;
+      _this4.form = data;
 
-      _this4.formDataLoaded = true; // });
+      _this4.loadExpenseReports().then(function (data) {
+        _this4.form.expense_reports = data;
+        _this4.formDataLoaded = true;
+      });
     });
   }
 });
@@ -306,7 +305,8 @@ var render = function() {
                           paymentForm: _vm.form,
                           paymentErrors: _vm.errors,
                           paymentRules: _vm.rules,
-                          payment_id: _vm.payment_id
+                          payment_id: _vm.payment_id,
+                          isEdit: true
                         },
                         on: { "on-save": _vm.onSave },
                         scopedSlots: _vm._u(
