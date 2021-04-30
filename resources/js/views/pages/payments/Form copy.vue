@@ -564,7 +564,6 @@ export default {
             immediate: true,
             deep: true,
             handler(newValue, oldValue) {
-                console.log(newValue);
                 this.form = newValue;
                 this.date_range = [newValue.from, newValue.to];
                 this.selected = newValue.expense_reports || [];
