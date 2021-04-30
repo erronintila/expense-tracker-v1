@@ -56,14 +56,16 @@ class PaymentObserver
             return;
         }
 
-        foreach ($payment->expense_reports as $expense_report) {
-            $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
-            foreach ($expense_report->expenses as $expense) {
-                $expense_amount = $expense->amount - $expense->reimbursable_amount;
-                $expense->save();
-                $user = User::findOrFail($expense->user_id);
-                $user->remaining_fund += $expense_amount;
-                $user->save();
+        if ($original_received_at == null && !$payment->received_at == null) {
+            foreach ($payment->expense_reports as $expense_report) {
+                $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
+                foreach ($expense_report->expenses as $expense) {
+                    $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                    $expense->save();
+                    $user = User::findOrFail($expense->user_id);
+                    $user->remaining_fund += $expense_amount;
+                    $user->save();
+                }
             }
         }
     }
