@@ -6,14 +6,18 @@
                 <v-btn @click="$router.go(-1)" class="mr-3" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
-
                 <v-spacer></v-spacer>
-
                 <h4 class="title green--text">New Payment Record</h4>
             </v-card-title>
 
             <v-container>
-                <Form :paymentForm="form" :paymentErrors="errors" paymentRules="rules" :isEdit="false">
+                <Form
+                    :paymentForm="form"
+                    :paymentErrors="errors"
+                    :paymentRules="rules"
+                    :isEdit="false"
+                    @on-save="onSave"
+                >
                     <template v-slot:userSelector>
                         <v-row>
                             <v-col>
@@ -136,7 +140,22 @@ export default {
         resetUser() {
             this.form.user = null;
         },
-        onSave() {}
+        onSave(value) {
+            PaymentDataService.store(value)
+                .then(response => {
+                    this.mixin_successDialog(
+                        response.data.status,
+                        response.data.message
+                    );
+                    this.$store.dispatch("AUTH_NOTIFICATIONS");
+                    this.$router.push({ name: "user.payments.index" });
+                })
+                .catch(error => {
+                    this.mixin_showErrors(error);
+                    this.errors = error.response.data.errors;
+                    this.formDataLoaded = true;
+                });
+        }
     }
 };
 </script>

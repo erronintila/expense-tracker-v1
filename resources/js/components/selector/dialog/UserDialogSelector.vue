@@ -106,7 +106,7 @@ export default {
                 search: ""
             },
             options: {
-                sortBy: ["last_name"],
+                sortBy: ["first_name"],
                 sortDesc: [false],
                 page: 1,
                 itemsPerPage: 10
