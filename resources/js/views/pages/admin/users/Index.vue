@@ -541,6 +541,10 @@ export default {
 
                 let data = {
                     params: {
+                        filterOptions: {
+                            matchCase: false,
+                            matchWholeWord: false,
+                        },
                         filterByField: {
                             code: this.onFilterByField("code"),
                             first_name: this.onFilterByField("first_name"),

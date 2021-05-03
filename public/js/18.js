@@ -753,6 +753,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var status = _this2.status;
         var data = {
           params: {
+            filterOptions: {
+              matchCase: false,
+              matchWholeWord: false
+            },
             filterByField: {
               code: _this2.onFilterByField("code"),
               first_name: _this2.onFilterByField("first_name"),
