@@ -167,10 +167,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../components/page/PageHeader */ "./resources/js/components/page/PageHeader.vue");
-/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
-/* harmony import */ var _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/selector/dropdown/DepartmentDropdownSelector */ "./resources/js/components/selector/dropdown/DepartmentDropdownSelector.vue");
-/* harmony import */ var _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/selector/dropdown/JobDropdownSelector */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/page/PageHeader */ "./resources/js/components/page/PageHeader.vue");
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/UserDataService */ "./resources/js/services/UserDataService.js");
+/* harmony import */ var _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/selector/dropdown/DepartmentDropdownSelector */ "./resources/js/components/selector/dropdown/DepartmentDropdownSelector.vue");
+/* harmony import */ var _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/selector/dropdown/JobDropdownSelector */ "./resources/js/components/selector/dropdown/JobDropdownSelector.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -587,12 +589,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {},
   components: {
-    PageHeader: _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_0__["default"],
-    DepartmentDropdownSelector: _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_2__["default"],
-    JobDropdownSelector: _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_3__["default"]
+    PageHeader: _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_1__["default"],
+    DepartmentDropdownSelector: _components_selector_dropdown_DepartmentDropdownSelector__WEBPACK_IMPORTED_MODULE_3__["default"],
+    JobDropdownSelector: _components_selector_dropdown_JobDropdownSelector__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   data: function data() {
     return {
@@ -749,6 +752,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var status = _this2.status;
         var data = {
           params: {
+            filterByField: {
+              code: search,
+              name: search,
+              gender: search,
+              is_superadmin: false,
+              job_id: job_id,
+              job_name: "",
+              department_id: department_id,
+              department_name: ""
+            },
+            filterByDate: {
+              key: "created_at",
+              start_date: "",
+              end_date: ""
+            },
+            filterByStatus: [status],
+            sort: {
+              key: sortBy[0],
+              desc: sortDesc[0]
+            },
+            pagination: {
+              current_page: page,
+              from: 1,
+              last_page: 1,
+              path: "",
+              per_page: itemsPerPage,
+              to: 1,
+              total: 1
+            },
             search: search,
             sortBy: sortBy[0],
             sortType: sortDesc[0] ? "desc" : "asc",
@@ -758,9 +790,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             department_id: department_id,
             job_id: job_id,
             is_superadmin: false
+          },
+          paramsSerializer: function paramsSerializer(params) {
+            return qs__WEBPACK_IMPORTED_MODULE_0___default.a.stringify(params, {
+              encode: false
+            });
           }
         };
-        _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].getAll(data).then(function (response) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll(data).then(function (response) {
+          console.log(response);
           _this2.loading = false;
           _this2.formDataLoaded = true;
           resolve(response.data);
@@ -811,7 +849,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return item.id;
           });
 
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].resetPassword(ids).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"].resetPassword(ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -840,7 +878,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return item.id;
           });
 
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](ids).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"]["delete"](ids).then(function (response) {
             _this4.mixin_successDialog(response.data.status, response.data.message);
 
             _this4.getDataFromApi().then(function (data) {
@@ -869,7 +907,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return item.id;
           });
 
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].restore(ids).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"].restore(ids).then(function (response) {
             _this5.mixin_successDialog(response.data.status, response.data.message);
 
             _this5.getDataFromApi().then(function (data) {
@@ -901,7 +939,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var data = {
             is_active: is_active
           };
-          _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"].updateActivation(ids, data).then(function (response) {
+          _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"].updateActivation(ids, data).then(function (response) {
             _this6.mixin_successDialog(response.data.status, response.data.message);
 
             _this6.getDataFromApi().then(function (data) {
@@ -919,7 +957,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     onExport: function onExport() {
       var _this7 = this;
 
-      _services_UserDataService__WEBPACK_IMPORTED_MODULE_1__["default"]["export"]().then(function (response) {
+      _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"]["export"]().then(function (response) {
         window.location.href = "/api/users/export/data";
 
         _this7.mixin_successDialog("Success", "The file was saved to 'Downloads' folder)");
@@ -2359,6 +2397,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_242adbf1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ 1:
+/*!********************************!*\
+  !*** ./util.inspect (ignored) ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 

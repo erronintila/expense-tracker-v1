@@ -405,6 +405,7 @@
 </template>
 
 <script>
+import qs from "qs";
 import PageHeader from "../../../../components/page/PageHeader";
 import UserDataService from "../../../../services/UserDataService";
 import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
@@ -538,6 +539,36 @@ export default {
                 let status = this.status;
                 let data = {
                     params: {
+                        filterByField: {
+                            code: search,
+                            name: search,
+                            gender: search,
+                            is_superadmin: false,
+                            job_id: job_id,
+                            job_name: "",
+                            department_id: department_id,
+                            department_name: ""
+                        },
+                        filterByDate: {
+                            key: "created_at",
+                            start_date: "",
+                            end_date: ""
+                        },
+                        filterByStatus: [status],
+                        sort: {
+                            key: sortBy[0],
+                            desc: sortDesc[0]
+                        },
+                        pagination: {
+                            current_page: page,
+                            from: 1,
+                            last_page: 1,
+                            path: "",
+                            per_page: itemsPerPage,
+                            to: 1,
+                            total: 1
+                        },
+
                         search: search,
                         sortBy: sortBy[0],
                         sortType: sortDesc[0] ? "desc" : "asc",
@@ -547,11 +578,15 @@ export default {
                         department_id: department_id,
                         job_id: job_id,
                         is_superadmin: false
+                    },
+                    paramsSerializer: function(params) {
+                        return qs.stringify(params, { encode: false });
                     }
                 };
 
                 UserDataService.getAll(data)
                     .then(response => {
+                        console.log(response);
                         this.loading = false;
                         this.formDataLoaded = true;
                         resolve(response.data);
