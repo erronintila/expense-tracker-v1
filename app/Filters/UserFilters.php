@@ -14,7 +14,7 @@ class UserFilters extends QueryFilters
         parent::__construct($request);
     }
 
-    public function filter($term)
+    public function filterByField($term)
     {
         return $this->builder->where('first_name', 'LIKE', "%$term%");
     }
