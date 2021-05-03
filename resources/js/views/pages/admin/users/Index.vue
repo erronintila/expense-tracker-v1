@@ -486,7 +486,8 @@ export default {
                 per_page: 10,
                 to: 0,
                 total: 0
-            }
+            },
+            filterByField: ["code", "first_name"]
         };
     },
     methods: {
@@ -537,17 +538,24 @@ export default {
                     this.department == null ? null : this.department.id;
                 let job_id = this.job == null ? null : this.job.id;
                 let status = this.status;
+
                 let data = {
                     params: {
                         filterByField: {
-                            code: search,
-                            name: search,
-                            gender: search,
+                            code: this.onFilterByField("code"),
+                            first_name: this.onFilterByField("first_name"),
+                            middle_name: this.onFilterByField("middle_name"),
+                            last_name: this.onFilterByField("last_name"),
+                            gender: this.onFilterByField("gender"),
+                            birthdate: this.onFilterByField("birthdate"),
+                            mobile_number: this.onFilterByField("mobile_number"),
+                            telephone_number: this.onFilterByField("telephone_number"),
+                            email: this.onFilterByField("email"),
                             is_superadmin: false,
                             job_id: job_id,
-                            job_name: "",
+                            job_name: this.onFilterByField("job_name"),
                             department_id: department_id,
-                            department_name: ""
+                            department_name: this.onFilterByField("department_name"),
                         },
                         filterByDate: {
                             key: "created_at",
@@ -598,6 +606,10 @@ export default {
                         reject();
                     });
             });
+        },
+        onFilterByField(field) {
+            let search = this.search.trim().toLowerCase();
+            return this.filterByField.includes(field) ? search : "";
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));

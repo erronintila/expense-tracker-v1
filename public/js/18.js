@@ -687,7 +687,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         per_page: 10,
         to: 0,
         total: 0
-      }
+      },
+      filterByField: ["code", "first_name"]
     };
   },
   methods: {
@@ -753,14 +754,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var data = {
           params: {
             filterByField: {
-              code: search,
-              name: search,
-              gender: search,
+              code: _this2.onFilterByField("code"),
+              first_name: _this2.onFilterByField("first_name"),
+              middle_name: _this2.onFilterByField("middle_name"),
+              last_name: _this2.onFilterByField("last_name"),
+              gender: _this2.onFilterByField("gender"),
+              birthdate: _this2.onFilterByField("birthdate"),
+              mobile_number: _this2.onFilterByField("mobile_number"),
+              telephone_number: _this2.onFilterByField("telephone_number"),
+              email: _this2.onFilterByField("email"),
               is_superadmin: false,
               job_id: job_id,
-              job_name: "",
+              job_name: _this2.onFilterByField("job_name"),
               department_id: department_id,
-              department_name: ""
+              department_name: _this2.onFilterByField("department_name")
             },
             filterByDate: {
               key: "created_at",
@@ -810,6 +817,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           reject();
         });
       });
+    },
+    onFilterByField: function onFilterByField(field) {
+      var search = this.search.trim().toLowerCase();
+      return this.filterByField.includes(field) ? search : "";
     },
     onRefresh: function onRefresh() {
       Object.assign(this.$data, this.$options.data.apply(this));
