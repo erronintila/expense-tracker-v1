@@ -3,11 +3,8 @@
 namespace App\Models;
 
 use App\User;
-use Exception;
-use JsonException;
 use App\Models\Job;
 use App\Traits\ApiResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -106,7 +103,7 @@ class Department extends Model
     // // used to fill properties and add custom fields before the activity is saved.
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+        $role = auth()->user() == null ? "default" : (auth()->user()->is_admin ? "admin" : "standard user");
 
         $activity->properties = $activity->properties->merge([
             'custom' => [

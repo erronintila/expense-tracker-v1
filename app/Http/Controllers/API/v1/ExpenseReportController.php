@@ -12,7 +12,6 @@ use App\Models\ExpenseReport;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Resources\ExpenseReportResource;
 use App\Notifications\ExpenseReportNotification;
@@ -254,8 +253,8 @@ class ExpenseReportController extends Controller
             $expense_report->submission_period = setting("submission_period");
             $expense_report->approval_period = setting("approval_period");
 
-            $expense_report->created_by = Auth::id();
-            $expense_report->updated_by = Auth::id();
+            $expense_report->created_by = auth()->user()->id;
+            $expense_report->updated_by = auth()->user()->id;
             $expense_report->user()->associate($user);
 
             $expense_report->save();
@@ -329,7 +328,7 @@ class ExpenseReportController extends Controller
 
 
         // // Prevent update if expense report has been deleted
-        if (Auth::user()->is_admin) {
+        if (auth()->user()->is_admin) {
             $count = 0;
             $count = ExpenseReport::where("id", $id)
                 ->where(function ($query) {
@@ -367,7 +366,7 @@ class ExpenseReportController extends Controller
             $expense_report->submission_period = setting("submission_period");
             $expense_report->approval_period = setting("approval_period");
 
-            $expense_report->updated_by = Auth::id();
+            $expense_report->updated_by = auth()->user()->id;
             $expense_report->user()->associate($user);
 
             $expense_report->save();
@@ -444,7 +443,7 @@ class ExpenseReportController extends Controller
         $data = DB::transaction(function () use ($id) {
             $data = ExpenseReport::findOrFail(explode(",", $id));
             $data->each(function ($item) {
-                $item->deleted_by = Auth::id();
+                $item->deleted_by = auth()->user()->id;
                 $item->delete();
                 $item->expenses->each->delete();
             });
@@ -764,16 +763,16 @@ class ExpenseReportController extends Controller
         $expense_report->rejected_at = $rejected ? now() : $expense_report->rejected_at;
         $expense_report->deleted_at = $deleted ? now() : $expense_report->deleted_at;
 
-        $expense_report->submitted_by = $submitted ? Auth::id() : $expense_report->submitted_by;
-        $expense_report->reviewed_by = $reviewed ? Auth::id() : $expense_report->reviewed_by;
-        $expense_report->approved_by = $approved ? Auth::id() : $expense_report->approved_by;
-        $expense_report->rejected_by = $rejected ? Auth::id() : $expense_report->rejected_by;
-        $expense_report->deleted_by = $deleted ? Auth::id() : $expense_report->deleted_by;
+        $expense_report->submitted_by = $submitted ? auth()->user()->id : $expense_report->submitted_by;
+        $expense_report->reviewed_by = $reviewed ? auth()->user()->id : $expense_report->reviewed_by;
+        $expense_report->approved_by = $approved ? auth()->user()->id : $expense_report->approved_by;
+        $expense_report->rejected_by = $rejected ? auth()->user()->id : $expense_report->rejected_by;
+        $expense_report->deleted_by = $deleted ? auth()->user()->id : $expense_report->deleted_by;
 
         if ($approved) {
             $expense_report->submitted_at = $expense_report->submitted_at == null ? now() : $expense_report->submitted_at;
 
-            $expense_report->submitted_by = $expense_report->submitted_by == null ? Auth::id() : $expense_report->submitted_by;
+            $expense_report->submitted_by = $expense_report->submitted_by == null ? auth()->user()->id : $expense_report->submitted_by;
         }
 
         $expense_report->disableLogging();
@@ -800,15 +799,15 @@ class ExpenseReportController extends Controller
         $expense->rejected_at = $rejected ? now() : $expense->rejected_at;
         $expense->deleted_at = $deleted ? now() : $expense->deleted_at;
 
-        $expense->submitted_by = $submitted ? Auth::id() : $expense->submitted_by;
-        $expense->reviewed_by = $reviewed ? Auth::id() : $expense->reviewed_by;
-        $expense->approved_by = $approved ? Auth::id() : $expense->approved_by;
-        $expense->rejected_by = $rejected ? Auth::id() : $expense->rejected_by;
-        $expense->deleted_by = $deleted ? Auth::id() : $expense->deleted_by;
+        $expense->submitted_by = $submitted ? auth()->user()->id : $expense->submitted_by;
+        $expense->reviewed_by = $reviewed ? auth()->user()->id : $expense->reviewed_by;
+        $expense->approved_by = $approved ? auth()->user()->id : $expense->approved_by;
+        $expense->rejected_by = $rejected ? auth()->user()->id : $expense->rejected_by;
+        $expense->deleted_by = $deleted ? auth()->user()->id : $expense->deleted_by;
 
         if ($approved) {
             $expense->submitted_at = $expense->submitted_at == null ? now() : $expense->submitted_at;
-            $expense->submitted_by = $expense->submitted_by == null ? Auth::id() : $expense->submitted_by;
+            $expense->submitted_by = $expense->submitted_by == null ? auth()->user()->id : $expense->submitted_by;
         }
 
         $expense->disableLogging();
@@ -855,7 +854,7 @@ class ExpenseReportController extends Controller
         }
 
         activity("expense_report")
-            ->causedBy(Auth::user())
+            ->causedBy(auth()->user())
             ->performedOn($expense_report)
             ->withProperties(['attributes' => ["code" => $expense_report->code, $key => $value], 'custom' => ["link" => "expense_reports/{$expense_report->id}"]])
             ->log($action . ' expense report');

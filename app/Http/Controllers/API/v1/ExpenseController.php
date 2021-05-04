@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseReport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ExpenseResource;
 use App\Http\Requests\Expense\ExpenseStoreRequest;
 use App\Http\Requests\Expense\ExpenseUpdateRequest;
@@ -443,8 +442,8 @@ class ExpenseController extends Controller
         $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
         $expense->details  = request("details") == null ? null : json_encode(request("details"));
 
-        $expense->created_by = Auth::id();
-        $expense->updated_by = Auth::id();
+        $expense->created_by = auth()->user()->id;
+        $expense->updated_by = auth()->user()->id;
         $expense->user()->associate($user);
         $expense->expense_type()->associate($expense_type);
         $expense->sub_type()->associate($sub_type);
@@ -541,7 +540,7 @@ class ExpenseController extends Controller
         $expense = Expense::findOrFail($id);
 
         if ($expense->expense_report) {
-            if (Auth::user()->is_admin) {
+            if (auth()->user()->is_admin) {
                 $expense_report = ExpenseReport::where("id", $expense->expense_report_id)
                         ->where(function ($query) {
                             $query->whereHas('payments');
@@ -571,7 +570,7 @@ class ExpenseController extends Controller
         $expense->tax_amount = request("is_tax_inclusive") ? request("tax_amount") : 0;
         $expense->details  = request("details") == null ? null : json_encode(request("details"));
 
-        $expense->updated_by = Auth::id();
+        $expense->updated_by = auth()->user()->id;
         $expense->user()->associate($user);
         $expense->expense_type()->associate($expense_type);
         $expense->sub_type()->associate($sub_type);
