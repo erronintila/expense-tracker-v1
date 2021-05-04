@@ -165,7 +165,6 @@
                     small
                     @click:close="onExport"
                     close-icon="mdi-download"
-                    dark
                 >
                     Export Data
                 </v-chip>
