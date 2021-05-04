@@ -32,18 +32,12 @@ class PaymentObserver
      */
     public function updated(Payment $payment)
     {
-        $original_cancelled_at = $payment->getOriginal("cancelled_at");
-        $original_received_at = $payment->getOriginal("received_at");
+        $isCancelledBefore = $payment->getOriginal("cancelled_at") == null ? false : true;
+        $isReceivedBefore = $payment->getOriginal("received_at") == null ? false : true;
+        $isCancelled = $payment->cancelled_at == null ? false : true;
+        $isReceived = $payment->received_at == null ? false : true;
 
-        if (!$payment->cancelled_at == null && !$original_cancelled_at == null) {
-            return;
-        }
-
-        if (!$payment->cancelled_at == null && $original_received_at == null) {
-            return;
-        }
-
-        if (!$payment->cancelled_at == null && $original_cancelled_at == null && !$original_received_at == null) {
+        if ($isCancelled && !$isCancelledBefore && $isReceivedBefore) {
             foreach ($payment->expense_reports as $expense_report) {
                 $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
                 foreach ($expense_report->expenses as $expense) {
@@ -56,7 +50,7 @@ class PaymentObserver
             return;
         }
 
-        if ($original_received_at == null && !$payment->received_at == null) {
+        if ($isReceived && !$isReceivedBefore) {
             foreach ($payment->expense_reports as $expense_report) {
                 $expense_report = ExpenseReport::findOrFail($expense_report["id"]);
                 foreach ($expense_report->expenses as $expense) {

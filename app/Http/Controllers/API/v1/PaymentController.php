@@ -262,6 +262,18 @@ class PaymentController extends Controller
             $payment->code = $validated["code"] ?? generate_code(Payment::class, "PAY", 10);
             $payment->updated_by = Auth::id();
             $payment->user()->associate($user);
+
+            if (!$payment->received_at == null) {
+                $payment->expense_reports->each(function ($expense_report) {
+                    $expense_report->expenses->each(function ($expense) {
+                        $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                        $user = User::findOrFail($expense->user_id);
+                        $user->remaining_fund -= $expense_amount;
+                        $user->save();
+                    });
+                });
+            }
+
             $payment->save();
 
             if (request()->has("expense_reports")) {
@@ -270,6 +282,15 @@ class PaymentController extends Controller
                 foreach (request("expense_reports") as $item) {
                     $expense_report = ExpenseReport::findOrFail($item["id"]);
                     $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
+
+                    if (!$payment->received_at == null) {
+                        $expense_report->expenses->each(function ($expense) {
+                            $expense_amount = $expense->amount - $expense->reimbursable_amount;
+                            $user = User::findOrFail($expense->user_id);
+                            $user->remaining_fund += $expense_amount;
+                            $user->save();
+                        });
+                    }
                 }
             
                 $payment->expense_reports()->sync([]);
@@ -278,6 +299,8 @@ class PaymentController extends Controller
 
             return $payment;
         });
+
+        
 
         $message = "Payment updated successfully";
         return $this->successResponse($data, $message, 200);
