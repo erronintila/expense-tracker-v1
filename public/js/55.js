@@ -1,9 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[55],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expenses/Create.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/expenses/Create.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expense_reports/Edit.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,9 +11,10 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/views/pages/expenses/Form.vue");
-/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/views/pages/expense_reports/Form.vue");
+/* harmony import */ var _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/ExpenseReportDataService */ "./resources/js/services/ExpenseReportDataService.js");
 /* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
+/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
 //
 //
 //
@@ -88,108 +89,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Form: _Form__WEBPACK_IMPORTED_MODULE_1__["default"],
-    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_2__["default"]
+    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_4__["default"],
+    Form: _Form__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      formDataLoaded: true,
+      loader: true,
+      formDataLoaded: false,
       usersParameters: {
         params: {
-          with_expense_types: true,
           is_superadmin: false
         }
       },
-      itemize: false,
+      expense_report_id: parseInt(this.$route.params.id),
       form: {
-        code: null,
-        reference_no: null,
-        description: null,
-        amount: 0,
-        reimbursable_amount: 0,
-        tax_name: "",
-        tax_rate: 0,
-        is_compound_tax: false,
-        is_tax_inclusive: true,
-        tax_amount: 0,
-        receipt_number: null,
-        date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
-        details: [],
-        // details: {
-        //     description: "",
-        //     quantity: 1,
-        //     amount: 0,
-        //     total: 0
-        // },
+        code: "",
+        description: "",
         remarks: "",
         notes: "",
-        encoding_period: this.$store.getters.settings.expense_encoding_period,
-        // expense_type: {
-        //     id: null,
-        //     name: "",
-        //     limit: null,
-        //     sub_types: { id: null, name: "None", limit: null }
-        // },
-        expense_type: null,
-        sub_type: null,
-        // sub_type: { id: null, name: "", limit: null },
-        user: this.$store.getters.user.is_admin && this.mixin_can("select specific users on expenses") ? null : this.$store.getters.user,
-        vendor: null,
-        expense_report_id: null,
-        tax_id: null,
-        expense_header_id: null,
-        details_quantity: 0,
-        details_amount: 0,
-        is_active: true,
-        // particular: "",
-        // particular_amount: 0,
-        // particular_reimbursable_amount: 0,
-        is_reimbursable: false,
-        revolving_fund: 0
-      },
-      rules: {
-        reimbursable_amount: [],
-        revolving_fund: []
+        user: this.$store.getters.user.is_admin ? null : this.$store.getters.user,
+        expenses: [],
+        status: null,
+        from: "",
+        to: ""
       },
       errors: {
-        sub_type: [],
+        date_range: [],
         code: [],
-        reference_no: [],
         description: [],
-        amount: [],
-        reimbursable_amount: [],
-        tax_name: [],
-        tax_rate: [],
-        is_compound_tax: [],
-        is_tax_inclusive: [],
-        tax_amount: [],
-        receipt_number: [],
-        date: [],
-        details: [],
         remarks: [],
         notes: [],
-        encoding_period: [],
-        expense_type_id: [],
-        sub_type_id: [],
         user_id: [],
-        vendor_id: [],
-        expense_report_id: [],
-        tax_id: [],
-        expense_header_id: [],
-        is_active: []
-      }
+        expenses: []
+      },
+      rules: {}
     };
   },
   methods: {
     selectUser: function selectUser(e) {
-      this.errors.user_id = [];
-
       if (e == null || e == undefined) {
         this.form.user = null;
         return;
@@ -200,45 +144,89 @@ __webpack_require__.r(__webpack_exports__);
     resetUser: function resetUser() {
       this.form.user = null;
     },
-    onSave: function onSave(value) {
+    getData: function getData() {
       var _this = this;
 
-      if (value.vendor) {
-        if (!value.vendor.is_vat_inclusive) {
-          value.tax_rate = 0;
-          value.tax_amount = 0;
-        }
-      }
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].show(_this.$route.params.id).then(function (response) {
+          _this.loader = false;
+          resolve(response.data.data);
+        })["catch"](function (error) {
+          _this.mixin_showErrors(error);
 
-      value.details = value.itemize ? value.items : null;
-      value.expense_type_id = value.expense_type ? value.expense_type.id : null;
-      value.sub_type_id = value.sub_type ? value.sub_type.id : null;
+          _this.loader = false;
+
+          _this.$router.push({
+            name: "user.expense_reports.index"
+          }, function () {});
+
+          reject();
+        });
+      });
+    },
+    loadExpenses: function loadExpenses(reportData) {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].get({
+          params: {
+            update_report: true,
+            user_id: reportData.user ? reportData.user.id : null,
+            start_date: reportData.from,
+            end_date: moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf().format("YYYY-MM-DD"),
+            expense_report_id: _this2.$route.params.id
+          }
+        }).then(function (response) {
+          _this2.loader = false;
+          resolve(response.data.data);
+        })["catch"](function (error) {
+          _this2.mixin_showErrors(error);
+
+          _this2.loader = false;
+          reject();
+        });
+      });
+    },
+    onSave: function onSave(value) {
+      var _this3 = this;
+
+      this.loader = true;
       value.user_id = value.user ? value.user.id : null;
-      value.vendor_id = value.vendor ? value.vendor.id : null;
-      value.reimbursable_amount = value.amount_to_reimburse;
-      _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_3__["default"].store(value).then(function (response) {
-        _this.mixin_successDialog(response.data.status, response.data.message);
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_2__["default"].update(this.$route.params.id, value).then(function (response) {
+        _this3.mixin_successDialog(response.data.status, response.data.message);
 
-        _this.$router.go(-1);
+        _this3.$router.push({
+          name: "user.expense_reports.index"
+        });
 
-        _this.loading = false;
-        _this.formDataLoaded = true;
+        _this3.loader = false;
       })["catch"](function (error) {
-        _this.mixin_showErrors(error);
+        _this3.mixin_showErrors(error);
 
-        _this.errors = error.response.data.errors;
-        _this.formDataLoaded = true;
+        _this3.errors = error.response.data.errors;
+        _this3.loader = false;
       });
     }
+  },
+  created: function created() {
+    var _this4 = this;
+
+    this.getData().then(function (data) {
+      _this4.loadExpenses(data).then(function (expenses) {
+        _this4.form = data;
+        _this4.form.expenses = expenses;
+        _this4.formDataLoaded = true;
+      });
+    });
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expenses/Create.vue?vue&type=template&id=6d587456&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/expenses/Create.vue?vue&type=template&id=6d587456& ***!
-  \*******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expense_reports/Edit.vue?vue&type=template&id=01fd24ab&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/expense_reports/Edit.vue?vue&type=template&id=01fd24ab& ***!
+  \************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -281,7 +269,7 @@ var render = function() {
                   _c("v-spacer"),
                   _vm._v(" "),
                   _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v("New Expense")
+                    _vm._v("Edit Expense Report")
                   ])
                 ],
                 1
@@ -290,141 +278,158 @@ var render = function() {
               _c(
                 "v-container",
                 [
-                  _c("Form", {
-                    attrs: {
-                      errors: _vm.errors,
-                      expenseForm: _vm.form,
-                      rules: _vm.rules
-                    },
-                    on: { "on-save": _vm.onSave },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "userSelector",
-                        fn: function() {
-                          return [
-                            _c(
-                              "v-row",
-                              [
-                                _c(
-                                  "v-col",
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        value: _vm.form.user
-                                          ? _vm.form.user.full_name
-                                          : "No Employee",
-                                        "error-messages": _vm.errors.user_id,
-                                        label: "Employee",
-                                        readonly: ""
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          _vm.errors.user_id = []
-                                        }
-                                      },
-                                      scopedSlots: _vm._u(
+                  _vm.formDataLoaded
+                    ? _c("Form", {
+                        attrs: {
+                          expenseReportForm: _vm.form,
+                          expenseReportErrors: _vm.errors,
+                          expenseReportRules: _vm.rules,
+                          expense_report_id: _vm.expense_report_id
+                        },
+                        on: { "on-save": _vm.onSave },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "userSelector",
+                              fn: function() {
+                                return [
+                                  _c(
+                                    "v-row",
+                                    [
+                                      _c(
+                                        "v-col",
                                         [
-                                          _vm.mixin_can(
-                                            "select specific users on expenses"
-                                          )
-                                            ? {
-                                                key: "append",
-                                                fn: function() {
-                                                  return [
-                                                    _c("UserDialogSelector", {
-                                                      ref: "userDialogSelector",
-                                                      attrs: {
-                                                        selectedUser:
-                                                          _vm.form.user,
-                                                        usersParameters:
-                                                          _vm.usersParameters,
-                                                        itemize: _vm.itemize
-                                                      },
-                                                      on: {
-                                                        selectUser:
-                                                          _vm.selectUser,
-                                                        onReset: _vm.resetUser
-                                                      },
-                                                      scopedSlots: _vm._u(
-                                                        [
-                                                          {
-                                                            key: "openDialog",
-                                                            fn: function(ref) {
-                                                              var bind =
-                                                                ref.bind
-                                                              var on = ref.on
-                                                              return [
-                                                                _c(
-                                                                  "v-btn",
-                                                                  _vm._g(
-                                                                    _vm._b(
-                                                                      {
-                                                                        attrs: {
-                                                                          fab:
-                                                                            "",
-                                                                          color:
-                                                                            "primary",
-                                                                          text:
-                                                                            "",
-                                                                          "x-small":
-                                                                            ""
-                                                                        }
-                                                                      },
-                                                                      "v-btn",
-                                                                      bind,
-                                                                      false
-                                                                    ),
-                                                                    on
-                                                                  ),
-                                                                  [
-                                                                    _c(
-                                                                      "v-icon",
-                                                                      {
-                                                                        attrs: {
-                                                                          dark:
-                                                                            ""
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _vm._v(
-                                                                          "mdi-magnify"
+                                          _c("v-text-field", {
+                                            attrs: {
+                                              value: _vm.form.user
+                                                ? _vm.form.user.full_name
+                                                : "No Employee",
+                                              "error-messages":
+                                                _vm.errors.user_id,
+                                              label: "Employee",
+                                              readonly: ""
+                                            },
+                                            on: {
+                                              input: function($event) {
+                                                _vm.errors.user_id = []
+                                              }
+                                            },
+                                            scopedSlots: _vm._u(
+                                              [
+                                                _vm.mixin_can(
+                                                  "select specific users on expense reports"
+                                                )
+                                                  ? {
+                                                      key: "append",
+                                                      fn: function() {
+                                                        return [
+                                                          _c(
+                                                            "UserDialogSelector",
+                                                            {
+                                                              ref:
+                                                                "userDialogSelector",
+                                                              attrs: {
+                                                                selectedUser:
+                                                                  _vm.form.user,
+                                                                usersParameters:
+                                                                  _vm.usersParameters
+                                                              },
+                                                              on: {
+                                                                selectUser:
+                                                                  _vm.selectUser,
+                                                                onReset:
+                                                                  _vm.resetUser
+                                                              },
+                                                              scopedSlots: _vm._u(
+                                                                [
+                                                                  {
+                                                                    key:
+                                                                      "openDialog",
+                                                                    fn: function(
+                                                                      ref
+                                                                    ) {
+                                                                      var bind =
+                                                                        ref.bind
+                                                                      var on =
+                                                                        ref.on
+                                                                      return [
+                                                                        _c(
+                                                                          "v-btn",
+                                                                          _vm._g(
+                                                                            _vm._b(
+                                                                              {
+                                                                                attrs: {
+                                                                                  fab:
+                                                                                    "",
+                                                                                  color:
+                                                                                    "primary",
+                                                                                  text:
+                                                                                    "",
+                                                                                  "x-small":
+                                                                                    ""
+                                                                                }
+                                                                              },
+                                                                              "v-btn",
+                                                                              bind,
+                                                                              false
+                                                                            ),
+                                                                            on
+                                                                          ),
+                                                                          [
+                                                                            _c(
+                                                                              "v-icon",
+                                                                              {
+                                                                                attrs: {
+                                                                                  dark:
+                                                                                    ""
+                                                                                }
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "mdi-magnify"
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ],
+                                                                          1
                                                                         )
                                                                       ]
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
-                                                              ]
+                                                                    }
+                                                                  }
+                                                                ],
+                                                                null,
+                                                                false,
+                                                                2729772431
+                                                              )
                                                             }
-                                                          }
-                                                        ],
-                                                        null,
-                                                        false,
-                                                        2729772431
-                                                      )
-                                                    })
-                                                  ]
-                                                },
-                                                proxy: true
-                                              }
-                                            : null
+                                                          )
+                                                        ]
+                                                      },
+                                                      proxy: true
+                                                    }
+                                                  : null
+                                              ],
+                                              null,
+                                              true
+                                            )
+                                          })
                                         ],
-                                        null,
-                                        true
+                                        1
                                       )
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ]
-                        },
-                        proxy: true
-                      }
-                    ])
-                  })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              },
+                              proxy: true
+                            }
+                          ],
+                          null,
+                          false,
+                          2894676940
+                        )
+                      })
+                    : _vm._e()
                 ],
                 1
               )
@@ -442,17 +447,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/expenses/Create.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/views/pages/expenses/Create.vue ***!
-  \******************************************************/
+/***/ "./resources/js/views/pages/expense_reports/Edit.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/views/pages/expense_reports/Edit.vue ***!
+  \***********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Create_vue_vue_type_template_id_6d587456___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=6d587456& */ "./resources/js/views/pages/expenses/Create.vue?vue&type=template&id=6d587456&");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/expenses/Create.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Edit_vue_vue_type_template_id_01fd24ab___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=01fd24ab& */ "./resources/js/views/pages/expense_reports/Edit.vue?vue&type=template&id=01fd24ab&");
+/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/expense_reports/Edit.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -462,9 +467,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Create_vue_vue_type_template_id_6d587456___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Create_vue_vue_type_template_id_6d587456___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Edit_vue_vue_type_template_id_01fd24ab___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Edit_vue_vue_type_template_id_01fd24ab___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -474,38 +479,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/pages/expenses/Create.vue"
+component.options.__file = "resources/js/views/pages/expense_reports/Edit.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/expenses/Create.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/views/pages/expenses/Create.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
+/***/ "./resources/js/views/pages/expense_reports/Edit.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/views/pages/expense_reports/Edit.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expenses/Create.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expense_reports/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/expenses/Create.vue?vue&type=template&id=6d587456&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/views/pages/expenses/Create.vue?vue&type=template&id=6d587456& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/views/pages/expense_reports/Edit.vue?vue&type=template&id=01fd24ab&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/views/pages/expense_reports/Edit.vue?vue&type=template&id=01fd24ab& ***!
+  \******************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_6d587456___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Create.vue?vue&type=template&id=6d587456& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expenses/Create.vue?vue&type=template&id=6d587456&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_6d587456___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_01fd24ab___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=01fd24ab& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/expense_reports/Edit.vue?vue&type=template&id=01fd24ab&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_01fd24ab___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_6d587456___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_01fd24ab___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

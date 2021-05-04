@@ -2,24 +2,30 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Activity Logs</h4>
-                <v-spacer></v-spacer>
-            </v-card-title>
-
-            <v-card-subtitle>
-                <DateRangePicker
-                    ref="dateRangePicker"
-                    :dateRange="filters.date_range"
-                    @on-change="updateDates"
-                >
-                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
-                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
-                            {{ dateRangeText }}
-                        </v-btn>
-                    </template>
-                </DateRangePicker>
-            </v-card-subtitle>
+            <!-- Page Header -->
+            <page-header :title="'Activity Logs'">
+                <template v-slot:sub-actions>
+                    <DateRangePicker
+                        ref="dateRangePicker"
+                        :dateRange="filters.date_range"
+                        @on-change="updateDates"
+                    >
+                        <template
+                            v-slot:openDialog="{ on, attrs, dateRangeText }"
+                        >
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                text
+                                class="ml-0 pl-0"
+                            >
+                                {{ dateRangeText }}
+                            </v-btn>
+                        </template>
+                    </DateRangePicker>
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-4">
                 <v-chip
@@ -153,12 +159,14 @@
 
 <script>
 import moment from "moment";
+import PageHeader from "../../../../components/page/PageHeader";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
 import ActivityLogDataService from "../../../../services/ActivityLogDataService";
 
 export default {
     components: {
+        PageHeader,
         DateRangePicker,
         UserDialogSelector
     },

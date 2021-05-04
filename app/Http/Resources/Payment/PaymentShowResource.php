@@ -7,6 +7,7 @@ use App\Http\Resources\ExpenseReport\ExpenseReportOnlyResource;
 use App\Http\Resources\UserIndexResource;
 use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 use Spatie\Activitylog\Models\Activity;
 
 class PaymentShowResource extends JsonResource
@@ -57,6 +58,8 @@ class PaymentShowResource extends JsonResource
             // -------------------------------------------------------------------
             "status" => $this->status,
             "logs" => $logs,
+            "from" => Carbon::parse($this->getPaymentStartDateAttribute())->format("Y-m-d"),
+            "to" => Carbon::parse($this->getPaymentEndDateAttribute())->format("Y-m-d"),
 
             // -------------------------------------------------------------------
             // Transaction Logs

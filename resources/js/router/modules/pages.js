@@ -251,6 +251,44 @@ const pageRoutes = [
                 }
             },
             {
+                path: "/payments/create",
+                name: "user.payments.create",
+                component: () =>
+                    import("../../views/pages/payments/Create.vue"),
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("add payments")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                },
+                meta: {
+                    keepAlive: false
+                }
+            },
+            {
+                path: "/payments/:id/edit",
+                name: "user.payments.edit",
+                component: () =>
+                    import("../../views/pages/payments/Edit.vue"),
+                beforeEnter: (to, from, next) => {
+                    let permissions = store.getters.user.permissions;
+                    permissions = permissions.map(item => item.name);
+
+                    if (permissions.includes("edit payments")) {
+                        next();
+                    } else {
+                        next({ name: "error_403" });
+                    }
+                },
+                meta: {
+                    keepAlive: false
+                }
+            },
+            {
                 path: "/payments/:id",
                 name: "user.payments.show",
                 component: () =>
@@ -588,6 +626,11 @@ const pageRoutes = [
                     keepAlive: false
                 }
             },
+
+            //
+            // Jobs
+            //
+
             {
                 path: "/jobs",
                 name: "admin.jobs.index",
@@ -636,25 +679,6 @@ const pageRoutes = [
                     permissions = permissions.map(item => item.name);
 
                     if (permissions.includes("edit jobs")) {
-                        next();
-                    } else {
-                        next({ name: "error_403" });
-                    }
-                },
-                meta: {
-                    keepAlive: false
-                }
-            },
-            {
-                path: "/payments/create",
-                name: "user.payments.create",
-                component: () =>
-                    import("../../views/pages/payments/Create.vue"),
-                beforeEnter: (to, from, next) => {
-                    let permissions = store.getters.user.permissions;
-                    permissions = permissions.map(item => item.name);
-
-                    if (permissions.includes("add payments")) {
                         next();
                     } else {
                         next({ name: "error_403" });

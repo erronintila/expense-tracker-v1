@@ -2,252 +2,42 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Profile</h4>
-                <v-spacer></v-spacer>
-            </v-card-title>
-            <v-card-subtitle>
-                Last updated: {{ lastUpdated }}
-            </v-card-subtitle>
+            <page-header :title="'Profile'">
+                <template v-slot:sub-actions>
+                    Last updated: {{ lastUpdated }}
+                </template>
+            </page-header>
 
             <v-card-text>
                 <v-container>
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-hover v-slot:default="{ hover }">
-                                <v-card
-                                    outlined
-                                    class="mx-auto mt-3"
-                                    :elevation="hover ? 5 : 2"
+                                <profile-card
+                                    :form="form"
+                                    :image_url="image_url"
+                                    :hover="hover"
                                 >
-                                    <v-card-text>
-                                        <v-row align="center" justify="center">
-                                            <v-col
-                                                cols="12"
-                                                align="center"
-                                                justify="center"
+                                    <template v-slot:actions>
+                                        <change-password>
+                                            <template
+                                                v-slot:openDialog="{
+                                                    attrs,
+                                                    on
+                                                }"
                                             >
-                                                <v-avatar
-                                                    class="profile"
-                                                    color="grey"
-                                                    size="200"
+                                                <v-btn
+                                                    text
+                                                    color="primary"
+                                                    v-bind="attrs"
+                                                    v-on="on"
                                                 >
-                                                    <v-img
-                                                        :src="
-                                                            require('../../../assets/img/user.png')
-                                                        "
-                                                    />
-                                                </v-avatar>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col
-                                                cols="12"
-                                                align="center"
-                                                justify="center"
-                                            >
-                                                <div>
-                                                    {{
-                                                        form.job == null
-                                                            ? ""
-                                                            : form.job
-                                                                  .department ==
-                                                              null
-                                                            ? ""
-                                                            : form.job
-                                                                  .department
-                                                                  .name
-                                                    }}
-                                                </div>
-                                                <h3
-                                                    class="display-1 green--text"
-                                                >
-                                                    {{
-                                                        `${
-                                                            form.last_name
-                                                        }, ${form.first_name ||
-                                                            ""} ${form.suffix ||
-                                                            ""}`
-                                                    }}
-                                                </h3>
-                                                <p>
-                                                    {{
-                                                        form.job == null
-                                                            ? ""
-                                                            : form.job.name
-                                                    }}
-                                                </p>
-                                                <div class="text--primary">
-                                                    {{ form.mobile_number
-                                                    }}<br />
-                                                    {{ form.email }}
-                                                </div>
-                                            </v-col>
-                                        </v-row>
-                                    </v-card-text>
-
-                                    <v-dialog
-                                        v-model="dialogPassword"
-                                        persistent
-                                        width="500"
-                                    >
-                                        <template
-                                            v-slot:activator="{ on, attrs }"
-                                        >
-                                            <v-btn
-                                                text
-                                                color="primary"
-                                                v-bind="attrs"
-                                                v-on="on"
-                                            >
-                                                Change Password
-                                            </v-btn>
-                                        </template>
-
-                                        <v-card>
-                                            <v-card-title class="headline">
-                                                Change Password
-                                            </v-card-title>
-                                            <v-form ref="form_password">
-                                                <v-card-text>
-                                                    <v-container>
-                                                        <v-row>
-                                                            <v-col cols="12">
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        old_password
-                                                                    "
-                                                                    :rules="
-                                                                        mixin_validation.required
-                                                                    "
-                                                                    :error-messages="
-                                                                        password_errors.old_password
-                                                                    "
-                                                                    @input="
-                                                                        () => {
-                                                                            password_errors.old_password = [];
-                                                                        }
-                                                                    "
-                                                                    color="success"
-                                                                    label="Old Password"
-                                                                    name="password"
-                                                                    :type="
-                                                                        showOldPassword
-                                                                            ? 'text'
-                                                                            : 'password'
-                                                                    "
-                                                                    :append-icon="
-                                                                        showOldPassword
-                                                                            ? 'mdi-eye'
-                                                                            : 'mdi-eye-off'
-                                                                    "
-                                                                    @click:append="
-                                                                        showOldPassword = !showOldPassword
-                                                                    "
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                            <v-col cols="12">
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        password
-                                                                    "
-                                                                    :rules="[
-                                                                        ...mixin_validation.required,
-                                                                        ...mixin_validation.minimumLength(
-                                                                            8
-                                                                        )
-                                                                    ]"
-                                                                    :error-messages="
-                                                                        password_errors.password
-                                                                    "
-                                                                    @input="
-                                                                        () => {
-                                                                            password_errors.password = [];
-                                                                        }
-                                                                    "
-                                                                    color="success"
-                                                                    label="New Password"
-                                                                    name="password"
-                                                                    :type="
-                                                                        showNewPassword
-                                                                            ? 'text'
-                                                                            : 'password'
-                                                                    "
-                                                                    :append-icon="
-                                                                        showNewPassword
-                                                                            ? 'mdi-eye'
-                                                                            : 'mdi-eye-off'
-                                                                    "
-                                                                    @click:append="
-                                                                        showNewPassword = !showNewPassword
-                                                                    "
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                            <v-col cols="12">
-                                                                <v-text-field
-                                                                    v-model="
-                                                                        password_confirmation
-                                                                    "
-                                                                    :rules="
-                                                                        password_rules.password_confirmation
-                                                                    "
-                                                                    :error-messages="
-                                                                        password_errors.password_confirmation
-                                                                    "
-                                                                    @input="
-                                                                        () => {
-                                                                            password_errors.password_confirmation = [];
-                                                                        }
-                                                                    "
-                                                                    color="success"
-                                                                    label="Re-type Password"
-                                                                    name="confirm_password"
-                                                                    :type="
-                                                                        showRetypePassword
-                                                                            ? 'text'
-                                                                            : 'password'
-                                                                    "
-                                                                    :append-icon="
-                                                                        showRetypePassword
-                                                                            ? 'mdi-eye'
-                                                                            : 'mdi-eye-off'
-                                                                    "
-                                                                    @click:append="
-                                                                        showRetypePassword = !showRetypePassword
-                                                                    "
-                                                                ></v-text-field>
-                                                            </v-col>
-                                                        </v-row>
-                                                    </v-container>
-                                                </v-card-text>
-
-                                                <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn
-                                                        color="primary"
-                                                        text
-                                                        @click="
-                                                            closePasswordDialog
-                                                        "
-                                                    >
-                                                        Cancel
-                                                    </v-btn>
-                                                    <v-btn
-                                                        color="primary"
-                                                        text
-                                                        @click="
-                                                            onUpdatePassword
-                                                        "
-                                                    >
-                                                        Save
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-form>
-                                        </v-card>
-                                    </v-dialog>
-
-                                    <v-row class="mt-4"></v-row>
-                                </v-card>
+                                                    Change Password
+                                                </v-btn>
+                                            </template>
+                                        </change-password>
+                                    </template>
+                                </profile-card>
                             </v-hover>
                         </v-col>
 
@@ -432,16 +222,21 @@
 
 <script>
 import moment from "moment";
+import PageHeader from "../../../components/page/PageHeader";
+import ProfileCard from "./ProfileCard";
+import ChangePassword from "./ChangePassword";
 import UserDataService from "../../../services/UserDataService";
 
 export default {
+    components: {
+        PageHeader,
+        ProfileCard,
+        ChangePassword
+    },
     data() {
         return {
+            image_url: require("../../../assets/img/user.png"),
             formDataLoaded: false,
-            showOldPassword: false,
-            showNewPassword: false,
-            showRetypePassword: false,
-            dialogPassword: false,
             dialog: false,
             menu: false,
             form: {
@@ -471,40 +266,6 @@ export default {
                 permissions: [],
                 old_role: "",
                 role: "Standard User"
-            },
-            // id: "",
-            // email: "",
-            // username: "",
-            // is_admin: "",
-            // updated_at: "",
-            // can_login: 1,
-            // full_name: "",
-            // first_name: "",
-            // middle_name: "",
-            // last_name: "",
-            // suffix: "",
-            // gender: "",
-            // birthdate: "",
-            // mobile_number: "",
-            // telephone_number: "",
-            // email: "",
-            // address: "",
-            // job: { department: {} },
-            old_password: "",
-            password: "",
-            password_confirmation: "",
-            password_rules: {
-                password_confirmation: [
-                    v => !!v || "Retype password is required",
-                    v =>
-                        this.password === this.password_confirmation ||
-                        "Passwords do not match"
-                ]
-            },
-            password_errors: {
-                old_password: [],
-                password: [],
-                password_confirmation: []
             },
             rules: {
                 username: [],
@@ -580,41 +341,6 @@ export default {
                         this.errors = error.response.data.errors;
                     });
             }
-        },
-        onUpdatePassword() {
-            if (this.$refs.form_password.validate()) {
-                UserDataService.updatePassword(this.form.id, {
-                    old_password: this.old_password,
-                    password: this.password,
-                    password_confirmation: this.password_confirmation
-                })
-                    .then(response => {
-                        this.mixin_successDialog(response.data.status, response.data.message);
-                        // this.$store.dispatch("AUTH_USER");
-
-                        this.dialogPassword = false;
-                        this.old_password = "";
-                        this.password = "";
-                        this.password_confirmation = "";
-                    })
-                    .catch(error => {
-                        this.mixin_showErrors(error);
-
-                        if (error.response) {
-                            if (error.response.data) {
-                                this.password_errors =
-                                    error.response.data.errors;
-                            }
-                        }
-                    });
-            }
-        },
-        closePasswordDialog() {
-            this.dialogPassword = false;
-            this.old_password = "";
-            this.password = "";
-            this.password_confirmation = "";
-            this.$refs.form_password.resetValidation();
         }
     },
     computed: {
@@ -625,17 +351,9 @@ export default {
             return moment(this.form.updated_at).format("MMM DD, YYYY HH:mm:ss");
         }
     },
-    // created() {
-    //     this.$store.dispatch("AUTH_USER").then(response => {
-    //         this.form = response;
-    //         // this.$store.dispatch("AUTH_NOTIFICATIONS");
-    //         this.formDataLoaded = true;
-    //     });
-    // },
     activated() {
         this.$store.dispatch("AUTH_USER").then(response => {
             this.form = response;
-            // this.$store.dispatch("AUTH_NOTIFICATIONS");
             this.formDataLoaded = true;
         });
     }

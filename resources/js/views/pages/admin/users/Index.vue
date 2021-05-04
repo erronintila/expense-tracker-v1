@@ -2,102 +2,32 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 p-0 m-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Employees</h4>
-
-                <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template
-                        v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add users')"
-                    >
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            :to="{ name: 'admin.users.create' }"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
+            <!-- Page Header -->
+            <page-header :title="'Employees'">
+                <template v-slot:actions>
+                    <v-tooltip bottom>
+                        <template
+                            v-slot:activator="{ on, attrs }"
+                            v-if="mixin_can('add users')"
                         >
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Add New</span>
-                </v-tooltip>
-
-                <!-- <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onPasswordReset">
-                            <v-list-item-icon>
-                                <v-icon>mdi-lock-reset</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Reset Password
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onEditFund">
-                            <v-list-item-icon>
-                                <v-icon>mdi-text-box-plus-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Edit Revolving Fund
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onEditPermissions">
-                            <v-list-item-icon>
-                                <v-icon>mdi-text-box-plus-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Edit Permissions
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onRestore">
-                            <v-list-item-icon>
-                                <v-icon>mdi-history</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Restore
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-trash-can-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Move to archive
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu> -->
-            </v-card-title>
+                            <v-btn
+                                class="elevation-3 mr-2"
+                                color="green"
+                                :to="{ name: 'admin.users.create' }"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon dark>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Add New</span>
+                    </v-tooltip>
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-4">
                 <v-chip
@@ -235,7 +165,6 @@
                     small
                     @click:close="onExport"
                     close-icon="mdi-download"
-                    dark
                 >
                     Export Data
                 </v-chip>
@@ -475,6 +404,8 @@
 </template>
 
 <script>
+import qs from "qs";
+import PageHeader from "../../../../components/page/PageHeader";
 import UserDataService from "../../../../services/UserDataService";
 import DepartmentDropdownSelector from "../../../../components/selector/dropdown/DepartmentDropdownSelector";
 import JobDropdownSelector from "../../../../components/selector/dropdown/JobDropdownSelector";
@@ -482,6 +413,7 @@ import JobDropdownSelector from "../../../../components/selector/dropdown/JobDro
 export default {
     props: {},
     components: {
+        PageHeader,
         DepartmentDropdownSelector,
         JobDropdownSelector
     },
@@ -553,7 +485,8 @@ export default {
                 per_page: 10,
                 to: 0,
                 total: 0
-            }
+            },
+            filterByField: ["code", "first_name"]
         };
     },
     methods: {
@@ -604,8 +537,49 @@ export default {
                     this.department == null ? null : this.department.id;
                 let job_id = this.job == null ? null : this.job.id;
                 let status = this.status;
+
                 let data = {
                     params: {
+                        filterOptions: {
+                            matchCase: false,
+                            matchWholeWord: false,
+                        },
+                        filterByField: {
+                            code: this.onFilterByField("code"),
+                            first_name: this.onFilterByField("first_name"),
+                            middle_name: this.onFilterByField("middle_name"),
+                            last_name: this.onFilterByField("last_name"),
+                            gender: this.onFilterByField("gender"),
+                            birthdate: this.onFilterByField("birthdate"),
+                            mobile_number: this.onFilterByField("mobile_number"),
+                            telephone_number: this.onFilterByField("telephone_number"),
+                            email: this.onFilterByField("email"),
+                            is_superadmin: false,
+                            job_id: job_id,
+                            job_name: this.onFilterByField("job_name"),
+                            department_id: department_id,
+                            department_name: this.onFilterByField("department_name"),
+                        },
+                        filterByDate: {
+                            key: "created_at",
+                            start_date: "",
+                            end_date: ""
+                        },
+                        filterByStatus: [status],
+                        sort: {
+                            key: sortBy[0],
+                            desc: sortDesc[0]
+                        },
+                        pagination: {
+                            current_page: page,
+                            from: 1,
+                            last_page: 1,
+                            path: "",
+                            per_page: itemsPerPage,
+                            to: 1,
+                            total: 1
+                        },
+
                         search: search,
                         sortBy: sortBy[0],
                         sortType: sortDesc[0] ? "desc" : "asc",
@@ -615,6 +589,9 @@ export default {
                         department_id: department_id,
                         job_id: job_id,
                         is_superadmin: false
+                    },
+                    paramsSerializer: function(params) {
+                        return qs.stringify(params, { encode: false });
                     }
                 };
 
@@ -631,6 +608,10 @@ export default {
                         reject();
                     });
             });
+        },
+        onFilterByField(field) {
+            let search = this.search.trim().toLowerCase();
+            return this.filterByField.includes(field) ? search : "";
         },
         onRefresh() {
             Object.assign(this.$data, this.$options.data.apply(this));
@@ -836,13 +817,8 @@ export default {
             };
         }
     },
-    // created() {
-    //     this.$store.dispatch("AUTH_USER");
-    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-    // },
     activated() {
         this.$store.dispatch("AUTH_USER");
-        // this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {
             this.items = data.data;
             this.meta = data.meta;

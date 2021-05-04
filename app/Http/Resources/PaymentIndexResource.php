@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class PaymentIndexResource extends JsonResource
 {
@@ -38,6 +39,8 @@ class PaymentIndexResource extends JsonResource
             // Additional Fields
             // -------------------------------------------------------------------
             "status" => $this->status,
+            "from" => Carbon::parse($this->getPaymentStartDateAttribute())->format("Y-m-d"),
+            "to" => Carbon::parse($this->getPaymentEndDateAttribute())->format("Y-m-d"),
 
             // -------------------------------------------------------------------
             // Transaction Logs

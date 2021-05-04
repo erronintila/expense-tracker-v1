@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\User;
 use App\Models\ExpenseReport;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -75,7 +74,7 @@ class Payment extends Model
         parent::boot();
 
         static::deleting(function ($payment) {
-            abort_if(!Auth::user()->is_admin, 422, "Some records can't be deleted.");
+            abort_if(!auth()->user()->is_admin, 422, "Some records can't be deleted.");
         });
     }
 
@@ -128,7 +127,7 @@ class Payment extends Model
     // // used to fill properties and add custom fields before the activity is saved.
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+        $role = auth()->user() == null ? "default" : (auth()->user()->is_admin ? "admin" : "standard user");
 
         $activity->properties = $activity->properties->merge([
             'custom' => [
@@ -192,6 +191,26 @@ class Payment extends Model
     | LARAVEL ACCESSORS
     |------------------------------------------------------------------------------------------------------------------------------------
     */
+
+    /**
+     * Displays the earliest created date covered by the payment.
+     *
+     * @return mixed
+     */
+    public function getPaymentStartDateAttribute()
+    {
+        return $this->expense_reports()->withTrashed()->min("expense_reports.created_at");
+    }
+
+    /**
+     * Displays the latest created date covered by the payment.
+     *
+     * @return mixed
+     */
+    public function getPaymentEndDateAttribute()
+    {
+        return $this->expense_reports()->withTrashed()->max("expense_reports.created_at");
+    }
     
     /**
      * status

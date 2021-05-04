@@ -2,75 +2,33 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Expense Types</h4>
-
-                <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template
-                        v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add expense types')"
-                    >
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            :to="{ name: 'admin.expense_types.create' }"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
+            <!-- Page Header -->
+            <page-header :title="'Expense Types'">
+                <template v-slot:actions>
+                    <v-tooltip bottom>
+                        <template
+                            v-slot:activator="{ on, attrs }"
+                            v-if="mixin_can('add expense types')"
                         >
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Add New</span>
-                </v-tooltip>
-
-                <!-- <v-menu offset-y transition="scale-transition" left>
-                    <template v-slot:activator="{ on: menu, attrs }">
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on: tooltip }">
-                                <v-btn
-                                    class="elevation-3"
-                                    color="green"
-                                    dark
-                                    fab
-                                    x-small
-                                    v-bind="attrs"
-                                    v-on="{ ...tooltip, ...menu }"
-                                >
-                                    <v-icon dark
-                                        >mdi-view-grid-plus-outline</v-icon
-                                    >
-                                </v-btn>
-                            </template>
-                            <span>More Options</span>
-                        </v-tooltip>
-                    </template>
-
-                    <v-list>
-                        <v-list-item @click="onRestore">
-                            <v-list-item-icon>
-                                <v-icon>mdi-history</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Restore
-                            </v-list-item-subtitle>
-                        </v-list-item>
-
-                        <v-list-item @click="onDelete">
-                            <v-list-item-icon>
-                                <v-icon>mdi-trash-can-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-subtitle>
-                                Move to archive
-                            </v-list-item-subtitle>
-                        </v-list-item>
-                    </v-list>
-                </v-menu> -->
-            </v-card-title>
+                            <v-btn
+                                class="elevation-3 mr-2"
+                                color="green"
+                                :to="{ name: 'admin.expense_types.create' }"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon dark>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Add New</span>
+                    </v-tooltip>
+                </template>
+                <template v-slot:sub-actions> </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-4">
                 <v-chip
@@ -195,7 +153,10 @@
                             small
                             class="mr-2"
                             @click="onEdit(item)"
-                            v-if="mixin_can('edit expense types') && item.deleted_at == null"
+                            v-if="
+                                mixin_can('edit expense types') &&
+                                    item.deleted_at == null
+                            "
                         >
                             mdi-pencil
                         </v-icon>
@@ -207,10 +168,14 @@
 </template>
 
 <script>
+import PageHeader from "../../../../components/page/PageHeader";
 import ExpenseTypeDataService from "../../../../services/ExpenseTypeDataService";
 
 export default {
     props: {},
+    components: {
+        PageHeader
+    },
     data() {
         return {
             formDataLoaded: false,
@@ -238,9 +203,9 @@ export default {
     methods: {
         onSearch() {
             this.getDataFromApi().then(data => {
-                    this.items = data.items;
-                    this.totalItems = data.total;
-                });
+                this.items = data.items;
+                this.totalItems = data.total;
+            });
         },
         getDataFromApi() {
             this.loading = true;
@@ -283,10 +248,10 @@ export default {
             this.selected = [];
         },
         onShow(item) {
-            let params = { id: item.id }
+            let params = { id: item.id };
 
-            if(item.deleted_at) {
-                params = { id: item.id, isDeleted: true }
+            if (item.deleted_at) {
+                params = { id: item.id, isDeleted: true };
             }
 
             this.$router.push({
@@ -311,7 +276,7 @@ export default {
                     let ids = this.selected.map(item => {
                         return item.id;
                     });
-                    
+
                     ExpenseTypeDataService.delete(ids)
                         .then(response => {
                             this.mixin_successDialog(
@@ -343,7 +308,7 @@ export default {
                     let ids = this.selected.map(item => {
                         return item.id;
                     });
-                    
+
                     ExpenseTypeDataService.restore(ids)
                         .then(response => {
                             this.mixin_successDialog(
@@ -376,7 +341,7 @@ export default {
     },
     watch: {
         search() {
-            if(this.search == '') {
+            if (this.search == "") {
                 this.getDataFromApi().then(data => {
                     this.items = data.items;
                     this.totalItems = data.total;
@@ -394,9 +359,6 @@ export default {
             }
         }
     },
-    // created() {
-    //     this.$store.dispatch("AUTH_NOTIFICATIONS");
-    // },
     activated() {
         this.$store.dispatch("AUTH_NOTIFICATIONS");
         this.getDataFromApi().then(data => {

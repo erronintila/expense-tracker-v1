@@ -109,6 +109,7 @@ class UserSeeder extends Seeder
             }
 
             if ($model == "payments") {
+                Permission::create(['name' => 'edit completed payments', 'category' => $model]);
                 Permission::create(['name' => 'receive payments', 'category' => $model]);
                 Permission::create(['name' => 'cancel payments', 'category' => $model]);
                 Permission::create(['name' => 'view all users payments', 'category' => $model]);

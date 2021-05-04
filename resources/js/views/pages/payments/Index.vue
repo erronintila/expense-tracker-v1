@@ -2,58 +2,53 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Payment Records</h4>
-
-                <v-spacer></v-spacer>
-
-                <v-tooltip bottom>
-                    <template
-                        v-slot:activator="{ on, attrs }"
-                        v-if="mixin_can('add payments')"
-                    >
-                        <v-btn
-                            class="elevation-3 mr-2"
-                            color="green"
-                            :to="{ name: 'user.payments.create' }"
-                            dark
-                            fab
-                            x-small
-                            v-bind="attrs"
-                            v-on="on"
+            <!-- Page Header -->
+            <page-header :title="'Payment Records'">
+                <template v-slot:actions>
+                    <v-tooltip bottom>
+                        <template
+                            v-slot:activator="{ on, attrs }"
+                            v-if="mixin_can('add payments')"
                         >
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>Add New Record</span>
-                </v-tooltip>
-            </v-card-title>
+                            <v-btn
+                                class="elevation-3 mr-2"
+                                color="green"
+                                :to="{ name: 'user.payments.create' }"
+                                dark
+                                fab
+                                x-small
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon dark>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Add New Record</span>
+                    </v-tooltip>
+                </template>
 
-            <v-card-subtitle>
-                <!-- <DateRangePicker
-                    :buttonType="true"
-                    :buttonText="true"
-                    :buttonColor="'grey'"
-                    :buttonClass="'ml-0 pl-0'"
-                    :preset="preset"
-                    :presets="presets"
-                    :value="date_range"
-                    @updateDates="updateDates"
-                >
-                </DateRangePicker> -->
-
-                <DateRangePicker
-                    ref="dateRangePicker"
-                    :dateRange="date_range"
-                    @on-change="updateDates"
-                >
-                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
-                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
-                            {{ dateRangeText }}
-                        </v-btn>
-                    </template>
-                </DateRangePicker>
-            </v-card-subtitle>
+                <template v-slot:sub-actions>
+                    <DateRangePicker
+                        ref="dateRangePicker"
+                        :dateRange="date_range"
+                        @on-change="updateDates"
+                    >
+                        <template
+                            v-slot:openDialog="{ on, attrs, dateRangeText }"
+                        >
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                text
+                                class="ml-0 pl-0"
+                            >
+                                {{ dateRangeText }}
+                            </v-btn>
+                        </template>
+                    </DateRangePicker>
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-4">
                 <v-chip
@@ -295,9 +290,14 @@
                         >
                             mdi-eye
                         </v-icon>
-                        <!-- <v-icon small class="mr-2" @click="onEdit(item)">
+                        <v-icon
+                            v-show="isValidEdit(item)"
+                            small
+                            class="mr-2"
+                            @click="onEdit(item)"
+                        >
                             mdi-pencil
-                        </v-icon> -->
+                        </v-icon>
                     </template>
                     <template v-slot:[`item.amount`]="{ item }">
                         {{ mixin_formatNumber(item.amount) }}
@@ -332,12 +332,17 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import PageHeader from "../../../components/page/PageHeader";
 import DateRangePicker from "../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../components/selector/dialog/UserDialogSelector";
 import PaymentDataService from "../../../services/PaymentDataService";
 
 export default {
-    components: { DateRangePicker, UserDialogSelector },
+    components: {
+        DateRangePicker,
+        UserDialogSelector,
+        PageHeader
+    },
     data() {
         return {
             formDataLoaded: false,
@@ -489,35 +494,6 @@ export default {
                 params: { id: item.id }
             });
         },
-        // onDelete() {
-        //     if (this.selected.length == 0) {
-        //         this.mixin_errorDialog("Error", "No item(s) selected");
-        //         return;
-        //     }
-
-        //     this.$confirm("do you want to delete payment?").then(res => {
-        //         if (res) {
-        //             axios
-        //                 .delete(`/api/payments/${this.selected[0].id}`, {
-        //                     params: {
-        //                         ids: this.selected.map(item => {
-        //                             return item.id;
-        //                         })
-        //                     }
-        //                 })
-        //                 .then(response => {
-        //                      this.mixin_successDialog(response.data.status, response.data.message);
-        //                     this.getDataFromApi().then(data => {
-        //                         this.items = data.items;
-        //                         this.totalItems = data.total;
-        //                     });
-        //                 })
-        //                 .catch(error => {
-        //                     this.mixin_showErrors(error);
-        //                 });
-        //         }
-        //     });
-        // },
         onUpdate(action, method) {
             if (action == "receive" && !this.mixin_can("receive payments")) {
                 this.mixin_errorDialog(`Error`, "Not allowed");
@@ -586,9 +562,6 @@ export default {
                     axios({
                         method: method,
                         url: url
-                        // data: {
-                        //     ids: ids
-                        // }
                     })
                         .then(response => {
                             this.mixin_successDialog(
@@ -607,6 +580,23 @@ export default {
                         });
                 }
             });
+        },
+        isValidEdit(item) {
+            if (
+                item.deleted_at == null &&
+                item.cancelled_at == null &&
+                this.$store.getters.user.is_admin
+            ) {
+                if (
+                    item.received_at != null &&
+                    !this.mixin_can("edit completed payments")
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
         }
     },
     computed: {
@@ -615,7 +605,12 @@ export default {
                 return false;
             }
 
-            if(this.selected.some(item => item.received_at != null || item.cancelled_at != null)) {
+            if (
+                this.selected.some(
+                    item =>
+                        item.received_at != null || item.cancelled_at != null
+                )
+            ) {
                 return false;
             }
 
@@ -626,11 +621,11 @@ export default {
                 return false;
             }
 
-            if(!this.$store.getters.user.is_admin) {
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 
-            if(this.selected.some(item => item.deleted_at != null)) {
+            if (this.selected.some(item => item.deleted_at != null)) {
                 return false;
             }
 
@@ -641,11 +636,15 @@ export default {
                 return false;
             }
 
-            if(!this.$store.getters.user.is_admin) {
+            if (!this.$store.getters.user.is_admin) {
                 return false;
             }
 
-            if(this.selected.some(item => item.deleted_at != null || item.cancelled_at != null)) {
+            if (
+                this.selected.some(
+                    item => item.deleted_at != null || item.cancelled_at != null
+                )
+            ) {
                 return false;
             }
 
@@ -654,7 +653,6 @@ export default {
         params(nv) {
             return {
                 ...this.options,
-                // query: this.search,
                 query: this.status,
                 query: this.date_range,
                 query: this.user
@@ -700,16 +698,6 @@ export default {
             );
         }
     },
-    // mounted() {
-    //     this.getDataFromApi().then(data => {
-    //         this.items = data.items;
-    //         this.totalItems = data.total;
-    //     });
-    // },
-    // created() {
-    //     // this.$store.dispatch("AUTH_USER");
-    //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-    // },
     activated() {
         if (this.$route.params.status) {
             this.status = this.$route.params.status;

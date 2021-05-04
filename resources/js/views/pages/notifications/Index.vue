@@ -2,36 +2,30 @@
     <div>
         <loader-component v-if="!formDataLoaded"></loader-component>
         <v-card v-else class="elevation-0 pt-0">
-            <v-card-title class="pt-0">
-                <h4 class="title green--text">Notifications</h4>
-                <v-spacer></v-spacer>
-            </v-card-title>
-
-            <v-card-subtitle>
-                <!-- <DateRangePicker
-                    :buttonType="true"
-                    :buttonText="true"
-                    :buttonColor="'grey'"
-                    :buttonClass="'ml-0 pl-0'"
-                    :preset="preset"
-                    :presets="presets"
-                    :value="date_range"
-                    @updateDates="updateDates"
-                >
-                </DateRangePicker> -->
-
-                <DateRangePicker
-                    ref="dateRangePicker"
-                    :dateRange="date_range"
-                    @on-change="updateDates"
-                >
-                    <template v-slot:openDialog="{ on, attrs, dateRangeText }">
-                        <v-btn v-bind="attrs" v-on="on" text class="ml-0 pl-0">
-                            {{ dateRangeText }}
-                        </v-btn>
-                    </template>
-                </DateRangePicker>
-            </v-card-subtitle>
+            <!-- Page Header -->
+            <page-header :title="'Notifications'">
+                <template v-slot:sub-actions>
+                    <DateRangePicker
+                        ref="dateRangePicker"
+                        :dateRange="date_range"
+                        @on-change="updateDates"
+                    >
+                        <template
+                            v-slot:openDialog="{ on, attrs, dateRangeText }"
+                        >
+                            <v-btn
+                                v-bind="attrs"
+                                v-on="on"
+                                text
+                                class="ml-0 pl-0"
+                            >
+                                {{ dateRangeText }}
+                            </v-btn>
+                        </template>
+                    </DateRangePicker>
+                </template>
+            </page-header>
+            <!-- End of Page Header -->
 
             <v-row class="ml-2">
                 <v-col>
@@ -280,11 +274,12 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import PageHeader from "../../../components/page/PageHeader";
 import DateRangePicker from "../../../components/datepicker/DateRangePicker";
 import NotificationDataService from "../../../services/NotificationDataService";
 
 export default {
-    components: { DateRangePicker },
+    components: { DateRangePicker, PageHeader },
     data() {
         return {
             formDataLoaded: false,
