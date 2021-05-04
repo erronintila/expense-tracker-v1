@@ -808,7 +808,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         };
         _services_UserDataService__WEBPACK_IMPORTED_MODULE_2__["default"].getAll(data).then(function (response) {
-          console.log(response);
           _this2.loading = false;
           _this2.formDataLoaded = true;
           resolve(response.data);

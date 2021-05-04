@@ -291,11 +291,7 @@
                             mdi-eye
                         </v-icon>
                         <v-icon
-                            v-show="
-                                item.deleted_at == null &&
-                                    item.cancelled_at == null &&
-                                    $store.getters.user.is_admin
-                            "
+                            v-show="isValidEdit(item)"
                             small
                             class="mr-2"
                             @click="onEdit(item)"
@@ -584,6 +580,23 @@ export default {
                         });
                 }
             });
+        },
+        isValidEdit(item) {
+            if (
+                item.deleted_at == null &&
+                item.cancelled_at == null &&
+                this.$store.getters.user.is_admin
+            ) {
+                if (
+                    item.received_at != null &&
+                    !this.mixin_can("edit completed payments")
+                ) {
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
         }
     },
     computed: {

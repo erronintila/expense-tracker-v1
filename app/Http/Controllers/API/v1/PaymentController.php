@@ -264,6 +264,7 @@ class PaymentController extends Controller
             $payment->user()->associate($user);
 
             if (!$payment->received_at == null) {
+                abort_if(!app("auth")->user()->hasPermissionTo('edit completed payments'), 403);
                 $payment->expense_reports->each(function ($expense_report) {
                     $expense_report->expenses->each(function ($expense) {
                         $expense_amount = $expense->amount - $expense->reimbursable_amount;
@@ -284,6 +285,7 @@ class PaymentController extends Controller
                     $arr[$expense_report->id] = ['payment' => $expense_report->getTotalExpenseAmountAttribute()];
 
                     if (!$payment->received_at == null) {
+                        abort_if(!app("auth")->user()->hasPermissionTo('edit completed payments'), 403);
                         $expense_report->expenses->each(function ($expense) {
                             $expense_amount = $expense->amount - $expense->reimbursable_amount;
                             $user = User::findOrFail($expense->user_id);

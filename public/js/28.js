@@ -385,10 +385,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -639,6 +635,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
         }
       });
+    },
+    isValidEdit: function isValidEdit(item) {
+      if (item.deleted_at == null && item.cancelled_at == null && this.$store.getters.user.is_admin) {
+        if (item.received_at != null && !this.mixin_can("edit completed payments")) {
+          return false;
+        }
+
+        return true;
+      }
+
+      return false;
     }
   },
   computed: {
@@ -1479,12 +1486,8 @@ var render = function() {
                                       {
                                         name: "show",
                                         rawName: "v-show",
-                                        value:
-                                          item.deleted_at == null &&
-                                          item.cancelled_at == null &&
-                                          _vm.$store.getters.user.is_admin,
-                                        expression:
-                                          "\n                            item.deleted_at == null &&\n                                item.cancelled_at == null &&\n                                $store.getters.user.is_admin\n                        "
+                                        value: _vm.isValidEdit(item),
+                                        expression: "isValidEdit(item)"
                                       }
                                     ],
                                     staticClass: "mr-2",

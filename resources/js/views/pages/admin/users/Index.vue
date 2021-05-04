@@ -597,7 +597,6 @@ export default {
 
                 UserDataService.getAll(data)
                     .then(response => {
-                        console.log(response);
                         this.loading = false;
                         this.formDataLoaded = true;
                         resolve(response.data);
