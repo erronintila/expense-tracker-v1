@@ -113,13 +113,14 @@ export default {
                 }
             }
         },
-        drawer: {
+        showNavigationDrawer: {
             type: Boolean,
             default: true
         }
     },
     data() {
         return {
+            drawer: true,
             items: [
                 {
                     icon: "mdi-chart-areaspline",
@@ -240,6 +241,16 @@ export default {
     methods: {
         onLogout() {
             this.$emit("on-logout");
+        }
+    },
+    watch: {
+        showNavigationDrawer: {
+            handler(newValue) {
+                this.drawer = newValue
+            }
+        },
+        drawer() {
+            this.$emit("show-drawer", this.drawer);
         }
     }
 };

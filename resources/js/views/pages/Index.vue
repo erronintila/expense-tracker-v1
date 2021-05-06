@@ -8,7 +8,7 @@
         >
         </application-bar>
 
-        <navigation-drawer :user="user" :drawer="drawer" @on-logout="onLogout">
+        <navigation-drawer :user="user" :showNavigationDrawer="drawer" @show-drawer="showDrawer" @on-logout="onLogout">
         </navigation-drawer>
 
         <notification-drawer
@@ -65,9 +65,11 @@ export default {
     methods: {
         showDrawer(e) {
             this.drawer = e;
+            console.log("drawer??", e);
         },
         showNotificationDrawer(e) {
             this.notificationDrawer = e;
+            console.log("notificationDrawer??", e);
         },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error

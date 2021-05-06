@@ -222,13 +222,14 @@ __webpack_require__.r(__webpack_exports__);
         };
       }
     },
-    drawer: {
+    showNavigationDrawer: {
       type: Boolean,
       "default": true
     }
   },
   data: function data() {
     return {
+      drawer: true,
       items: [{
         icon: "mdi-chart-areaspline",
         text: "Dashboard",
@@ -365,6 +366,16 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     onLogout: function onLogout() {
       this.$emit("on-logout");
+    }
+  },
+  watch: {
+    showNavigationDrawer: {
+      handler: function handler(newValue) {
+        this.drawer = newValue;
+      }
+    },
+    drawer: function drawer() {
+      this.$emit("show-drawer", this.drawer);
     }
   }
 });
@@ -620,9 +631,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     showDrawer: function showDrawer(e) {
       this.drawer = e;
+      console.log("drawer??", e);
     },
     showNotificationDrawer: function showNotificationDrawer(e) {
       this.notificationDrawer = e;
+      console.log("notificationDrawer??", e);
     },
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
@@ -1424,8 +1437,8 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("navigation-drawer", {
-        attrs: { user: _vm.user, drawer: _vm.drawer },
-        on: { "on-logout": _vm.onLogout }
+        attrs: { user: _vm.user, showNavigationDrawer: _vm.drawer },
+        on: { "show-drawer": _vm.showDrawer, "on-logout": _vm.onLogout }
       }),
       _vm._v(" "),
       _c("notification-drawer", {
