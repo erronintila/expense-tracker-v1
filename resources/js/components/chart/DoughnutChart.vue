@@ -5,6 +5,7 @@ import { Doughnut } from "vue-chartjs";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default {
+    name: "doughnut-chart",
     extends: Doughnut,
     props: ["data", "options"],
     methods: {

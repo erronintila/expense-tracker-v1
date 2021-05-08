@@ -5,6 +5,7 @@ import { HorizontalBar } from "vue-chartjs";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export default {
+    name: "horizontal-bar-chart",
     extends: HorizontalBar,
     props: ["data", "options"],
     methods: {

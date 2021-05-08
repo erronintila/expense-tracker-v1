@@ -1054,6 +1054,7 @@ export default {
                 labels: [],
                 datasets: [
                     {
+                        label: "",
                         type: "line",
                         data: [],
                         backgroundColor: "#dbffe5",

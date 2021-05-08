@@ -9,12 +9,10 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">Analytics</h4>
+                <h4 class="title green--text">{{ $route.params.label }}</h4>
             </v-card-title>
 
             <v-card-text>
-                <div class="headline">{{ $route.params.label }}</div>
-
                 <div class="d-flex">
                     <DateRangePicker
                         ref="dateRangePicker"
@@ -137,9 +135,16 @@
                 </v-row>
             </v-card-text>
 
+            <!-- <div>
+                <bar-chart
+                    :data="chartData"
+                    :options="chartOptions"
+                ></bar-chart>
+            </div> -->
+
             <div>
                 <line-chart
-                    :chartData="chartData"
+                    :data="chartData"
                     :options="chartOptions"
                 ></line-chart>
             </div>
@@ -150,7 +155,8 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
-import LineChart from "../../../../components/analytics/LineChart";
+import LineChart from "../../../../components/chart/LineChart";
+import BarChart from "../../../../components/chart/BarChart";
 import PageHeader from "../../../../components/page/PageHeader";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
@@ -163,7 +169,8 @@ export default {
         DateRangePicker,
         UserDialogSelector,
         VendorDialogSelector,
-        LineChart
+        LineChart,
+        BarChart
     },
     data() {
         return {
@@ -181,6 +188,26 @@ export default {
             statuses: ["Active", "Inactive", "Inactive"],
             total: [{ label: "Expenses", amount: 100.0, count: 0.0 }],
             params: {},
+            //
+            //
+            //
+            //
+            labels: ["pending", "approved"],
+            data: [
+                { id: 1, status: "pending", label: "expense 1", amount: 100 },
+                { id: 2, status: "approved", label: "expense 2", amount: 50 },
+                {
+                    id: 3,
+                    status: "approved",
+                    label: "expense 3",
+                    amount: 10000
+                },
+                { id: 4, status: "pending", label: "expense 4", amount: 10 }
+            ],
+            //
+            //
+            //
+            //
             chartData: {
                 labels: ["January", "February", "March"],
                 datasets: [
@@ -188,16 +215,53 @@ export default {
                         label: "Data One",
                         backgroundColor: "#dbffe5",
                         borderColor: "#4caf50",
-                        data: [40, 20, 100],
+                        data: [40, 20, 90],
                         fill: false,
-                        // lineTension: 0
+                        lineTension: 0
+                    },
+                    {
+                        label: "Data Two",
+                        backgroundColor: "#dbffe5",
+                        borderColor: "#4caf50",
+                        data: [80, 50, 30],
+                        fill: false,
+                        lineTension: 0
                     }
                 ]
             },
             chartOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
-
+                tooltips: {
+                    mode: "index",
+                    intersect: false,
+                    position: "nearest"
+                },
+                // legend: {
+                //     display: false
+                // },
+                scales: {
+                    yAxes: [
+                        {
+                            // gridLines: {
+                            //     display: false
+                            // },
+                            ticks: $.extend(
+                                {
+                                    beginAtZero: true,
+                                },
+                                {}
+                            )
+                        }
+                    ],
+                    xAxes: [
+                        {
+                            gridLines: {
+                                display: false
+                            }
+                        }
+                    ]
+                }
             }
         };
     },
@@ -224,6 +288,17 @@ export default {
         },
         resetVendor() {
             this.vendor = null;
+        },
+        getLabels(arr, unique_field) {
+            const unique = [];
+            const distinct = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (!unique[arr[i][unique_field]]) {
+                    distinct.push(arr[i][unique_field]);
+                    unique[arr[i][unique_field]] = 1;
+                }
+            }
+            return distinct;
         }
     },
     // beforeCreate() {
@@ -234,5 +309,8 @@ export default {
     //         this.$router.push("/analytics");
     //     }
     // },
+    created() {
+        console.log(this.getLabels(this.data, "status"));
+    }
 };
 </script>
