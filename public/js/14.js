@@ -334,6 +334,14 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
 
+      children.push({
+        icon: "mdi-format-list-numbered",
+        text: "Analytics",
+        link: {
+          name: "admin.analytics.index"
+        }
+      });
+
       if (this.mixin_can("view all activity logs")) {
         children.push({
           icon: "mdi-format-list-numbered",

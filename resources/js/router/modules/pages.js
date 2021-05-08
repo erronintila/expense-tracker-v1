@@ -39,8 +39,7 @@ const pageRoutes = [
             {
                 path: "/profile",
                 name: "user.profile.index",
-                component: () =>
-                    import("../../views/pages/profile/Index.vue"),
+                component: () => import("../../views/pages/profile/Index.vue"),
                 meta: {
                     keepAlive: true
                 }
@@ -55,8 +54,7 @@ const pageRoutes = [
             {
                 path: "/expenses",
                 name: "user.expenses.index",
-                component: () =>
-                    import("../../views/pages/expenses/Index.vue"),
+                component: () => import("../../views/pages/expenses/Index.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -93,8 +91,7 @@ const pageRoutes = [
             {
                 path: "/expenses/:id/edit",
                 name: "user.expenses.edit",
-                component: () =>
-                    import("../../views/pages/expenses/Edit.vue"),
+                component: () => import("../../views/pages/expenses/Edit.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -112,8 +109,7 @@ const pageRoutes = [
             {
                 path: "/expenses/:id",
                 name: "user.expenses.show",
-                component: () =>
-                    import("../../views/pages/expenses/Show.vue"),
+                component: () => import("../../views/pages/expenses/Show.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -139,9 +135,7 @@ const pageRoutes = [
                 path: "/expense_reports",
                 name: "user.expense_reports.index",
                 component: () =>
-                    import(
-                        "../../views/pages/expense_reports/Index.vue"
-                    ),
+                    import("../../views/pages/expense_reports/Index.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -160,9 +154,7 @@ const pageRoutes = [
                 path: "/expense_reports/create",
                 name: "user.expense_reports.create",
                 component: () =>
-                    import(
-                        "../../views/pages/expense_reports/Create.vue"
-                    ),
+                    import("../../views/pages/expense_reports/Create.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -234,8 +226,7 @@ const pageRoutes = [
             {
                 path: "/payments",
                 name: "user.payments.index",
-                component: () =>
-                    import("../../views/pages/payments/Index.vue"),
+                component: () => import("../../views/pages/payments/Index.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -272,8 +263,7 @@ const pageRoutes = [
             {
                 path: "/payments/:id/edit",
                 name: "user.payments.edit",
-                component: () =>
-                    import("../../views/pages/payments/Edit.vue"),
+                component: () => import("../../views/pages/payments/Edit.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -291,8 +281,7 @@ const pageRoutes = [
             {
                 path: "/payments/:id",
                 name: "user.payments.show",
-                component: () =>
-                    import("../../views/pages/payments/Show.vue"),
+                component: () => import("../../views/pages/payments/Show.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -335,7 +324,7 @@ const pageRoutes = [
              *
              *
              */
-             {
+            {
                 path: "/settings",
                 name: "admin.settings.index",
                 component: () =>
@@ -370,7 +359,7 @@ const pageRoutes = [
              *
              *
              */
-             {
+            {
                 path: "/activity_logs",
                 name: "admin.activity_logs.index",
                 component: () =>
@@ -590,9 +579,7 @@ const pageRoutes = [
                 path: "/expense_types/create",
                 name: "admin.expense_types.create",
                 component: () =>
-                    import(
-                        "../../views/pages/admin/expense_types/Create.vue"
-                    ),
+                    import("../../views/pages/admin/expense_types/Create.vue"),
                 beforeEnter: (to, from, next) => {
                     let permissions = store.getters.user.permissions;
                     permissions = permissions.map(item => item.name);
@@ -695,7 +682,7 @@ const pageRoutes = [
              *
              *
              */
-             {
+            {
                 path: "/vendors",
                 name: "admin.vendors.index",
                 component: () =>
@@ -771,6 +758,38 @@ const pageRoutes = [
                     keepAlive: true
                 }
             },
+            /**
+             *  Analytics routes
+             * 
+             */
+            {
+                path: "/analytics",
+                name: "admin.analytics.index",
+                component: () =>
+                    import("../../views/pages/admin/analytics/Index.vue"),
+                // beforeEnter: (to, from, next) => {
+                //     let permissions = store.getters.user.permissions;
+                //     permissions = permissions.map(item => item.name);
+
+                //     if (permissions.includes("view vendors")) {
+                //         next();
+                //     } else {
+                //         next({ name: "error_403" });
+                //     }
+                // },
+                meta: {
+                    keepAlive: true
+                }
+            },
+            {
+                path: "/analytics/view",
+                name: "admin.analytics.show",
+                component: () =>
+                    import("../../views/pages/admin/analytics/Show.vue"),
+                meta: {
+                    keepAlive: false
+                }
+            }
         ]
     }
 ];
