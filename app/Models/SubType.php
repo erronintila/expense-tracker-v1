@@ -5,7 +5,6 @@ namespace App\Models;
 use App\User;
 use App\Models\Expense;
 use App\Models\ExpenseType;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -72,7 +71,7 @@ class SubType extends Model
     // // used to fill properties and add custom fields before the activity is saved.
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+        $role = auth()->user() == null ? "default" : (auth()->user()->is_admin ? "admin" : "standard user");
 
         $activity->properties = $activity->properties->merge([
             'custom' => [

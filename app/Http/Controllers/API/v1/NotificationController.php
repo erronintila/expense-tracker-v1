@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\User;
+use Carbon\Carbon;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notification;
 use App\Http\Resources\NotificationResource;
-use Carbon\Carbon;
 
 class NotificationController extends Controller
 {
@@ -33,8 +30,8 @@ class NotificationController extends Controller
         $user = request()->has("user_id") ?
             (request("user_id") > 0 ?
                 User::find(request("user_id")) :
-                Auth::user()) :
-            Auth::user();
+                auth()->user()) :
+                auth()->user();
 
         $status = request("status") ?? "All Notifications";
 

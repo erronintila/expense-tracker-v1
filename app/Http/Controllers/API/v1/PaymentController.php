@@ -12,8 +12,6 @@ use App\Http\Requests\Payment\PaymentStoreRequest;
 use App\Http\Requests\Payment\PaymentUpdateRequest;
 use App\Http\Resources\Payment\PaymentShowResource;
 use App\Http\Resources\PaymentIndexResource;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\PaymentResource;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -172,8 +170,8 @@ class PaymentController extends Controller
             $payment->approved_at = now(); // temporary
             $payment->released_at = now(); // temporary
             $payment->received_at = null; // temporary
-            $payment->created_by = Auth::id();
-            $payment->updated_by = Auth::id();
+            $payment->created_by = auth()->user()->id;
+            $payment->updated_by = auth()->user()->id;
             $payment->user()->associate($user);
             $payment->save();
 
@@ -260,7 +258,7 @@ class PaymentController extends Controller
             $payment = Payment::findOrFail($id);
             $payment->fill($validated);
             $payment->code = $validated["code"] ?? generate_code(Payment::class, "PAY", 10);
-            $payment->updated_by = Auth::id();
+            $payment->updated_by = auth()->user()->id;
             $payment->user()->associate($user);
 
             if (!$payment->received_at == null) {
@@ -316,7 +314,7 @@ class PaymentController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        abort_if(!Auth::user()->is_admin, 422, "Some records can't be deleted.");
+        abort_if(!auth()->user()->is_admin, 422, "Some records can't be deleted.");
 
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
@@ -357,7 +355,7 @@ class PaymentController extends Controller
                     });
                 }
             
-                $item->deleted_by = Auth::id();
+                $item->deleted_by = auth()->user()->id;
                 $item->expense_reports()->sync([]);
                 $item->delete();
             });
@@ -387,7 +385,7 @@ class PaymentController extends Controller
 
     public function approve_payment(Request $request, $id)
     {
-        abort_if(!Auth::user()->is_admin, 422, "Some records can't be approved.");
+        abort_if(!auth()->user()->is_admin, 422, "Some records can't be approved.");
 
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
@@ -418,7 +416,7 @@ class PaymentController extends Controller
 
     public function release_payment(Request $request, $id)
     {
-        abort_if(!Auth::user()->is_admin, 422, "Some records can't be released.");
+        abort_if(!auth()->user()->is_admin, 422, "Some records can't be released.");
 
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
@@ -478,7 +476,7 @@ class PaymentController extends Controller
 
     public function complete_payment(Request $request, $id)
     {
-        abort_if(!Auth::user()->is_admin, 422, "Some records can't be completed.");
+        abort_if(!auth()->user()->is_admin, 422, "Some records can't be completed.");
 
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);
@@ -499,7 +497,7 @@ class PaymentController extends Controller
 
     public function cancel_payment(Request $request, $id)
     {
-        abort_if(!Auth::user()->is_admin, 422, "Some records can't be cancelled.");
+        abort_if(!auth()->user()->is_admin, 422, "Some records can't be cancelled.");
 
         $data = DB::transaction(function () use ($id) {
             $ids = explode(",", $id);

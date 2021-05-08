@@ -6,8 +6,6 @@ use App\User;
 use App\Models\Expense;
 use App\Models\Payment;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -35,7 +33,7 @@ class ExpenseReport extends Model
     {
         parent::boot();
         static::deleting(function ($expense_report) {
-            abort_if(!Auth::user()->is_admin && $expense_report->approved_at != null, 422, "Approved expense report can't be deleted.");
+            abort_if(!auth()->user()->is_admin && $expense_report->approved_at != null, 422, "Approved expense report can't be deleted.");
             abort_if($expense_report->payments()->count() > 0, 422, "Some records can't be deleted.");
         });
     }
@@ -135,7 +133,7 @@ class ExpenseReport extends Model
     // // used to fill properties and add custom fields before the activity is saved.
     public function tapActivity(Activity $activity, string $eventName)
     {
-        $role = Auth::user() == null ? "default" : (Auth::user()->is_admin ? "admin" : "standard user");
+        $role = auth()->user() == null ? "default" : (auth()->user()->is_admin ? "admin" : "standard user");
 
         $activity->properties = $activity->properties->merge([
             'custom' => [

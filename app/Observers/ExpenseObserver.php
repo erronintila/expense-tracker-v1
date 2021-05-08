@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Expense;
-use Illuminate\Support\Facades\Auth;
 
 class ExpenseObserver
 {
@@ -43,7 +42,7 @@ class ExpenseObserver
      */
     public function deleting(Expense $expense)
     {
-        $expense->deleted_by = Auth::id();
+        $expense->deleted_by = auth()->user()->id;
         $expense->save();
     }
 
