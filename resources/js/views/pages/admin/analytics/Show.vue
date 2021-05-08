@@ -95,12 +95,28 @@
                 </div>
 
                 <v-row>
-                    <v-col cols="12" md="4">
-                        Pie Chart
-                    </v-col>
+                    
                     <v-col cols="12" md="8">
-                        line chart
+                        <v-sheet>
+                            <v-timeline align-top dense>
+                                <v-timeline-item
+                                    v-for="message in messages"
+                                    :key="message.time"
+                                    :color="message.color"
+                                    small
+                                >
+                                    <div>
+                                        <div class="font-weight-normal">
+                                            <strong>{{ message.from }}</strong>
+                                            @{{ message.time }}
+                                        </div>
+                                        <div>{{ message.message }}</div>
+                                    </div>
+                                </v-timeline-item>
+                            </v-timeline>
+                        </v-sheet>
                     </v-col>
+                    <v-col cols="12" md="4"></v-col>
                 </v-row>
 
                 <v-row>
@@ -127,20 +143,7 @@
                         </v-card>
                     </v-col>
                 </v-row>
-
-                <v-row>
-                    <v-col>
-                        <div>Table</div>
-                    </v-col>
-                </v-row>
             </v-card-text>
-
-            <!-- <div>
-                <bar-chart
-                    :data="chartData"
-                    :options="chartOptions"
-                ></bar-chart>
-            </div> -->
 
             <div>
                 <line-chart
@@ -183,10 +186,36 @@ export default {
                     .endOf("month")
                     .format("YYYY-MM-DD")
             ],
+            messages: [
+                {
+                    from: "You",
+                    message: `Sure, I'll see you later.`,
+                    time: "10:42am",
+                    color: "deep-purple lighten-1"
+                },
+                {
+                    from: "John Doe",
+                    message: "Yeah, sure. Does 1:00pm work?",
+                    time: "10:37am",
+                    color: "green"
+                },
+                {
+                    from: "You",
+                    message: "Did you still want to grab lunch today?",
+                    time: "9:47am",
+                    color: "deep-purple lighten-1"
+                }
+            ],
             user: null,
             vendor: null,
             statuses: ["Active", "Inactive", "Inactive"],
-            total: [{ label: "Expenses", amount: 100.0, count: 0.0 }],
+            total: [
+                { label: "Expenses", amount: 100.0, count: 0.0 },
+                { label: "Expenses", amount: 100.0, count: 0.0 },
+                { label: "Expenses", amount: 100.0, count: 0.0 },
+                { label: "Expenses", amount: 100.0, count: 0.0 },
+                { label: "Expenses", amount: 100.0, count: 0.0 }
+            ],
             params: {},
             //
             //
@@ -248,7 +277,7 @@ export default {
                             // },
                             ticks: $.extend(
                                 {
-                                    beginAtZero: true,
+                                    beginAtZero: true
                                 },
                                 {}
                             )

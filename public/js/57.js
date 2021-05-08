@@ -200,6 +200,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -222,10 +225,42 @@ __webpack_require__.r(__webpack_exports__);
     return {
       formDataLoaded: true,
       date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
+      messages: [{
+        from: "You",
+        message: "Sure, I'll see you later.",
+        time: "10:42am",
+        color: "deep-purple lighten-1"
+      }, {
+        from: "John Doe",
+        message: "Yeah, sure. Does 1:00pm work?",
+        time: "10:37am",
+        color: "green"
+      }, {
+        from: "You",
+        message: "Did you still want to grab lunch today?",
+        time: "9:47am",
+        color: "deep-purple lighten-1"
+      }],
       user: null,
       vendor: null,
       statuses: ["Active", "Inactive", "Inactive"],
       total: [{
+        label: "Expenses",
+        amount: 100.0,
+        count: 0.0
+      }, {
+        label: "Expenses",
+        amount: 100.0,
+        count: 0.0
+      }, {
+        label: "Expenses",
+        amount: 100.0,
+        count: 0.0
+      }, {
+        label: "Expenses",
+        amount: 100.0,
+        count: 0.0
+      }, {
         label: "Expenses",
         amount: 100.0,
         count: 0.0
@@ -578,17 +613,57 @@ var render = function() {
                   _c(
                     "v-row",
                     [
-                      _c("v-col", { attrs: { cols: "12", md: "4" } }, [
-                        _vm._v(
-                          "\n                    Pie Chart\n                "
-                        )
-                      ]),
+                      _c(
+                        "v-col",
+                        { attrs: { cols: "12", md: "8" } },
+                        [
+                          _c(
+                            "v-sheet",
+                            [
+                              _c(
+                                "v-timeline",
+                                { attrs: { "align-top": "", dense: "" } },
+                                _vm._l(_vm.messages, function(message) {
+                                  return _c(
+                                    "v-timeline-item",
+                                    {
+                                      key: message.time,
+                                      attrs: { color: message.color, small: "" }
+                                    },
+                                    [
+                                      _c("div", [
+                                        _c(
+                                          "div",
+                                          { staticClass: "font-weight-normal" },
+                                          [
+                                            _c("strong", [
+                                              _vm._v(_vm._s(message.from))
+                                            ]),
+                                            _vm._v(
+                                              "\n                                        @" +
+                                                _vm._s(message.time) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("div", [
+                                          _vm._v(_vm._s(message.message))
+                                        ])
+                                      ])
+                                    ]
+                                  )
+                                }),
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "8" } }, [
-                        _vm._v(
-                          "\n                    line chart\n                "
-                        )
-                      ])
+                      _c("v-col", { attrs: { cols: "12", md: "4" } })
                     ],
                     1
                   ),
@@ -651,9 +726,7 @@ var render = function() {
                       )
                     }),
                     1
-                  ),
-                  _vm._v(" "),
-                  _c("v-row", [_c("v-col", [_c("div", [_vm._v("Table")])])], 1)
+                  )
                 ],
                 1
               ),
