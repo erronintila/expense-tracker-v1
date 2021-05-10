@@ -166,7 +166,6 @@ return [
          * Package Service Providers...
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -234,7 +233,6 @@ return [
         /*
          * Package Class Aliases...
          */
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
     ],
 
