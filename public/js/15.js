@@ -81,9 +81,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.renderChart(this.data, {
-      maintainAspectRatio: false
-    });
+    this.renderChart(this.data, this.options); // this.renderChart(this.data, {
+    //     maintainAspectRatio: false
+    // });
   }
 });
 
@@ -1140,12 +1140,12 @@ __webpack_require__.r(__webpack_exports__);
         scales: {
           yAxes: [{
             // display: false,
-            gridLines: {
-              display: true,
-              lineWidth: "4px",
-              color: "rgba(0, 0, 0, .2)",
-              zeroLineColor: "transparent"
-            },
+            // gridLines: {
+            //     display: true,
+            //     lineWidth: "4px",
+            //     color: "rgba(0, 0, 0, .2)",
+            //     zeroLineColor: "transparent"
+            // },
             ticks: $.extend({
               beginAtZero: true,
               suggestedMax: 200
@@ -1163,6 +1163,7 @@ __webpack_require__.r(__webpack_exports__);
       this.lineChartData = {
         labels: [],
         datasets: [{
+          label: "",
           type: "line",
           data: [],
           backgroundColor: "#dbffe5",
