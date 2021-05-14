@@ -631,11 +631,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     showDrawer: function showDrawer(e) {
       this.drawer = e;
-      console.log("drawer??", e);
     },
     showNotificationDrawer: function showNotificationDrawer(e) {
       this.notificationDrawer = e;
-      console.log("notificationDrawer??", e);
     },
     toProfile: function toProfile() {
       // Added () => {} on router, used to prevent NavigationDuplicated error
