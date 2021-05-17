@@ -40,9 +40,20 @@
             >
             </v-combobox>
 
-            <div class="overline green--text">
-                Expenses
-            </div>
+            <v-row>
+                <v-col>
+                    <div class="overline green--text">
+                        Expenses
+                    </div>
+                </v-col>
+                <v-spacer></v-spacer>
+                <v-col class="text-right">
+                    <add-expense
+                        :user="form.user"
+                        @on-close="onCloseExpenseDialog"
+                    ></add-expense>
+                </v-col>
+            </v-row>
 
             <v-data-table
                 v-model="selected"
@@ -144,7 +155,7 @@
                     <v-icon
                         small
                         class="mr-2"
-                        @click="$router.push(`/user/expenses/${item.id}`)"
+                        @click="$router.push(`/expenses/${item.id}`)"
                     >
                         mdi-eye
                     </v-icon>
@@ -232,6 +243,7 @@ import moment from "moment";
 import numeral from "numeral";
 import ExpenseDataService from "../../../services/ExpenseDataService";
 import DateRangePicker from "../../../components/datepicker/DateRangePicker";
+import AddExpense from "../../../components/dialogs/AddExpense";
 
 export default {
     props: {
@@ -289,10 +301,12 @@ export default {
         }
     },
     components: {
-        DateRangePicker
+        DateRangePicker,
+        AddExpense
     },
     data() {
         return {
+            expenseDialog: false,
             formDataLoaded: false,
             range: [
                 moment()
@@ -412,6 +426,13 @@ export default {
             if (this.$refs.form.validate()) {
                 this.$emit("on-save", this.form);
             }
+        },
+        onCloseExpenseDialog() {
+            this.getDataFromApi().then(data => {
+                this.items = data.items;
+                this.totalItems = data.total;
+                this.formDataLoaded = true;
+            });
         }
     },
     computed: {
