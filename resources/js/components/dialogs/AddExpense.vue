@@ -161,9 +161,12 @@
                                     persistent-hint
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col
+                                cols="12"
+                                md="6"
+                                v-if="mixin_can('set reimbursable amount')"
+                            >
                                 <v-text-field
-                                    v-if="mixin_can('set reimbursable amount')"
                                     :error-messages="errors.reimbursable_amount"
                                     @input="errors.reimbursable_amount = []"
                                     v-model="form.reimbursable_amount"
@@ -451,7 +454,7 @@ export default {
         },
         loadUser(data) {
             if (data) {
-                UserDataService.show(data.id, { params: { addExpense: true }})
+                UserDataService.show(data.id, { params: { addExpense: true } })
                     .then(response => {
                         this.form.user = response.data.data;
                         this.expense_types = response.data.data.expense_types;
@@ -576,7 +579,7 @@ export default {
 
     watch: {
         openDialog() {
-            if(this.openDialog) {
+            if (this.openDialog) {
                 this.loadUser(this.user);
             }
         },

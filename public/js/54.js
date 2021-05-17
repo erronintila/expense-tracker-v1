@@ -241,6 +241,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1500,12 +1503,12 @@ var render = function() {
                             1
                           ),
                           _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "6" } },
-                            [
-                              _vm.mixin_can("set reimbursable amount")
-                                ? _c("v-text-field", {
+                          _vm.mixin_can("set reimbursable amount")
+                            ? _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "6" } },
+                                [
+                                  _c("v-text-field", {
                                     attrs: {
                                       "error-messages":
                                         _vm.errors.reimbursable_amount,
@@ -1531,10 +1534,10 @@ var render = function() {
                                       expression: "form.reimbursable_amount"
                                     }
                                   })
-                                : _vm._e()
-                            ],
-                            1
-                          ),
+                                ],
+                                1
+                              )
+                            : _vm._e(),
                           _vm._v(" "),
                           _vm.isVendorTaxInclusive
                             ? _c(
