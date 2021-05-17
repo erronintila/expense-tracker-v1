@@ -9,10 +9,7 @@
 
                 <v-spacer></v-spacer>
 
-                <h4 class="title green--text">{{ $route.params.label }}</h4>
-            </v-card-title>
-
-            <v-card-text>
+                <!-- <h4 class="title green--text">{{ $route.params.label }}</h4> -->
                 <div class="d-flex">
                     <DateRangePicker
                         ref="dateRangePicker"
@@ -20,15 +17,20 @@
                         @on-change="updateDates"
                     >
                         <template
-                            v-slot:openDialog="{ on, attrs, dateRangeText }"
+                            v-slot:openDialog="{ on, attrs }"
                         >
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
-                                text
-                                class="ma-0 pa-0"
+                                color="green"
+                                dark
+                                class="mr-2"
+                                fab
+                                small
+                                title="Date Range"
                             >
-                                {{ dateRangeText }}
+                            <v-icon>mdi-calendar</v-icon>
+                                <!-- {{ dateRangeText }} -->
                             </v-btn>
                         </template>
                     </DateRangePicker>
@@ -46,21 +48,25 @@
                         <template
                             v-slot:openDialog="{
                                 bind,
-                                on,
-                                computedSelectedUser
+                                on
                             }"
                         >
                             <v-btn
                                 v-bind="bind"
                                 v-on="on"
-                                text
-                                class="ma-0 pa-0 text-capitalize"
+                                color="green"
+                                dark
+                                class="mr-2"
+                                fab
+                                small
+                                title="Employees"
                             >
-                                {{
+                            <v-icon>mdi-clipboard-account</v-icon>
+                                <!-- {{
                                     computedSelectedUser
                                         ? computedSelectedUser.name
                                         : "All Employees"
-                                }}
+                                }} -->
                             </v-btn>
                         </template>
                     </UserDialogSelector>
@@ -74,25 +80,32 @@
                         <template
                             v-slot:openDialog="{
                                 bind,
-                                on,
-                                computedSelectedVendor
+                                on
                             }"
                         >
                             <v-btn
                                 v-bind="bind"
                                 v-on="on"
-                                text
-                                class="ma-0 pa-0 text-capitalize"
+                                color="green"
+                                dark
+                                fab
+                                small
+                                title="Vendors"
                             >
-                                {{
+                            <v-icon>mdi-account-group</v-icon>
+                                <!-- {{
                                     computedSelectedVendor
                                         ? computedSelectedVendor.name
                                         : "All Vendors"
-                                }}
+                                }} -->
                             </v-btn>
                         </template>
                     </VendorDialogSelector>
                 </div>
+            </v-card-title>
+
+            <v-card-text>
+                <div class="title green--text">{{ $route.params.label }}</div>
 
                 <v-row>
                     

@@ -203,6 +203,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -443,16 +456,6 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
-                  _c("h4", { staticClass: "title green--text" }, [
-                    _vm._v(_vm._s(_vm.$route.params.label))
-                  ])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
                   _c(
                     "div",
                     { staticClass: "d-flex" },
@@ -467,15 +470,20 @@ var render = function() {
                             fn: function(ref) {
                               var on = ref.on
                               var attrs = ref.attrs
-                              var dateRangeText = ref.dateRangeText
                               return [
                                 _c(
                                   "v-btn",
                                   _vm._g(
                                     _vm._b(
                                       {
-                                        staticClass: "ma-0 pa-0",
-                                        attrs: { text: "" }
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          color: "green",
+                                          dark: "",
+                                          fab: "",
+                                          small: "",
+                                          title: "Date Range"
+                                        }
                                       },
                                       "v-btn",
                                       attrs,
@@ -483,13 +491,8 @@ var render = function() {
                                     ),
                                     on
                                   ),
-                                  [
-                                    _vm._v(
-                                      "\n                            " +
-                                        _vm._s(dateRangeText) +
-                                        "\n                        "
-                                    )
-                                  ]
+                                  [_c("v-icon", [_vm._v("mdi-calendar")])],
+                                  1
                                 )
                               ]
                             }
@@ -517,17 +520,20 @@ var render = function() {
                                   fn: function(ref) {
                                     var bind = ref.bind
                                     var on = ref.on
-                                    var computedSelectedUser =
-                                      ref.computedSelectedUser
                                     return [
                                       _c(
                                         "v-btn",
                                         _vm._g(
                                           _vm._b(
                                             {
-                                              staticClass:
-                                                "ma-0 pa-0 text-capitalize",
-                                              attrs: { text: "" }
+                                              staticClass: "mr-2",
+                                              attrs: {
+                                                color: "green",
+                                                dark: "",
+                                                fab: "",
+                                                small: "",
+                                                title: "Employees"
+                                              }
                                             },
                                             "v-btn",
                                             bind,
@@ -536,16 +542,11 @@ var render = function() {
                                           on
                                         ),
                                         [
-                                          _vm._v(
-                                            "\n                            " +
-                                              _vm._s(
-                                                computedSelectedUser
-                                                  ? computedSelectedUser.name
-                                                  : "All Employees"
-                                              ) +
-                                              "\n                        "
-                                          )
-                                        ]
+                                          _c("v-icon", [
+                                            _vm._v("mdi-clipboard-account")
+                                          ])
+                                        ],
+                                        1
                                       )
                                     ]
                                   }
@@ -553,7 +554,7 @@ var render = function() {
                               ],
                               null,
                               false,
-                              120983028
+                              1822367560
                             )
                           })
                         : _vm._e(),
@@ -571,17 +572,19 @@ var render = function() {
                             fn: function(ref) {
                               var bind = ref.bind
                               var on = ref.on
-                              var computedSelectedVendor =
-                                ref.computedSelectedVendor
                               return [
                                 _c(
                                   "v-btn",
                                   _vm._g(
                                     _vm._b(
                                       {
-                                        staticClass:
-                                          "ma-0 pa-0 text-capitalize",
-                                        attrs: { text: "" }
+                                        attrs: {
+                                          color: "green",
+                                          dark: "",
+                                          fab: "",
+                                          small: "",
+                                          title: "Vendors"
+                                        }
                                       },
                                       "v-btn",
                                       bind,
@@ -589,17 +592,8 @@ var render = function() {
                                     ),
                                     on
                                   ),
-                                  [
-                                    _vm._v(
-                                      "\n                            " +
-                                        _vm._s(
-                                          computedSelectedVendor
-                                            ? computedSelectedVendor.name
-                                            : "All Vendors"
-                                        ) +
-                                        "\n                        "
-                                    )
-                                  ]
+                                  [_c("v-icon", [_vm._v("mdi-account-group")])],
+                                  1
                                 )
                               ]
                             }
@@ -608,7 +602,17 @@ var render = function() {
                       })
                     ],
                     1
-                  ),
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c("div", { staticClass: "title green--text" }, [
+                    _vm._v(_vm._s(_vm.$route.params.label))
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-row",

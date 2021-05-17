@@ -335,7 +335,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       children.push({
-        icon: "mdi-format-list-numbered",
+        icon: "mdi-google-analytics",
         text: "Analytics",
         link: {
           name: "admin.analytics.index"
