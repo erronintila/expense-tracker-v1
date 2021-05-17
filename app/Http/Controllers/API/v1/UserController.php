@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['permission:view users'], ['only' => ['show']]);
+        // $this->middleware(['permission:view users'], ['only' => ['show']]);
         $this->middleware(['permission:add users'], ['only' => ['create', 'store']]);
         $this->middleware(['permission:edit users'], ['only' => ['edit', 'update']]);
         $this->middleware(['permission:delete users'], ['only' => ['destroy']]);
@@ -210,6 +210,10 @@ class UserController extends Controller
      */
     public function show(Request $request, $id)
     {
+        if (!request("addExpense") || !request()->has("addExpense")) {
+            abort_if(!app("auth")->user()->hasPermissionTo('view users'), 403);
+        }
+
         if (request()->has("isDeleted")) {
             if (request("isDeleted")) {
                 $user = User::withTrashed()

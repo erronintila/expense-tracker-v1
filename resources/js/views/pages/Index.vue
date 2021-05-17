@@ -65,11 +65,9 @@ export default {
     methods: {
         showDrawer(e) {
             this.drawer = e;
-            console.log("drawer??", e);
         },
         showNotificationDrawer(e) {
             this.notificationDrawer = e;
-            console.log("notificationDrawer??", e);
         },
         toProfile() {
             // Added () => {} on router, used to prevent NavigationDuplicated error
