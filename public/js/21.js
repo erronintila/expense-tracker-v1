@@ -738,23 +738,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.user = null;
     },
     showAllUnsubmitted: function showAllUnsubmitted() {
-      this.user = null;
+      if (this.$store.getters.user.is_admin) {
+        this.user = null;
+      }
+
       this.status = "Unsubmitted Expense Reports";
       this.updateDates([moment__WEBPACK_IMPORTED_MODULE_1___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD")]);
     },
     showAllUnapproved: function showAllUnapproved() {
-      this.user = null;
+      if (this.$store.getters.user.is_admin) {
+        this.user = null;
+      }
+
       this.status = "Submitted Expense Reports";
       this.updateDates([moment__WEBPACK_IMPORTED_MODULE_1___default()("0000-01-01").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_1___default()().format("YYYY-MM-DD")]);
     },
     loadTotalCountReportStatus: function loadTotalCountReportStatus() {
       var _this2 = this;
 
-      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_6__["default"].get({
+      var data = {
         params: {
           total_count: true
         }
-      }).then(function (response) {
+      };
+
+      if (!this.$store.getters.user.is_admin) {
+        data.params.user_id = this.$store.getters.user.id;
+      }
+
+      _services_ExpenseReportDataService__WEBPACK_IMPORTED_MODULE_6__["default"].get(data).then(function (response) {
         var _response$data, _total$data$total_uns, _total$data$total_una;
 
         var total = (_response$data = response.data) !== null && _response$data !== void 0 ? _response$data : 0;

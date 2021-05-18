@@ -31,17 +31,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/departments/Index.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/departments/Index.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../components/page/PageHeader */ "./resources/js/components/page/PageHeader.vue");
-/* harmony import */ var _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/DepartmentDataService */ "./resources/js/services/DepartmentDataService.js");
+/* harmony import */ var _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../services/ExpenseTypeDataService */ "./resources/js/services/ExpenseTypeDataService.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -213,9 +213,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {},
   components: {
     PageHeader: _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -226,7 +231,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       headers: [{
         text: "Name",
         value: "name"
-      }, {
+      }, // { text: "Created", value: "created_at" },
+      // { text: "Updated", value: "updated_at" },
+      {
         text: "Actions",
         value: "actions",
         sortable: false
@@ -278,7 +285,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             status: status
           }
         };
-        _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_1__["default"].getAll(data).then(function (response) {
+        _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_1__["default"].getAll(data).then(function (response) {
           var items = response.data.data;
           var total = response.data.meta.total;
           _this2.loading = false;
@@ -301,16 +308,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.selected = [];
     },
     onShow: function onShow(item) {
+      var params = {
+        id: item.id
+      };
+
+      if (item.deleted_at) {
+        params = {
+          id: item.id,
+          isDeleted: true
+        };
+      }
+
       this.$router.push({
-        name: "admin.departments.show",
-        params: {
-          id: item.id
-        }
+        name: "admin.expense_types.show",
+        params: params
       });
     },
     onEdit: function onEdit(item) {
       this.$router.push({
-        name: "admin.departments.edit",
+        name: "admin.expense_types.edit",
         params: {
           id: item.id
         }
@@ -330,7 +346,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return item.id;
           });
 
-          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](ids).then(function (response) {
+          _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](ids).then(function (response) {
             _this3.mixin_successDialog(response.data.status, response.data.message);
 
             _this3.getDataFromApi().then(function (data) {
@@ -359,7 +375,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return item.id;
           });
 
-          _services_DepartmentDataService__WEBPACK_IMPORTED_MODULE_1__["default"].restore(ids).then(function (response) {
+          _services_ExpenseTypeDataService__WEBPACK_IMPORTED_MODULE_1__["default"].restore(ids).then(function (response) {
             _this4.mixin_successDialog(response.data.status, response.data.message);
 
             _this4.getDataFromApi().then(function (data) {
@@ -407,9 +423,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  // created() {
-  //     // this.$store.dispatch("AUTH_NOTIFICATIONS");
-  // },
   activated: function activated() {
     var _this7 = this;
 
@@ -468,10 +481,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/departments/Index.vue?vue&type=template&id=7abc6f8a&":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/departments/Index.vue?vue&type=template&id=7abc6f8a& ***!
-  \***************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=template&id=8110a58a&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=template&id=8110a58a& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -493,7 +506,7 @@ var render = function() {
             { staticClass: "elevation-0 pt-0" },
             [
               _c("page-header", {
-                attrs: { title: "Departments" },
+                attrs: { title: "Expense Types" },
                 scopedSlots: _vm._u([
                   {
                     key: "actions",
@@ -505,7 +518,7 @@ var render = function() {
                             attrs: { bottom: "" },
                             scopedSlots: _vm._u(
                               [
-                                _vm.mixin_can("add departments")
+                                _vm.mixin_can("add expense types")
                                   ? {
                                       key: "activator",
                                       fn: function(ref) {
@@ -523,7 +536,7 @@ var render = function() {
                                                     color: "green",
                                                     to: {
                                                       name:
-                                                        "admin.departments.create"
+                                                        "admin.expense_types.create"
                                                     },
                                                     dark: "",
                                                     fab: "",
@@ -557,6 +570,13 @@ var render = function() {
                           [_vm._v(" "), _c("span", [_vm._v("Add New")])]
                         )
                       ]
+                    },
+                    proxy: true
+                  },
+                  {
+                    key: "sub-actions",
+                    fn: function() {
+                      return undefined
                     },
                     proxy: true
                   }
@@ -613,28 +633,30 @@ var render = function() {
                             var menu = ref.on
                             var attrs = ref.attrs
                             return [
-                              _c(
-                                "v-chip",
-                                _vm._g(
-                                  _vm._b(
-                                    {
-                                      staticClass: "mr-2 mb-2",
-                                      attrs: { small: "" }
-                                    },
+                              _vm.status != null
+                                ? _c(
                                     "v-chip",
-                                    attrs,
-                                    false
-                                  ),
-                                  menu
-                                ),
-                                [
-                                  _vm._v(
-                                    "\n                        " +
-                                      _vm._s(_vm.status) +
-                                      "\n                    "
+                                    _vm._g(
+                                      _vm._b(
+                                        {
+                                          staticClass: "mr-2 mb-2",
+                                          attrs: { small: "" }
+                                        },
+                                        "v-chip",
+                                        attrs,
+                                        false
+                                      ),
+                                      menu
+                                    ),
+                                    [
+                                      _vm._v(
+                                        "\n                        " +
+                                          _vm._s(_vm.status) +
+                                          "\n                    "
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
+                                : _vm._e()
                             ]
                           }
                         }
@@ -752,7 +774,7 @@ var render = function() {
                   _c("v-text-field", {
                     attrs: {
                       "append-icon": "mdi-magnify",
-                      label: "Search for name",
+                      label: "Search",
                       "single-line": "",
                       "hide-details": ""
                     },
@@ -791,8 +813,6 @@ var render = function() {
                   _c("v-data-table", {
                     staticClass: "elevation-0",
                     attrs: {
-                      "show-select": "",
-                      "item-key": "id",
                       headers: _vm.headers,
                       items: _vm.items,
                       loading: _vm.loading,
@@ -805,7 +825,9 @@ var render = function() {
                         lastIcon: "mdi-page-last",
                         prevIcon: "mdi-chevron-left",
                         nextIcon: "mdi-chevron-right"
-                      }
+                      },
+                      "show-select": "",
+                      "item-key": "id"
                     },
                     on: {
                       "update:options": function($event) {
@@ -819,7 +841,7 @@ var render = function() {
                           fn: function(ref) {
                             var item = ref.item
                             return [
-                              _vm.mixin_can("edit departments") &&
+                              _vm.mixin_can("edit expense types") &&
                               item.deleted_at == null
                                 ? _c(
                                     "v-icon",
@@ -940,10 +962,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/services/DepartmentDataService.js":
-/*!********************************************************!*\
-  !*** ./resources/js/services/DepartmentDataService.js ***!
-  \********************************************************/
+/***/ "./resources/js/services/ExpenseTypeDataService.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/services/ExpenseTypeDataService.js ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -960,66 +982,66 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // import http from "../http-common";
 
 
-var DepartmentDataService = /*#__PURE__*/function () {
-  function DepartmentDataService() {
-    _classCallCheck(this, DepartmentDataService);
+var ExpenseTypeDataService = /*#__PURE__*/function () {
+  function ExpenseTypeDataService() {
+    _classCallCheck(this, ExpenseTypeDataService);
   }
 
-  _createClass(DepartmentDataService, [{
+  _createClass(ExpenseTypeDataService, [{
     key: "getAll",
     value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/departments", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types", data);
     }
   }, {
     key: "get",
     value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/departments", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expense_types", data);
     }
   }, {
     key: "show",
     value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/departments/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expense_types/".concat(id), data);
     }
   }, {
     key: "store",
     value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/departments", data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expense_types", data);
     }
   }, {
     key: "update",
     value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/departments/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/".concat(id), data);
     }
   }, {
     key: "delete",
     value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/departments/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expense_types/".concat(id), data);
     }
   }, {
     key: "restore",
     value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/departments/restore/".concat(id), data);
+      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expense_types/restore/".concat(id), data);
     }
   }]);
 
-  return DepartmentDataService;
+  return ExpenseTypeDataService;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (new DepartmentDataService());
+/* harmony default export */ __webpack_exports__["default"] = (new ExpenseTypeDataService());
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/departments/Index.vue":
-/*!**************************************************************!*\
-  !*** ./resources/js/views/pages/admin/departments/Index.vue ***!
-  \**************************************************************/
+/***/ "./resources/js/views/pages/admin/expense_types/Index.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/views/pages/admin/expense_types/Index.vue ***!
+  \****************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Index_vue_vue_type_template_id_7abc6f8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=7abc6f8a& */ "./resources/js/views/pages/admin/departments/Index.vue?vue&type=template&id=7abc6f8a&");
-/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/departments/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Index_vue_vue_type_template_id_8110a58a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=8110a58a& */ "./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=template&id=8110a58a&");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1030,8 +1052,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Index_vue_vue_type_template_id_7abc6f8a___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Index_vue_vue_type_template_id_7abc6f8a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Index_vue_vue_type_template_id_8110a58a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Index_vue_vue_type_template_id_8110a58a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1041,38 +1063,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/views/pages/admin/departments/Index.vue"
+component.options.__file = "resources/js/views/pages/admin/expense_types/Index.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/departments/Index.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/departments/Index.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************/
+/***/ "./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/departments/Index.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/views/pages/admin/departments/Index.vue?vue&type=template&id=7abc6f8a&":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/departments/Index.vue?vue&type=template&id=7abc6f8a& ***!
-  \*********************************************************************************************/
+/***/ "./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=template&id=8110a58a&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=template&id=8110a58a& ***!
+  \***********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_7abc6f8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=7abc6f8a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/departments/Index.vue?vue&type=template&id=7abc6f8a&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_7abc6f8a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_8110a58a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=template&id=8110a58a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/expense_types/Index.vue?vue&type=template&id=8110a58a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_8110a58a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_7abc6f8a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_8110a58a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
