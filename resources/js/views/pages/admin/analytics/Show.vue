@@ -385,13 +385,12 @@ export default {
             this.doughnutChartData.datasets = [
                 {
                     backgroundColor: randomColor({
-                        luminosity: "light",
+                        hue: 'green',
                         count: 3
                     }),
                     data: [10, 121, 45]
                 }
             ];
-            // this.$refs.doughnutChart.update();
         },
         getLabels(arr, unique_field) {
             const unique = [];
@@ -416,7 +415,7 @@ export default {
     created() {
         console.log(this.getLabels(this.data, "status"));
 
-        console.log("randomcolor", randomColor({ hue: "orange", count: 3 }));
+        console.log("randomcolor", randomColor({hue: "red", count: 3}));
     }
 };
 </script>

@@ -448,11 +448,11 @@ __webpack_require__.r(__webpack_exports__);
       this.doughnutChartData.labels = ["January", "February", "March"];
       this.doughnutChartData.datasets = [{
         backgroundColor: randomcolor__WEBPACK_IMPORTED_MODULE_2___default()({
-          luminosity: "light",
+          hue: 'green',
           count: 3
         }),
         data: [10, 121, 45]
-      }]; // this.$refs.doughnutChart.update();
+      }];
     },
     getLabels: function getLabels(arr, unique_field) {
       var unique = [];
@@ -479,7 +479,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     console.log(this.getLabels(this.data, "status"));
     console.log("randomcolor", randomcolor__WEBPACK_IMPORTED_MODULE_2___default()({
-      hue: "orange",
+      hue: "red",
       count: 3
     }));
   }
