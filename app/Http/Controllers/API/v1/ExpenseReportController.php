@@ -212,7 +212,8 @@ class ExpenseReportController extends Controller
                 })
                 ->where("user_id", request("user_id"))
                 ->orderBy($sortBy, $sortType)
-                // ->where("approved_at", "<>", null)
+                ->where("approved_at", "<>", null)
+                // ->where("submitted_at", null)
                 ->where("rejected_at", null)
                 ->where("deleted_at", null)
                 ->where(function ($q) use ($request, $start_date, $end_date) {
