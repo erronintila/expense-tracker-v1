@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
+use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -39,7 +40,7 @@ class AnalyticsController extends Controller
         }
 
         $data = $data->get();
-        
+
         return $this->successResponse($data, "", 200);
     }
 

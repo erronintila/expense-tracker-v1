@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Resources\UserResource;
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/analytics/expenses', 'API\v1\AnalyticsController@show_expense_analytics');
+
 Route::middleware('auth:sanctum')->group(function () {
 
     /*
@@ -25,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     |------------------------------------------------------------------------------------------------------------------------------------
     */
 
-    
+
 
     Route::apiResources(
         [
@@ -163,6 +162,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/data/expense_stats', 'API\v1\DashboardController@expense_stats');
     Route::get('/data/expenses_summary', 'API\v1\DashboardController@expenses_summary');
     Route::get('/data/statistics', 'API\v1\DashboardController@statistics');
+
+    /*
+    |------------------------------------------------------------------------------------------------------------------------------------
+    | EXPENSE CONTROLLER CUSTOM ROUTES
+    |------------------------------------------------------------------------------------------------------------------------------------
+    */
+
+    
 
     /*
     |------------------------------------------------------------------------------------------------------------------------------------
