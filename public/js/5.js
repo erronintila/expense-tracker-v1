@@ -5,9 +5,563 @@
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/dialogs/AddExpense.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\resources\\js\\components\\dialogs\\AddExpense.vue: Unexpected token (579:15)\n\n\u001b[0m \u001b[90m 577 | \u001b[39m    watch\u001b[33m:\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 578 | \u001b[39m        openDialog() {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 579 | \u001b[39m            \u001b[36mif\u001b[39m() {\u001b[0m\n\u001b[0m \u001b[90m     | \u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 580 | \u001b[39m                \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mloadUser(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39muser)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 581 | \u001b[39m            }\u001b[0m\n\u001b[0m \u001b[90m 582 | \u001b[39m        }\u001b[33m,\u001b[39m\u001b[0m\n    at Parser._raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:766:17)\n    at Parser.raiseWithData (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:759:17)\n    at Parser.raise (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:753:17)\n    at Parser.unexpected (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:8966:16)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10282:20)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)\n    at Parser.parseExpressionBase (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9564:23)\n    at C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:39\n    at Parser.allowInAnd (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11297:16)\n    at Parser.parseExpression (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9558:17)\n    at Parser.parseHeaderExpression (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11702:22)\n    at Parser.parseIfStatement (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11784:22)\n    at Parser.parseStatementContent (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11476:21)\n    at Parser.parseStatement (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11431:17)\n    at Parser.parseBlockOrModuleBlockBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:12013:25)\n    at Parser.parseBlockBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11999:10)\n    at Parser.parseBlock (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:11983:10)\n    at Parser.parseFunctionBody (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10963:24)\n    at Parser.parseFunctionBodyAndFinish (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10946:10)\n    at Parser.parseMethod (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10883:10)\n    at Parser.parseObjectMethod (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10808:19)\n    at Parser.parseObjPropValue (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10841:23)\n    at Parser.parsePropertyDefinition (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10772:10)\n    at Parser.parseObjectLike (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10664:25)\n    at Parser.parseExprAtom (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:10198:23)\n    at Parser.parseExprSubscripts (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9844:23)\n    at Parser.parseUpdate (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9824:21)\n    at Parser.parseMaybeUnary (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9813:17)\n    at Parser.parseExprOps (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9683:23)\n    at Parser.parseMaybeConditional (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9657:23)\n    at Parser.parseMaybeAssign (C:\\Users\\ERROR-PC\\Documents\\LaravelProjects\\expense-tracker-v1\\node_modules\\@babel\\parser\\lib\\index.js:9620:21)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
+/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/ExpenseDataService */ "./resources/js/services/ExpenseDataService.js");
+/* harmony import */ var _components_selector_dialog_VendorDialogSelector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/selector/dialog/VendorDialogSelector */ "./resources/js/components/selector/dialog/VendorDialogSelector.vue");
+/* harmony import */ var _services_UserDataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/UserDataService */ "./resources/js/services/UserDataService.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    user: {
+      type: Object,
+      "default": function _default() {}
+    }
+  },
+  name: "add-expense",
+  data: function data() {
+    return {
+      loader: false,
+      valid: false,
+      menu: false,
+      openDialog: false,
+      form: {
+        code: null,
+        reference_no: null,
+        description: null,
+        amount: 0,
+        reimbursable_amount: 0,
+        tax_name: "",
+        tax_rate: 0,
+        is_compound_tax: false,
+        is_tax_inclusive: true,
+        tax_amount: 0,
+        receipt_number: null,
+        date: moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD"),
+        details: [],
+        remarks: "",
+        notes: "",
+        encoding_period: this.$store.getters.settings.expense_encoding_period,
+        expense_type: null,
+        sub_type: null,
+        user: null,
+        vendor: null,
+        expense_report_id: null,
+        tax_id: null,
+        expense_header_id: null,
+        details_quantity: 0,
+        details_amount: 0,
+        is_active: true,
+        is_reimbursable: false,
+        revolving_fund: 0
+      },
+      expense_types: [],
+      sub_types: [],
+      errors: {
+        sub_type: [],
+        code: [],
+        reference_no: [],
+        description: [],
+        amount: [],
+        reimbursable_amount: [],
+        tax_name: [],
+        tax_rate: [],
+        is_compound_tax: [],
+        is_tax_inclusive: [],
+        tax_amount: [],
+        receipt_number: [],
+        date: [],
+        details: [],
+        remarks: [],
+        notes: [],
+        encoding_period: [],
+        expense_type_id: [],
+        sub_type_id: [],
+        user_id: [],
+        vendor_id: [],
+        expense_report_id: [],
+        tax_id: [],
+        expense_header_id: [],
+        is_active: []
+      }
+    };
+  },
+  components: {
+    VendorDialogSelector: _components_selector_dialog_VendorDialogSelector__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  methods: {
+    selectVendor: function selectVendor(e) {
+      if (e == null || e == undefined) {
+        this.form.vendor = null;
+        return;
+      }
+
+      this.form.vendor = e;
+    },
+    resetVendor: function resetVendor() {
+      this.form.vendor = null;
+    },
+    loadSubTypes: function loadSubTypes(e) {
+      // this.form.sub_type = null;
+      if (e) {
+        this.sub_types = e.sub_types;
+        this.sub_types.unshift({
+          id: null,
+          name: "None",
+          limit: null
+        });
+      }
+    },
+    onClose: function onClose() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+      this.openDialog = false;
+      this.$emit("on-close");
+    },
+    onSave: function onSave(value) {
+      var _this = this;
+
+      var expense_type_limit = this.form.expense_type ? this.form.expense_type.limit : null;
+      var sub_type_limit = this.form.sub_type ? this.form.sub_type.limit : null;
+      var expense_limit = sub_type_limit ? sub_type_limit : expense_type_limit;
+      var expense_amount = this.form.amount;
+
+      if (!this.mixin_can("add expenses beyond limit")) {
+        if (!this.itemize) {
+          if (expense_limit !== null && expense_limit < expense_amount) {
+            this.mixin_errorDialog("Error", "Amount can't be greater than expense limit.");
+            return;
+          }
+        } else {
+          if (expense_limit !== null && expense_limit < this.form.details_amount) {
+            this.mixin_errorDialog("Error", "Itemized Expenses Amount can't be greater than expense limit");
+            return;
+          }
+        }
+      }
+
+      if (this.form.user == null) {
+        this.mixin_errorDialog("Error", "No user selected");
+        return;
+      }
+
+      if (!this.form.expense_type) {
+        this.mixin_errorDialog("Error", "No Expense Type Selected");
+        return;
+      }
+
+      if (this.amount_to_replenish > (this.form.user ? this.form.user.remaining_fund : 0)) {
+        this.mixin_errorDialog("Error", "Amount to replenish is greater than remaining fund");
+        return;
+      }
+
+      if (this.amount_to_replenish + this.amount_to_reimburse < this.form.amount) {
+        this.mixin_errorDialog("Error", "Expense Amount is greater than amount to replenish/reimburse");
+        return;
+      }
+
+      if (this.amount_to_replenish + this.amount_to_reimburse <= 0) {
+        this.mixin_errorDialog("Error", "Total Expenses can't be lesser or equal to zero");
+        return;
+      }
+
+      this.$refs.form.validate();
+
+      if (!this.$refs.form.validate()) {
+        return;
+      }
+
+      if (this.form.vendor) {
+        if (!this.form.vendor.is_vat_inclusive) {
+          this.form.tax_rate = 0;
+          this.form.tax_amount = 0;
+        }
+      }
+
+      this.form.details = null;
+      this.form.expense_type_id = this.form.expense_type ? this.form.expense_type.id : null;
+      this.form.sub_type_id = this.form.sub_type ? this.form.sub_type.id : null;
+      this.form.user_id = this.form.user ? this.form.user.id : null;
+      this.form.vendor_id = this.form.vendor ? this.form.vendor.id : null;
+      this.form.reimbursable_amount = this.amount_to_reimburse;
+      _services_ExpenseDataService__WEBPACK_IMPORTED_MODULE_2__["default"].store(this.form).then(function (response) {
+        _this.mixin_successDialog(response.data.status, response.data.message);
+
+        _this.loading = false;
+        _this.formDataLoaded = true;
+
+        _this.onClose();
+      })["catch"](function (error) {
+        _this.mixin_showErrors(error);
+
+        _this.errors = error.response.data.errors;
+        _this.formDataLoaded = true;
+      });
+    },
+    loadUser: function loadUser(data) {
+      var _this2 = this;
+
+      if (data) {
+        _services_UserDataService__WEBPACK_IMPORTED_MODULE_4__["default"].show(data.id, {
+          params: {
+            addExpense: true
+          }
+        }).then(function (response) {
+          _this2.form.user = response.data.data;
+          _this2.expense_types = response.data.data.expense_types;
+        })["catch"](function (error) {
+          return _this2.mixin_showErrors(error);
+        });
+      }
+    }
+  },
+  computed: {
+    minDate: function minDate() {
+      var _settings$expense_enc;
+
+      if (this.mixin_can("add expenses beyond encoding period")) {
+        return null;
+      }
+
+      var settings = this.$store.getters.settings;
+      var encodingMinDate = moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(((_settings$expense_enc = settings.expense_encoding_period) !== null && _settings$expense_enc !== void 0 ? _settings$expense_enc : 1) - 1, "days").format("YYYY-MM-DD");
+      return encodingMinDate;
+    },
+    maxDate: function maxDate() {
+      var today = moment__WEBPACK_IMPORTED_MODULE_0___default()().format("YYYY-MM-DD");
+      return today;
+    },
+    taxable_amount: {
+      get: function get() {
+        if (!this.form.is_tax_inclusive) {
+          this.form.tax_amount = this.tax_exclusive.toFixed(2);
+          return this.tax_exclusive.toFixed(2);
+        }
+
+        this.form.tax_amount = this.tax_inclusive.toFixed(2);
+        return this.tax_inclusive.toFixed(2);
+      },
+      set: function set(amount) {
+        this.form.tax_amount = amount;
+        return amount;
+      }
+    },
+    tax_inclusive: function tax_inclusive() {
+      return this.mixin_convertToNumber(this.form.amount) / (1 + this.mixin_convertToNumber(this.form.tax_rate) / 100) * (this.mixin_convertToNumber(this.form.tax_rate) / 100);
+    },
+    tax_exclusive: function tax_exclusive() {
+      return this.mixin_convertToNumber(this.form.amount) * (this.mixin_convertToNumber(this.form.tax_rate) / 100);
+    },
+    amount_to_reimburse: function amount_to_reimburse() {
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
+      var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return reimbursable > amount ? 0 : reimbursable;
+      }
+
+      if (remaining_fund < amount) {
+        var to_replenish = Math.abs(remaining_fund - amount);
+        this.form.reimbursable_amount = to_replenish;
+        return to_replenish;
+      }
+
+      this.form.reimbursable_amount = 0;
+      return 0;
+    },
+    amount_to_replenish: function amount_to_replenish() {
+      var remaining_fund = this.mixin_convertToNumber(this.form.user ? this.form.user.remaining_fund : 0);
+      var amount = this.mixin_convertToNumber(this.form.amount);
+      var reimbursable = this.mixin_convertToNumber(this.form.reimbursable_amount);
+      var amt_to_replenish = amount < reimbursable ? 0 : amount - reimbursable;
+
+      if (this.mixin_can("set reimbursable amount")) {
+        return amount - reimbursable > remaining_fund ? 0 : amt_to_replenish;
+      }
+
+      if (remaining_fund >= amount) {
+        return amount;
+      }
+
+      return amount - Math.abs(remaining_fund - amount);
+    },
+    isVendorTaxInclusive: function isVendorTaxInclusive() {
+      return this.form.vendor ? this.form.vendor.is_vat_inclusive : false;
+    },
+    expense_amount_limit: function expense_amount_limit() {
+      if (this.form.sub_type) {
+        return this.form.sub_type.limit == null ? this.form.expense_type ? this.form.expense_type.limit : null : this.form.sub_type.limit;
+      }
+
+      if (this.form.expense_type) {
+        return this.form.expense_type.limit == null ? null : this.form.expense_type.limit;
+      }
+
+      return null;
+    }
+  },
+  watch: {
+    openDialog: function openDialog() {
+      if (this.openDialog) {
+        this.loadUser(this.user);
+      }
+    },
+    "form.vendor": function formVendor() {
+      this.form.tax_rate = this.$store.getters.settings.tax_rate; // this.form.tax_rate = 12;
+
+      this.form.tax_amount = 0;
+      this.form.is_tax_inclusive = true;
+    },
+    // "form.user": function() {
+    //     this.expense_types = this.form.user
+    //         ? this.form.user.expense_types
+    //         : [];
+    // },
+    "form.expense_type": function formExpense_type() {
+      if (this.form) {
+        this.loadSubTypes(this.form.expense_type);
+      }
+    }
+  }
+});
 
 /***/ }),
 
@@ -949,12 +1503,12 @@ var render = function() {
                             1
                           ),
                           _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "6" } },
-                            [
-                              _vm.mixin_can("set reimbursable amount")
-                                ? _c("v-text-field", {
+                          _vm.mixin_can("set reimbursable amount")
+                            ? _c(
+                                "v-col",
+                                { attrs: { cols: "12", md: "6" } },
+                                [
+                                  _c("v-text-field", {
                                     attrs: {
                                       "error-messages":
                                         _vm.errors.reimbursable_amount,
@@ -980,10 +1534,10 @@ var render = function() {
                                       expression: "form.reimbursable_amount"
                                     }
                                   })
-                                : _vm._e()
-                            ],
-                            1
-                          ),
+                                ],
+                                1
+                              )
+                            : _vm._e(),
                           _vm._v(" "),
                           _vm.isVendorTaxInclusive
                             ? _c(
@@ -1759,80 +2313,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddExpense_vue_vue_type_template_id_a9f29df4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/services/ExpenseDataService.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/services/ExpenseDataService.js ***!
-  \*****************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// import http from "../http-common";
-
-
-var ExpenseDataService = /*#__PURE__*/function () {
-  function ExpenseDataService() {
-    _classCallCheck(this, ExpenseDataService);
-  }
-
-  _createClass(ExpenseDataService, [{
-    key: "getAll",
-    value: function getAll(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses", data);
-    }
-  }, {
-    key: "get",
-    value: function get(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/data/expenses", data);
-    }
-  }, {
-    key: "show",
-    value: function show(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/".concat(id), data);
-    }
-  }, {
-    key: "store",
-    value: function store(data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/expenses", data);
-    }
-  }, {
-    key: "update",
-    value: function update(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/".concat(id), data);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/expenses/".concat(id), data);
-    }
-  }, {
-    key: "restore",
-    value: function restore(id, data) {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/expenses/restore/".concat(id), data);
-    }
-  }, {
-    key: "export",
-    value: function _export() {
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/expenses/export/data");
-    }
-  }]);
-
-  return ExpenseDataService;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (new ExpenseDataService());
 
 /***/ }),
 

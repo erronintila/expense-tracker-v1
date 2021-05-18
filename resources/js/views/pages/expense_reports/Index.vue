@@ -672,7 +672,10 @@ export default {
             this.user = null;
         },
         showAllUnsubmitted() {
-            this.user = null;
+            if (this.$store.getters.user.is_admin) {
+                this.user = null;
+            }
+
             this.status = "Unsubmitted Expense Reports";
             this.updateDates([
                 moment("0000-01-01").format("YYYY-MM-DD"),
@@ -680,7 +683,10 @@ export default {
             ]);
         },
         showAllUnapproved() {
-            this.user = null;
+            if (this.$store.getters.user.is_admin) {
+                this.user = null;
+            }
+
             this.status = "Submitted Expense Reports";
             this.updateDates([
                 moment("0000-01-01").format("YYYY-MM-DD"),
@@ -688,11 +694,17 @@ export default {
             ]);
         },
         loadTotalCountReportStatus() {
-            ExpenseReportDataService.get({
+            let data = {
                 params: {
                     total_count: true
                 }
-            })
+            };
+
+            if (!this.$store.getters.user.is_admin) {
+                data.params.user_id = this.$store.getters.user.id;
+            }
+
+            ExpenseReportDataService.get(data)
                 .then(response => {
                     let total = response.data ?? 0;
 
