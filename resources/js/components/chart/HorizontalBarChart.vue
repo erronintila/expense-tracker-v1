@@ -7,10 +7,22 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 export default {
     name: "horizontal-bar-chart",
     extends: HorizontalBar,
-    props: ["data", "options"],
-    methods: {
-        update() {
-            this.$data._chart.update();
+    props: {
+        data: {
+            type: Object,
+            default: () => {}
+        },
+        options: {
+            type: Object,
+            default: () => {}
+        }
+    },
+    watch: {
+        data: {
+            deep: true,
+            handler() {
+                this.$data._chart.update();
+            }
         }
     },
     mounted() {

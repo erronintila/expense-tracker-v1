@@ -1,879 +1,528 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[34],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/BarChart.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/chart/BarChart.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "./node_modules/randomcolor/randomColor.js":
+/*!*************************************************!*\
+  !*** ./node_modules/randomcolor/randomColor.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue_chartjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-chartjs */ "./node_modules/vue-chartjs/es/index.js");
+/* WEBPACK VAR INJECTION */(function(module) {// randomColor by David Merfield under the CC0 license
+// https://github.com/davidmerfield/randomColor/
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "bar-chart",
-  "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Bar"],
-  props: ["data", "options"],
-  methods: {
-    update: function update() {
-      this.$data._chart.update();
+;(function(root, factory) {
+
+  // Support CommonJS
+  if (true) {
+    var randomColor = factory();
+
+    // Support NodeJS & Component, which allow module.exports to be a function
+    if ( true && module && module.exports) {
+      exports = module.exports = randomColor;
     }
-  },
-  mounted: function mounted() {
-    this.renderChart(this.data, this.options);
-  }
-});
 
-/***/ }),
+    // Support CommonJS 1.1.1 spec
+    exports.randomColor = randomColor;
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/analytics/Show.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/analytics/Show.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+  // Support AMD
+  } else {}
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! numeral */ "./node_modules/numeral/numeral.js");
-/* harmony import */ var numeral__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(numeral__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/chart/LineChart */ "./resources/js/components/chart/LineChart.vue");
-/* harmony import */ var _components_chart_BarChart__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/chart/BarChart */ "./resources/js/components/chart/BarChart.vue");
-/* harmony import */ var _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/page/PageHeader */ "./resources/js/components/page/PageHeader.vue");
-/* harmony import */ var _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../components/datepicker/DateRangePicker */ "./resources/js/components/datepicker/DateRangePicker.vue");
-/* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
-/* harmony import */ var _components_selector_dialog_VendorDialogSelector__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../components/selector/dialog/VendorDialogSelector */ "./resources/js/components/selector/dialog/VendorDialogSelector.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+}(this, function() {
 
+  // Seed to get repeatable colors
+  var seed = null;
 
+  // Shared color dictionary
+  var colorDictionary = {};
 
+  // Populate the color dictionary
+  loadColorBounds();
 
+  // check if a range is taken
+  var colorRanges = [];
 
+  var randomColor = function (options) {
 
+    options = options || {};
 
+    // Check if there is a seed and ensure it's an
+    // integer. Otherwise, reset the seed value.
+    if (options.seed !== undefined && options.seed !== null && options.seed === parseInt(options.seed, 10)) {
+      seed = options.seed;
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: "show-analytics",
-  components: {
-    PageHeader: _components_page_PageHeader__WEBPACK_IMPORTED_MODULE_4__["default"],
-    DateRangePicker: _components_datepicker_DateRangePicker__WEBPACK_IMPORTED_MODULE_5__["default"],
-    UserDialogSelector: _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_6__["default"],
-    VendorDialogSelector: _components_selector_dialog_VendorDialogSelector__WEBPACK_IMPORTED_MODULE_7__["default"],
-    LineChart: _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_2__["default"],
-    BarChart: _components_chart_BarChart__WEBPACK_IMPORTED_MODULE_3__["default"]
-  },
-  data: function data() {
-    return {
-      formDataLoaded: true,
-      date_range: [moment__WEBPACK_IMPORTED_MODULE_0___default()().startOf("month").format("YYYY-MM-DD"), moment__WEBPACK_IMPORTED_MODULE_0___default()().endOf("month").format("YYYY-MM-DD")],
-      messages: [{
-        from: "You",
-        message: "Sure, I'll see you later.",
-        time: "10:42am",
-        color: "deep-purple lighten-1"
-      }, {
-        from: "John Doe",
-        message: "Yeah, sure. Does 1:00pm work?",
-        time: "10:37am",
-        color: "green"
-      }, {
-        from: "You",
-        message: "Did you still want to grab lunch today?",
-        time: "9:47am",
-        color: "deep-purple lighten-1"
-      }],
-      user: null,
-      vendor: null,
-      statuses: ["Active", "Inactive", "Inactive"],
-      total: [{
-        label: "Expenses",
-        amount: 100.0,
-        count: 0.0
-      }, {
-        label: "Expenses",
-        amount: 100.0,
-        count: 0.0
-      }, {
-        label: "Expenses",
-        amount: 100.0,
-        count: 0.0
-      }, {
-        label: "Expenses",
-        amount: 100.0,
-        count: 0.0
-      }, {
-        label: "Expenses",
-        amount: 100.0,
-        count: 0.0
-      }],
-      params: {},
-      //
-      //
-      //
-      //
-      labels: ["pending", "approved"],
-      data: [{
-        id: 1,
-        status: "pending",
-        label: "expense 1",
-        amount: 100
-      }, {
-        id: 2,
-        status: "approved",
-        label: "expense 2",
-        amount: 50
-      }, {
-        id: 3,
-        status: "approved",
-        label: "expense 3",
-        amount: 10000
-      }, {
-        id: 4,
-        status: "pending",
-        label: "expense 4",
-        amount: 10
-      }],
-      //
-      //
-      //
-      //
-      chartData: {
-        labels: ["January", "February", "March"],
-        datasets: [{
-          label: "Data One",
-          backgroundColor: "#dbffe5",
-          borderColor: "#4caf50",
-          data: [40, 20, 90],
-          fill: false,
-          lineTension: 0
-        }, {
-          label: "Data Two",
-          backgroundColor: "#dbffe5",
-          borderColor: "#4caf50",
-          data: [80, 50, 30],
-          fill: false,
-          lineTension: 0
-        }]
-      },
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        tooltips: {
-          mode: "index",
-          intersect: false,
-          position: "nearest"
-        },
-        // legend: {
-        //     display: false
-        // },
-        scales: {
-          yAxes: [{
-            // gridLines: {
-            //     display: false
-            // },
-            ticks: $.extend({
-              beginAtZero: true
-            }, {})
-          }],
-          xAxes: [{
-            gridLines: {
-              display: false
-            }
-          }]
-        }
-      }
-    };
-  },
-  methods: {
-    updateDates: function updateDates(e) {
-      this.date_range = e;
-    },
-    selectUser: function selectUser(e) {
-      if (e == null || e == undefined) {
-        this.user = null;
-        return;
-      }
+    // A string was passed as a seed
+    } else if (typeof options.seed === 'string') {
+      seed = stringToInteger(options.seed);
 
-      this.user = e;
-    },
-    resetUser: function resetUser() {
-      this.user = null;
-    },
-    selectVendor: function selectVendor(e) {
-      if (e == null || e == undefined) {
-        this.vendor = null;
-        return;
-      }
+    // Something was passed as a seed but it wasn't an integer or string
+    } else if (options.seed !== undefined && options.seed !== null) {
+      throw new TypeError('The seed value must be an integer or string');
 
-      this.vendor = e;
-    },
-    resetVendor: function resetVendor() {
-      this.vendor = null;
-    },
-    getLabels: function getLabels(arr, unique_field) {
-      var unique = [];
-      var distinct = [];
-
-      for (var i = 0; i < arr.length; i++) {
-        if (!unique[arr[i][unique_field]]) {
-          distinct.push(arr[i][unique_field]);
-          unique[arr[i][unique_field]] = 1;
-        }
-      }
-
-      return distinct;
+    // No seed, reset the value outside.
+    } else {
+      seed = null;
     }
-  },
-  // beforeCreate() {
-  //     if (
-  //         this.$route.params.constructor !== Object ||
-  //         Object.keys(this.$route.params).length === 0
-  //     ) {
-  //         this.$router.push("/analytics");
-  //     }
-  // },
-  created: function created() {
-    console.log(this.getLabels(this.data, "status"));
+
+    var H,S,B;
+
+    // Check if we need to generate multiple colors
+    if (options.count !== null && options.count !== undefined) {
+
+      var totalColors = options.count,
+          colors = [];
+      // Value false at index i means the range i is not taken yet.
+      for (var i = 0; i < options.count; i++) {
+        colorRanges.push(false)
+        }
+      options.count = null;
+
+      while (totalColors > colors.length) {
+
+        var color = randomColor(options);
+
+        if (seed !== null) {
+          options.seed = seed;
+        }
+
+        colors.push(color);
+      }
+
+      options.count = totalColors;
+
+      return colors;
+    }
+
+    // First we pick a hue (H)
+    H = pickHue(options);
+
+    // Then use H to determine saturation (S)
+    S = pickSaturation(H, options);
+
+    // Then use S and H to determine brightness (B).
+    B = pickBrightness(H, S, options);
+
+    // Then we return the HSB color in the desired format
+    return setFormat([H,S,B], options);
+  };
+
+  function pickHue(options) {
+    if (colorRanges.length > 0) {
+      var hueRange = getRealHueRange(options.hue)
+
+      var hue = randomWithin(hueRange)
+
+      //Each of colorRanges.length ranges has a length equal approximatelly one step
+      var step = (hueRange[1] - hueRange[0]) / colorRanges.length
+
+      var j = parseInt((hue - hueRange[0]) / step)
+
+      //Check if the range j is taken
+      if (colorRanges[j] === true) {
+        j = (j + 2) % colorRanges.length
+      }
+      else {
+        colorRanges[j] = true
+           }
+
+      var min = (hueRange[0] + j * step) % 359,
+          max = (hueRange[0] + (j + 1) * step) % 359;
+
+      hueRange = [min, max]
+
+      hue = randomWithin(hueRange)
+
+      if (hue < 0) {hue = 360 + hue;}
+      return hue
+    }
+    else {
+      var hueRange = getHueRange(options.hue)
+
+      hue = randomWithin(hueRange);
+      // Instead of storing red as two seperate ranges,
+      // we group them, using negative numbers
+      if (hue < 0) {
+        hue = 360 + hue;
+      }
+
+      return hue;
+    }
   }
-});
 
-/***/ }),
+  function pickSaturation (hue, options) {
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/analytics/Show.vue?vue&type=template&id=62e187f0&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/pages/admin/analytics/Show.vue?vue&type=template&id=62e187f0& ***!
-  \************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    if (options.hue === 'monochrome') {
+      return 0;
+    }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      !_vm.formDataLoaded
-        ? _c("loader-component")
-        : _c(
-            "v-card",
-            { staticClass: "elevation-0 pt-0" },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "pt-0" },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.$router.go(-1)
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-arrow-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "d-flex" },
-                    [
-                      _c("DateRangePicker", {
-                        ref: "dateRangePicker",
-                        attrs: { dateRange: _vm.date_range },
-                        on: { "on-change": _vm.updateDates },
-                        scopedSlots: _vm._u([
-                          {
-                            key: "openDialog",
-                            fn: function(ref) {
-                              var on = ref.on
-                              var attrs = ref.attrs
-                              return [
-                                _c(
-                                  "v-btn",
-                                  _vm._g(
-                                    _vm._b(
-                                      {
-                                        staticClass: "mr-2",
-                                        attrs: {
-                                          color: "green",
-                                          dark: "",
-                                          fab: "",
-                                          small: "",
-                                          title: "Date Range"
-                                        }
-                                      },
-                                      "v-btn",
-                                      attrs,
-                                      false
-                                    ),
-                                    on
-                                  ),
-                                  [_c("v-icon", [_vm._v("mdi-calendar")])],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      }),
-                      _vm._v(" "),
-                      _vm.$store.getters.user.is_admin
-                        ? _c("UserDialogSelector", {
-                            ref: "userDialogSelector",
-                            attrs: {
-                              selectedUser: _vm.user,
-                              usersParameters: {
-                                params: { is_superadmin: false }
-                              }
-                            },
-                            on: {
-                              selectUser: _vm.selectUser,
-                              onReset: _vm.resetUser
-                            },
-                            scopedSlots: _vm._u(
-                              [
-                                {
-                                  key: "openDialog",
-                                  fn: function(ref) {
-                                    var bind = ref.bind
-                                    var on = ref.on
-                                    return [
-                                      _c(
-                                        "v-btn",
-                                        _vm._g(
-                                          _vm._b(
-                                            {
-                                              staticClass: "mr-2",
-                                              attrs: {
-                                                color: "green",
-                                                dark: "",
-                                                fab: "",
-                                                small: "",
-                                                title: "Employees"
-                                              }
-                                            },
-                                            "v-btn",
-                                            bind,
-                                            false
-                                          ),
-                                          on
-                                        ),
-                                        [
-                                          _c("v-icon", [
-                                            _vm._v("mdi-clipboard-account")
-                                          ])
-                                        ],
-                                        1
-                                      )
-                                    ]
-                                  }
-                                }
-                              ],
-                              null,
-                              false,
-                              1822367560
-                            )
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("VendorDialogSelector", {
-                        ref: "vendorDialogSelector",
-                        attrs: { selectedVendor: _vm.vendor },
-                        on: {
-                          selectVendor: _vm.selectVendor,
-                          onReset: _vm.resetVendor
-                        },
-                        scopedSlots: _vm._u([
-                          {
-                            key: "openDialog",
-                            fn: function(ref) {
-                              var bind = ref.bind
-                              var on = ref.on
-                              return [
-                                _c(
-                                  "v-btn",
-                                  _vm._g(
-                                    _vm._b(
-                                      {
-                                        attrs: {
-                                          color: "green",
-                                          dark: "",
-                                          fab: "",
-                                          small: "",
-                                          title: "Vendors"
-                                        }
-                                      },
-                                      "v-btn",
-                                      bind,
-                                      false
-                                    ),
-                                    on
-                                  ),
-                                  [_c("v-icon", [_vm._v("mdi-account-group")])],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("div", { staticClass: "title green--text" }, [
-                    _vm._v(_vm._s(_vm.$route.params.label))
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    [
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "12", md: "8" } },
-                        [
-                          _c(
-                            "v-sheet",
-                            [
-                              _c(
-                                "v-timeline",
-                                { attrs: { "align-top": "", dense: "" } },
-                                _vm._l(_vm.messages, function(message) {
-                                  return _c(
-                                    "v-timeline-item",
-                                    {
-                                      key: message.time,
-                                      attrs: { color: message.color, small: "" }
-                                    },
-                                    [
-                                      _c("div", [
-                                        _c(
-                                          "div",
-                                          { staticClass: "font-weight-normal" },
-                                          [
-                                            _c("strong", [
-                                              _vm._v(_vm._s(message.from))
-                                            ]),
-                                            _vm._v(
-                                              "\n                                        @" +
-                                                _vm._s(message.time) +
-                                                "\n                                    "
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c("div", [
-                                          _vm._v(_vm._s(message.message))
-                                        ])
-                                      ])
-                                    ]
-                                  )
-                                }),
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-col", { attrs: { cols: "12", md: "4" } })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
-                    _vm._l(_vm.total, function(item, index) {
-                      return _c(
-                        "v-col",
-                        { key: index, attrs: { cols: "12", md: "3" } },
-                        [
-                          _c(
-                            "v-card",
-                            {
-                              staticClass: "mx-auto",
-                              attrs: { elevation: "2" }
-                            },
-                            [
-                              _c("v-card-text", [
-                                _c("div", { staticClass: "green--text" }, [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(item.label) +
-                                      "\n                            "
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "font-weight-bold text--primary"
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                ₱\n                                " +
-                                        _vm._s(
-                                          item.amount == null ? 0 : item.amount
-                                        ) +
-                                        "\n                            "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("div", [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(
-                                        item.count == null ? 0 : item.count
-                                      ) +
-                                      "\n                                record(s)\n                            "
-                                  )
-                                ])
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    }),
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                [
-                  _c("line-chart", {
-                    attrs: { data: _vm.chartData, options: _vm.chartOptions }
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          )
-    ],
-    1
-  )
+    if (options.luminosity === 'random') {
+      return randomWithin([0,100]);
+    }
+
+    var saturationRange = getSaturationRange(hue);
+
+    var sMin = saturationRange[0],
+        sMax = saturationRange[1];
+
+    switch (options.luminosity) {
+
+      case 'bright':
+        sMin = 55;
+        break;
+
+      case 'dark':
+        sMin = sMax - 10;
+        break;
+
+      case 'light':
+        sMax = 55;
+        break;
+   }
+
+    return randomWithin([sMin, sMax]);
+
+  }
+
+  function pickBrightness (H, S, options) {
+
+    var bMin = getMinimumBrightness(H, S),
+        bMax = 100;
+
+    switch (options.luminosity) {
+
+      case 'dark':
+        bMax = bMin + 20;
+        break;
+
+      case 'light':
+        bMin = (bMax + bMin)/2;
+        break;
+
+      case 'random':
+        bMin = 0;
+        bMax = 100;
+        break;
+    }
+
+    return randomWithin([bMin, bMax]);
+  }
+
+  function setFormat (hsv, options) {
+
+    switch (options.format) {
+
+      case 'hsvArray':
+        return hsv;
+
+      case 'hslArray':
+        return HSVtoHSL(hsv);
+
+      case 'hsl':
+        var hsl = HSVtoHSL(hsv);
+        return 'hsl('+hsl[0]+', '+hsl[1]+'%, '+hsl[2]+'%)';
+
+      case 'hsla':
+        var hslColor = HSVtoHSL(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'hsla('+hslColor[0]+', '+hslColor[1]+'%, '+hslColor[2]+'%, ' + alpha + ')';
+
+      case 'rgbArray':
+        return HSVtoRGB(hsv);
+
+      case 'rgb':
+        var rgb = HSVtoRGB(hsv);
+        return 'rgb(' + rgb.join(', ') + ')';
+
+      case 'rgba':
+        var rgbColor = HSVtoRGB(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'rgba(' + rgbColor.join(', ') + ', ' + alpha + ')';
+
+      default:
+        return HSVtoHex(hsv);
+    }
+
+  }
+
+  function getMinimumBrightness(H, S) {
+
+    var lowerBounds = getColorInfo(H).lowerBounds;
+
+    for (var i = 0; i < lowerBounds.length - 1; i++) {
+
+      var s1 = lowerBounds[i][0],
+          v1 = lowerBounds[i][1];
+
+      var s2 = lowerBounds[i+1][0],
+          v2 = lowerBounds[i+1][1];
+
+      if (S >= s1 && S <= s2) {
+
+         var m = (v2 - v1)/(s2 - s1),
+             b = v1 - m*s1;
+
+         return m*S + b;
+      }
+
+    }
+
+    return 0;
+  }
+
+  function getHueRange (colorInput) {
+
+    if (typeof parseInt(colorInput) === 'number') {
+
+      var number = parseInt(colorInput);
+
+      if (number < 360 && number > 0) {
+        return [number, number];
+      }
+
+    }
+
+    if (typeof colorInput === 'string') {
+
+      if (colorDictionary[colorInput]) {
+        var color = colorDictionary[colorInput];
+        if (color.hueRange) {return color.hueRange;}
+      } else if (colorInput.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorInput)[0];
+        return [ hue, hue ];
+      }
+    }
+
+    return [0,360];
+
+  }
+
+  function getSaturationRange (hue) {
+    return getColorInfo(hue).saturationRange;
+  }
+
+  function getColorInfo (hue) {
+
+    // Maps red colors to make picking hue easier
+    if (hue >= 334 && hue <= 360) {
+      hue-= 360;
+    }
+
+    for (var colorName in colorDictionary) {
+       var color = colorDictionary[colorName];
+       if (color.hueRange &&
+           hue >= color.hueRange[0] &&
+           hue <= color.hueRange[1]) {
+          return colorDictionary[colorName];
+       }
+    } return 'Color not found';
+  }
+
+  function randomWithin (range) {
+    if (seed === null) {
+      //generate random evenly destinct number from : https://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+      var golden_ratio = 0.618033988749895
+      var r=Math.random()
+      r += golden_ratio
+      r %= 1
+      return Math.floor(range[0] + r*(range[1] + 1 - range[0]));
+    } else {
+      //Seeded random algorithm from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+      var max = range[1] || 1;
+      var min = range[0] || 0;
+      seed = (seed * 9301 + 49297) % 233280;
+      var rnd = seed / 233280.0;
+      return Math.floor(min + rnd * (max - min));
 }
-var staticRenderFns = []
-render._withStripped = true
+  }
 
+  function HSVtoHex (hsv){
 
+    var rgb = HSVtoRGB(hsv);
 
-/***/ }),
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? '0' + hex : hex;
+    }
 
-/***/ "./resources/js/components/chart/BarChart.vue":
-/*!****************************************************!*\
-  !*** ./resources/js/components/chart/BarChart.vue ***!
-  \****************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    var hex = '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BarChart.vue?vue&type=script&lang=js& */ "./resources/js/components/chart/BarChart.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-var render, staticRenderFns
+    return hex;
 
+  }
 
+  function defineColor (name, hueRange, lowerBounds) {
 
+    var sMin = lowerBounds[0][0],
+        sMax = lowerBounds[lowerBounds.length - 1][0],
 
-/* normalize component */
+        bMin = lowerBounds[lowerBounds.length - 1][1],
+        bMax = lowerBounds[0][1];
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  _BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"],
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
+    colorDictionary[name] = {
+      hueRange: hueRange,
+      lowerBounds: lowerBounds,
+      saturationRange: [sMin, sMax],
+      brightnessRange: [bMin, bMax]
+    };
 
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/chart/BarChart.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+  }
 
-/***/ }),
+  function loadColorBounds () {
 
-/***/ "./resources/js/components/chart/BarChart.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/components/chart/BarChart.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    defineColor(
+      'monochrome',
+      null,
+      [[0,0],[100,0]]
+    );
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./BarChart.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/chart/BarChart.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BarChart_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+    defineColor(
+      'red',
+      [-26,18],
+      [[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]
+    );
 
-/***/ }),
+    defineColor(
+      'orange',
+      [18,46],
+      [[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]
+    );
 
-/***/ "./resources/js/views/pages/admin/analytics/Show.vue":
-/*!***********************************************************!*\
-  !*** ./resources/js/views/pages/admin/analytics/Show.vue ***!
-  \***********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    defineColor(
+      'yellow',
+      [46,62],
+      [[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]
+    );
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Show_vue_vue_type_template_id_62e187f0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Show.vue?vue&type=template&id=62e187f0& */ "./resources/js/views/pages/admin/analytics/Show.vue?vue&type=template&id=62e187f0&");
-/* harmony import */ var _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Show.vue?vue&type=script&lang=js& */ "./resources/js/views/pages/admin/analytics/Show.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+    defineColor(
+      'green',
+      [62,178],
+      [[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]
+    );
 
+    defineColor(
+      'blue',
+      [178, 257],
+      [[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]
+    );
 
+    defineColor(
+      'purple',
+      [257, 282],
+      [[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]
+    );
 
+    defineColor(
+      'pink',
+      [282, 334],
+      [[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]
+    );
 
+  }
 
-/* normalize component */
+  function HSVtoRGB (hsv) {
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Show_vue_vue_type_template_id_62e187f0___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Show_vue_vue_type_template_id_62e187f0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
+    // this doesn't work for the values of 0 and 360
+    // here's the hacky fix
+    var h = hsv[0];
+    if (h === 0) {h = 1;}
+    if (h === 360) {h = 359;}
 
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/views/pages/admin/analytics/Show.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+    // Rebase the h,s,v values
+    h = h/360;
+    var s = hsv[1]/100,
+        v = hsv[2]/100;
 
-/***/ }),
+    var h_i = Math.floor(h*6),
+      f = h * 6 - h_i,
+      p = v * (1 - s),
+      q = v * (1 - f*s),
+      t = v * (1 - (1 - f)*s),
+      r = 256,
+      g = 256,
+      b = 256;
 
-/***/ "./resources/js/views/pages/admin/analytics/Show.vue?vue&type=script&lang=js&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/analytics/Show.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    switch(h_i) {
+      case 0: r = v; g = t; b = p;  break;
+      case 1: r = q; g = v; b = p;  break;
+      case 2: r = p; g = v; b = t;  break;
+      case 3: r = p; g = q; b = v;  break;
+      case 4: r = t; g = p; b = v;  break;
+      case 5: r = v; g = p; b = q;  break;
+    }
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/analytics/Show.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+    var result = [Math.floor(r*255), Math.floor(g*255), Math.floor(b*255)];
+    return result;
+  }
 
-/***/ }),
+  function HexToHSB (hex) {
+    hex = hex.replace(/^#/, '');
+    hex = hex.length === 3 ? hex.replace(/(.)/g, '$1$1') : hex;
 
-/***/ "./resources/js/views/pages/admin/analytics/Show.vue?vue&type=template&id=62e187f0&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/views/pages/admin/analytics/Show.vue?vue&type=template&id=62e187f0& ***!
-  \******************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    var red = parseInt(hex.substr(0, 2), 16) / 255,
+          green = parseInt(hex.substr(2, 2), 16) / 255,
+          blue = parseInt(hex.substr(4, 2), 16) / 255;
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_62e187f0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib??vue-loader-options!./Show.vue?vue&type=template&id=62e187f0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/pages/admin/analytics/Show.vue?vue&type=template&id=62e187f0&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_62e187f0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+    var cMax = Math.max(red, green, blue),
+          delta = cMax - Math.min(red, green, blue),
+          saturation = cMax ? (delta / cMax) : 0;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Show_vue_vue_type_template_id_62e187f0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+    switch (cMax) {
+      case red: return [ 60 * (((green - blue) / delta) % 6) || 0, saturation, cMax ];
+      case green: return [ 60 * (((blue - red) / delta) + 2) || 0, saturation, cMax ];
+      case blue: return [ 60 * (((red - green) / delta) + 4) || 0, saturation, cMax ];
+    }
+  }
 
+  function HSVtoHSL (hsv) {
+    var h = hsv[0],
+      s = hsv[1]/100,
+      v = hsv[2]/100,
+      k = (2-s)*v;
 
+    return [
+      h,
+      Math.round(s*v / (k<1 ? k : 2-k) * 10000) / 100,
+      k/2 * 100
+    ];
+  }
+
+  function stringToInteger (string) {
+    var total = 0
+    for (var i = 0; i !== string.length; i++) {
+      if (total >= Number.MAX_SAFE_INTEGER) break;
+      total += string.charCodeAt(i)
+    }
+    return total
+  }
+
+  // get The range of given hue when options.count!=0
+  function getRealHueRange(colorHue)
+  { if (!isNaN(colorHue)) {
+    var number = parseInt(colorHue);
+
+    if (number < 360 && number > 0) {
+      return getColorInfo(colorHue).hueRange
+    }
+  }
+    else if (typeof colorHue === 'string') {
+
+      if (colorDictionary[colorHue]) {
+        var color = colorDictionary[colorHue];
+
+        if (color.hueRange) {
+          return color.hueRange
+       }
+    } else if (colorHue.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorHue)[0]
+        return getColorInfo(hue).hueRange
+    }
+  }
+
+    return [0,360]
+}
+  return randomColor;
+}));
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
 
 /***/ })
 

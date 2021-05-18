@@ -16,9 +16,7 @@
                         :dateRange="date_range"
                         @on-change="updateDates"
                     >
-                        <template
-                            v-slot:openDialog="{ on, attrs }"
-                        >
+                        <template v-slot:openDialog="{ on, attrs }">
                             <v-btn
                                 v-bind="attrs"
                                 v-on="on"
@@ -29,7 +27,7 @@
                                 small
                                 title="Date Range"
                             >
-                            <v-icon>mdi-calendar</v-icon>
+                                <v-icon>mdi-calendar</v-icon>
                                 <!-- {{ dateRangeText }} -->
                             </v-btn>
                         </template>
@@ -61,7 +59,7 @@
                                 small
                                 title="Employees"
                             >
-                            <v-icon>mdi-clipboard-account</v-icon>
+                                <v-icon>mdi-clipboard-account</v-icon>
                                 <!-- {{
                                     computedSelectedUser
                                         ? computedSelectedUser.name
@@ -92,7 +90,7 @@
                                 small
                                 title="Vendors"
                             >
-                            <v-icon>mdi-account-group</v-icon>
+                                <v-icon>mdi-account-group</v-icon>
                                 <!-- {{
                                     computedSelectedVendor
                                         ? computedSelectedVendor.name
@@ -108,7 +106,6 @@
                 <div class="title green--text">{{ $route.params.label }}</div>
 
                 <v-row>
-                    
                     <v-col cols="12" md="8">
                         <v-sheet>
                             <v-timeline align-top dense>
@@ -164,6 +161,19 @@
                     :options="chartOptions"
                 ></line-chart>
             </div>
+
+            <div>
+                <doughnut-chart
+                    ref="doughnutChart"
+                    :data="doughnutChartData"
+                    :options="doughnutChartOptions"
+                >
+                </doughnut-chart>
+            </div>
+
+            <v-btn @click="changeData">
+                Random Data
+            </v-btn>
         </v-card>
     </div>
 </template>
@@ -171,8 +181,10 @@
 <script>
 import moment from "moment";
 import numeral from "numeral";
+import randomColor from "randomcolor";
 import LineChart from "../../../../components/chart/LineChart";
 import BarChart from "../../../../components/chart/BarChart";
+import DoughnutChart from "../../../../components/chart/DoughnutChart";
 import PageHeader from "../../../../components/page/PageHeader";
 import DateRangePicker from "../../../../components/datepicker/DateRangePicker";
 import UserDialogSelector from "../../../../components/selector/dialog/UserDialogSelector";
@@ -186,7 +198,8 @@ export default {
         UserDialogSelector,
         VendorDialogSelector,
         LineChart,
-        BarChart
+        BarChart,
+        DoughnutChart
     },
     data() {
         return {
@@ -304,6 +317,42 @@ export default {
                         }
                     ]
                 }
+            },
+            doughnutChartData: {
+                labels: ["January", "February", "March"],
+                datasets: [
+                    {
+                        backgroundColor: randomColor({
+                            luminosity: "light",
+                            count: 3
+                        }),
+                        data: [40, 20, 90]
+                    }
+                ]
+            },
+            doughnutChartOptions: {
+                hoverBorderWidth: 20,
+                legend: false,
+                plugins: {
+                    datalabels: {
+                        display: function(context) {
+                            return (
+                                context.dataset.data[context.dataIndex] !== 0
+                            );
+                        },
+                        borderWidth: 2,
+                        borderColor: "white",
+                        borderRadius: 20,
+                        // color: 0,
+                        font: {
+                            weight: "bold"
+                        },
+                        backgroundColor: "lightgray",
+                        formatter: (value, ctx) => {
+                            return this.mixin_formatNumber(value) + " %";
+                        }
+                    }
+                }
             }
         };
     },
@@ -331,6 +380,19 @@ export default {
         resetVendor() {
             this.vendor = null;
         },
+        changeData() {
+            this.doughnutChartData.labels = ["January", "February", "March"];
+            this.doughnutChartData.datasets = [
+                {
+                    backgroundColor: randomColor({
+                        luminosity: "light",
+                        count: 3
+                    }),
+                    data: [10, 121, 45]
+                }
+            ];
+            // this.$refs.doughnutChart.update();
+        },
         getLabels(arr, unique_field) {
             const unique = [];
             const distinct = [];
@@ -353,6 +415,8 @@ export default {
     // },
     created() {
         console.log(this.getLabels(this.data, "status"));
+
+        console.log("randomcolor", randomColor({ hue: "orange", count: 3 }));
     }
 };
 </script>

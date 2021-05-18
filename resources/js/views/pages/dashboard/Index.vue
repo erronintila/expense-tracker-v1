@@ -542,7 +542,6 @@
                         <v-row class="ml-4 mb-4">
                             <v-col md="4" class="mt-5">
                                 <DoughnutChart
-                                    ref="donut_chart"
                                     :data="doughnutChartData"
                                     :options="doughnutChartOptions"
                                 ></DoughnutChart>
@@ -555,7 +554,6 @@
                                 >
                                     <v-card-text>
                                         <HorizontalBarChart
-                                            ref="horizontalBar_chart"
                                             :data="horizontalBarChartData"
                                             :options="horizontalBarChartOptions"
                                         ></HorizontalBarChart>
@@ -609,7 +607,6 @@
                         <v-row>
                             <v-col cols="12">
                                 <LineChart
-                                    ref="line_chart"
                                     :data="lineChartData"
                                     :options="lineChartOptions"
                                 ></LineChart>
@@ -1061,7 +1058,7 @@ export default {
                         borderColor: "#4caf50",
                         pointBorderColor: "#4caf50",
                         pointBackgroundColor: "#4caf50",
-                        fill: true,
+                        fill: false,
                         lineTension: 0
                     }
                 ]
@@ -1083,7 +1080,6 @@ export default {
         },
         updateBarChartValues(labels, data, backgroundColors) {
             this.horizontalBarChartData.labels = labels;
-
             this.horizontalBarChartData.datasets = [
                 {
                     label: "",
@@ -1091,12 +1087,9 @@ export default {
                     data: data
                 }
             ];
-
-            this.$refs.horizontalBar_chart.update();
         },
         updatePieChartValues(labels, data, backgroundColors) {
             this.doughnutChartData.labels = labels;
-
             this.doughnutChartData.datasets = [
                 {
                     label: "",
@@ -1104,15 +1097,20 @@ export default {
                     data: data
                 }
             ];
-
-            this.$refs.donut_chart.update();
         },
         updateLineChartValues(labels, data) {
             this.lineChartData.labels = labels;
-
-            this.lineChartData.datasets[0].data = data;
-
-            this.$refs.line_chart.update();
+            this.lineChartData.datasets = [
+                {
+                    backgroundColor: "#dbffe5",
+                        borderColor: "#4caf50",
+                        pointBorderColor: "#4caf50",
+                        pointBackgroundColor: "#4caf50",
+                        fill: false,
+                        lineTension: 0,
+                    data: data
+                }
+            ];
         },
         onDateChange(start, end) {
             this.expenses_by_category = [];
