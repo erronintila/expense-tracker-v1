@@ -233,7 +233,7 @@
                                     class="mr-2"
                                     @click="
                                         $router.push(
-                                            `/user/${item.data.data.model}/${item.data.data.id}`
+                                            `/${item.data.data.model}/${item.data.data.id}`
                                         )
                                     "
                                     v-bind="attrs"
