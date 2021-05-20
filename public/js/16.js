@@ -16,10 +16,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Doughnut"],
-  props: ["data", "options"],
-  methods: {
-    update: function update() {
-      this.$data._chart.update();
+  props: {
+    data: {
+      type: Object,
+      "default": function _default() {}
+    },
+    options: {
+      type: Object,
+      "default": function _default() {}
+    }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler: function handler() {
+        this.$data._chart.update();
+      }
     }
   },
   mounted: function mounted() {
@@ -47,10 +59,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["HorizontalBar"],
-  props: ["data", "options"],
-  methods: {
-    update: function update() {
-      this.$data._chart.update();
+  props: {
+    data: {
+      type: Object,
+      "default": function _default() {}
+    },
+    options: {
+      type: Object,
+      "default": function _default() {}
+    }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler: function handler() {
+        this.$data._chart.update();
+      }
     }
   },
   mounted: function mounted() {
@@ -74,16 +98,26 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   "extends": vue_chartjs__WEBPACK_IMPORTED_MODULE_0__["Line"],
-  props: ["data", "options"],
-  methods: {
-    update: function update() {
-      this.$data._chart.update();
+  props: {
+    data: {
+      type: Object,
+      "default": function _default() {}
+    },
+    options: {
+      type: Object,
+      "default": function _default() {}
+    }
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler: function handler() {
+        this.$data._chart.update();
+      }
     }
   },
   mounted: function mounted() {
-    this.renderChart(this.data, this.options); // this.renderChart(this.data, {
-    //     maintainAspectRatio: false
-    // });
+    this.renderChart(this.data, this.options);
   }
 });
 
@@ -141,9 +175,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_chart_HorizontalBarChart__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/chart/HorizontalBarChart */ "./resources/js/components/chart/HorizontalBarChart.vue");
 /* harmony import */ var _components_chart_LineChart__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../components/chart/LineChart */ "./resources/js/components/chart/LineChart.vue");
 /* harmony import */ var _components_selector_dialog_UserDialogSelector__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../components/selector/dialog/UserDialogSelector */ "./resources/js/components/selector/dialog/UserDialogSelector.vue");
-//
-//
-//
 //
 //
 //
@@ -1170,7 +1201,7 @@ __webpack_require__.r(__webpack_exports__);
           borderColor: "#4caf50",
           pointBorderColor: "#4caf50",
           pointBackgroundColor: "#4caf50",
-          fill: true,
+          fill: false,
           lineTension: 0
         }]
       };
@@ -1199,7 +1230,6 @@ __webpack_require__.r(__webpack_exports__);
         backgroundColor: backgroundColors,
         data: data
       }];
-      this.$refs.horizontalBar_chart.update();
     },
     updatePieChartValues: function updatePieChartValues(labels, data, backgroundColors) {
       this.doughnutChartData.labels = labels;
@@ -1208,12 +1238,18 @@ __webpack_require__.r(__webpack_exports__);
         backgroundColor: backgroundColors,
         data: data
       }];
-      this.$refs.donut_chart.update();
     },
     updateLineChartValues: function updateLineChartValues(labels, data) {
       this.lineChartData.labels = labels;
-      this.lineChartData.datasets[0].data = data;
-      this.$refs.line_chart.update();
+      this.lineChartData.datasets = [{
+        backgroundColor: "#dbffe5",
+        borderColor: "#4caf50",
+        pointBorderColor: "#4caf50",
+        pointBackgroundColor: "#4caf50",
+        fill: false,
+        lineTension: 0,
+        data: data
+      }];
     },
     onDateChange: function onDateChange(start, end) {
       this.expenses_by_category = [];
@@ -2871,7 +2907,6 @@ var render = function() {
                                       },
                                       [
                                         _c("DoughnutChart", {
-                                          ref: "donut_chart",
                                           attrs: {
                                             data: _vm.doughnutChartData,
                                             options: _vm.doughnutChartOptions
@@ -2899,7 +2934,6 @@ var render = function() {
                                               "v-card-text",
                                               [
                                                 _c("HorizontalBarChart", {
-                                                  ref: "horizontalBar_chart",
                                                   attrs: {
                                                     data:
                                                       _vm.horizontalBarChartData,
@@ -3066,7 +3100,6 @@ var render = function() {
                                       { attrs: { cols: "12" } },
                                       [
                                         _c("LineChart", {
-                                          ref: "line_chart",
                                           attrs: {
                                             data: _vm.lineChartData,
                                             options: _vm.lineChartOptions

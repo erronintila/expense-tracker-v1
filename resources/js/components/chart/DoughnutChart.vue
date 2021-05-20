@@ -1,15 +1,26 @@
 <script>
-
 import { Doughnut } from "vue-chartjs";
 
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 export default {
     extends: Doughnut,
-    props: ["data", "options"],
-    methods: {
-        update() {
-            this.$data._chart.update();
+    props: {
+        data: {
+            type: Object,
+            default: () => {}
+        },
+        options: {
+            type: Object,
+            default: () => {}
+        }
+    },
+    watch: {
+        data: {
+            deep: true,
+            handler() {
+                this.$data._chart.update();
+            }
         }
     },
     mounted() {

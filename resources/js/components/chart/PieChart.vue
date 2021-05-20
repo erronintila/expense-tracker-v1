@@ -2,10 +2,22 @@
 import { Pie } from "vue-chartjs";
 export default {
     extends: Pie,
-    props: ["data", "options"],
-    methods: {
-        update() {
-            this.$data._chart.update();
+    props: {
+        data: {
+            type: Object,
+            default: () => {}
+        },
+        options: {
+            type: Object,
+            default: () => {}
+        }
+    },
+    watch: {
+        data: {
+            deep: true,
+            handler() {
+                this.$data._chart.update();
+            }
         }
     },
     mounted() {

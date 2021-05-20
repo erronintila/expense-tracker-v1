@@ -2,17 +2,26 @@
 import { Line } from "vue-chartjs";
 export default {
     extends: Line,
-    props: ["data", "options"],
-    methods: {
-        update() {
-            this.$data._chart.update();
+    props: {
+        data: {
+            type: Object,
+            default: () => {}
+        },
+        options: {
+            type: Object,
+            default: () => {}
+        }
+    },
+    watch: {
+        data: {
+            deep: true,
+            handler() {
+                this.$data._chart.update();
+            }
         }
     },
     mounted() {
         this.renderChart(this.data, this.options);
-        // this.renderChart(this.data, {
-        //     maintainAspectRatio: false
-        // });
     }
 };
 </script>
