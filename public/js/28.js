@@ -1170,7 +1170,7 @@ var render = function() {
                                                     on: {
                                                       click: function($event) {
                                                         return _vm.$router.push(
-                                                          "/user/" +
+                                                          "/" +
                                                             item.data.data
                                                               .model +
                                                             "/" +
